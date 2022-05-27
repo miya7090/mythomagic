@@ -1,0 +1,38 @@
+draft
+
+player figurine: choose one per game (active character, blind pick for 2p game, draft pick for multiplayer game)
+
+items: ambrosia, nectar
+
+main deck: 7 cards
+side deck: 3 cards (can swap in game if criteria met)
+
+atk, def, hp, movement speed, mana/knowledge
+statuses: blinded, charmed, poisoned, stunned, terrified (3 turns, stacks length, max 7 turns)
+saving throws
+
+attack/defense positions
+if opponent2 in attack position, atk2-atk1 is base damage done, (roll for damage offset)
+otherwise, def2-atk1
+range: gives disadvantage x2, x3 depending if attack out of range
+saving throw: augmented by movement speed and defense, success halves damage
+
+figurine: must match one of main deck
+figurines: gacha, currency is from logging in, winning games
+
+
+card stats:
+
+[[subclass]]
+is figurine: bool
+statuses, expiry: dictionary, string to int
+
+
+[[main class, stat+bonus]]
+attack, bonus 
+hp, bonus
+defense, bonus
+mana, bonus
+mana bonus: 
+
+
