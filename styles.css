@@ -1,0 +1,80 @@
+body {
+    margin: 20px;
+    background-color: rgb(105, 73, 73);
+    font-family: arial, sans-serif;
+    font-size: 14px;
+}
+
+.player {
+    display: flex;
+}
+  
+.column {
+    flex: 50%;
+    border: 2px dashed brown;
+}
+
+h1 {
+    font-size: 35px;
+    font-weight: normal;
+    margin-top: 5px;
+}
+
+.grid {
+    margin-top: 20px;
+    margin-left: 20px;
+    display: block;
+    height: 170px;
+    width: 170px;
+    background-color: rgb(64, 200, 125);
+    border: 2px dotted #000000;
+}
+
+.gameSquare {
+    float: left;
+    margin: 0 0 0 0;
+    height: 40px;
+    width: 40px;
+    border: 1px solid black;
+}
+
+.default { background-color: rgb(130, 130, 130); }
+.jungle { background-color: rgb(44, 103, 71); }
+.water { background-color: rgb(79, 92, 193); }
+.sand { background-color: rgb(203, 182, 124); }
+.obstacle { background-color: rgb(57, 57, 57); }
+
+.cards {
+    margin-top: 20px;
+    margin-left: 20px;
+    height: 120px;
+    width: 80px;
+    float: left;
+    background-color: rgb(203, 203, 203);
+    border: 3px dotted #858585;
+}
+
+.player1 {
+    border: 3px solid #a711f1;
+    box-sizing: border-box; /* border goes inside box not outside */
+}
+
+.figurine {
+    margin-top: 10px;
+    margin-left: 10px;
+    width: 20px;
+    height: 20px;
+    background-color: red;
+}
+
+.notFigurine {
+    margin-top: 10px;
+    margin-left: 10px;
+    width: 20px;
+    height: 20px;
+    background-color: rgb(199, 93, 48);
+}
+
+#placeholder {
+    color: blue;
+}

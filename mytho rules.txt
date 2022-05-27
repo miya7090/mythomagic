@@ -1,11 +1,21 @@
 draft
 
+should be able to be played physically
+
+battleship game from class??
+
+on-field vs off-field support
+
+simple procedure for start game---------
+1) pick cards from inventory
+
+
 player figurine: choose one per game (active character, blind pick for 2p game, draft pick for multiplayer game)
 
 items: ambrosia, nectar
 
-main deck: 7 cards
-side deck: 3 cards (can swap in game if criteria met)
+main deck: 5 cards
+side deck: 2 cards (can swap in game if criteria met)
 
 atk, def, hp, movement speed, mana/knowledge
 statuses: blinded, charmed, poisoned, stunned, terrified (3 turns, stacks length, max 7 turns)
