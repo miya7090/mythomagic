@@ -2,6 +2,7 @@
 
 document.addEventListener("DOMContentLoaded", () => {
   console.log("loaded~");
+  console.log(BASE_DAMAGE_DIFF_SCALE_TO_HP);
   const mainGrid = document.getElementById("mainGrid");
   const onFieldCards = document.getElementById("onFieldCards");
   const gameInfoBox = document.getElementById("gameInfoBox");
@@ -69,24 +70,49 @@ document.addEventListener("DOMContentLoaded", () => {
   class PlayerCard extends Card {
     constructor(cardName, isFigurine, aggressive, currentIndex) {
       super(cardName);
-      this.current_attack = this.base_attack
-      this.current_defense = this.base_defense
-      this.current_health = this.base_health
-      this.current_mana = this.base_mana
-      this.current_movement = this.base_movement
-      this.dead = false
+      this.current_attack = this.base_attack;
+      this.current_defense = this.base_defense;
+      this.current_health = this.base_health;
+      this.current_mana = this.base_mana;
+      this.current_movement = this.base_movement;
+      this.dead = false;
 
-      this.attack_bonus = 0
-      this.defense_bonus = 0
-      this.health_bonus = 0
-      this.mana_bonus = 0
-      this.movement_bonus = 0
+      this.attack_bonus = 0;
+      this.defense_bonus = 0;
+      this.health_bonus = 0;
+      this.mana_bonus = 0;
+      this.movement_bonus = 0;
 
-      this.is_figurine = isFigurine
-      this.statuses = {"blinded":0, "charmed":0, "poisoned":0, "stunned":0, "terrified":0}
+      this.is_figurine = isFigurine;
+      this.statuses = {"blinded":0, "charmed":0, "poisoned":0, "stunned":0, "terrified":0};
 
-      this.aggressive = aggressive // whether in attack or defense stance
-      this.currentIndex = currentIndex // location on grid
+      this.aggressive = aggressive; // whether in attack or defense stance
+      this.currentIndex = currentIndex; // location on grid
+    }
+
+    class Player {
+      constructor(name, figurine, cardsPicked) {
+        /////////////////////////////////////////////////// fill in from here #TODO
+        const base_stats = getBaseStats(cardName);
+        this.cardName = cardName;
+        this.name = "XXXX";
+        this.base_attack = base_stats[0];
+        this.base_defense = base_stats[1];
+        this.base_health = base_stats[2];
+        this.base_mana = base_stats[3];
+        this.base_movement = base_stats[4];
+      }
+    }
+
+    savingThrow(savingThrowThreshold) {
+      // augmented by movement speed and defense
+      const mvmtOffset = (this.current_movement + this.movement_bonus) / MVMT_SPD_SCALE_TO_SAVE_THROW;
+      const defOffset = (this.current_defense + this.defense_bonus) / DEFENCE_SCALE_TO_SAVE_THROW;
+      var figBoost = 0;
+      if (this.is_figurine){
+        figBoost = FIGURINE_SAVING_THROW_FLAT_BOOST;
+      }
+      return (Math.floor(Math.random()*20) + mvmtOffset + defOffset + figBoost) > savingThrowThreshold;
     }
   }
 
