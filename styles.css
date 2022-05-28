@@ -1,4 +1,36 @@
-body {
+.hexgrid { /* hexagon grid: https://css-tricks.com/hexagons-and-beyond-flexible-responsive-grid-patterns-sans-media-queries/ */
+    display: flex;
+    --s: 25px;  /* size  */
+    --m: 2px;    /* margin */
+    --f: calc(1.732 * var(--s) + 4 * var(--m)  - 1px);
+  }
+  
+  .container {
+    font-size: 0; /*disable white space between inline block element */
+  }
+  
+  .gameSquare {
+    width: var(--s);
+    margin: var(--m);
+    height: calc(var(--s)*1.1547); 
+    display: inline-block;
+    font-size:initial;
+    clip-path: polygon(0% 25%, 0% 75%, 50% 100%, 100% 75%, 100% 25%, 50% 0%);
+    margin-bottom: calc(var(--m) - var(--s)*0.2885); 
+  }
+  
+  .container::before {
+    content: "";
+    width: calc(var(--s)/2 + var(--m));
+    float: left;
+    height: 120%;
+    shape-outside: repeating-linear-gradient(     
+                     #0000 0 calc(var(--f) - 3px),      
+                     #000  0 var(--f));
+  }
+  
+  
+  body {
     margin: 20px;
     background-color: rgb(105, 73, 73);
     font-family: arial, sans-serif;
@@ -9,8 +41,15 @@ body {
     display: flex;
 }
   
-.column {
-    flex: 50%;
+.leftcolumn {
+    flex: 55%;
+    float: left;
+    border: 2px dashed rgb(255, 194, 96);
+}
+
+.rightcolumn {
+    flex: 45%;
+    float: left;
     border: 2px dashed brown;
 }
 
@@ -30,15 +69,8 @@ h1 {
     border: 2px dotted #000000;
 }
 
-.gameSquare {
-    float: left;
-    margin: 0 0 0 0;
-    height: 40px;
-    width: 40px;
-    border: 1px solid black;
-}
-
 .default { background-color: rgb(130, 130, 130); }
+.offgrid { background-color: rgb(74, 74, 74); }
 .jungle { background-color: rgb(44, 103, 71); }
 .water { background-color: rgb(79, 92, 193); }
 .sand { background-color: rgb(203, 182, 124); }
@@ -47,32 +79,58 @@ h1 {
 .cards {
     margin-top: 20px;
     margin-left: 20px;
+    margin-right: 20px;
     height: 120px;
-    width: 80px;
-    float: left;
-    background-color: rgb(203, 203, 203);
+    background-color: rgb(50, 49, 49);
+    border: 3px dotted #858585;
+}
+
+.hoverInfo {
+    margin-top: 20px;
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-bottom: 20px;
+    height: 120px;
+    background-color: rgb(36, 83, 32);
     border: 3px dotted #858585;
 }
 
 .player1 {
-    border: 3px solid #a711f1;
+    border: 3px solid #785788;
     box-sizing: border-box; /* border goes inside box not outside */
 }
 
-.figurine {
-    margin-top: 10px;
-    margin-left: 10px;
+.token {
+    position:relative;
+    top: 17px;
+    left: 15px;
     width: 20px;
     height: 20px;
     background-color: red;
 }
 
+.figurine {
+    background-color: red;
+}
+
 .notFigurine {
+    background-color: rgb(199, 93, 48);
+}
+
+.ccard {
     margin-top: 10px;
     margin-left: 10px;
-    width: 20px;
-    height: 20px;
-    background-color: rgb(199, 93, 48);
+    float: left;
+    width: 60px;
+    height: 90px;
+}
+
+.cardIsFigurine {
+    background-color: rgb(186, 142, 142);
+}
+
+.cardIsNotFigurine {
+    background-color: rgb(227, 225, 148);
 }
 
 #placeholder {

@@ -3,7 +3,7 @@
 document.addEventListener("DOMContentLoaded", () => {
   console.log("loaded~");
   console.log(BASE_DAMAGE_DIFF_SCALE_TO_HP);
-  const mainGrid = document.getElementById("mainGrid");
+  const mainGrid = document.getElementById("hexContainer");
   const onFieldCards = document.getElementById("onFieldCards");
   const gameInfoBox = document.getElementById("gameInfoBox");
   const offFieldCards = document.getElementById("offFieldCards");
@@ -11,45 +11,51 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // create game board
   const squares = [];
-  const layout = [
-    0, 0, 0, 4,
-    0, 1, 1, 3,
-    0, 0, 2, 2,
-    0, 0, 3, 3
-  ];
-
-  function createBoard() {
-    for (let i = 0; i < layout.length; i++) {
-      const square = document.createElement("div");
-      squares.push(square);
-      squares[i].classList.add("gameSquare");
-      mainGrid.appendChild(square);
-
-      if (layout[i] === 0) {
-        squares[i].classList.add("default");
-      } else if (layout[i] === 1) {
-        squares[i].classList.add("jungle");
-      } else if (layout[i] === 2) {
-        squares[i].classList.add("water");
-      } else if (layout[i] === 3) {
-        squares[i].classList.add("sand");
-      } else if (layout[i] === 4) {
-        squares[i].classList.add("obstacle");
-      }
-    }
+  const layout = [];
+  // create hexagon
+  addRow(3, 7); addRow(2, 8); addRow(2, 9);
+  addRow(1, 10); addRow(1, 11); addRow(0, 12);
+  addRow(0, 13);
+  addRow(0, 12); addRow(1, 11); addRow(1, 10);
+  addRow(2, 9);  addRow(2, 8); addRow(3, 7);
+  
+  function addRow(marginLen, mainRowLen) {
+    const row = document.createElement("div");
+    row.classList.add("hexRow");
+    mainGrid.appendChild(row);
+    for (let i = 0; i < marginLen; i++) { addTile("offgrid"); }
+    for (let i = 0; i < mainRowLen; i++) { addTile("default"); }
+    for (let i = 0; i < marginLen; i++) { addTile("offgrid"); }
   }
+
+  function addTile(tileType) {
+    const square = document.createElement("div");
+    squares.push(square);
+    square.classList.add("gameSquare");
+    square.classList.add(tileType);
+    mainGrid.appendChild(square);
+  }
+  
+  // default, jungle, water, offgrid, obstacle
   console.log("loaded2~");
-  createBoard();
 
   // card setup and playing logic
   const base_stat_dictionary = {
-    "test1":(100,200,100,20,50), 
-    "test2":(10,200,300,20,20), 
-    "test3":(500,200,100,0,60)
+    // name, base atk, normal attack range, defense, hp, mana per turn, mana per attack, movement speed
+    "Athena":(3000,2,15,700,100,100,1), 
+    "Kronos":(3000,2,10,700,100,250,1), 
+    "Achilles":(2900,2,20,600,100,250,2),
+    "Apollo":(2000,6,10,700,100,250,1),
+    "Jason":(2100,2,10,800,100,250,1),
+    "Hestia":(500,2,15,1200,250,0,1)
   } // #TODO move this somewhere else
+
 
   // utility functions for cards
   function getBaseStats(cardType) {
+    if (base_stat_dictionary[cardType] == undefined){
+      console.error(cardType+" not found in base stat dictionary");
+    }
     return base_stat_dictionary[cardType];
   }
 
@@ -58,22 +64,26 @@ document.addEventListener("DOMContentLoaded", () => {
     constructor(cardName) {
       const base_stats = getBaseStats(cardName);
       this.cardName = cardName;
-      this.name = "XXXX";
       this.base_attack = base_stats[0];
-      this.base_defense = base_stats[1];
-      this.base_health = base_stats[2];
-      this.base_mana = base_stats[3];
-      this.base_movement = base_stats[4];
+      this.base_normal_attack_range = base_stats[1];
+      this.base_defense = base_stats[2];
+      this.base_health = base_stats[3];
+      this.base_mana_per_turn = base_stats[4];
+      this.base_mana_per_atk = base_stats[5];
+      this.base_movement = base_stats[6];
     }
   }
 
   class PlayerCard extends Card {
-    constructor(cardName, isFigurine, aggressive, currentIndex) {
+    constructor(cardName, isFigurine, currentIndex) {
       super(cardName);
       this.current_attack = this.base_attack;
+      this.current_normal_attack_range = this.base_normal_attack_range;
       this.current_defense = this.base_defense;
       this.current_health = this.base_health;
       this.current_mana = this.base_mana;
+      this.current_mana_per_turn = this.base_mana_per_turn;
+      this.current_mana_per_atk = this.base_mana_per_atk;
       this.current_movement = this.base_movement;
       this.dead = false;
 
@@ -86,52 +96,53 @@ document.addEventListener("DOMContentLoaded", () => {
       this.is_figurine = isFigurine;
       this.statuses = {"blinded":0, "charmed":0, "poisoned":0, "stunned":0, "terrified":0};
 
-      this.aggressive = aggressive; // whether in attack or defense stance
       this.currentIndex = currentIndex; // location on grid
-    }
-
-    class Player {
-      constructor(name, figurine, cardsPicked) {
-        /////////////////////////////////////////////////// fill in from here #TODO
-        const base_stats = getBaseStats(cardName);
-        this.cardName = cardName;
-        this.name = "XXXX";
-        this.base_attack = base_stats[0];
-        this.base_defense = base_stats[1];
-        this.base_health = base_stats[2];
-        this.base_mana = base_stats[3];
-        this.base_movement = base_stats[4];
-      }
-    }
-
-    savingThrow(savingThrowThreshold) {
-      // augmented by movement speed and defense
-      const mvmtOffset = (this.current_movement + this.movement_bonus) / MVMT_SPD_SCALE_TO_SAVE_THROW;
-      const defOffset = (this.current_defense + this.defense_bonus) / DEFENCE_SCALE_TO_SAVE_THROW;
-      var figBoost = 0;
-      if (this.is_figurine){
-        figBoost = FIGURINE_SAVING_THROW_FLAT_BOOST;
-      }
-      return (Math.floor(Math.random()*20) + mvmtOffset + defOffset + figBoost) > savingThrowThreshold;
     }
   }
 
+  class Player {
+    constructor(name, figurine, cardsPicked) {
+      /////////////////////////////////////////////////// fill in from here #TODO
+      const base_stats = getBaseStats(cardName);
+      this.cardName = cardName;
+      this.base_attack = base_stats[0];
+      this.base_defense = base_stats[1];
+      this.base_health = base_stats[2];
+      this.base_mana = base_stats[3];
+      this.base_movement = base_stats[4];
+    }
+  }
+
+  function savingThrow(savingThrowThreshold) {
+    // augmented by movement speed and defense
+    const mvmtOffset = (this.current_movement + this.movement_bonus) / MVMT_SPD_SCALE_TO_SAVE_THROW;
+    const defOffset = (this.current_defense + this.defense_bonus) / DEFENCE_SCALE_TO_SAVE_THROW;
+    var figBoost = 0;
+    if (this.is_figurine){
+      figBoost = FIGURINE_SAVING_THROW_FLAT_BOOST;
+    }
+    return (Math.floor(Math.random()*20) + mvmtOffset + defOffset + figBoost) > savingThrowThreshold;
+  }
+
   // create some default cards
-  defaultCards = [
-    new PlayerCard("test1", false, true, 12),
-    new PlayerCard("test2", true, true, 0),
-    new PlayerCard("test1", false, false, 9)
+  var defaultCards = [
+    new PlayerCard("Achilles", false, 12),
+    new PlayerCard("Apollo", true, 0),
+    new PlayerCard("Athena", true, 2),
+    new PlayerCard("Hestia", false, 5),
+    new PlayerCard("Apollo", false, 9)
   ];
 
   // draw cards and figurines
   const playerCards = [];
   defaultCards.forEach((defaultCard) => {
     const ccard = document.createElement("div");
-
     squares[defaultCard.currentIndex].classList.add(defaultCard.cardName);
     ccard.classList.add(defaultCard.cardName);
+    ccard.classList.add("ccard");
 
     const token = document.createElement("div");
+    token.classList.add("token");
     if (defaultCard.is_figurine) {
       token.classList.add("figurine");
       ccard.classList.add("cardIsFigurine");
@@ -142,7 +153,7 @@ document.addEventListener("DOMContentLoaded", () => {
     token.classList.add("player1");
     squares[defaultCard.currentIndex].appendChild(token);
 
-    squares.push(ccard);
+    squares.push(token);
     onFieldCards.appendChild(ccard);
   });
 

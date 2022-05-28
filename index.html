@@ -11,15 +11,19 @@
         <script src="game.js" charset="utf8"></script>
     </head>
     <body>
+        
+
         <div class="wrapper">
             <div class="player">
-                <div class="column">
-                    <div class="grid" id="mainGrid"></div>
+                <div class="leftcolumn">
+                    <div class="hexgrid">
+                        <div class="container" id="hexContainer">
+                        </div>
+                    </div>
                 </div>
-                <div class="column">
+                <div class="rightcolumn">
                     <div class="cards" id="onFieldCards"></div>
                     <div class="hoverInfo" id="gameInfoBox"></div>
-                    <div class="cards" id="offFieldCards"></div>
                     <div class="optionBox" id="gameOptions"></div>
                 </div>
             </div>
