@@ -1,5 +1,8 @@
+// @miya7090
+
 HEX_SIDELENGTH = 13;
 HEX_RADIUS = (HEX_SIDELENGTH-1)/2;
+CUBE_DIR_VECS = [[1,0,-1],[1,-1,0],[0,-1,1],[-1,0,1],[-1,1,0],[0,1,-1]];
 
 document.addEventListener("DOMContentLoaded", () => {
   console.log("loaded~");
@@ -51,14 +54,52 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // fancy highlighting
+  // fancy (un-)highlighting
   function highlightSelfAndRadius(turnOn, cubeQ, cubeR, cubeS, radius){
-    console.log(cubeQ,cubeR,cubeS,"XXX");
-    var bgColor = "black";
-    if (turnOn == true) { bgColor = "yellow"; }
-    squaresByCubeIndex[cubeQ+","+cubeR+","+cubeS].setAttribute("hoverHighlight", turnOn);
-    // #TODO also highlight neighbors in radius
-    // LEFT OFF HERE
+    const tileNeighbors = getCoordinatesWithinRadius(cubeQ,cubeR,cubeS,radius,true);
+
+    tileNeighbors.forEach((tileNeighbor) => {
+      squaresByCubeIndex[tileNeighbor].setAttribute("hoverHighlight", turnOn);
+    });
+
+    /* // does asterisk
+    for (let i_radius = 0; i_radius < radius; i_radius++) {
+      for (let n = 0; n < 6; n++) {
+        var [vQ,vR,vS] = [CUBE_DIR_VECS[n][0],CUBE_DIR_VECS[n][1],CUBE_DIR_VECS[n][2]];
+        [vQ,vR,vS] = [vQ,vR,vS].map(x => x * i_radius);
+        const [nQ,nR,nS] = [cubeQ+vQ,cubeR+vR,cubeS+vS];
+        if (squaresByCubeIndex[nQ+","+nR+","+nS] !== undefined){
+          squaresByCubeIndex[nQ+","+nR+","+nS].setAttribute("hoverHighlight", turnOn);
+        }
+        
+      }
+    } */
+  }
+
+  function getCoordinatesWithinRadius(cQ, cR, cS, radius, includeSelf=true){
+    var results = []; // returns list of strings
+    if (includeSelf == true) { results.push(cQ+","+cR+","+cS); }
+
+    for (let m = 1; m <= radius; m++) {
+      // pick direction, jump onto projected tile on radius ring
+      var [vQ,vR,vS] = [CUBE_DIR_VECS[4][0],CUBE_DIR_VECS[4][1],CUBE_DIR_VECS[4][2]];
+      [vQ,vR,vS] = [vQ,vR,vS].map(x => x * m);
+      [vQ,vR,vS] = [cQ+vQ, cR+vR, cS+vS];
+
+      // go around in loop
+      for (let i = 0; i < 6; i++) {
+        for (let j = 0; j < m; j++) {
+          if (squaresByCubeIndex[vQ+","+vR+","+vS] !== undefined){
+            results.push(vQ+","+vR+","+vS);
+          }
+          [vQ,vR,vS] = [vQ+CUBE_DIR_VECS[i][0], 
+                        vR+CUBE_DIR_VECS[i][1],
+                        vS+CUBE_DIR_VECS[i][2]];
+        }
+      }
+    }
+
+    return results;
   }
   
   // default, jungle, water, offgrid, obstacle
