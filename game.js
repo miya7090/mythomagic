@@ -78,6 +78,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function getCoordinatesWithinRadius(cQ, cR, cS, radius, includeSelf=true){
     var results = []; // returns list of strings
+
+    for (let q = -radius; q <= radius; q++) {
+      for (let r = Math.max(-radius, -q-radius); r <= Math.min(radius, -q+radius); r++) {
+        var s = -q-r;
+        const neighborInfo = (cQ+q)+","+(cR+r)+","+(cS+s);
+        if (squaresByCubeIndex[neighborInfo] !== undefined){
+          results.push(neighborInfo);
+        }
+      }
+    }
+
+    if (includeSelf == false) { results.splice(results.indexOf(cQ+","+cR+","+cS),1); }
+    return results;
+  }
+
+  /* // inefficient multiple loops
+  function getCoordinatesWithinRadius(cQ, cR, cS, radius, includeSelf=true){
+    var results = []; // returns list of strings
     if (includeSelf == true) { results.push(cQ+","+cR+","+cS); }
 
     for (let m = 1; m <= radius; m++) {
@@ -100,7 +118,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     return results;
-  }
+  }*/
   
   // default, jungle, water, offgrid, obstacle
   console.log("loaded2~");
