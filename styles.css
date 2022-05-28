@@ -3,23 +3,34 @@
     --s: 25px;  /* size  */
     --m: 2px;    /* margin */
     --f: calc(1.732 * var(--s) + 4 * var(--m)  - 1px);
-  }
+}
   
-  .container {
+.container {
     font-size: 0; /*disable white space between inline block element */
-  }
+    width: 100%;
+    border: 1px cyan solid; 
+}
   
-  .gameSquare {
+.gameSquare {
     width: var(--s);
     margin: var(--m);
     height: calc(var(--s)*1.1547); 
     display: inline-block;
     font-size:initial;
     clip-path: polygon(0% 25%, 0% 75%, 50% 100%, 100% 75%, 100% 25%, 50% 0%);
-    margin-bottom: calc(var(--m) - var(--s)*0.2885); 
-  }
+    margin-bottom: calc(var(--m) - var(--s)*0.2885);
+    background-color: rgb(106, 154, 170);
+}
+
+.gameSquare[hoverHighlight=true] {
+    background-color: green;
+}
+
+.gameSquare[hoverHighlight=false] {
+    background-color: rgb(106, 154, 170);
+}
   
-  .container::before {
+.container::before {
     content: "";
     width: calc(var(--s)/2 + var(--m));
     float: left;
@@ -27,10 +38,9 @@
     shape-outside: repeating-linear-gradient(     
                      #0000 0 calc(var(--f) - 3px),      
                      #000  0 var(--f));
-  }
-  
-  
-  body {
+}
+    
+body {
     margin: 20px;
     background-color: rgb(105, 73, 73);
     font-family: arial, sans-serif;
@@ -69,7 +79,6 @@ h1 {
     border: 2px dotted #000000;
 }
 
-.default { background-color: rgb(130, 130, 130); }
 .offgrid { background-color: rgb(74, 74, 74); }
 .jungle { background-color: rgb(44, 103, 71); }
 .water { background-color: rgb(79, 92, 193); }

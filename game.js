@@ -1,8 +1,9 @@
-//////////////////////////////////// change before commmit
+HEX_SIDELENGTH = 13;
+HEX_RADIUS = (HEX_SIDELENGTH-1)/2;
 
 document.addEventListener("DOMContentLoaded", () => {
   console.log("loaded~");
-  console.log(BASE_DAMAGE_DIFF_SCALE_TO_HP);
+  console.log(BASE_DAMAGE_DIFF_SCALE_TO_HP); // debug
   const mainGrid = document.getElementById("hexContainer");
   const onFieldCards = document.getElementById("onFieldCards");
   const gameInfoBox = document.getElementById("gameInfoBox");
@@ -10,30 +11,54 @@ document.addEventListener("DOMContentLoaded", () => {
   const gameOptions = document.getElementById("gameOptions");
 
   // create game board
-  const squares = [];
-  const layout = [];
-  // create hexagon
-  addRow(3, 7); addRow(2, 8); addRow(2, 9);
-  addRow(1, 10); addRow(1, 11); addRow(0, 12);
-  addRow(0, 13);
-  addRow(0, 12); addRow(1, 11); addRow(1, 10);
-  addRow(2, 9);  addRow(2, 8); addRow(3, 7);
+  const squares = []; // integer indexing
+  const squaresByCubeIndex = {}; // keys: "q,r,s"
   
-  function addRow(marginLen, mainRowLen) {
+  // add tiles to game board
+  for (let r = -HEX_RADIUS; r <= HEX_RADIUS; r++) {
     const row = document.createElement("div");
     row.classList.add("hexRow");
     mainGrid.appendChild(row);
-    for (let i = 0; i < marginLen; i++) { addTile("offgrid"); }
-    for (let i = 0; i < mainRowLen; i++) { addTile("default"); }
-    for (let i = 0; i < marginLen; i++) { addTile("offgrid"); }
+    for (let q = -HEX_RADIUS; q <= HEX_RADIUS; q++) {
+      const square = document.createElement("div");
+      square.classList.add("gameSquare");
+      row.appendChild(square);
+
+      // manage coordinates
+      square.setAttribute("offset-q", q);
+      square.setAttribute("offset-r", r);
+      const cubeQ = q - (r - (r&1)) / 2; // this works! (probably)
+      const cubeR = r;
+      const cubeS = -cubeQ-r;
+      square.setAttribute("cube-q", cubeQ);
+      square.setAttribute("cube-r", cubeR);
+      square.setAttribute("cube-s", cubeS);
+
+      // save references to the tile
+      squares.push(square);
+      squaresByCubeIndex[cubeQ+","+cubeR+","+cubeS] = square;
+
+      // #TODO select tiles on edge as off field
+
+      // fancy highlighting of tile & neighbors
+      square.onmouseenter = (function(turnOn, c_q, c_r, c_s, radius) {
+        return function() { highlightSelfAndRadius(turnOn, c_q, c_r, c_s, radius); }
+      })(true, cubeQ, cubeR, cubeS, 3);
+      square.onmouseleave = (function(turnOn, c_q, c_r, c_s, radius) {
+        return function() { highlightSelfAndRadius(turnOn, c_q, c_r, c_s, radius); }
+      })(false, cubeQ, cubeR, cubeS, 3);
+      //console.log(square);
+    }
   }
 
-  function addTile(tileType) {
-    const square = document.createElement("div");
-    squares.push(square);
-    square.classList.add("gameSquare");
-    square.classList.add(tileType);
-    mainGrid.appendChild(square);
+  // fancy highlighting
+  function highlightSelfAndRadius(turnOn, cubeQ, cubeR, cubeS, radius){
+    console.log(cubeQ,cubeR,cubeS,"XXX");
+    var bgColor = "black";
+    if (turnOn == true) { bgColor = "yellow"; }
+    squaresByCubeIndex[cubeQ+","+cubeR+","+cubeS].setAttribute("hoverHighlight", turnOn);
+    // #TODO also highlight neighbors in radius
+    // LEFT OFF HERE
   }
   
   // default, jungle, water, offgrid, obstacle
