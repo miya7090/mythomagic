@@ -96,20 +96,17 @@ h1 {
     border: 3px dotted #858585;
 }
 
-.ccard {
+.card {
     margin-top: 10px;
     margin-left: 10px;
     float: left;
     width: 60px;
     height: 90px;
+    background-color: rgb(194, 190, 220);
 }
 
-.cardIsFigurine {
+.card[figurine=true] {
     background-color: rgb(186, 142, 142);
-}
-
-.cardIsNotFigurine {
-    background-color: rgb(227, 225, 148);
 }
 
 .hoverInfo {
@@ -121,6 +118,15 @@ h1 {
     background-color: rgb(36, 83, 32);
     border: 3px dotted #858585;
 }
+
+/* HP/mana preview bars */
+.barPreviewContainer {
+  width: 100%;
+  background-color: #ddd;
+}
+
+.hpBar {background-color: #04AA6D;}
+.manaBar {background-color: #5e6bff;}
 
 /* TOKEN BASE RULES */
 .player1 {
@@ -137,10 +143,6 @@ h1 {
     background-color: red;
 }
 
-.figurine {
-    background-color: red;
-}
-
-.notFigurine {
-    background-color: rgb(199, 93, 48);
+.token[figurine=true] {
+    background-color: rgb(237, 226, 140);
 }

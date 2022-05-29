@@ -7,6 +7,22 @@ MOUSE_HOVER_RADIUS = 3;
 CURRENT_MOUSE_Q = undefined;
 CURRENT_MOUSE_R = undefined;
 CURRENT_MOUSE_S = undefined;
+MAX_MANA = 1000;
+
+const BASE_STAT_DICT = {
+  // name, base atk, normal attack range, defense, hp, mana per turn, mana per attack, movement speed
+  "Athena":[3000,2,15,700,100,100,1], 
+  "Kronos":[3000,2,10,700,100,250,1], 
+  "Achilles":[2900,2,20,600,100,250,2],
+  "Apollo":[2000,6,10,700,100,250,1],
+  "Jason":[2100,2,10,800,100,250,1],
+  "Hestia":[500,2,15,1200,250,0,1],
+  "Steve":[500,2,15,1200,250,0,1],
+  "Joe":[500,2,15,1200,250,0,1],
+  "Bob":[500,2,15,1200,250,0,1]
+}
+
+const PLAYER_OWNED = ["Athena","Kronos","Apollo","Jason","Hestia","Steve"];
 
 document.addEventListener("DOMContentLoaded", () => {
   console.log("loaded~");
@@ -14,9 +30,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const mainGrid = document.getElementById("hexContainer");
   const onFieldCards = document.getElementById("onFieldCards");
   const gameInfoBox = document.getElementById("gameInfoBox");
-  const offFieldCards = document.getElementById("offFieldCards");
   const gameOptions = document.getElementById("gameOptions");
   const previewRadius = document.getElementById("previewRadius");
+  const myAvailableCards = document.getElementById("myAvailableCards");
   previewRadius.textContent="Preview radius: "+MOUSE_HOVER_RADIUS;
 
   // create game board
@@ -88,7 +104,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (event.keyCode === 90 && MOUSE_HOVER_RADIUS > 0) { // z, reduce radius
         MOUSE_HOVER_RADIUS -= 1;
         previewRadius.textContent="Preview radius: "+MOUSE_HOVER_RADIUS;
-      } else if (event.keyCode === 88 && MOUSE_HOVER_RADIUS < HEX_RADIUS) { // x, increase radius
+      } else if (event.keyCode === 88 && MOUSE_HOVER_RADIUS < 12) { // x, increase radius
         MOUSE_HOVER_RADIUS += 1;
         previewRadius.textContent="Preview radius: "+MOUSE_HOVER_RADIUS;
       }
@@ -174,24 +190,12 @@ document.addEventListener("DOMContentLoaded", () => {
   // default, jungle, water, offgrid, obstacle
   console.log("loaded2~");
 
-  // card setup and playing logic
-  const base_stat_dictionary = {
-    // name, base atk, normal attack range, defense, hp, mana per turn, mana per attack, movement speed
-    "Athena":(3000,2,15,700,100,100,1), 
-    "Kronos":(3000,2,10,700,100,250,1), 
-    "Achilles":(2900,2,20,600,100,250,2),
-    "Apollo":(2000,6,10,700,100,250,1),
-    "Jason":(2100,2,10,800,100,250,1),
-    "Hestia":(500,2,15,1200,250,0,1)
-  } // #TODO move this somewhere else
-
-
   // utility functions for cards
   function getBaseStats(cardType) {
-    if (base_stat_dictionary[cardType] == undefined){
+    if (BASE_STAT_DICT[cardType] == undefined){
       console.error(cardType+" not found in base stat dictionary");
     }
-    return base_stat_dictionary[cardType];
+    return BASE_STAT_DICT[cardType];
   }
 
   // Card information class
@@ -210,13 +214,13 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   class PlayerCard extends Card {
-    constructor(cardName, isFigurine, currentIndex) {
+    constructor(cardName, isFigurine, pc_q, pc_r, pc_s) {
       super(cardName);
       this.current_attack = this.base_attack;
       this.current_normal_attack_range = this.base_normal_attack_range;
       this.current_defense = this.base_defense;
       this.current_health = this.base_health;
-      this.current_mana = this.base_mana;
+      this.current_mana = 0;
       this.current_mana_per_turn = this.base_mana_per_turn;
       this.current_mana_per_atk = this.base_mana_per_atk;
       this.current_movement = this.base_movement;
@@ -231,7 +235,10 @@ document.addEventListener("DOMContentLoaded", () => {
       this.is_figurine = isFigurine;
       this.statuses = {"blinded":0, "charmed":0, "poisoned":0, "stunned":0, "terrified":0};
 
-      this.currentIndex = currentIndex; // location on grid
+      this.q = pc_q; // location on grid
+      this.r = pc_r;
+      this.s = pc_s;
+      this.tag = pc_q+","+pc_r+","+pc_s;
     }
   }
 
@@ -259,34 +266,70 @@ document.addEventListener("DOMContentLoaded", () => {
     return (Math.floor(Math.random()*20) + mvmtOffset + defOffset + figBoost) > savingThrowThreshold;
   }
 
+  // show all available cards of player
+  PLAYER_OWNED.forEach((availCard) => {
+    const acard = document.createElement("div");
+    acard.classList.add("card");
+    acard.setAttribute("name", availCard);
+    acard.innerHTML = getBaseCardHTML(availCard);
+    myAvailableCards.appendChild(acard);
+  });
+
+  function getBaseCardHTML(cardName, imgLink) {
+    return cardName + "\n TODO";
+  }
+
+  function getGameCardHTML(PCard) {
+    // cardName, imgLink, cardHP, cardMana, statusList
+    var pcResult = PCard.cardName + "\n"
+            + PCard.current_health + "HP\n"
+            + PCard.current_mana + "MP\n";
+    
+    // HP bar
+    var healthPercentage = PCard.current_health / (PCard.base_health + PCard.health_bonus);
+    healthPercentage = Math.round(100 * healthPercentage);
+    var manaPercentage = PCard.current_mana / (MAX_MANA + PCard.mana_bonus);
+    manaPercentage = Math.round(100 * manaPercentage);
+    pcResult += '<div class="barPreviewContainer">'
+                +'<div class="hpBar" style="width:'+healthPercentage+'%">'
+                +PCard.current_health+'/'+(PCard.base_health + PCard.health_bonus)+'</div>'
+                +'<div class="manaBar" style="width:'+manaPercentage+'%">'
+                +PCard.current_mana+'/'+(MAX_MANA + PCard.mana_bonus)+'</div>'
+                +'</div>';
+
+    //this.statuses = {"blinded":0, "charmed":0, "poisoned":0, "stunned":0, "terrified":0};
+
+    return pcResult;
+  }
+
   // create some default cards
   var defaultCards = [
-    new PlayerCard("Achilles", false, 12),
-    new PlayerCard("Apollo", true, 0),
-    new PlayerCard("Athena", true, 2),
-    new PlayerCard("Hestia", false, 5),
-    new PlayerCard("Apollo", false, 9)
+    new PlayerCard("Achilles", false, 0,1,-1), // s = -q-r
+    new PlayerCard("Apollo", true, 0,-1,1),
+    new PlayerCard("Athena", true, 2,3,-5),
+    new PlayerCard("Hestia", false, 2,2,-4),
+    new PlayerCard("Apollo", false, -1,2,-1)
   ];
 
   // draw cards and figurines
   const playerCards = [];
   defaultCards.forEach((defaultCard) => {
     const ccard = document.createElement("div");
-    squares[defaultCard.currentIndex].classList.add(defaultCard.cardName);
-    ccard.classList.add(defaultCard.cardName);
-    ccard.classList.add("ccard");
+    ccard.classList.add("card");
+    ccard.setAttribute("name",defaultCard.cardName);
+    ccard.innerHTML = getGameCardHTML(defaultCard);
 
     const token = document.createElement("div");
     token.classList.add("token");
-    if (defaultCard.is_figurine) {
-      token.classList.add("figurine");
-      ccard.classList.add("cardIsFigurine");
-    } else {
-      token.classList.add("notFigurine");
-      ccard.classList.add("cardIsNotFigurine");
-    }
     token.classList.add("player1");
-    squares[defaultCard.currentIndex].appendChild(token);
+
+    if (defaultCard.is_figurine) {
+      ccard.setAttribute("figurine",true);
+      token.setAttribute("figurine",true);
+    }
+    
+    // place token on board
+    squaresByCubeIndex[defaultCard.tag].appendChild(token);
 
     squares.push(token);
     onFieldCards.appendChild(ccard);
