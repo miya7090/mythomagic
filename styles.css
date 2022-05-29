@@ -1,45 +1,4 @@
-.hexgrid { /* hexagon grid: https://css-tricks.com/hexagons-and-beyond-flexible-responsive-grid-patterns-sans-media-queries/ */
-    display: flex;
-    --s: 25px;  /* size  */
-    --m: 2px;    /* margin */
-    --f: calc(1.732 * var(--s) + 4 * var(--m)  - 1px);
-}
-  
-.container {
-    font-size: 0; /*disable white space between inline block element */
-    width: 100%;
-    border: 1px cyan solid; 
-}
-  
-.gameSquare {
-    width: var(--s);
-    margin: var(--m);
-    height: calc(var(--s)*1.1547); 
-    display: inline-block;
-    font-size:initial;
-    clip-path: polygon(0% 25%, 0% 75%, 50% 100%, 100% 75%, 100% 25%, 50% 0%);
-    margin-bottom: calc(var(--m) - var(--s)*0.2885);
-    background-color: rgb(106, 154, 170);
-}
-
-.gameSquare[hoverHighlight=true] {
-    background-color: green;
-}
-
-.gameSquare[hoverHighlight=false] {
-    background-color: rgb(106, 154, 170);
-}
-  
-.container::before {
-    content: "";
-    width: calc(var(--s)/2 + var(--m));
-    float: left;
-    height: 120%;
-    shape-outside: repeating-linear-gradient(     
-                     #0000 0 calc(var(--f) - 3px),      
-                     #000  0 var(--f));
-}
-    
+/* GENERAL RULES */
 body {
     margin: 20px;
     background-color: rgb(105, 73, 73);
@@ -69,22 +28,65 @@ h1 {
     margin-top: 5px;
 }
 
-.grid {
-    margin-top: 20px;
-    margin-left: 20px;
-    display: block;
-    height: 170px;
-    width: 170px;
-    background-color: rgb(64, 200, 125);
-    border: 2px dotted #000000;
+/* HEXAGON GAMETILE BASE RULES */
+.hexgrid { /* hexagon grid: https://css-tricks.com/hexagons-and-beyond-flexible-responsive-grid-patterns-sans-media-queries/ */
+    display: flex;
+    --s: 25px;  /* size  */
+    --m: 2px;    /* margin */
+    --f: calc(1.732 * var(--s) + 4 * var(--m)  - 1px);
+}
+  
+.container {
+    font-size: 0; /*disable white space between inline block element */
+    width: 100%;
+    border: 1px cyan solid; 
+}
+  
+.gameSquare {
+    width: var(--s);
+    margin: var(--m);
+    height: calc(var(--s)*1.1547); 
+    display: inline-block;
+    font-size:initial;
+    clip-path: polygon(0% 25%, 0% 75%, 50% 100%, 100% 75%, 100% 25%, 50% 0%);
+    margin-bottom: calc(var(--m) - var(--s)*0.2885);
+    background-color: rgb(106, 154, 170);
+}
+ 
+.container::before {
+    content: "";
+    width: calc(var(--s)/2 + var(--m));
+    float: left;
+    height: 120%;
+    shape-outside: repeating-linear-gradient(     
+                     #0000 0 calc(var(--f) - 3px),      
+                     #000  0 var(--f));
+}
+    
+/* HEXAGON GAMETILE INTERACTION RULES */
+.gameSquare[hoverHighlight=true] {
+    background-color: green;
 }
 
-.offgrid { background-color: rgb(74, 74, 74); }
+.gameSquare[hoverHighlight=false] {
+    background-color: rgb(106, 154, 170);
+}
+
 .jungle { background-color: rgb(44, 103, 71); }
 .water { background-color: rgb(79, 92, 193); }
 .sand { background-color: rgb(203, 182, 124); }
 .obstacle { background-color: rgb(57, 57, 57); }
+.offgrid { background-color: rgb(74, 74, 74); }
 
+.offgrid[hoverHighlight=true] {
+    background-color: rgb(139, 40, 40);
+}
+
+.offgrid[hoverHighlight=false] {
+    background-color: rgb(74, 74, 74);
+}
+
+/* CARD AREA BASE RULES */
 .cards {
     margin-top: 20px;
     margin-left: 20px;
@@ -92,6 +94,22 @@ h1 {
     height: 120px;
     background-color: rgb(50, 49, 49);
     border: 3px dotted #858585;
+}
+
+.ccard {
+    margin-top: 10px;
+    margin-left: 10px;
+    float: left;
+    width: 60px;
+    height: 90px;
+}
+
+.cardIsFigurine {
+    background-color: rgb(186, 142, 142);
+}
+
+.cardIsNotFigurine {
+    background-color: rgb(227, 225, 148);
 }
 
 .hoverInfo {
@@ -104,6 +122,7 @@ h1 {
     border: 3px dotted #858585;
 }
 
+/* TOKEN BASE RULES */
 .player1 {
     border: 3px solid #785788;
     box-sizing: border-box; /* border goes inside box not outside */
@@ -124,24 +143,4 @@ h1 {
 
 .notFigurine {
     background-color: rgb(199, 93, 48);
-}
-
-.ccard {
-    margin-top: 10px;
-    margin-left: 10px;
-    float: left;
-    width: 60px;
-    height: 90px;
-}
-
-.cardIsFigurine {
-    background-color: rgb(186, 142, 142);
-}
-
-.cardIsNotFigurine {
-    background-color: rgb(227, 225, 148);
-}
-
-#placeholder {
-    color: blue;
 }

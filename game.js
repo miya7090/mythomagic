@@ -3,6 +3,10 @@
 HEX_SIDELENGTH = 13;
 HEX_RADIUS = (HEX_SIDELENGTH-1)/2;
 CUBE_DIR_VECS = [[1,0,-1],[1,-1,0],[0,-1,1],[-1,0,1],[-1,1,0],[0,1,-1]];
+MOUSE_HOVER_RADIUS = 3;
+CURRENT_MOUSE_Q = undefined;
+CURRENT_MOUSE_R = undefined;
+CURRENT_MOUSE_S = undefined;
 
 document.addEventListener("DOMContentLoaded", () => {
   console.log("loaded~");
@@ -12,6 +16,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const gameInfoBox = document.getElementById("gameInfoBox");
   const offFieldCards = document.getElementById("offFieldCards");
   const gameOptions = document.getElementById("gameOptions");
+  const previewRadius = document.getElementById("previewRadius");
+  previewRadius.textContent="Preview radius: "+MOUSE_HOVER_RADIUS;
 
   // create game board
   const squares = []; // integer indexing
@@ -22,7 +28,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const row = document.createElement("div");
     row.classList.add("hexRow");
     mainGrid.appendChild(row);
-    for (let q = -HEX_RADIUS; q <= HEX_RADIUS; q++) {
+    for (let full_q = -HEX_RADIUS; full_q <= HEX_RADIUS; full_q++) {
+      var q = full_q; // offset number of columns in odd rows instead of just using q
+      if (r&1 && full_q == HEX_RADIUS) { break; }
+
       const square = document.createElement("div");
       square.classList.add("gameSquare");
       row.appendChild(square);
@@ -37,25 +46,67 @@ document.addEventListener("DOMContentLoaded", () => {
       square.setAttribute("cube-r", cubeR);
       square.setAttribute("cube-s", cubeS);
 
+      // select tiles inside edge as in field
+      if (getTileDistance(cubeQ,cubeR,cubeS,0,0,0) > HEX_RADIUS) {
+        square.classList.add("offgrid");
+      }
+
       // save references to the tile
       squares.push(square);
       squaresByCubeIndex[cubeQ+","+cubeR+","+cubeS] = square;
 
-      // #TODO select tiles on edge as off field
-
       // fancy highlighting of tile & neighbors
-      square.onmouseenter = (function(turnOn, c_q, c_r, c_s, radius) {
-        return function() { highlightSelfAndRadius(turnOn, c_q, c_r, c_s, radius); }
-      })(true, cubeQ, cubeR, cubeS, 3);
-      square.onmouseleave = (function(turnOn, c_q, c_r, c_s, radius) {
-        return function() { highlightSelfAndRadius(turnOn, c_q, c_r, c_s, radius); }
-      })(false, cubeQ, cubeR, cubeS, 3);
+      square.onmouseenter = (function(turnOn, c_q, c_r, c_s) {
+        return function() {
+          CURRENT_MOUSE_Q = c_q;
+          CURRENT_MOUSE_R = c_r;
+          CURRENT_MOUSE_S = c_s;
+          highlightSelfAndRadius(turnOn, c_q, c_r, c_s);
+        }
+      })(true, cubeQ, cubeR, cubeS);
+      square.onmouseleave = (function(turnOn, c_q, c_r, c_s) {
+        return function() {
+          CURRENT_MOUSE_Q = undefined;
+          CURRENT_MOUSE_R = undefined;
+          CURRENT_MOUSE_S = undefined;
+          highlightSelfAndRadius(turnOn, c_q, c_r, c_s);
+        }
+      })(false, cubeQ, cubeR, cubeS);
       //console.log(square);
     }
   }
 
+  // key press handling
+  document.addEventListener('keydown', logKey);
+
+  function logKey(event) {
+    if (event.keyCode === 90 || event.keyCode === 88) { // mouse hover radius stuff
+      // first clear hover highlights
+      if (CURRENT_MOUSE_Q !== undefined) {
+        highlightSelfAndRadius(false, CURRENT_MOUSE_Q, CURRENT_MOUSE_R, CURRENT_MOUSE_S);
+      }
+      if (event.keyCode === 90 && MOUSE_HOVER_RADIUS > 0) { // z, reduce radius
+        MOUSE_HOVER_RADIUS -= 1;
+        previewRadius.textContent="Preview radius: "+MOUSE_HOVER_RADIUS;
+      } else if (event.keyCode === 88 && MOUSE_HOVER_RADIUS < HEX_RADIUS) { // x, increase radius
+        MOUSE_HOVER_RADIUS += 1;
+        previewRadius.textContent="Preview radius: "+MOUSE_HOVER_RADIUS;
+      }
+      // then redo hover highlights
+      if (CURRENT_MOUSE_Q !== undefined) {
+        highlightSelfAndRadius(true, CURRENT_MOUSE_Q, CURRENT_MOUSE_R, CURRENT_MOUSE_S);
+      }
+    }
+    return;
+  }
+
+  function getTileDistance(aQ, aR, aS, bQ, bR, bS) {
+    return Math.max(Math.abs(aQ-bQ), Math.abs(aR-bR), Math.abs(aS-bS));
+  }
+
   // fancy (un-)highlighting
-  function highlightSelfAndRadius(turnOn, cubeQ, cubeR, cubeS, radius){
+  function highlightSelfAndRadius(turnOn, cubeQ, cubeR, cubeS){
+    const radius = MOUSE_HOVER_RADIUS;
     const tileNeighbors = getCoordinatesWithinRadius(cubeQ,cubeR,cubeS,radius,true);
 
     tileNeighbors.forEach((tileNeighbor) => {
