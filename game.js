@@ -98,9 +98,18 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       }
     })();
+
+    const referenceCard = new Card(availCard);
+    acard.onmouseenter = (function(BCard) {
+      return function() {
+        gameInfoBox.innerHTML = get_BC_BroadcastForInfoBox(BCard);
+      }
+    })(referenceCard);
   }); 
 
   // draw cards and tokens
+  // #TODO make function that removes a player card when clicking on it (in setup phase)
+
   function renderCard(pcToRender) {
     const ccard = document.createElement("div");
     ccard.classList.add("card");
@@ -115,15 +124,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     ccard.onmouseenter = (function(PCard) {
       return function() {
-        gameInfoBox.innerHTML = getBroadcastForInfoBox(PCard);
+        gameInfoBox.innerHTML = get_PC_BroadcastForInfoBox(PCard);
       }
     })(pcToRender);
-
-    ccard.onmouseleave = (function() {
-      return function() {
-        gameInfoBox.innerHTML = getClearBroadcastForInfoBox();
-      }
-    })();
   };
 
   function renderToken(pcToRender) {

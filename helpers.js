@@ -101,7 +101,23 @@
     return pcResult;
   }
 
-  function getBroadcastForInfoBox(PCard) {
+  function get_BC_BroadcastForInfoBox(BCard) {
+    var bcResult = "<p>" + BCard.cardName + "</p>";
+    bcResult += "<p>" + BCard.base_health + "HP</p>";
+ 
+    bcResult += "<p>ATK: " + BCard.base_attack + "</p>";
+    bcResult += "<p>RNG: " + BCard.base_normal_attack_range + "</p>";
+    bcResult += "<p>DEF: " + BCard.base_defense + "</p>";
+    bcResult += "<p>MP/turn: " + BCard.base_mana_per_turn + "</p>";
+    bcResult += "<p>MP/atk: " + BCard.base_mana_per_atk + "</p>";
+    bcResult += "<p>MVT: " + BCard.base_movement + "</p>";
+    
+    bcResult += "<p>********* display holofoil power here ***********</p>"; // #TODO display only if owned
+
+    return bcResult;
+  }
+
+  function get_PC_BroadcastForInfoBox(PCard) {
     var pcResult = "<p>" + PCard.cardName + " (" + PCard.dead + ")</p>";
     
     var healthPercentage = PCard.current_health / (PCard.base_health + PCard.health_bonus);
@@ -117,7 +133,7 @@
     pcResult += "(" + MAX_MANA + "+" + PCard.mana_bonus + ")</p>";
     
     pcResult += "<p>ATK: " + PCard.current_attack + " (base " + PCard.base_attack + ")</p>";
-    pcResult += "<p>Normal range: " + PCard.current_normal_attack_range + " (base " + PCard.base_normal_attack_range + ")</p>";
+    pcResult += "<p>RNG: " + PCard.current_normal_attack_range + " (base " + PCard.base_normal_attack_range + ")</p>";
     pcResult += "<p>DEF: " + PCard.current_defense + " (base " + PCard.base_defense + ")</p>";
     pcResult += "<p>MP/turn: " + PCard.current_mana_per_turn + " (base " + PCard.base_mana_per_turn + ")</p>";
     pcResult += "<p>MP/atk: " + PCard.current_mana_per_atk + " (base " + PCard.base_mana_per_atk + ")</p>";
