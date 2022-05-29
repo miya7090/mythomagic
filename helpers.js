@@ -82,9 +82,7 @@
   // for formatting display of cards that player is using in game
   function getGameCardHTML(PCard) {
     // cardName, imgLink, cardHP, cardMana, statusList
-    var pcResult = PCard.cardName + "\n"
-            + PCard.current_health + "HP\n"
-            + PCard.current_mana + "MP\n";
+    var pcResult = PCard.cardName + "\n";
     
     // HP bar
     var healthPercentage = PCard.current_health / (PCard.base_health + PCard.health_bonus);
@@ -101,4 +99,50 @@
     //this.statuses = {"blinded":0, "charmed":0, "poisoned":0, "stunned":0, "terrified":0};
 
     return pcResult;
+  }
+
+  function getBroadcastForInfoBox(PCard) {
+    var pcResult = "<p>" + PCard.cardName + " (" + PCard.dead + ")</p>";
+    
+    var healthPercentage = PCard.current_health / (PCard.base_health + PCard.health_bonus);
+    healthPercentage = Math.round(100 * healthPercentage);
+    pcResult += "<p>" + healthPercentage + "%, ";
+    pcResult += PCard.current_health + "/" + (PCard.base_health + PCard.health_bonus) + "HP ";
+    pcResult += "(" + PCard.base_health + "+" + PCard.health_bonus + ")</p>";
+    
+    var manaPercentage = PCard.current_mana / (MAX_MANA + PCard.mana_bonus);
+    manaPercentage = Math.round(100 * manaPercentage);
+    pcResult += "<p>" + manaPercentage + "%, ";
+    pcResult += PCard.current_mana + "/" + (MAX_MANA + PCard.mana_bonus) + "MP ";
+    pcResult += "(" + MAX_MANA + "+" + PCard.mana_bonus + ")</p>";
+    
+    pcResult += "<p>ATK: " + PCard.current_attack + " (base " + PCard.base_attack + ")</p>";
+    pcResult += "<p>Normal range: " + PCard.current_normal_attack_range + " (base " + PCard.base_normal_attack_range + ")</p>";
+    pcResult += "<p>DEF: " + PCard.current_defense + " (base " + PCard.base_defense + ")</p>";
+    pcResult += "<p>MP/turn: " + PCard.current_mana_per_turn + " (base " + PCard.base_mana_per_turn + ")</p>";
+    pcResult += "<p>MP/atk: " + PCard.current_mana_per_atk + " (base " + PCard.base_mana_per_atk + ")</p>";
+    pcResult += "<p>MVT: " + PCard.current_movement + " (base " + PCard.base_movement + ")</p>";
+    
+    if (PCard.is_figurine == true) {
+        pcResult += "<p>********* display holofoil power here ***********</p>";
+    } else {
+        pcResult += "<p>Holofoil unavailable</p>";
+    }
+
+    var statusTxt = "<p>Statuses: ";
+    for (var sKey in PCard.statuses){
+        if (PCard.statuses[sKey] == 1){
+            statusTxt += sKey + " ";
+        }
+    }
+    if (statusTxt === "<p>Statuses: ") {
+        statusTxt += "none";
+    }
+    pcResult += statusTxt + "</p>";
+
+    return pcResult;
+  }
+
+  function getClearBroadcastForInfoBox() {
+    return "";
   }

@@ -24,12 +24,14 @@
       this.current_mana_per_turn = this.base_mana_per_turn;
       this.current_mana_per_atk = this.base_mana_per_atk;
       this.current_movement = this.base_movement;
-      this.dead = false;
+      this.dead = "active"; // "active", "defeated", or "undead"
 
       this.attack_bonus = 0;
       this.defense_bonus = 0;
       this.health_bonus = 0;
       this.mana_bonus = 0;
+      this.mana_turnRegen_bonus = 0;
+      this.mana_atkRegen_bonus = 0;
       this.movement_bonus = 0;
 
       this.is_figurine = isFigurine;
@@ -37,6 +39,9 @@
 
       this.q = pc_q; // location on grid
       this.r = pc_r;
+      if (pc_s !== -pc_q -pc_r){
+          console.error("attempted to make a player card with invalid cubic coordinates: "+pc_q+","+pc_r+","+pc_s);
+      }
       this.s = pc_s;
       this.tag = pc_q+","+pc_r+","+pc_s;
     }

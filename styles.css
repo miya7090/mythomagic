@@ -123,14 +123,18 @@ h1 {
     border: 3px dotted #858585;
 }
 
+.hoverInfo p {
+    margin: 0px 0px 0px 0px;
+}
+
 /* HP/mana preview bars */
 .barPreviewContainer {
   width: 100%;
   background-color: #ddd;
 }
 
-.hpBar {background-color: #04AA6D;}
-.manaBar {background-color: #5e6bff;}
+.hpBar {background-color: #04AA6D; font-size: 11px;}
+.manaBar {background-color: #5e6bff; font-size: 11px;}
 
 /* TOKEN BASE RULES */
 .player1 {

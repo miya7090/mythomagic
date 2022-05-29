@@ -30,4 +30,5 @@ const BASE_STAT_DICT = {
     "Bob":[500,2,15,1200,250,0,1]
   }
   
-const PLAYER_OWNED = ["Athena","Kronos","Apollo","Jason","Hestia","Steve"];
+  const PLAYER_OWNED = ["Athena","Kronos","Apollo","Jason","Hestia","Steve"];
+  const PLAYER_HOLOFOIL = ["Athena","Apollo","Jason","Steve"];

@@ -12,6 +12,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   previewRadius.textContent="Preview radius: "+MOUSE_HOVER_RADIUS;
 
+  // key press handling
+  document.addEventListener('keydown', logKey);
+
   // add tiles to game board
   for (let r = -HEX_RADIUS; r <= HEX_RADIUS; r++) {
     const row = document.createElement("div");
@@ -65,10 +68,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // key press handling
-  document.addEventListener('keydown', logKey);
-
   // #TODO add terrain processing
+
+  // CARD TIME
+  var playerCards = [];
 
   // show all available cards of player
   PLAYER_OWNED.forEach((availCard) => {
@@ -77,38 +80,64 @@ document.addEventListener("DOMContentLoaded", () => {
     acard.setAttribute("name", availCard);
     acard.innerHTML = getBaseCardHTML(availCard);
     myAvailableCards.appendChild(acard);
+
+    acard.onmouseup = (function() {
+      return function() {
+        const countPlayersPicks = onFieldCards.childElementCount;
+        if (countPlayersPicks >= 5){
+          console.error("player has already picked 5 cards"); // #TODO express error nicely
+        } else if (playerCards.map(x => x.cardName).includes(availCard)) {
+          console.error(availCard+" card already selected");
+        } else {
+          // define a new player card with a starter position
+          var hasHolo = PLAYER_HOLOFOIL.includes(availCard);
+          var newPC = new PlayerCard(availCard, hasHolo, -(HEX_RADIUS-1)+countPlayersPicks,HEX_RADIUS,-1-countPlayersPicks);
+          renderCard(newPC);
+          renderToken(newPC);
+          playerCards.push(newPC);
+        }
+      }
+    })();
   }); 
 
-  // create some default cards
-  var defaultCards = [
-    new PlayerCard("Achilles", false, 0,1,-1), // s = -q-r
-    new PlayerCard("Apollo", true, 0,-1,1),
-    new PlayerCard("Athena", true, 2,3,-5),
-    new PlayerCard("Hestia", false, 2,2,-4),
-    new PlayerCard("Apollo", false, -1,2,-1)
-  ];
-
-  // draw cards and figurines
-  const playerCards = [];
-  defaultCards.forEach((defaultCard) => {
+  // draw cards and tokens
+  function renderCard(pcToRender) {
     const ccard = document.createElement("div");
     ccard.classList.add("card");
-    ccard.setAttribute("name",defaultCard.cardName);
-    ccard.innerHTML = getGameCardHTML(defaultCard);
+    ccard.setAttribute("name",pcToRender.cardName);
+    ccard.innerHTML = getGameCardHTML(pcToRender);
 
+    if (pcToRender.is_figurine) {
+      ccard.setAttribute("figurine",true);
+    }
+    
+    onFieldCards.appendChild(ccard);
+
+    ccard.onmouseenter = (function(PCard) {
+      return function() {
+        gameInfoBox.innerHTML = getBroadcastForInfoBox(PCard);
+      }
+    })(pcToRender);
+
+    ccard.onmouseleave = (function() {
+      return function() {
+        gameInfoBox.innerHTML = getClearBroadcastForInfoBox();
+      }
+    })();
+  };
+
+  function renderToken(pcToRender) {
     const token = document.createElement("div");
     token.classList.add("token");
     token.classList.add("player1");
 
-    if (defaultCard.is_figurine) {
-      ccard.setAttribute("figurine",true);
+    if (pcToRender.is_figurine) {
       token.setAttribute("figurine",true);
     }
     
-    // place token on board, display card
-    HEXTILE_CUBIC_INDEX[defaultCard.tag].appendChild(token);
-    onFieldCards.appendChild(ccard);
-  });
+    // place token on board
+    HEXTILE_CUBIC_INDEX[pcToRender.tag].appendChild(token);
+  };
 
   // use clearInterval, setInterval, card.timerId or similar, setTimeout
   // document.removeEventListener
