@@ -8,11 +8,11 @@
         <link rel="shortcut icon" href="favicon.ico" />
         <link rel="stylesheet" href="styles.css" />
         <script src="config.js" charset="utf8"></script>
+        <script src="models.js" charset="utf8"></script>
+        <script src="helpers.js" charset="utf8"></script>
         <script src="game.js" charset="utf8"></script>
     </head>
     <body>
-        
-
         <div class="wrapper">
             <div class="player">
                 <div class="leftcolumn">
@@ -27,9 +27,14 @@
                     <div class="optionBox" id="gameOptions"></div>
                 </div>
             </div>
+            <div class="cards" id="myAvailableCards"></div>
+            <p id="previewRadius">Preview radius: undefined</p>
             <div class="instructions">
-                <h1>instructions</h1>
-                <p>instructions here at the bottom of the screen</p>
+                <p>z/x ... -/+ preview radius</p>
+                <p>q ... pick heroes [DEBUG] [TODO] [priority 1!!!!!!!!!!!!!!!!!!!!!!!]</p>
+                <p>w ... initiate hero placement [DEBUG] [TODO]</p>
+                <p>e ... begin new player 1 turn [DEBUG] [TODO]</p>
+
             </div>
         </div>
     </body>

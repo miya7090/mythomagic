@@ -109,6 +109,10 @@ h1 {
     background-color: rgb(186, 142, 142);
 }
 
+.card:hover {
+    background-color: rgb(249, 255, 130);
+}
+
 .hoverInfo {
     margin-top: 20px;
     margin-left: 20px;
