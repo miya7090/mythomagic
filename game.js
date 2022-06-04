@@ -99,7 +99,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     })();
 
-    const referenceCard = new Card(availCard);
+    const referenceCard = new Card(availCard); // show stats on hover
     acard.onmouseenter = (function(BCard) {
       return function() {
         gameInfoBox.innerHTML = get_BC_BroadcastForInfoBox(BCard);
@@ -108,11 +108,10 @@ document.addEventListener("DOMContentLoaded", () => {
   }); 
 
   // draw cards and tokens
-  // #TODO make function that removes a player card when clicking on it (in setup phase)
-
   function renderCard(pcToRender) {
     const ccard = document.createElement("div");
     ccard.classList.add("card");
+    ccard.id = "p1card-"+pcToRender.cardName;
     ccard.setAttribute("name",pcToRender.cardName);
     ccard.innerHTML = getGameCardHTML(pcToRender);
 
@@ -127,12 +126,23 @@ document.addEventListener("DOMContentLoaded", () => {
         gameInfoBox.innerHTML = get_PC_BroadcastForInfoBox(PCard);
       }
     })(pcToRender);
+
+    ccard.onmouseup = (function() { // remove card
+      return function() {
+        playerCards.splice(playerCards.indexOf(pcToRender), 1); // remove from playerCards
+        ccard.remove(); // remove div
+        removeToken(pcToRender);
+      }
+    })();
   };
 
   function renderToken(pcToRender) {
     const token = document.createElement("div");
     token.classList.add("token");
     token.classList.add("player1");
+    token.id = "p1token-" + pcToRender.cardName;
+    console.log("created token with id "+token.id);
+    token.q = pcToRender.q;
 
     if (pcToRender.is_figurine) {
       token.setAttribute("figurine",true);
@@ -140,6 +150,34 @@ document.addEventListener("DOMContentLoaded", () => {
     
     // place token on board
     HEXTILE_CUBIC_INDEX[pcToRender.tag].appendChild(token);
+  };
+
+  function removeToken(pcardOfThisToken) { // only valid before game starts
+    const tokenToRemove = document.getElementById("p1token-" + pcardOfThisToken.cardName);
+    const ttrQ = pcardOfThisToken.q;
+    tokenToRemove.remove();
+    // move tokens to the right, left one space
+    Object.keys(playerCards).forEach(key => {
+      const pcardOfOtherToken = playerCards[key];
+      const ttmQ = pcardOfOtherToken.q;
+      if (ttmQ > ttrQ) {
+        moveToken(pcardOfOtherToken, -1, 0);
+      }
+    });
+  };
+
+  function moveToken(tokenPcard, diffQ, diffR) {
+    const tokenDiv = document.getElementById("p1token-" + tokenPcard.cardName);
+    tokenDiv.remove();
+    tokenPcard.q += diffQ;
+    tokenPcard.r += diffR;
+    tokenPcard.s = -tokenPcard.q - tokenPcard.r;
+    tokenPcard.tag = tokenPcard.q+","+tokenPcard.r+","+tokenPcard.s;
+    // check if this coordinate is invalid
+    if (HEXTILE_CUBIC_INDEX[tokenPcard.tag] == undefined){
+      console.error(tokenPcard.cardName+" cannot be moved to "+tokenPcard.tag+" since this is out of bounds");
+    }
+    renderToken(tokenPcard);
   };
 
   // use clearInterval, setInterval, card.timerId or similar, setTimeout

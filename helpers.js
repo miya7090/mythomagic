@@ -29,6 +29,7 @@
   function highlightSelfAndRadius(turnOn, cubeQ, cubeR, cubeS){
     const radius = MOUSE_HOVER_RADIUS;
     const tileNeighbors = getCoordinatesWithinRadius(cubeQ,cubeR,cubeS,radius,true);
+    // console.log(cubeQ+"/"+cubeR+"/"+cubeS);
 
     tileNeighbors.forEach((tileNeighbor) => {
         HEXTILE_CUBIC_INDEX[tileNeighbor].setAttribute("hoverHighlight", turnOn);
