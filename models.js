@@ -1,4 +1,6 @@
-  // Card information class
+// @miya7090
+
+// Card information class
   class Card {
     constructor(cardName) {
       const base_stats = getBaseStats(cardName);
@@ -45,6 +47,38 @@
       this.s = pc_s;
       this.tag = pc_q+","+pc_r+","+pc_s;
     }
+    changeLocationTo(nq,nr){
+      this.q = nq;
+      this.r = nr;
+      this.s = -nq - nr;
+      this.tag = this.q+","+this.r+","+this.s;
+    }
+    moveLocationBy(nq,nr){
+      this.q += nq;
+      this.r += nr;
+      this.s = -this.q - this.r;
+      this.tag = this.q+","+this.r+","+this.s;
+    }
+    /*getRangeOfMotion(){
+      return 
+
+      function getCoordinatesWithinRadius(cQ, cR, cS, radius, includeSelf=true){
+        var results = []; // returns list of strings
+    
+        for (let q = -radius; q <= radius; q++) {
+          for (let r = Math.max(-radius, -q-radius); r <= Math.min(radius, -q+radius); r++) {
+            var s = -q-r;
+            const neighborInfo = (cQ+q)+","+(cR+r)+","+(cS+s);
+            if (HEXTILE_CUBIC_INDEX[neighborInfo] !== undefined){
+              results.push(neighborInfo);
+            }
+          }
+        }
+    
+        if (includeSelf == false) { results.splice(results.indexOf(cQ+","+cR+","+cS),1); }
+        return results;
+      }
+    }*/
   }
 
   class Player {

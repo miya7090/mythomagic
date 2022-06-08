@@ -1,3 +1,5 @@
+// @miya7090
+
 BASE_DAMAGE_DIFF_SCALE_TO_HP = 20
 MVMT_SPD_SCALE_TO_SAVE_THROW = 20
 DEFENCE_SCALE_TO_SAVE_THROW = 20
@@ -17,6 +19,9 @@ CURRENT_MOUSE_S = undefined;
 MAX_MANA = 1000;
 HEXTILE_CUBIC_INDEX = {}; // keys: "q,r,s", maps to divs that are hextiles
 
+GAME_MODE = "startup"; // startup, moving
+GAME_MODE_MEMORYTARGET = undefined; // used if moving tokens, etc
+
 const BASE_STAT_DICT = {
     // name, base atk, normal attack range, defense, hp, mana per turn, mana per attack, movement speed
     "Athena":[3000,2,15,700,100,100,1], 
@@ -32,3 +37,4 @@ const BASE_STAT_DICT = {
   
   const PLAYER_OWNED = ["Athena","Kronos","Apollo","Jason","Hestia","Steve"];
   const PLAYER_HOLOFOIL = ["Athena","Apollo","Jason","Steve"];
+  PLAYER_GAMECARD_OBJS = [];

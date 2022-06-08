@@ -1,84 +1,104 @@
-  // what to do when key pressed
-  function logKey(event) {
-    if (event.keyCode === 90 || event.keyCode === 88) { // mouse hover radius stuff
-      // first clear hover highlights
-      if (CURRENT_MOUSE_Q !== undefined) {
-        highlightSelfAndRadius(false, CURRENT_MOUSE_Q, CURRENT_MOUSE_R, CURRENT_MOUSE_S);
-      }
-      if (event.keyCode === 90 && MOUSE_HOVER_RADIUS > 0) { // z, reduce radius
-        MOUSE_HOVER_RADIUS -= 1;
-        previewRadius.textContent="Preview radius: "+MOUSE_HOVER_RADIUS;
-      } else if (event.keyCode === 88 && MOUSE_HOVER_RADIUS < 12) { // x, increase radius
-        MOUSE_HOVER_RADIUS += 1;
-        previewRadius.textContent="Preview radius: "+MOUSE_HOVER_RADIUS;
-      }
-      // then redo hover highlights
-      if (CURRENT_MOUSE_Q !== undefined) {
-        highlightSelfAndRadius(true, CURRENT_MOUSE_Q, CURRENT_MOUSE_R, CURRENT_MOUSE_S);
-      }
-    }
-    return;
-  }
+// @miya7090
 
-  // get hex distance
-  function getTileDistance(aQ, aR, aS, bQ, bR, bS) {
-    return Math.max(Math.abs(aQ-bQ), Math.abs(aR-bR), Math.abs(aS-bS));
-  }
+// fancy tile highlighting and clearing of highlights
+function highlightSelfAndRadius(turnOn, cubeQ, cubeR, cubeS){
+  const coordsInRange = getCoordinatesWithinRadius(cubeQ,cubeR,cubeS,MOUSE_HOVER_RADIUS,true);
+  const tileNeighbors = filterOnlyCoordinatesOnBoard(coordsInRange);
+  // console.log(cubeQ+"/"+cubeR+"/"+cubeS); // for debug
 
-  // fancy tile highlighting and clearing of highlights
-  function highlightSelfAndRadius(turnOn, cubeQ, cubeR, cubeS){
-    const radius = MOUSE_HOVER_RADIUS;
-    const tileNeighbors = getCoordinatesWithinRadius(cubeQ,cubeR,cubeS,radius,true);
-    // console.log(cubeQ+"/"+cubeR+"/"+cubeS);
-
+  if (tileNeighbors !== undefined) {
     tileNeighbors.forEach((tileNeighbor) => {
         HEXTILE_CUBIC_INDEX[tileNeighbor].setAttribute("hoverHighlight", turnOn);
     });
+  }
+}
 
+function createTileDiv(rowDiv, q, r) {
+  const square = document.createElement("div"); // create tile and add to row
+
+  square.classList.add("gameSquare"); // #TODO rename as tiles not squares
+  rowDiv.appendChild(square);
+
+  // store tile coordinates
+  square.offset_q = q;
+  square.offset_r = r;
+  const cubeQ = q - (r - (r&1)) / 2; // this works! (probably)
+  const cubeR = r;
+  const cubeS = -cubeQ-r;
+  square.cube_q = cubeQ;
+  square.cube_r = cubeR;
+  square.cube_s = cubeS;
+
+  // select tiles outside edge as off field
+  if (getTileDistance(cubeQ,cubeR,cubeS,0,0,0) > HEX_RADIUS) {
+    square.classList.add("offgrid");
   }
 
-  // get list of all coordinates within range of given center tile
-  function getCoordinatesWithinRadius(cQ, cR, cS, radius, includeSelf=true){
-    var results = []; // returns list of strings
+  // save reference to the tile
+  HEXTILE_CUBIC_INDEX[cubeQ+","+cubeR+","+cubeS] = square;
 
-    for (let q = -radius; q <= radius; q++) {
-      for (let r = Math.max(-radius, -q-radius); r <= Math.min(radius, -q+radius); r++) {
-        var s = -q-r;
-        const neighborInfo = (cQ+q)+","+(cR+r)+","+(cS+s);
-        if (HEXTILE_CUBIC_INDEX[neighborInfo] !== undefined){
-          results.push(neighborInfo);
-        }
-      }
+  // fancy highlighting of tile & neighbors
+  square.addEventListener('mouseenter', mouseOverTile);
+
+  // tile moving receptor
+  // token mover function
+  square.addEventListener('mouseup', mouseClickTile);
+};
+
+function createAvailableCardDiv(pcToRender) {
+  const acard = document.createElement("div");
+  acard.classList.add("card");
+  acard.name = pcToRender;
+  acard.innerHTML = getBaseCardHTML(pcToRender);
+  myAvailableCards.appendChild(acard);
+
+  const referenceCard = new Card(pcToRender); // show stats on hover
+  acard.addEventListener('mouseenter', function(evt){mouseOverAvailableCard(evt, referenceCard);});
+  acard.addEventListener('mouseup', mouseClickAvailableCard);
+};
+
+function createGameCardDiv(pcToRender) {
+  const ccard = document.createElement("div");
+
+  ccard.classList.add("player1");
+  ccard.classList.add("card");
+  ccard.id = "p1card-"+pcToRender.cardName;
+  ccard.innerHTML = getGameCardHTML(pcToRender);
+  ccard.name = pcToRender.cardName;
+  ccard.setAttribute("figurine",pcToRender.is_figurine);
+  
+  onFieldCards.appendChild(ccard);
+
+  ccard.addEventListener('mouseenter', function(evt){mouseOverGameCard(evt, pcToRender);});
+  ccard.addEventListener('mouseup', function(evt){mouseClickGameCard(evt, pcToRender);});
+};
+
+function createTokenDiv(pcToRender) {
+  const token = document.createElement("div");
+  token.classList.add("player1");
+  token.classList.add("token");
+  token.id = "p1token-" + pcToRender.cardName;
+  token.name = pcToRender.cardName;
+  token.setAttribute("figurine",pcToRender.is_figurine);
+  token.q = pcToRender.q; // used for location initialization
+
+  // place token on board
+  HEXTILE_CUBIC_INDEX[pcToRender.tag].appendChild(token);
+
+  // token mover function
+  token.onmouseup = (function() {
+    return function(e) {
+      e.stopPropagation(); // don't also click on the square beneath
+      GAME_MODE = "moving";
+      GAME_MODE_MEMORYTARGET = pcToRender;
     }
+  })();
+};
 
-    if (includeSelf == false) { results.splice(results.indexOf(cQ+","+cR+","+cS),1); }
-    return results;
-  }
-
-  // retrieve base stats of a card, return array
-  function getBaseStats(cardType) {
-    if (BASE_STAT_DICT[cardType] == undefined){
-      console.error(cardType+" not found in base stat dictionary");
-    }
-    return BASE_STAT_DICT[cardType];
-  }
-
-  // #TODO change this up
-  function savingThrow(savingThrowThreshold) {
-    // augmented by movement speed and defense
-    const mvmtOffset = (this.current_movement + this.movement_bonus) / MVMT_SPD_SCALE_TO_SAVE_THROW;
-    const defOffset = (this.current_defense + this.defense_bonus) / DEFENCE_SCALE_TO_SAVE_THROW;
-    var figBoost = 0;
-    if (this.is_figurine){
-      figBoost = FIGURINE_SAVING_THROW_FLAT_BOOST;
-    }
-    return (Math.floor(Math.random()*20) + mvmtOffset + defOffset + figBoost) > savingThrowThreshold;
-  }
-
-  // for formatting display of cards available to player
-  function getBaseCardHTML(cardName, imgLink) {
-    return cardName + "\n TODO";
-  }
+// for formatting display of cards available to player
+function getBaseCardHTML(cardName, imgLink) {
+  return cardName + "\n TODO";
+}
 
   // for formatting display of cards that player is using in game
   function getGameCardHTML(PCard) {
