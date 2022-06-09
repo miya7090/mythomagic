@@ -88,7 +88,7 @@ function createTokenDiv(pcToRender) {
   // token mover function
   token.onmouseup = (function() {
     return function(e) {
-      e.stopPropagation(); // don't also click on the square beneath
+      e.stopPropagation(); // don't also click on the square beneath #TODO click the tile not just the token to move
       GAME_MODE = "moving";
       GAME_MODE_MEMORYTARGET = pcToRender;
     }
@@ -100,86 +100,108 @@ function getBaseCardHTML(cardName, imgLink) {
   return cardName + "\n TODO";
 }
 
-  // for formatting display of cards that player is using in game
-  function getGameCardHTML(PCard) {
-    // cardName, imgLink, cardHP, cardMana, statusList
-    var pcResult = PCard.cardName + "\n";
-    
-    // HP bar
-    var healthPercentage = PCard.current_health / (PCard.base_health + PCard.health_bonus);
-    healthPercentage = Math.round(100 * healthPercentage);
-    var manaPercentage = PCard.current_mana / (MAX_MANA + PCard.mana_bonus);
-    manaPercentage = Math.round(100 * manaPercentage);
-    pcResult += '<div class="barPreviewContainer">'
-                +'<div class="hpBar" style="width:'+healthPercentage+'%">'
-                +PCard.current_health+'/'+(PCard.base_health + PCard.health_bonus)+'</div>'
-                +'<div class="manaBar" style="width:'+manaPercentage+'%">'
-                +PCard.current_mana+'/'+(MAX_MANA + PCard.mana_bonus)+'</div>'
-                +'</div>';
+// for formatting display of cards that player is using in game
+function getGameCardHTML(PCard) {
+  // cardName, imgLink, cardHP, cardMana, statusList
+  var pcResult = PCard.cardName + "\n";
+  
+  // HP bar
+  var healthPercentage = PCard.current_health / (PCard.base_health + PCard.health_bonus);
+  healthPercentage = Math.round(100 * healthPercentage);
+  var manaPercentage = PCard.current_mana / (MAX_MANA + PCard.mana_bonus);
+  manaPercentage = Math.round(100 * manaPercentage);
+  pcResult += '<div class="barPreviewContainer">'
+              +'<div class="hpBar" style="width:'+healthPercentage+'%">'
+              +PCard.current_health+'/'+(PCard.base_health + PCard.health_bonus)+'</div>'
+              +'<div class="manaBar" style="width:'+manaPercentage+'%">'
+              +PCard.current_mana+'/'+(MAX_MANA + PCard.mana_bonus)+'</div>'
+              +'</div>';
 
-    //this.statuses = {"blinded":0, "charmed":0, "poisoned":0, "stunned":0, "terrified":0};
+  //this.statuses = {"blinded":0, "charmed":0, "poisoned":0, "stunned":0, "terrified":0};
 
-    return pcResult;
-  }
+  return pcResult;
+}
 
-  function get_BC_BroadcastForInfoBox(BCard) {
-    var bcResult = "<p>" + BCard.cardName + "</p>";
-    bcResult += "<p>" + BCard.base_health + "HP</p>";
- 
-    bcResult += "<p>ATK: " + BCard.base_attack + "</p>";
-    bcResult += "<p>RNG: " + BCard.base_normal_attack_range + "</p>";
-    bcResult += "<p>DEF: " + BCard.base_defense + "</p>";
-    bcResult += "<p>MP/turn: " + BCard.base_mana_per_turn + "</p>";
-    bcResult += "<p>MP/atk: " + BCard.base_mana_per_atk + "</p>";
-    bcResult += "<p>MVT: " + BCard.base_movement + "</p>";
-    
-    bcResult += "<p>********* display holofoil power here ***********</p>"; // #TODO display only if owned
+function get_BC_BroadcastForInfoBox(BCard) {
+  var res = "";
+  res += '<div class="hoverColWrap">';
+  res += "<h3>" + BCard.cardName + "</h3>";
 
-    return bcResult;
-  }
+  res += '<div class="hoverColumn">';
+    res += "<p>ATK: " + BCard.base_attack + "</p>";
+    res += "<p>HP: " + BCard.base_health + "</p>";
+    res += "<p>DEF: " + BCard.base_defense + "</p>";
+    res += "</div>";
 
-  function get_PC_BroadcastForInfoBox(PCard) {
-    var pcResult = "<p>" + PCard.cardName + " (" + PCard.dead + ")</p>";
-    
-    var healthPercentage = PCard.current_health / (PCard.base_health + PCard.health_bonus);
-    healthPercentage = Math.round(100 * healthPercentage);
-    pcResult += "<p>" + healthPercentage + "%, ";
-    pcResult += PCard.current_health + "/" + (PCard.base_health + PCard.health_bonus) + "HP ";
-    pcResult += "(" + PCard.base_health + "+" + PCard.health_bonus + ")</p>";
-    
-    var manaPercentage = PCard.current_mana / (MAX_MANA + PCard.mana_bonus);
-    manaPercentage = Math.round(100 * manaPercentage);
-    pcResult += "<p>" + manaPercentage + "%, ";
-    pcResult += PCard.current_mana + "/" + (MAX_MANA + PCard.mana_bonus) + "MP ";
-    pcResult += "(" + MAX_MANA + "+" + PCard.mana_bonus + ")</p>";
-    
-    pcResult += "<p>ATK: " + PCard.current_attack + " (base " + PCard.base_attack + ")</p>";
-    pcResult += "<p>RNG: " + PCard.current_normal_attack_range + " (base " + PCard.base_normal_attack_range + ")</p>";
-    pcResult += "<p>DEF: " + PCard.current_defense + " (base " + PCard.base_defense + ")</p>";
-    pcResult += "<p>MP/turn: " + PCard.current_mana_per_turn + " (base " + PCard.base_mana_per_turn + ")</p>";
-    pcResult += "<p>MP/atk: " + PCard.current_mana_per_atk + " (base " + PCard.base_mana_per_atk + ")</p>";
-    pcResult += "<p>MVT: " + PCard.current_movement + " (base " + PCard.base_movement + ")</p>";
-    
-    if (PCard.is_figurine == true) {
-        pcResult += "<p>********* display holofoil power here ***********</p>";
-    } else {
-        pcResult += "<p>Holofoil unavailable</p>";
-    }
+    res += '<div class="hoverColumn">';
+    res += "<p>RNG: " + BCard.base_normal_attack_range + "</p>";
+    res += "<p>MVT: " + BCard.base_movement + "</p>";
+    res += "</div>";
 
-    var statusTxt = "<p>Statuses: ";
+    res += '<div class="hoverColumn">';
+    res += "<p>MP/turn: " + BCard.base_mana_per_turn + "</p>";
+    res += "<p>MP/atk: " + BCard.base_mana_per_atk + "</p>";
+    res += "</div>";
+  res += "</div>";
+  
+  res += "<p>Sample skill: holofoil power</p>"; // #TODO display only if owned
+  res += "<p>Sample skill: figurine power</p>";
+  res += "<p>Sample skill: ???? power</p>";
+
+  return res;
+}
+
+function capitalize(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+function get_PC_BroadcastForInfoBox(PCard) {
+  var res = "";
+  
+  res += '<div class="hoverColWrap">';
+    res += '<p><b style="font-size: medium;">' + PCard.cardName + "</b> - " + PCard.dead;
+    var statusTxt = ", statuses: ";
     for (var sKey in PCard.statuses){
         if (PCard.statuses[sKey] == 1){
             statusTxt += sKey + " ";
         }
     }
-    if (statusTxt === "<p>Statuses: ") {
+    if (statusTxt === ", statuses: ") {
         statusTxt += "none";
     }
-    pcResult += statusTxt + "</p>";
+    res += statusTxt + "</p>";
 
-    return pcResult;
+    
+    res += '<div class="hoverColumn">';
+    res += "<p>" + PCard.current_health + "/" + (PCard.base_health + PCard.health_bonus) + "HP <i>(+" + PCard.health_bonus + ")</i></p>";
+    res += "<p>" + PCard.current_mana + "/" + (MAX_MANA + PCard.mana_bonus) + "MP <i>(+" + PCard.mana_bonus + ")</i></p>";
+    res += "</div>";
+    
+    res += '<div class="hoverColumn">';
+    res += "<p>ATK: " + PCard.current_attack + " <i>(+" + PCard.attack_bonus + ")</i></p>";
+    res += "<p>DEF: " + PCard.current_defense + " <i>(+" + PCard.defense_bonus + ")</i></p>";
+
+    
+    res += "<p>RNG: " + PCard.current_normal_attack_range + " <i>(+" + PCard.base_normal_attack_range + ")</i></p>";
+    res += "<p>MVT: " + PCard.current_movement + " <i>(+" + PCard.movement_bonus + ")</i></p>";
+    res += "</div>";
+
+    res += '<div class="hoverColumn">';
+    res += "<p>MP/turn: " + PCard.current_mana_per_turn + " <i>(+" + PCard.mana_turnRegen_bonus + ")</i></p>";
+    res += "<p>MP/atk: " + PCard.current_mana_per_atk + " <i>(+" + PCard.mana_atkRegen_bonus + ")</i></p>";
+    res += "</div>";
+
+  res += "</div>";
+    
+  if (PCard.is_figurine == true) {
+    res += "<p>********* display holofoil power here ***********</p>";
+  } else {
+    res += "<p>Holofoil unavailable</p>";
   }
 
-  function getClearBroadcastForInfoBox() {
-    return "";
-  }
+  return res;
+}
+
+function getClearBroadcastForInfoBox() {
+  return "";
+}

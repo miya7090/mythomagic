@@ -1,9 +1,19 @@
+:root {
+    --normalTile: rgba(54, 71, 253, 0.5);
+    --highlightedTile: rgba(59, 59, 240, 0.9);
+    --offgridTile: rgba(0, 0, 0, 0.4);
+    --highlightedOffgrid: rgba(0, 0, 0, 0.9);
+  }
+
 /* GENERAL RULES */
 body {
     margin: 20px;
-    background-color: rgb(105, 73, 73);
+    background-image: url("forestbg.jpg");
+    background-color: rgba(0,0,0,0.2);
+    background-blend-mode: darken;
     font-family: arial, sans-serif;
     font-size: 14px;
+    color: rgb(255,255,255);
 }
 
 .player {
@@ -11,21 +21,15 @@ body {
 }
   
 .leftcolumn {
-    flex: 55%;
-    float: left;
-    border: 2px dashed rgb(255, 194, 96);
+    width: 380px;
 }
 
 .rightcolumn {
-    flex: 45%;
-    float: left;
-    border: 2px dashed brown;
-}
-
-h1 {
-    font-size: 35px;
-    font-weight: normal;
-    margin-top: 5px;
+    margin-left: 10px;
+    width: calc(100% - 420px);
+    background-color: rgba(255,255,255,0.05);
+    box-shadow:inset 0px 0px 50px 2px rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
 }
 
 /* HEXAGON GAMETILE BASE RULES */
@@ -39,7 +43,6 @@ h1 {
 .container {
     font-size: 0; /*disable white space between inline block element */
     width: 100%;
-    border: 1px cyan solid; 
 }
   
 .gameSquare {
@@ -50,7 +53,7 @@ h1 {
     font-size:initial;
     clip-path: polygon(0% 25%, 0% 75%, 50% 100%, 100% 75%, 100% 25%, 50% 0%);
     margin-bottom: calc(var(--m) - var(--s)*0.2885);
-    background-color: rgb(106, 154, 170);
+    background-color: var(--normalTile);
 }
  
 .container::before {
@@ -65,25 +68,25 @@ h1 {
     
 /* HEXAGON GAMETILE INTERACTION RULES */
 .gameSquare[hoverHighlight=true] {
-    background-color: green;
+    background-color: var(--highlightedTile);
 }
 
 .gameSquare[hoverHighlight=false] {
-    background-color: rgb(106, 154, 170);
+    background-color: var(--normalTile);
 }
 
 .jungle { background-color: rgb(44, 103, 71); }
 .water { background-color: rgb(79, 92, 193); }
 .sand { background-color: rgb(203, 182, 124); }
 .obstacle { background-color: rgb(57, 57, 57); }
-.offgrid { background-color: rgb(74, 74, 74); }
+.offgrid { background-color: var(--offgridTile); }
 
 .offgrid[hoverHighlight=true] {
-    background-color: rgb(139, 40, 40);
+    background-color: var(--highlightedOffgrid);
 }
 
 .offgrid[hoverHighlight=false] {
-    background-color: rgb(74, 74, 74);
+    background-color: var(--offgridTile);
 }
 
 /* CARD AREA BASE RULES */
@@ -92,8 +95,7 @@ h1 {
     margin-left: 20px;
     margin-right: 20px;
     height: 120px;
-    background-color: rgb(50, 49, 49);
-    border: 3px dotted #858585;
+    background-color: rgba(146, 146, 146, 0.4);
 }
 
 .card {
@@ -118,13 +120,32 @@ h1 {
     margin-left: 20px;
     margin-right: 20px;
     margin-bottom: 20px;
-    height: 120px;
-    background-color: rgb(36, 83, 32);
-    border: 3px dotted #858585;
+    height: 160px;
+}
+
+h3 {
+    font-size: medium;
+    margin-left: 10px;
+    margin-bottom: 2px;
+}
+
+.hoverColWrap {
+    height:100px;
+}
+
+.hoverColumn {
+    float: left;
+    width: 33%;
 }
 
 .hoverInfo p {
-    margin: 0px 0px 0px 0px;
+    margin-left: 10px;
+    margin-top: 2px;
+    margin-bottom: 2px;
+}
+
+.hoverColumn p {
+    margin-left: 10px;
 }
 
 /* HP/mana preview bars */
@@ -152,5 +173,5 @@ h1 {
 }
 
 .token[figurine=true] {
-    background-color: rgb(237, 226, 140);
+    background-color: yellow;
 }
