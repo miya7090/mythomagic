@@ -96,8 +96,11 @@ function createTokenDiv(pcToRender) {
 };
 
 // for formatting display of cards available to player
-function getBaseCardHTML(cardName, imgLink) {
-  return cardName + "\n TODO";
+function getBaseCardHTML(cardName) {
+  // cardName, imgLink, cardHP, cardMana, statusList
+  var res = cardName + "\n";
+  res += '<img class="baseCardImg" src="cardImgs/'+cardName+'.png" onerror="javascript:this.src=\'cardImgs/default.png\'"/>';
+  return res;
 }
 
 // for formatting display of cards that player is using in game
