@@ -8,7 +8,7 @@
 /* GENERAL RULES */
 body {
   margin: 20px;
-  background-image: url("forestbg.jpg");
+  background-image: url("../images/forestbg.jpg");
   background-color: rgba(0,0,0,0.2);
   background-blend-mode: darken;
   font-family: arial, sans-serif;
