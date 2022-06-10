@@ -1,12 +1,46 @@
 // @miya7090
 
+function nextTurn() {
+  if (GAME_MODE == "startup") {
+    console.log("now player 1's turn");
+    GAME_MODE = "p1-active";
+  } else if (GAME_MODE == "p1-active" || GAME_MODE == "p1-moveToken") {
+    console.log("now player 2's turn");
+    GAME_MODE = "p2-active";
+  } else if (GAME_MODE == "p2-active" || GAME_MODE == "p2-moveToken") {
+    console.log("now player 1's turn");
+    GAME_MODE = "p1-active";
+  } else {
+    console.error("error continuing to next turn from", GAME_MODE);
+  }
+
+  updateTurnText();
+}
+
+function changeGameModeTo(newMode) {
+  GAME_MODE = newMode;
+  updateTurnText();
+}
+
+function getTurn() {
+  if (GAME_MODE == "startup") {
+    return "startup";
+  } else if (GAME_MODE == "p1-active" || GAME_MODE == "p1-moveToken") {
+    return "p1";
+  } else if (GAME_MODE == "p2-active" || GAME_MODE == "p2-moveToken") {
+    return "p2";
+  } else {
+    console.error("can't determine which player's turn it is", GAME_MODE);
+  }
+}
+
 // retrieve base stats of a card, return array
 function getBaseStats(cardType) {
-    if (BASE_STAT_DICT[cardType] == undefined){
-        console.error(cardType+" not found in base stat dictionary");
-    }
-    return BASE_STAT_DICT[cardType];
-
+  if (BASE_STAT_DICT[cardType] == undefined){
+      console.error(cardType+" not found in base stat dictionary");
+  }
+  return BASE_STAT_DICT[cardType];
+}
 
 // #TODO change this up
 function savingThrow(savingThrowThreshold) {
@@ -18,7 +52,7 @@ function savingThrow(savingThrowThreshold) {
         figBoost = FIGURINE_SAVING_THROW_FLAT_BOOST;
     }
     return (Math.floor(Math.random()*20) + mvmtOffset + defOffset + figBoost) > savingThrowThreshold;
-}}
+}
 
 // given coordinate list, keep only coordinates which are on board
 function filterOnlyCoordinatesOnBoard(qrsList){

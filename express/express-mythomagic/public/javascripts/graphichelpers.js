@@ -1,5 +1,26 @@
 // @miya7090
 
+function getPlayerTurnText() {
+  if (GAME_MODE == "startup") {
+    return "n/a";
+  } else if (GAME_MODE == "p1-active") {
+    return "Your turn";
+  } else if (GAME_MODE == "p1-moveToken") {
+    return "Your turn (placing token...)";
+  } else if (GAME_MODE == "p2-active") {
+    return "Waiting for other player...";
+  } else if (GAME_MODE == "p2-moveToken") {
+    return "Waiting for other player... (placing token...)";
+  } else {
+    console.error("issue with GAME_MODE", GAME_MODE);
+  }
+}
+
+function updateTurnText() {
+  const playerTurn = document.getElementById("playerTurn");
+  playerTurn.textContent=getPlayerTurnText();
+}
+
 // fancy tile highlighting and clearing of highlights
 function highlightSelfAndRadius(turnOn, cubeQ, cubeR, cubeS){
   const coordsInRange = getCoordinatesWithinRadius(cubeQ,cubeR,cubeS,MOUSE_HOVER_RADIUS,true);
@@ -79,20 +100,14 @@ function createTokenDiv(pcToRender) {
   token.classList.add("token");
   token.id = "p1token-" + pcToRender.cardName;
   token.name = pcToRender.cardName;
+  token.pcardLink = pcToRender;
   token.setAttribute("figurine",pcToRender.is_figurine);
   token.q = pcToRender.q; // used for location initialization
 
   // place token on board
   HEXTILE_CUBIC_INDEX[pcToRender.tag].appendChild(token);
 
-  // token mover function
-  token.onmouseup = (function() {
-    return function(e) {
-      e.stopPropagation(); // don't also click on the square beneath #TODO click the tile not just the token to move
-      GAME_MODE = "moving";
-      GAME_MODE_MEMORYTARGET = pcToRender;
-    }
-  })();
+  token.addEventListener('mouseup', mouseClickToken);
 };
 
 // for formatting display of cards available to player

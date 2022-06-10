@@ -6,9 +6,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const gameInfoBox = document.getElementById("gameInfoBox");
   const gameOptions = document.getElementById("gameOptions");
   const previewRadius = document.getElementById("previewRadius");
+  const playerTurn = document.getElementById("playerTurn");
   const myAvailableCards = document.getElementById("myAvailableCards");
 
   previewRadius.textContent="Preview radius: "+MOUSE_HOVER_RADIUS;
+  playerTurn.textContent=getPlayerTurnText();
 
   document.addEventListener('keydown', keyProcessing);
   mainGrid.addEventListener('mouseleave', mouseOutOfGrid);
