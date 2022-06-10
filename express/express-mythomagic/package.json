@@ -12,7 +12,8 @@
     "http-errors": "~1.6.3",
     "mongoose": "^6.3.6",
     "morgan": "~1.9.1",
-    "pug": "3.0.1"
+    "pug": "3.0.1",
+    "socket.io": "^4.5.1"
   },
   "devDependencies": {
     "nodemon": "^2.0.16"

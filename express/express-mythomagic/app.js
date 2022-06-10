@@ -1,11 +1,24 @@
-var createError = require('http-errors');
-
 var express = require('express');
 var app = express();
+const server = require("http").Server(app); // create server
+const io = require("socket.io")(server); // create instance of socketio
+
+app.use(express.static("public")); // use "public" directory for static files
+
+io.on("connection", socket => {
+  socket.on("joined", () => { // when server receives the "joined" message
+    io.emit("joined"); // send message to client // var multiplayerx = require('./public/javascripts/lobbylogic'); multiplayerx.initGame(io, socket);
+  });
+  socket.on("disconnect", () => { // when someone closes the tab
+    io.emit("leave");
+  });
+});
+
+server.listen(3000);
+console.log("localhost:3000");
+
 var path = require('path');
 const router = express.Router();
-
-app.use(express.static('public'));
 
 // pug router setup
 app.set('view engine', 'pug');
@@ -21,6 +34,7 @@ router.get("/GAMECODEHERE", (req, res) => {
 
 app.use('/', router);
 
+
 /*
 app.use(logger('dev'));
 app.use(express.json());
@@ -34,6 +48,8 @@ var logger = require('morgan');
 /////////////////////////////////////////////////////////////////
 */
 
+// mongoose stuff
+/*
 var mongoose = require('mongoose');//Import the mongoose module
 
 // mongoose set up and debug
@@ -47,10 +63,11 @@ var samplecardX = new BaseCardModel({ name: 'aaaaaa', base_atk: 500 });
 console.log(samplecardX.name);
 samplecardX.name="New cool name";
 samplecardX.save(function (err) { if (err) return console.error(err); });
-
+*/
 
 /////////////////////////////////////////////////////////////////
 
+/*
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
@@ -68,3 +85,4 @@ app.use(function(err, req, res, next) {
 });
 
 module.exports = app;
+*/

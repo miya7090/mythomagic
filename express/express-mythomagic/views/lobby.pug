@@ -4,6 +4,31 @@ head
   title mythomagic
   meta(name='description' content='still working on this')
   meta(name='keywords' content='mythomagic')
-p this is the lobby
-a(href='GAMECODEHERE') go to game
-| &gt;
+  script(src='/socket.io/socket.io.js' charset='utf8')
+  script(src='../javascripts/socket_lobby.js' charset='utf8')
+h2(style='text-align: center;') mythomagic
+br
+br
+#gameStart
+  form#newgameform
+    label(for='nickname') nickname 
+    input#nickname(type='text' name='nickname' maxlength='10')
+    br
+    br
+    input#cp1(type='checkbox' name='cp1' value='Car' checked='' disabled='')
+    label(for='cp1') use default card pack
+    br
+    br
+    input(type='submit' value='enter queue')
+    br
+    br
+  form#joingameform
+    label(for='gamecode') or enter game code 
+    input#gamecode(type='text' name='gamecode' maxlength='6')
+    br
+    br
+    input(type='submit' value='join game')
+br
+br
+a(href='GAMECODEHERE') debug: go to game
+

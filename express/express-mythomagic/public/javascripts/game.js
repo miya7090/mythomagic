@@ -1,6 +1,9 @@
 // @miya7090
 
 document.addEventListener("DOMContentLoaded", () => {
+  const socket = io(); // create new instance
+  console.log("io is working?", socket.id);
+
   const mainGrid = document.getElementById("hexContainer");
   const onFieldCards = document.getElementById("onFieldCards");
   const gameInfoBox = document.getElementById("gameInfoBox");
