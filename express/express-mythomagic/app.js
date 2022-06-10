@@ -37,6 +37,8 @@ var logger = require('morgan');
 var mongoose = require('mongoose');//Import the mongoose module
 
 // mongoose set up and debug
+var login = require('../express-mythomagic/login');
+var mongoDB = login.mongoDB;
 mongoose.connect(mongoDB, {useNewUrlParser: true, useUnifiedTopology: true});
 var db = mongoose.connection; //Get the default connection
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
