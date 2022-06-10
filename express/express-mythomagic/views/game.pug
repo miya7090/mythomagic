@@ -1,0 +1,32 @@
+doctype html
+head
+  meta(charset='utf8')
+  title mythomagic
+  meta(name='description' content='still working on this')
+  meta(name='keywords' content='mythomagic')
+  link(rel='shortcut icon' href='favicon.ico')
+  link(rel='stylesheet' href='../stylesheets/style.css')
+  script(src='config.js' charset='utf8')
+  script(src='mathhelpers.js' charset='utf8')
+  script(src='models.js' charset='utf8')
+  script(src='graphichelpers.js' charset='utf8')
+  script(src='listeners.js' charset='utf8')
+  script(src='game.js' charset='utf8')
+  script(src='gamelogichelpers.js' charset='utf8')
+.wrapper
+  .player
+    .leftcolumn
+      .hexgrid
+        #hexContainer.container
+    .rightcolumn
+      #onFieldCards.cards
+      #gameInfoBox.hoverInfo
+      #gameOptions.optionBox
+  #myAvailableCards.cards
+  p#previewRadius Preview radius: undefined
+  .instructions
+    p z/x ... -/+ preview radius
+    p q ... pick heroes [DEBUG] [TODO] [priority 1!!!!!!!!!!!!!!!!!!!!!!!]
+    p w ... initiate hero placement [DEBUG] [TODO]
+    p e ... begin new player 1 turn [DEBUG] [TODO]
+| &gt;
