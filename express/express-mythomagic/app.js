@@ -37,7 +37,6 @@ var logger = require('morgan');
 var mongoose = require('mongoose');//Import the mongoose module
 
 // mongoose set up and debug
-var mongoDB = 'mongodb+srv://oystercrackers:WWbFjhRa0vMgol50@clusterm.cnxek.mongodb.net/?retryWrites=true&w=majority'; // don't add to git
 mongoose.connect(mongoDB, {useNewUrlParser: true, useUnifiedTopology: true});
 var db = mongoose.connection; //Get the default connection
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
