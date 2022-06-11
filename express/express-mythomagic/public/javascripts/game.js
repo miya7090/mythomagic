@@ -2,9 +2,11 @@
 
 document.addEventListener("DOMContentLoaded", () => {
   const socket = io(); // create new instance
-  console.log("io is working?", socket.id);
-  socket.id=1111111111111;
-  console.log("io is working?", socket.id);
+  socket.id=socketid;
+  socket.emit("joined", nickname, gamecode);
+  socket.join(gamecode);
+  io.to(room).emit("joined", nickname, room);
+  console.log("socket id set to", socket.id);
 
   const mainGrid = document.getElementById("hexContainer");
   const onFieldCards = document.getElementById("onFieldCards");

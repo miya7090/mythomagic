@@ -11,22 +11,24 @@ io.on("connection", socket => {
     socket.join(room);
     io.to(room).emit("joined", nickname, room);
     users[socket.id] = {nickname:nickname,room:room};
-    console.log(users);
   });
   socket.on("disconnect", () => { // when someone closes the tab
-    console.log(users, socket.id);
     if (users[socket.id] != undefined) {
       let nickname = users[socket.id]["nickname"];
       let room = users[socket.id]["room"];
       io.to(room).emit("leave", nickname);
       delete users[socket.id];
     }
-    console.log(users);
   });
 });
 
 server.listen(3000);
 console.log("localhost:3000");
+
+// post parsing setup
+const bodyParser = require("body-parser");
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 // pug router setup
 var path = require('path');
@@ -39,10 +41,16 @@ router.get("/", (req, res) => {
   res.render("lobby");
 });
 
-router.get("/GAMECODEHERE", (req, res) => {
-  res.render("game", { title: "Hey", message: "Hello there!" });
+router.post('/game',(req,res) => {
+  console.log("P",req.body);
+  res.render("game", { socketid: req.body.socketid, nickname: req.body.nickname, gamecode: req.body.gamecode }); // NOT REDIRECT
 });
 
+/*
+router.post("/game/", (req, res) => {
+  res.render("game", { title: "Hey", message: "Hello there!" });
+});
+*/
 app.use('/', router);
 
 
