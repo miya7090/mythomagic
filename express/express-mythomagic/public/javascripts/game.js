@@ -2,17 +2,17 @@
 
 document.addEventListener("DOMContentLoaded", () => {
   const socket = io(); // create new instance
-  console.log("beep");
+  const urlParams = new URLSearchParams(window.location.search);
+  const roomCode = urlParams.get('room');
+  const selfName = urlParams.get('self');
+  const otherName = urlParams.get('other');
+  console.log("beep", roomCode, selfName, otherName);
   socket.on('connect', ()=>{
-    const socketId = document.getElementById("socketid");
-    console.log(socketId);
-    socket.emit("joined", nickname, gamecode);
-    console.log("boop");
-    //socket.join(gamecode);
-    socket.broadcast.to(gamecode).emit("joined", nickname, gamecode);
-    console.log("boop2");
-    console.log("socket id set to", socket.id);
+    socket.emit("registerPlayer", roomCode, selfName);
   });
+  socket.on('gameSetupComplete', ()=>{
+    console.log("setup OK");
+  })
 
   ///////////////////////////// JOIN ROOM????????????????????????
 

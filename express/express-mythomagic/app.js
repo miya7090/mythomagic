@@ -25,6 +25,24 @@ io.on("connection", socket => {
     delete regionUsers[rk(region)][socket.id];
     io.to(rk(region)).emit("lobbyLeft", nickname, region, regionUsers[rk(region)]);
   });
+
+  socket.on("gameInvite", (inviterNickname, inviterId, recipientNickname, recipientId)=>{
+    io.to(recipientId).emit("gameInvite", inviterNickname, inviterId);
+  });
+  
+  socket.on("roomRequest", (region, room, inviterNickname, inviterId, recipientNickname, recipientId)=>{
+    delete regionUsers[rk(region)][inviterId];
+    delete regionUsers[rk(region)][socket.id];
+    io.to(rk(region)).emit("lobbyLeft2", inviterNickname, recipientNickname, region, regionUsers[rk(region)]);
+    io.to(inviterId).emit("redirectToGame", inviterNickname, recipientNickname, room);
+    io.to(socket.id).emit("redirectToGame", recipientNickname, inviterNickname, room);
+  })
+
+  socket.on("registerPlayer", (roomCode, selfName) => {
+    socket.join(roomCode);
+    io.to(roomCode).emit("gameSetupComplete");
+  });
+
   socket.on("joined", (nickname, region) => { // when server receives the "joined" message
   });
   socket.on("disconnect", () => { // when someone closes the tab
@@ -57,9 +75,10 @@ router.get("/", (req, res) => {
   res.render("lobby");
 });
 
-router.post('/game',(req,res) => {
-  console.log("P",req.body);
-  res.render("game", { socketid: req.body.socketid, nickname: req.body.nickname, gamecode: req.body.gamecode }); // NOT REDIRECT
+router.get('/game',(req,res) => {
+  console.log("P",req.query);
+  //res.render("game", { socketid: req.body.socketid, nickname: req.body.nickname, gamecode: req.body.gamecode }); // for POST (not redirect)
+  res.render("game", {room: req.query.room, self: req.query.self, other:req.query.other});
 });
 
 /*
