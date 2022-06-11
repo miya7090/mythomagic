@@ -7,10 +7,6 @@ head
   link(rel='shortcut icon' href='favicon.ico')
   link(rel='stylesheet' href='../stylesheets/style.css')
   script(src='/socket.io/socket.io.js' charset='utf8')
-  script(type='text/javascript').
-    socketid="#{socketid}";
-    nickname="#{nickname}";
-    gamecode="#{gamecode}";
   script(src='../javascripts/config.js' charset='utf8')
   script(src='../javascripts/mathhelpers.js' charset='utf8')
   script(src='../javascripts/models.js' charset='utf8')
@@ -30,8 +26,6 @@ head
   #myAvailableCards.cards
   p#previewRadius Preview radius: undefined
   p#playerTurn Current player: undefined
-  p= nickname
-  p= gamecode
   .instructions
     p z/x ... -/+ preview radius
     p p ... switch player turn (debug only)

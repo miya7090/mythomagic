@@ -16,6 +16,15 @@ app.use(express.static("public")); // use "public" directory for static files
 
 io.on("connection", socket => {
   socket.on("lobbyJoin", (nickname, region) => {
+    // check that doesn't exist in other regions
+    Object.keys(regionUsers).forEach(rkregion => {
+      if (regionUsers[rkregion][socket.id] != undefined) {
+        const nickname = regionUsers[rkregion][socket.id];
+        delete regionUsers[rkregion][socket.id];
+        io.to(rkregion).emit("lobbyLeft", nickname, nk(rkregion), regionUsers[rkregion]);
+      }
+    })
+
     regionUsers[rk(region)][socket.id] = nickname;
     socket.join(rk(region));
     io.to(rk(region)).emit("lobbyJoined", nickname, region, regionUsers[rk(region)]);
