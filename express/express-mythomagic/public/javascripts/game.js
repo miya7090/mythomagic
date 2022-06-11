@@ -3,6 +3,8 @@
 document.addEventListener("DOMContentLoaded", () => {
   const socket = io(); // create new instance
   console.log("io is working?", socket.id);
+  socket.id=1111111111111;
+  console.log("io is working?", socket.id);
 
   const mainGrid = document.getElementById("hexContainer");
   const onFieldCards = document.getElementById("onFieldCards");
@@ -17,6 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.addEventListener('keydown', keyProcessing);
   mainGrid.addEventListener('mouseleave', mouseOutOfGrid);
+  console.log("help");
 
   // add tiles to game board
   for (let r = -HEX_RADIUS; r <= HEX_RADIUS; r++) {

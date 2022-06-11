@@ -4,23 +4,34 @@ const server = require("http").Server(app); // create server
 const io = require("socket.io")(server); // create instance of socketio
 
 app.use(express.static("public")); // use "public" directory for static files
+const users = {};
 
 io.on("connection", socket => {
-  socket.on("joined", () => { // when server receives the "joined" message
-    io.emit("joined"); // send message to client // var multiplayerx = require('./public/javascripts/lobbylogic'); multiplayerx.initGame(io, socket);
+  socket.on("joined", (nickname, room) => { // when server receives the "joined" message
+    socket.join(room);
+    io.to(room).emit("joined", nickname, room);
+    users[socket.id] = {nickname:nickname,room:room};
+    console.log(users);
   });
   socket.on("disconnect", () => { // when someone closes the tab
-    io.emit("leave");
+    console.log(users, socket.id);
+    if (users[socket.id] != undefined) {
+      let nickname = users[socket.id]["nickname"];
+      let room = users[socket.id]["room"];
+      io.to(room).emit("leave", nickname);
+      delete users[socket.id];
+    }
+    console.log(users);
   });
 });
 
 server.listen(3000);
 console.log("localhost:3000");
 
+// pug router setup
 var path = require('path');
 const router = express.Router();
 
-// pug router setup
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
 

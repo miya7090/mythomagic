@@ -22,12 +22,12 @@ br
     input(type='submit' value='enter queue')
     br
     br
-  form#joingameform
+  form(action='/GAMECODEHERE')#joingameform
     label(for='gamecode') or enter game code 
     input#gamecode(type='text' name='gamecode' maxlength='6')
     br
     br
-    input(type='submit' value='join game')
+    input(type='button' value='join game' onclick="joinGame()")
 br
 br
 a(href='GAMECODEHERE') debug: go to game
