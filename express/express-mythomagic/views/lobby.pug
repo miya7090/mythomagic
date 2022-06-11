@@ -4,12 +4,14 @@ head
   title mythomagic
   meta(name='description' content='still working on this')
   meta(name='keywords' content='mythomagic')
+  link(rel='stylesheet' href='../stylesheets/lobbystyle.css')
   script(src='//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js')
   script(src='/socket.io/socket.io.js' charset='utf8')
   script(src='../javascripts/socket_lobby.js' charset='utf8')
 h2(style='text-align: center;') mythomagic
 br
 br
+#playersInRegion
 #gameStart
   form#gameform(method='POST' action='/game')
     input#socketid(type='hidden' name='socketid' value='default')
@@ -17,17 +19,29 @@ br
     input#nickname(type='text' name='nickname' maxlength='10')
     br
     br
-    label(for='gamecode') game code 
-    input#gamecode(type='text' name='gamecode' maxlength='6')
-    br
-    br
     input#cp1(type='checkbox' name='cp1' checked='' disabled='')
     label(for='cp1') use default card pack
     br
     br
-    input#joinButton(type='submit' value='join game')
     br
     br
+    div#regionselect
+      label(for='region') region&nbsp;
+      select#region(name='region')
+        option(value='olympia') olympia
+        option(value='corinth') corinth
+        option(value='athens') athens
+      input#lobbyJoinButton(type='button' value='join queue')
+      input#lobbyLeaveButton(type='button' value='leave queue')
+      p#queueNotes &nbsp;
     br
-  p use game code to create new game
+    br
+    div#regiondisplay
+      p#regionlabel
+      div#lobbiersinregion
+    label(for='gamecode') game code 
+    input#gamecode(type='text' name='gamecode' maxlength='6')
+    input#joinButton(type='submit' value='play')
+    br
+    br
 

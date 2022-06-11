@@ -2,11 +2,19 @@
 
 document.addEventListener("DOMContentLoaded", () => {
   const socket = io(); // create new instance
-  socket.id=socketid;
-  socket.emit("joined", nickname, gamecode);
-  socket.join(gamecode);
-  io.to(room).emit("joined", nickname, room);
-  console.log("socket id set to", socket.id);
+  console.log("beep");
+  socket.on('connect', ()=>{
+    const socketId = document.getElementById("socketid");
+    console.log(socketId);
+    socket.emit("joined", nickname, gamecode);
+    console.log("boop");
+    //socket.join(gamecode);
+    socket.broadcast.to(gamecode).emit("joined", nickname, gamecode);
+    console.log("boop2");
+    console.log("socket id set to", socket.id);
+  });
+
+  ///////////////////////////// JOIN ROOM????????????????????????
 
   const mainGrid = document.getElementById("hexContainer");
   const onFieldCards = document.getElementById("onFieldCards");

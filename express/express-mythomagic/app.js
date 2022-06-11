@@ -3,22 +3,38 @@ var app = express();
 const server = require("http").Server(app); // create server
 const io = require("socket.io")(server); // create instance of socketio
 
+// {region: {socketid: nickname}}
+const regionUsers = {"olympia=====": {}, "corinth=====": {}, "athens=====": {}};
+function rk(regionName){
+  return regionName + "=====";
+}
+function nk(rkRegion){
+  return rkRegion.slice(0, -5);
+}
+
 app.use(express.static("public")); // use "public" directory for static files
-const users = {};
 
 io.on("connection", socket => {
-  socket.on("joined", (nickname, room) => { // when server receives the "joined" message
-    socket.join(room);
-    io.to(room).emit("joined", nickname, room);
-    users[socket.id] = {nickname:nickname,room:room};
+  socket.on("lobbyJoin", (nickname, region) => {
+    regionUsers[rk(region)][socket.id] = nickname;
+    socket.join(rk(region));
+    io.to(rk(region)).emit("lobbyJoined", nickname, region, regionUsers[rk(region)]);
+  });
+  socket.on("lobbyLeave", (nickname, region) => {
+    socket.leave(rk(region));
+    delete regionUsers[rk(region)][socket.id];
+    io.to(rk(region)).emit("lobbyLeft", nickname, region, regionUsers[rk(region)]);
+  });
+  socket.on("joined", (nickname, region) => { // when server receives the "joined" message
   });
   socket.on("disconnect", () => { // when someone closes the tab
-    if (users[socket.id] != undefined) {
-      let nickname = users[socket.id]["nickname"];
-      let room = users[socket.id]["room"];
-      io.to(room).emit("leave", nickname);
-      delete users[socket.id];
-    }
+    Object.keys(regionUsers).forEach(rkregion => {
+      if (regionUsers[rkregion][socket.id] != undefined) {
+        const nickname = regionUsers[rkregion][socket.id];
+        delete regionUsers[rkregion][socket.id];
+        io.to(rkregion).emit("lobbyLeft", nickname, nk(rkregion), regionUsers[rkregion]);
+      }
+    })
   });
 });
 

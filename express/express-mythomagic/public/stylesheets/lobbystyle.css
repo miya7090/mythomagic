@@ -1,0 +1,14 @@
+body {
+    font-family: arial, sans-serif;
+    font-size: small;
+}
+
+#regionselect {
+    display: flex;
+    align-items: center;
+}
+
+#queueNotes {
+    margin-left: 5px;
+    color: red;
+}
