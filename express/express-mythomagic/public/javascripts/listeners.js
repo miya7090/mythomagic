@@ -96,7 +96,9 @@ function mouseClickAvailableCard(evt) {
     const onFieldCards = document.getElementById("onFieldCards");
     const countPlayersPicks = onFieldCards.childElementCount;
     const thisCardName = evt.target.name;
-    if (countPlayersPicks >= 5){
+    if (GAME_MODE != "pick-phase") {
+      console.error("cannot pick this card - it is not selection phase");
+    } else if (countPlayersPicks >= 5){
         console.error("player has already picked 5 cards"); // #TODO express error nicely
     } else if (onFieldCards.querySelector('#p1card-'+thisCardName) != null) { // search if card with that ID already selected to be played
         console.error(thisCardName+" card already selected");

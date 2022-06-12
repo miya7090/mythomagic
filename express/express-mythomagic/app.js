@@ -10,6 +10,7 @@ var roomBook = {};
 // player tracker, games only
 var roommateFinder = {}; // {room: [socketid, socketid]}
 var rivalFinder = {}; // {socketid: socketid}
+var doneTokenPick = new Set(); // {room} where room included if 1 person finished token pick
 
 // lobby code processing
 function rk(regionName){ return regionName + "====="; }
@@ -36,7 +37,7 @@ function kickOutFromLastRoom(socketId) {
 io.on("connection", socket => {
   /* ~~~~~ managing sockets of any type ~~~~~ */
   socket.on("disconnect", () => {
-    kickOutFromLastRoom(socket.id);
+    kickOutFromLastRoom(socket.id); // #TODO if only one left in room, delete the room and clear any game dict memories e.g. doneTokenPick
   });
 
   /* ~~~~~ lobby socket operations ~~~~~ */
@@ -71,15 +72,27 @@ io.on("connection", socket => {
     roomBook[socket.id] = roomCode;
     if (roomCode in roommateFinder){
       roommateFinder[roomCode].push(socket.id);
+      roommateFinder[roomCode].sort();
       rivalFinder[roommateFinder[roomCode][0]] = roommateFinder[roomCode][1];
       rivalFinder[roommateFinder[roomCode][1]] = roommateFinder[roomCode][0];
 
-      roommateFinder[roomCode].sort();
-      io.to(roommateFinder[roomCode][0]).emit("yourTurn");
-      io.to(roommateFinder[roomCode][1]).emit("waitTurn");
+      io.to(roommateFinder[roomCode][0]).emit("tokenPickPhase", roommateFinder[roomCode][1]);
+      io.to(roommateFinder[roomCode][1]).emit("tokenPickPhase", roommateFinder[roomCode][0]);
     } else {
       roommateFinder[roomCode] = [socket.id];
     }
+  });
+
+  socket.on("doneWithTokenPick", ()=>{
+    if (doneTokenPick.has(roomBook[socket.id])){
+      io.to(roommateFinder[roomCode][0]).emit("yourTurn");
+      io.to(roommateFinder[roomCode][1]).emit("waitTurn");
+    }
+  });
+
+  socket.on("voluntaryForfeitEvent", () => {
+    kickOutFromLastRoom(socket.id);
+    kickOutFromLastRoom(rivalFinder[socket.id]);
   });
 
   socket.on("tellRival_yourTurn", () => {

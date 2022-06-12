@@ -3,6 +3,8 @@
 function getPlayerTurnText() {
   if (GAME_MODE == "startup") {
     return "n/a";
+  } else if (GAME_MODE == "pick-phase") {
+    return "Pick your cards";
   } else if (GAME_MODE == "p1-active") {
     return "Your turn";
   } else if (GAME_MODE == "p1-moveToken") {

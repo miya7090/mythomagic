@@ -2,15 +2,34 @@
 
 const MY_SOCKET = io(); // create new instance
 
+function updateTokenClock(){ // #TODO move to listeners
+  let clock = document.getElementById("tokenCountdown");
+  let secLeft = (PICK_PHASE_TIMER - (Date.now() - PICK_PHASE_STARTED_AT))/1000;
+  clock.textContent = "pick your cards and place your tokens ("+Math.round(secLeft)+" seconds left)";
+  if (secLeft <= 0) {
+    clock.textContent = "";
+    changeGameModeTo("startup");
+    MY_SOCKET.emit("doneWithTokenPick");
+  } else {
+    setTimeout(updateTokenClock, 1000);
+  }
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   const urlParams = new URLSearchParams(window.location.search);
   const roomCode = urlParams.get('room');
   const selfName = urlParams.get('self');
   const otherName = urlParams.get('other');
-  var otherSocketId;
 
   MY_SOCKET.on('connect', ()=>{
     MY_SOCKET.emit("registerPlayer", roomCode);
+  });
+
+  MY_SOCKET.on('tokenPickPhase', (otherId)=>{
+    OPPONENT_SOCKET_ID = otherId;
+    changeGameModeTo("pick-phase");
+    PICK_PHASE_STARTED_AT = Date.now();
+    setTimeout(updateTokenClock, 1000); // update token clock every second
   });
 
   MY_SOCKET.on('yourTurn', ()=>{
