@@ -15,18 +15,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const lJoinButton = document.getElementById("lobbyJoinButton");
   lJoinButton.addEventListener("click", ()=>{
-    const nickname = document.getElementById("nickname").value;
-    const region = document.getElementById("region").value;
-    socket.emit("lobbyJoin", nickname, region);
-    regionNotesText.textContent = "success";
-    // #TODO disable changes to nickname, region
+    const nickname = document.getElementById("nickname");
+    const region = document.getElementById("region");
+    socket.emit("lobbyJoin", nickname.value, region.value);
+    regionNotesText.textContent = "joining "+region.value+" lobby...";
+    nickname.disabled = true;
   });
 
   const lLeaveButton = document.getElementById("lobbyLeaveButton");
   lLeaveButton.addEventListener("click", ()=>{
     socket.emit("lobbyLeave");
     clearRegionList();
-    // un-alter css to show waiting, allow nickname and region changes
+    regionNotesText.textContent = "";
+    nickname.disabled = false;
   });
 
   socket.on("lobbyJoined", (nickname, region, regionUsers)=>{
@@ -34,9 +35,13 @@ document.addEventListener("DOMContentLoaded", () => {
     populateRegionList(regionUsers);
   });
 
-  socket.on("lobbyLeft", (nickname, region, regionUsers)=>{
+  socket.on("lobbyLeft", (socketId, nickname, region, regionUsers)=>{
     console.log(nickname, "has left region", region);
-    populateRegionList(regionUsers);
+    if (socketId == socket.id){
+      clearRegionList(regionUsers);
+    } else {
+      populateRegionList(regionUsers);
+    }
   });
 
   socket.on("lobbyLeft2", (nicknameA, nicknameB, region, regionUsers)=>{

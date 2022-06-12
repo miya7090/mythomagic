@@ -26,7 +26,7 @@ function kickOutFromLastRoom(socketId) {
     if (isLobbyId(thisRoomCode)) { // if it's in a lobby room, remove from lobby and notify
       let nickname = regionUsers[thisRoomCode][socketId];
       delete regionUsers[thisRoomCode][socketId];
-      io.to(thisRoomCode).emit("lobbyLeft", nickname, nk(thisRoomCode), regionUsers[thisRoomCode]);
+      io.to(thisRoomCode).emit("lobbyLeft", socketId, nickname, nk(thisRoomCode), regionUsers[thisRoomCode]);
     } else {
       console.error("unimplemented", thisRoomCode); // notify game partner that left & forfeit game
       // clear rivalfinder #TODO
