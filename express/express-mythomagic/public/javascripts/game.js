@@ -9,8 +9,8 @@ function updateTokenClock(){ // #TODO move to listeners
   if (secLeft <= 0) {
     clock.textContent = "";
     changeGameModeTo("startup");
-    console.log("tokentransmitting", exportAllP1Cs());
-    MY_SOCKET.emit("doneWithTokenPick", exportAllP1Cs());
+    console.log("tokentransmitting", exportAllP1Cs(false));
+    MY_SOCKET.emit("doneWithTokenPick", exportAllP1Cs(false));
   } else {
     setTimeout(updateTokenClock, 1000);
   }

@@ -25,15 +25,27 @@ function exportPC(pcard){
   };
 }
 
-function exportAllP1Cs(){
+function exportAllP1Cs(withflip){
   let ans = [];
-  PLAYER_GAMECARD_OBJS.forEach(pc => { ans.push(exportPC(pc)); });
+  PLAYER_GAMECARD_OBJS.forEach(pc => {
+    let pcB = pc;
+    if (withflip == true){
+      pcB.flipAcrossBoard();
+    }
+    ans.push(exportPC(pcB));
+  });
   return ans;
 }
 
-function exportAllP2Cs(){
+function exportAllP2Cs(withflip){
   let ans = [];
-  ENEMY_GAMECARD_OBJS.forEach(pc => { ans.push(exportPC(pc)); });
+  ENEMY_GAMECARD_OBJS.forEach(pc => {
+    let pcB = pc;
+    if (withflip == true){
+      pcB.flipAcrossBoard();
+    }
+    ans.push(exportPC(pcB));
+  });
   return ans;
 }
 

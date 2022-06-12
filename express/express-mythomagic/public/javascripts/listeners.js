@@ -66,7 +66,7 @@ function mouseClickTile(evt) {
       const tR = evt.target.cube_r;
       moveToken(GAME_MODE_MEMORYTARGET, true, tQ, tR); // #TODO check if this is a valid move for the tile first
       changeGameModeTo('p2-active');
-      MY_SOCKET.emit("tellRival_yourTurn", exportAllP1Cs(), exportAllP2Cs());
+      MY_SOCKET.emit("tellRival_yourTurn", exportAllP1Cs(false), exportAllP2Cs(true));
       GAME_MODE_MEMORYTARGET = undefined;
     }
   } else {
