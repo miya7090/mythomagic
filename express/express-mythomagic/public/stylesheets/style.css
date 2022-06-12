@@ -91,6 +91,18 @@ body {
   background-color: var(--offgridTile);
 }
 
+/* POWER BOX RULES */
+.powerbox {
+  margin-top: 20px;
+  margin-left: 5px;
+  margin-right: 10px;
+  height: 120px;
+  background-color: rgba(71, 67, 124, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 /* CARD AREA BASE RULES */
 .cards {
   margin-top: 20px;
@@ -106,16 +118,17 @@ body {
   float: left;
   width: 60px;
   height: 90px;
-  background-color: rgb(194, 190, 220);
+  background-color: rgb(43, 51, 91);
   overflow: hidden;
+  text-align: center;
 }
 
 .card[figurine=true] {
-  background-color: rgb(186, 142, 142);
+  background-color: rgb(89, 83, 125);
 }
 
 .card:hover {
-  background-color: rgb(249, 255, 130);
+  background-color: rgb(19, 25, 58);
 }
 
 .baseCardImg{
@@ -171,7 +184,7 @@ background-color: #ddd;
 }
 
 .player2 {
-  border: 3px solid #000000;
+  border: 2px solid #000000;
   box-sizing: border-box; /* border goes inside box not outside */
 }
 
@@ -181,9 +194,9 @@ background-color: #ddd;
   left: 6px;
   width: 14px;
   height: 15px;
-  background-color: rgb(255, 0, 0)
+  background-color: #84746c;
 }
 
 .token[figurine=true] {
-  background-color: yellow;
+  background-color: #ded6c9;
 }

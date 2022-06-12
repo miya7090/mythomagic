@@ -39,7 +39,7 @@ function highlightSelfAndRadius(turnOn, cubeQ, cubeR, cubeS){
 }
 
 // animation
-function anim_tileHitByAttack(hitTileDiv){
+function anim_tileHitByAttack(hitTileDiv){ //#TODO also animate the game card
   hitTileDiv.animate({
     backgroundColor: "#aa0000",
   }, 700 );
