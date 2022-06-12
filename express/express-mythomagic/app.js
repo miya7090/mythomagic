@@ -28,16 +28,23 @@ function kickOutFromLastRoom(socketId) {
       delete regionUsers[thisRoomCode][socketId];
       io.to(thisRoomCode).emit("lobbyLeft", socketId, nickname, nk(thisRoomCode), regionUsers[thisRoomCode]);
     } else {
-      console.error("unimplemented", thisRoomCode); // notify game partner that left & forfeit game
-      // clear rivalfinder #TODO
+      delete roommateFinder[thisRoomCode];
+      delete doneTokenPick[thisRoomCode];
     }
+  }
+  if (socketId in rivalFinder){
+    delete rivalFinder[socketId];
   }
 }
 
 io.on("connection", socket => {
   /* ~~~~~ managing sockets of any type ~~~~~ */
   socket.on("disconnect", () => {
-    kickOutFromLastRoom(socket.id); // #TODO if only one left in room, delete the room and clear any game dict memories e.g. doneTokenPick
+    if (socket.id in rivalFinder) {
+      kickOutFromLastRoom(rivalFinder[socket.id]);
+      io.to(rivalFinder[socket.id]).emit("winThroughForfeit", "opponent disconnected");
+    }
+    kickOutFromLastRoom(socket.id);
   });
 
   /* ~~~~~ lobby socket operations ~~~~~ */
@@ -64,7 +71,11 @@ io.on("connection", socket => {
     //io.to(rk(region)).emit("lobbyLeft2", inviterNickname, recipientNickname, region, regionUsers[rk(region)]);
     io.to(inviterId).emit("redirectToGame", inviterNickname, recipientNickname, room);
     io.to(socket.id).emit("redirectToGame", recipientNickname, inviterNickname, room);
-  })
+  });
+
+  socket.on("denyChallengeRequest", (ownNickname, enemyId)=>{
+    io.to(enemyId).emit("gameRequestDenied", ownNickname);
+  });
 
   /* ~~~~~ player socket operations ~~~~~ */
   socket.on("registerPlayer", (roomCode) => {
@@ -85,22 +96,34 @@ io.on("connection", socket => {
   socket.on("doneWithTokenPick", (gameCardJsonObjs)=>{
     let roomCode = roomBook[socket.id];
     let rivalId = rivalFinder[socket.id];
-    if (roomCode in doneTokenPick){
-      if (socket.id > rivalId){ // this socket goes first
-        io.to(socket.id).emit("yourTurn", doneTokenPick[roomCode], undefined); // syntax: 'yourTurn', (yourEnemysCards, yourEnemysVerOfYourCards)
-        io.to(rivalId).emit("waitTurnAndPopulate", gameCardJsonObjs);
-      } else {
-        io.to(rivalId).emit("yourTurn", gameCardJsonObjs, undefined);
-        io.to(socket.id).emit("waitTurnAndPopulate", doneTokenPick[roomCode]);
+    if (roomCode in doneTokenPick){ // opponent is also done
+      // check that both have chosen >= 1 token
+      if (gameCardJsonObjs.length == 0 && doneTokenPick[roomCode] && 0){
+        io.to(roomCode).emit("forfeit", "did not pick any cards");
+        kickOutFromLastRoom(socket.id);
+        kickOutFromLastRoom(rivalId);
+      } else if (gameCardJsonObjs.length == 0){
+        io.to(socket.id).emit("forfeit", "did not pick any cards");
+        io.to(rivalId).emit("winThroughForfeit", "opponent did not pick any cards");
+        kickOutFromLastRoom(socket.id);
+        kickOutFromLastRoom(rivalId);
+      } else if (doneTokenPick[roomCode].length == 0){
+        io.to(socket.id).emit("winThroughForfeit", "opponent did not pick any cards");
+        io.to(rivalId).emit("forfeit", "did not pick any cards");
+        kickOutFromLastRoom(socket.id);
+        kickOutFromLastRoom(rivalId);
+      } else { // token pics were completed
+        if (socket.id > rivalId){ // this socket goes first
+          io.to(socket.id).emit("yourTurn", doneTokenPick[roomCode], undefined); // syntax: 'yourTurn', (yourEnemysCards, yourEnemysVerOfYourCards)
+          io.to(rivalId).emit("waitTurnAndPopulate", gameCardJsonObjs);
+        } else {
+          io.to(rivalId).emit("yourTurn", gameCardJsonObjs, undefined);
+          io.to(socket.id).emit("waitTurnAndPopulate", doneTokenPick[roomCode]);
+        }
       }
     } else {
       doneTokenPick[roomCode] = gameCardJsonObjs;
     }
-  });
-
-  socket.on("voluntaryForfeitEvent", () => {
-    kickOutFromLastRoom(socket.id);
-    kickOutFromLastRoom(rivalFinder[socket.id]);
   });
 
   socket.on("tellRival_yourTurn", (yourEnemysJsons, yourEnemysVerOfYourJsons) => {

@@ -38,6 +38,20 @@ function highlightSelfAndRadius(turnOn, cubeQ, cubeR, cubeS){
   }
 }
 
+// animation
+function anim_tileHitByAttack(hitTileDiv){
+  hitTileDiv.animate({
+    backgroundColor: "#aa0000",
+  }, 700 );
+};
+
+function anim_tileInAttackRange(hitTileDiv){
+  hitTileDiv.animate({
+    backgroundColor: "#3c52c9",
+  }, 700 );
+};
+
+// div creation
 function createTileDiv(rowDiv, q, r) {
   const square = document.createElement("div"); // create tile and add to row
 

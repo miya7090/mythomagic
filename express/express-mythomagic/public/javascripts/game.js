@@ -33,6 +33,16 @@ document.addEventListener("DOMContentLoaded", () => {
     setTimeout(updateTokenClock, 1000); // update token clock every second
   });
 
+  MY_SOCKET.on('winThroughForfeit', (reason)=>{
+    alert(otherName+" has forfeited the game ("+reason+")");
+    window.location.href = "/";
+  });
+
+  MY_SOCKET.on('forfeit', (reason)=>{
+    alert("you have forfeited the game ("+reason+")");
+    window.location.href = "/";
+  });
+
   MY_SOCKET.on('yourTurn', (yourEnemysCards, yourEnemysVerOfYourCards)=>{
     changeGameModeTo("p1-active");
     console.log("it's my turn!");

@@ -1,7 +1,11 @@
 const socket = io(); // create new instance
 socket.playerType = "lobby";
+var PENDING_INVITE_RESPONSE = false;
 
 document.addEventListener("DOMContentLoaded", () => {
+  const nicknameDiv = document.getElementById("nickname");
+  nicknameDiv.focus();
+  nicknameDiv.select();
 
   socket.on('connect', ()=>{
     console.log("new lobby socket connected", socket);
@@ -15,11 +19,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const lJoinButton = document.getElementById("lobbyJoinButton");
   lJoinButton.addEventListener("click", ()=>{
-    const nickname = document.getElementById("nickname");
-    const region = document.getElementById("region");
-    socket.emit("lobbyJoin", nickname.value, region.value);
-    regionNotesText.textContent = "joining "+region.value+" lobby...";
-    nickname.disabled = true;
+    const regionDiv = document.getElementById("region");
+    socket.emit("lobbyJoin", nicknameDiv.value, regionDiv.value);
+    regionNotesText.textContent = "joining "+regionDiv.value+" lobby...";
+    nicknameDiv.disabled = true;
   });
 
   const lLeaveButton = document.getElementById("lobbyLeaveButton");
@@ -27,7 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
     socket.emit("lobbyLeave");
     clearRegionList();
     regionNotesText.textContent = "";
-    nickname.disabled = false;
+    nicknameDiv.disabled = false;
   });
 
   socket.on("lobbyJoined", (nickname, region, regionUsers)=>{
@@ -60,14 +63,16 @@ document.addEventListener("DOMContentLoaded", () => {
       const genRoomCode = Math.random().toString(36).slice(2);
       socket.emit("roomRequest", genRoomCode, enemyNickname, enemyId, myNickname);
     } else {
-      socket.broadcast.to(socketid).emit("gameRequestDenied", myNickname, socket.id);
+      console.log("denying challenge");
+      socket.emit("denyChallengeRequest", myNickname, enemyId);
     }
   });
   
-  socket.on("gameRequestDenied", ()=>{
-    console.log("unimplemented");
+  socket.on("gameRequestDenied", (denier)=>{
+    console.log("challenge was denied");
+    regionNotesText.textContent = denier+" denied your challenge";
+    PENDING_INVITE_RESPONSE = false; // #TODO add timeout for invite response
   });
-
 });
 
 function clearRegionList(){
@@ -76,19 +81,32 @@ function clearRegionList(){
 }
 
 function populateRegionList(regionUsers){
+  const regionNotesText = document.getElementById("queueNotes");
+  if (Object.keys(regionUsers).length == 1){
+    regionNotesText.textContent = "nobody else here yet... (will automatically refresh)";
+  } else {
+    regionNotesText.textContent = "";
+  }
   const myNickname = document.getElementById("nickname").value;
   const lobbiersInRegion = document.getElementById("lobbiersinregion");
   lobbiersInRegion.innerHTML = ""; // clear div
   Object.keys(regionUsers).forEach(socketid => {
-    const rUser = document.createElement("button");
-    const nickname = regionUsers[socketid];
-    rUser.classList.add("lobbier");
-    rUser.textContent = nickname;
-    rUser.name = nickname;
-    rUser.addEventListener("click", (evt)=>{
-      console.log("*");
-      socket.emit("gameInvite", myNickname, socketid);
-    })
-    lobbiersInRegion.appendChild(rUser);
+    if (socketid != socket.id) {
+      const rUser = document.createElement("button");
+      const nickname = regionUsers[socketid];
+      rUser.classList.add("lobbier");
+      rUser.textContent = nickname;
+      rUser.name = nickname;
+      rUser.addEventListener("click", (evt)=>{
+        if (PENDING_INVITE_RESPONSE == false) {
+          PENDING_INVITE_RESPONSE = true;
+          regionNotesText.textContent = "invitation sent...";
+          socket.emit("gameInvite", myNickname, socketid);
+        } else {
+          console.error("you are still waiting for an invitation response");
+        }
+      })
+      lobbiersInRegion.appendChild(rUser);
+    }
   }); 
 }

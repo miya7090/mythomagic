@@ -1,5 +1,7 @@
 :root {
   --normalTile: rgba(54, 71, 253, 0.5);
+  --highlightedTileMemory: rgba(59, 59, 240, 0.9);
+  --highlightedTileAttack: rgba(36, 125, 170, 0.9);
   --highlightedTile: rgba(59, 59, 240, 0.9);
   --offgridTile: rgba(0, 0, 0, 0.4);
   --highlightedOffgrid: rgba(0, 0, 0, 0.9);
@@ -164,7 +166,7 @@ background-color: #ddd;
 
 /* TOKEN BASE RULES */
 .player1 {
-  border: 3px solid #00bbff;
+  border: 1px solid #000000;
   box-sizing: border-box; /* border goes inside box not outside */
 }
 

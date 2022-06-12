@@ -30,6 +30,9 @@ function autoattack(pcard){
       console.log("hit!!", tokenOnTile.pcardLink.cardName);
       let damageCalc = 200; // #TODO
       tokenOnTile.pcardLink.takeDamage(damageCalc);
+      anim_tileHitByAttack(hitTile);
+    } else {
+      anim_tileInAttackRange(hitTile);
     }
   });
 }

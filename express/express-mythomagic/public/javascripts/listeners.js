@@ -1,12 +1,15 @@
 // @miya7090
 
+HIGHLIGHT_TILE_MEMORY_COLOR = getComputedStyle(document.documentElement).getPropertyValue('--highlightedTileMemory');
+HIGHLIGHT_TILE_ATTACK_COLOR = getComputedStyle(document.documentElement).getPropertyValue('--highlightedTileAttack');
+
 // what to do when key pressed
 function keyProcessing(event) {
   if (event.keyCode === 80) { // switch player turn (for debugging)
     nextTurn();
     console.error("note this does not update opponent");
   }
-  if (event.keyCode === 90 || event.keyCode === 88) { // mouse hover radius stuff
+  if ((event.keyCode === 90 || event.keyCode === 88) && GAME_MODE != "p1-moveToken") { // mouse hover radius stuff
     // first clear hover highlights
     if (CURRENT_MOUSE_Q !== undefined) {
       highlightSelfAndRadius(false, CURRENT_MOUSE_Q, CURRENT_MOUSE_R, CURRENT_MOUSE_S);
@@ -61,6 +64,10 @@ function mouseClickTile(evt) {
       console.error("there is already a tile at this location, try again"); // #TODO allow the token to stay still and re-autoattack
       changeGameModeTo("p1-active");
       GAME_MODE_MEMORYTARGET = undefined;
+      highlightSelfAndRadius(false, CURRENT_MOUSE_Q, CURRENT_MOUSE_R, CURRENT_MOUSE_S);
+      MOUSE_HOVER_RADIUS = 0;
+      document.documentElement.style.setProperty('--highlightedTile', HIGHLIGHT_TILE_MEMORY_COLOR);
+      highlightSelfAndRadius(true, CURRENT_MOUSE_Q, CURRENT_MOUSE_R, CURRENT_MOUSE_S);
     } else {
       const tQ = evt.target.cube_q;
       const tR = evt.target.cube_r;
@@ -71,6 +78,10 @@ function mouseClickTile(evt) {
       MY_SOCKET.emit("tellRival_yourTurn", exportAllP1Cs(false), exportAllP2Cs(true));
       rerenderAllGamecardsAndTokens();
       GAME_MODE_MEMORYTARGET = undefined;
+      highlightSelfAndRadius(false, CURRENT_MOUSE_Q, CURRENT_MOUSE_R, CURRENT_MOUSE_S);
+      MOUSE_HOVER_RADIUS = 0;
+      document.documentElement.style.setProperty('--highlightedTile', HIGHLIGHT_TILE_MEMORY_COLOR);
+      highlightSelfAndRadius(true, CURRENT_MOUSE_Q, CURRENT_MOUSE_R, CURRENT_MOUSE_S);
     }
   } else {
     console.error("cannot place tokens until your turn begins");
@@ -79,7 +90,12 @@ function mouseClickTile(evt) {
   if (GAME_MODE == "p1-active" && tokenOnTile != null) {
     if (tokenOnTile.classList.contains("player1")) {
       changeGameModeTo("p1-moveToken");
+      
+      highlightSelfAndRadius(false, CURRENT_MOUSE_Q, CURRENT_MOUSE_R, CURRENT_MOUSE_S);
       GAME_MODE_MEMORYTARGET = tokenOnTile.pcardLink;
+      MOUSE_HOVER_RADIUS = tokenOnTile.pcardLink.current_normal_attack_range;
+      document.documentElement.style.setProperty('--highlightedTile', HIGHLIGHT_TILE_ATTACK_COLOR);
+      highlightSelfAndRadius(true, CURRENT_MOUSE_Q, CURRENT_MOUSE_R, CURRENT_MOUSE_S);
     }
   } else {
     console.error("this tile has no token");
