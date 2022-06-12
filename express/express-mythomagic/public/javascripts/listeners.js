@@ -42,7 +42,7 @@ function mouseOutOfGrid(evt) {
 }
 
 function mouseClickTile(evt) {
-  if (getTurn() != "p1") {
+  if (getTurn() != "p1" && getTurn() != "pick") {
     console.error("not the active player's turn", GAME_MODE, getTurn());
     return;
   }
@@ -118,7 +118,9 @@ function mouseOverGameCard(evt, referenceCard) {
 }
 
 function mouseClickGameCard(evt, pcardRef) {
-  PLAYER_GAMECARD_OBJS.splice(PLAYER_GAMECARD_OBJS.indexOf(pcardRef), 1); // remove from game cards
-  evt.target.remove(); // remove div
-  removeTokenAndShiftOthers(pcardRef);
+  if (GAME_MODE == "pick-phase") {
+    PLAYER_GAMECARD_OBJS.splice(PLAYER_GAMECARD_OBJS.indexOf(pcardRef), 1); // remove from game cards
+    evt.target.remove(); // remove div
+    removeTokenAndShiftOthers(pcardRef);
+  }
 }

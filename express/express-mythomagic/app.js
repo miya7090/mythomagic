@@ -15,7 +15,7 @@ var doneTokenPick = {}; // {room: gameCardObjs} where objs array is included if 
 // lobby code processing
 function rk(regionName){ return regionName + "====="; }
 function nk(rkRegion){ return rkRegion.slice(0, -5); }
-function isLobbyId(roomcode) { return (roomcode.slice(0, -5) == "====="); }
+function isLobbyId(roomcode) { return (roomcode.slice(roomcode.length-5) == "====="); }
 
 app.use(express.static("public")); // use "public" directory for static files
 
@@ -28,7 +28,7 @@ function kickOutFromLastRoom(socketId) {
       delete regionUsers[thisRoomCode][socketId];
       io.to(thisRoomCode).emit("lobbyLeft", nickname, nk(thisRoomCode), regionUsers[thisRoomCode]);
     } else {
-      console.error("unimplemented"); // notify game partner that left & forfeit game
+      console.error("unimplemented", thisRoomCode); // notify game partner that left & forfeit game
       // clear rivalfinder #TODO
     }
   }
@@ -88,10 +88,10 @@ io.on("connection", socket => {
     if (roomCode in doneTokenPick){
       if (socket.id > rivalId){ // this socket goes first
         io.to(socket.id).emit("yourTurn", doneTokenPick[roomCode], undefined); // syntax: 'yourTurn', (yourEnemysCards, yourEnemysVerOfYourCards)
-        io.to(rivalId).emit("waitTurn", gameCardObjs, undefined);
+        io.to(rivalId).emit("waitTurnAndPopulate", gameCardObjs);
       } else {
         io.to(rivalId).emit("yourTurn", gameCardObjs, undefined);
-        io.to(socket.id).emit("waitTurn", doneTokenPick[roomCode], undefined);
+        io.to(socket.id).emit("waitTurnAndPopulate", doneTokenPick[roomCode]);
       }
     } else {
       doneTokenPick[roomCode] = gameCardObjs;

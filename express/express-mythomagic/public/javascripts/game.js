@@ -35,20 +35,32 @@ document.addEventListener("DOMContentLoaded", () => {
   MY_SOCKET.on('yourTurn', (yourEnemysCards, yourEnemysVerOfYourCards)=>{
     changeGameModeTo("p1-active");
     console.log("it's my turn!");
-    console.log("opponent cards look like", yourEnemysCards); //#TODO render
-    //renderEnemyCards(yourEnemysCards);
+    console.log("opponent cards look like", yourEnemysCards);
+
+    ENEMY_GAMECARD_OBJS = yourEnemysCards;
+    if (yourEnemysVerOfYourCards != undefined){
+      PLAYER_GAMECARD_OBJS = yourEnemysVerOfYourCards;
+    }
+
+    rerenderAllGamecards();
   });
 
-  MY_SOCKET.on('waitTurn', (yourEnemysCards, yourEnemysVerOfYourCards)=>{
+  MY_SOCKET.on('waitTurnAndPopulate', (yourEnemysCards)=>{
     changeGameModeTo("p2-active");
     console.log("need to wait for opponent...");
     console.log("opponent cards look like", yourEnemysCards); //#TODO render
+  });
+
+  MY_SOCKET.on('waitTurn', ()=>{
+    changeGameModeTo("p2-active");
+    console.log("need to wait for opponent...");
   });
 
   ///////////////////////////// JOIN ROOM????????????????????????
 
   const mainGrid = document.getElementById("hexContainer");
   const onFieldCards = document.getElementById("onFieldCards");
+  const enemyCardReference = document.getElementById("enemyCardReference");
   const gameInfoBox = document.getElementById("gameInfoBox");
   const gameOptions = document.getElementById("gameOptions");
   const previewRadius = document.getElementById("previewRadius");

@@ -6,8 +6,10 @@ function changeGameModeTo(newMode) {
 }
 
 function getTurn() {
-  if (GAME_MODE == "startup" || GAME_MODE == "pick-phase") {
+  if (GAME_MODE == "startup") {
     return "startup";
+  } else if (GAME_MODE == "pick-phase") {
+    return "pick";
   } else if (GAME_MODE == "p1-active" || GAME_MODE == "p1-moveToken") {
     return "p1";
   } else if (GAME_MODE == "p2-active" || GAME_MODE == "p2-moveToken") {

@@ -96,6 +96,21 @@ function createGameCardDiv(pcToRender) {
   ccard.addEventListener('mouseup', function(evt){mouseClickGameCard(evt, pcToRender);});
 };
 
+function createEnemyGameCardDiv(pcToRender) { //#TODO reduce redundant code ^
+  const ccard = document.createElement("div");
+
+  ccard.classList.add("player2");
+  ccard.classList.add("card");
+  ccard.id = "p2card-"+pcToRender.cardName;
+  ccard.innerHTML = getGameCardHTML(pcToRender);
+  ccard.name = pcToRender.cardName;
+  ccard.setAttribute("figurine",pcToRender.is_figurine);
+  
+  enemyCardReference.appendChild(ccard);
+
+  ccard.addEventListener('mouseenter', function(evt){mouseOverGameCard(evt, pcToRender);});
+};
+
 function createTokenDiv(pcToRender) {
   const token = document.createElement("div");
   token.classList.add("player1");
@@ -111,6 +126,45 @@ function createTokenDiv(pcToRender) {
 
   token.addEventListener('mouseup', mouseClickToken);
 };
+
+function createEnemyTokenDiv(pcToRender) {
+  const token = document.createElement("div");
+  token.classList.add("player2");
+  token.classList.add("token");
+  token.id = "p2token-" + pcToRender.cardName;
+  token.name = pcToRender.cardName;
+  token.pcardLink = pcToRender;
+  token.setAttribute("figurine",pcToRender.is_figurine);
+  token.q = pcToRender.q; // used for location initialization
+
+  // place token on board
+  HEXTILE_CUBIC_INDEX[pcToRender.tag].appendChild(token);
+};
+
+function rerenderAllGamecards() {
+  // clear game info hover box
+  gameInfoBox.innerHTML = "";
+
+  // SELF: remove and remake gamecards and tokens
+  let myGCards = document.getElementsByClassName("player1 card");
+  let myTokens = document.getElementsByClassName("player1 token");
+  myGCards.forEach(myGCard => { myGCard.remove(); });
+  myTokens.forEach(myToken => { myToken.remove(); });
+  PLAYER_GAMECARD_OBJS.forEach(newGCard => { // enemyCardReference
+    createGameCardDiv(newGCard);
+    createTokenDiv(newGCard);
+  });
+
+  // ENEMY: remove and remake gamecards and tokens
+  let enemyGCards = document.getElementsByClassName("player2 card");
+  let enemyTokens = document.getElementsByClassName("player2 token");
+  enemyGCards.forEach(enemyGCard => { enemyGCard.remove(); });
+  enemyTokens.forEach(enemyToken => { enemyToken.remove(); });
+  ENEMY_GAMECARD_OBJS.forEach(newGCard => { // enemyCardReference
+    createEnemyGameCardDiv(newGCard);
+    createEnemyTokenDiv(newGCard);
+  });
+}
 
 // for formatting display of cards available to player
 function getBaseCardHTML(cardName) {

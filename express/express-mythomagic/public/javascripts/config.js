@@ -43,3 +43,4 @@ const BASE_STAT_DICT = {
   const PLAYER_OWNED = ["Athena","Kronos","Apollo","Jason","Hestia","Steve"];
   const PLAYER_HOLOFOIL = ["Athena","Apollo","Jason","Steve"];
   PLAYER_GAMECARD_OBJS = [];
+  ENEMY_GAMECARD_OBJS = [];
