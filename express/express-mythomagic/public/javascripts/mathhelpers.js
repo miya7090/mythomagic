@@ -7,15 +7,19 @@ function getTileDistance(aQ, aR, aS, bQ, bR, bS) {
 
 // get list of all coordinates within range of given coordinate
 function getCoordinatesWithinRadius(cQ, cR, cS, radius, includeSelf=true){
-  var results = []; // returns list of strings
+  let results = []; // returns list of strings
 
   for (let q = -radius; q <= radius; q++) {
     for (let r = Math.max(-radius, -q-radius); r <= Math.min(radius, -q+radius); r++) {
-      var s = -q-r;
+      let s = -q-r;
       results.push((cQ+q)+","+(cR+r)+","+(cS+s));
     }
   }
 
   if (includeSelf == false) { results.splice(results.indexOf(cQ+","+cR+","+cS),1); }
   return results;
+}
+
+function getReflectedCoordinate(q, r, s){
+  return [-q, -r, -s];
 }

@@ -10,7 +10,7 @@ var roomBook = {};
 // player tracker, games only
 var roommateFinder = {}; // {room: [socketid, socketid]}
 var rivalFinder = {}; // {socketid: socketid}
-var doneTokenPick = {}; // {room: gameCardObjs} where objs array is included if 1 person finished token pick
+var doneTokenPick = {}; // {room: gameCardJsonObjs} where objs array is included if 1 person finished token pick
 
 // lobby code processing
 function rk(regionName){ return regionName + "====="; }
@@ -82,19 +82,19 @@ io.on("connection", socket => {
     }
   });
 
-  socket.on("doneWithTokenPick", (gameCardObjs)=>{
+  socket.on("doneWithTokenPick", (gameCardJsonObjs)=>{
     let roomCode = roomBook[socket.id];
     let rivalId = rivalFinder[socket.id];
     if (roomCode in doneTokenPick){
       if (socket.id > rivalId){ // this socket goes first
         io.to(socket.id).emit("yourTurn", doneTokenPick[roomCode], undefined); // syntax: 'yourTurn', (yourEnemysCards, yourEnemysVerOfYourCards)
-        io.to(rivalId).emit("waitTurnAndPopulate", gameCardObjs);
+        io.to(rivalId).emit("waitTurnAndPopulate", gameCardJsonObjs);
       } else {
-        io.to(rivalId).emit("yourTurn", gameCardObjs, undefined);
+        io.to(rivalId).emit("yourTurn", gameCardJsonObjs, undefined);
         io.to(socket.id).emit("waitTurnAndPopulate", doneTokenPick[roomCode]);
       }
     } else {
-      doneTokenPick[roomCode] = gameCardObjs;
+      doneTokenPick[roomCode] = gameCardJsonObjs;
     }
   });
 
@@ -103,9 +103,9 @@ io.on("connection", socket => {
     kickOutFromLastRoom(rivalFinder[socket.id]);
   });
 
-  socket.on("tellRival_yourTurn", () => {
+  socket.on("tellRival_yourTurn", (yourEnemysJsons, yourEnemysVerOfYourJsons) => {
     let rivalId = rivalFinder[socket.id];
-    io.to(rivalId).emit("yourTurn");
+    io.to(rivalId).emit("yourTurn", yourEnemysJsons, yourEnemysVerOfYourJsons);
   });
 });
 

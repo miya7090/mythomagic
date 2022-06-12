@@ -66,10 +66,14 @@ function mouseClickTile(evt) {
       const tR = evt.target.cube_r;
       moveToken(GAME_MODE_MEMORYTARGET, true, tQ, tR); // #TODO check if this is a valid move for the tile first
       changeGameModeTo('p2-active');
-      MY_SOCKET.emit("tellRival_yourTurn");
+      MY_SOCKET.emit("tellRival_yourTurn", exportAllP1Cs(), exportAllP2Cs());
       GAME_MODE_MEMORYTARGET = undefined;
     }
-  } else if (GAME_MODE == "p1-active" && tokenOnTile != null) {
+  } else {
+    console.error("cannot place tokens until your turn begins");
+  }
+
+  if (GAME_MODE == "p1-active" && tokenOnTile != null) {
     if (tokenOnTile.classList.contains("player1")) {
       changeGameModeTo("p1-moveToken");
       GAME_MODE_MEMORYTARGET = tokenOnTile.pcardLink;

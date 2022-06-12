@@ -9,7 +9,8 @@ function updateTokenClock(){ // #TODO move to listeners
   if (secLeft <= 0) {
     clock.textContent = "";
     changeGameModeTo("startup");
-    MY_SOCKET.emit("doneWithTokenPick", PLAYER_GAMECARD_OBJS);
+    console.log("tokentransmitting", exportAllP1Cs());
+    MY_SOCKET.emit("doneWithTokenPick", exportAllP1Cs());
   } else {
     setTimeout(updateTokenClock, 1000);
   }
@@ -37,9 +38,9 @@ document.addEventListener("DOMContentLoaded", () => {
     console.log("it's my turn!");
     console.log("opponent cards look like", yourEnemysCards);
 
-    ENEMY_GAMECARD_OBJS = yourEnemysCards;
+    importAllP2Cs(yourEnemysCards);
     if (yourEnemysVerOfYourCards != undefined){
-      PLAYER_GAMECARD_OBJS = yourEnemysVerOfYourCards;
+      importAllP1Cs(yourEnemysVerOfYourCards);
     }
 
     rerenderAllGamecards();
@@ -47,8 +48,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   MY_SOCKET.on('waitTurnAndPopulate', (yourEnemysCards)=>{
     changeGameModeTo("p2-active");
-    console.log("need to wait for opponent...");
-    console.log("opponent cards look like", yourEnemysCards); //#TODO render
+    console.log("opponent cards look like", yourEnemysCards);
+    importAllP2Cs(yourEnemysCards);
+    rerenderAllGamecards();
   });
 
   MY_SOCKET.on('waitTurn', ()=>{

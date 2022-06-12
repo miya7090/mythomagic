@@ -148,8 +148,8 @@ function rerenderAllGamecards() {
   // SELF: remove and remake gamecards and tokens
   let myGCards = document.getElementsByClassName("player1 card");
   let myTokens = document.getElementsByClassName("player1 token");
-  myGCards.forEach(myGCard => { myGCard.remove(); });
-  myTokens.forEach(myToken => { myToken.remove(); });
+  while(myGCards.length > 0){ myGCards[0].remove(); }
+  while(myTokens.length > 0){ myTokens[0].remove(); }
   PLAYER_GAMECARD_OBJS.forEach(newGCard => { // enemyCardReference
     createGameCardDiv(newGCard);
     createTokenDiv(newGCard);
@@ -158,9 +158,11 @@ function rerenderAllGamecards() {
   // ENEMY: remove and remake gamecards and tokens
   let enemyGCards = document.getElementsByClassName("player2 card");
   let enemyTokens = document.getElementsByClassName("player2 token");
-  enemyGCards.forEach(enemyGCard => { enemyGCard.remove(); });
-  enemyTokens.forEach(enemyToken => { enemyToken.remove(); });
+  while(enemyGCards.length > 0){ enemyGCards[0].remove(); }
+  while(enemyTokens.length > 0){ enemyTokens[0].remove(); }
+  console.log(PLAYER_GAMECARD_OBJS, ENEMY_GAMECARD_OBJS);
   ENEMY_GAMECARD_OBJS.forEach(newGCard => { // enemyCardReference
+    newGCard.flipAcrossBoard();
     createEnemyGameCardDiv(newGCard);
     createEnemyTokenDiv(newGCard);
   });
@@ -247,22 +249,22 @@ function get_PC_BroadcastForInfoBox(PCard) {
 
     
     res += '<div class="hoverColumn">';
-    res += "<p>" + PCard.current_health + "/" + (PCard.base_health + PCard.health_bonus) + "HP <i>(+" + PCard.health_bonus + ")</i></p>";
-    res += "<p>" + PCard.current_mana + "/" + (MAX_MANA + PCard.mana_bonus) + "MP <i>(+" + PCard.mana_bonus + ")</i></p>";
+    res += "<p>" + PCard.current_health + "/" + (PCard.base_health + PCard.health_bonus) + "HP <i>(max +" + PCard.health_bonus + ")</i></p>";
+    res += "<p>" + PCard.current_mana + "/" + (MAX_MANA + PCard.mana_bonus) + "MP <i>(max +" + PCard.mana_bonus + ")</i></p>";
     res += "</div>";
     
     res += '<div class="hoverColumn">';
-    res += "<p>ATK: " + PCard.current_attack + " <i>(+" + PCard.attack_bonus + ")</i></p>";
-    res += "<p>DEF: " + PCard.current_defense + " <i>(+" + PCard.defense_bonus + ")</i></p>";
+    res += "<p>ATK: " + PCard.current_attack + " <i>(+" + (PCard.current_attack - PCard.base_attack) + ")</i></p>";
+    res += "<p>DEF: " + PCard.current_defense + " <i>(+" + (PCard.current_defense - PCard.base_defense) + ")</i></p>";
 
     
-    res += "<p>RNG: " + PCard.current_normal_attack_range + " <i>(+" + PCard.base_normal_attack_range + ")</i></p>";
-    res += "<p>MVT: " + PCard.current_movement + " <i>(+" + PCard.movement_bonus + ")</i></p>";
+    res += "<p>RNG: " + PCard.current_normal_attack_range + " <i>(+" + (PCard.current_normal_attack_range - PCard.base_normal_attack_range) + ")</i></p>";
+    res += "<p>MVT: " + PCard.current_movement + " <i>(+" + (PCard.current_movement - PCard.base_movement) + ")</i></p>";
     res += "</div>";
 
     res += '<div class="hoverColumn">';
-    res += "<p>MP/turn: " + PCard.current_mana_per_turn + " <i>(+" + PCard.mana_turnRegen_bonus + ")</i></p>";
-    res += "<p>MP/atk: " + PCard.current_mana_per_atk + " <i>(+" + PCard.mana_atkRegen_bonus + ")</i></p>";
+    res += "<p>MP/turn: " + PCard.current_mana_per_turn + " <i>(+" + (PCard.current_mana_per_turn - PCard.base_mana_per_turn) + ")</i></p>";
+    res += "<p>MP/atk: " + PCard.current_mana_per_atk + " <i>(+" + (PCard.current_mana_per_atk - PCard.base_mana_per_atk) + ")</i></p>";
     res += "</div>";
 
   res += "</div>";

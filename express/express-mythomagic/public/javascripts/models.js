@@ -15,6 +15,52 @@
     }
   }
 
+function exportPC(pcard){
+  return {
+    "n": pcard.cardName, "ca": pcard.current_attack, "cnar": pcard.current_normal_attack_range,
+    "cd": pcard.current_defense, "ch": pcard.current_health, "cm": pcard.current_mana,
+    "cmpt": pcard.current_mana_per_turn, "cmpa": pcard.current_mana_per_atk,
+    "m": pcard.current_movement, "d": pcard.dead, "hb": pcard.health_bonus, "mb": pcard.mana_bonus,
+    "if": pcard.is_figurine, "s": pcard.statuses, "qq": pcard.q, "rr": pcard.r, "ss": pcard.s // #TODO compress this?
+  };
+}
+
+function exportAllP1Cs(){
+  let ans = [];
+  PLAYER_GAMECARD_OBJS.forEach(pc => { ans.push(exportPC(pc)); });
+  return ans;
+}
+
+function exportAllP2Cs(){
+  let ans = [];
+  ENEMY_GAMECARD_OBJS.forEach(pc => { ans.push(exportPC(pc)); });
+  return ans;
+}
+
+function importPC(pcJson){
+  let ans = new PlayerCard(pcJson["n"], pcJson["if"], pcJson["qq"], pcJson["rr"], pcJson["ss"]);
+  ans.current_attack = pcJson["ca"]; ans.current_normal_attack_range = pcJson["cnar"];
+  ans.current_defense = pcJson["cd"]; ans.current_health = pcJson["ch"]; ans.current_mana = pcJson["cm"];
+  ans.current_mana_per_turn = pcJson["cmpt"]; ans.current_mana_per_atk = pcJson["cmpa"];
+  ans.current_movement = pcJson["m"]; ans.dead = pcJson["d"]; ans.health_bonus = pcJson["hb"];
+  ans.mana_bonus = pcJson["mb"]; ans.statuses = pcJson["s"];
+  return ans;
+}
+
+function importAllP1Cs(pcListObj){
+  let ans = [];
+  PLAYER_GAMECARD_OBJS = [];
+  Object.keys(pcListObj).forEach(key => { PLAYER_GAMECARD_OBJS.push(importPC(pcListObj[key])); });
+  return ans;
+}
+
+function importAllP2Cs(pcListObj){
+  let ans = [];
+  ENEMY_GAMECARD_OBJS = [];
+  Object.keys(pcListObj).forEach(key => { ENEMY_GAMECARD_OBJS.push(importPC(pcListObj[key])); });
+  return ans;
+}
+
   class PlayerCard extends Card {
     constructor(cardName, isFigurine, pc_q, pc_r, pc_s) {
       super(cardName);
@@ -28,13 +74,8 @@
       this.current_movement = this.base_movement;
       this.dead = "active"; // "active", "defeated", or "undead"
 
-      this.attack_bonus = 0;
-      this.defense_bonus = 0;
       this.health_bonus = 0;
       this.mana_bonus = 0;
-      this.mana_turnRegen_bonus = 0;
-      this.mana_atkRegen_bonus = 0;
-      this.movement_bonus = 0;
 
       this.is_figurine = isFigurine;
       this.statuses = {"blinded":0, "charmed":0, "poisoned":0, "stunned":0, "terrified":0};
@@ -45,19 +86,26 @@
           console.error("attempted to make a player card with invalid cubic coordinates: "+pc_q+","+pc_r+","+pc_s);
       }
       this.s = pc_s;
-      this.tag = pc_q+","+pc_r+","+pc_s;
+      this.refreshTag();
+    }
+    refreshTag(){
+      this.tag = this.q+","+this.r+","+this.s;
     }
     changeLocationTo(nq,nr){
       this.q = nq;
       this.r = nr;
       this.s = -nq - nr;
-      this.tag = this.q+","+this.r+","+this.s;
+      this.refreshTag();
     }
     moveLocationBy(nq,nr){
       this.q += nq;
       this.r += nr;
       this.s = -this.q - this.r;
-      this.tag = this.q+","+this.r+","+this.s;
+      this.refreshTag();
+    }
+    flipAcrossBoard(){
+      [this.q, this.r, this.s] = getReflectedCoordinate(this.q, this.r, this.s);
+      this.refreshTag();
     }
     /*getRangeOfMotion(){
       return 
