@@ -34,13 +34,13 @@ const BASE_STAT_DICT = {
     "Achilles":[2900,2,20,600,100,250,2],
     "Apollo":[2000,6,10,700,100,250,1],
     "Jason":[2100,2,10,800,100,250,1],
-    "Hestia":[500,2,15,1200,250,0,1],
-    "Steve":[500,2,15,1200,250,0,1],
-    "Joe":[500,2,15,1200,250,0,1],
-    "Bob":[500,2,15,1200,250,0,1]
+    "Hephaestus":[500,2,15,1200,250,0,1],
+    "Poseidon":[500,2,15,1200,250,0,1],
+    "Nyx":[500,2,15,1200,250,0,1],
+    "Nike":[500,2,15,1200,250,0,1]
   }
   
-  const PLAYER_OWNED = ["Athena","Kronos","Apollo","Jason","Hestia","Steve"];
-  const PLAYER_HOLOFOIL = ["Athena","Apollo","Jason","Steve"];
+  const PLAYER_OWNED = ["Athena","Kronos","Apollo","Nike","Hephaestus","Nyx"];
+  const PLAYER_HOLOFOIL = ["Athena","Apollo","Hephaestus","Nyx"];
   PLAYER_GAMECARD_OBJS = [];
   ENEMY_GAMECARD_OBJS = [];

@@ -7,13 +7,18 @@
   --highlightedOffgrid: rgba(0, 0, 0, 0.9);
 }
 
+@font-face {
+  font-family: "regularFont";
+  src: url("../fonts/DalekPinpointBold.ttf");
+}
+
 /* GENERAL RULES */
 body {
   margin: 20px;
   background-image: url("../images/forestbg.jpg");
   background-color: rgba(0,0,0,0.2);
   background-blend-mode: darken;
-  font-family: arial, sans-serif;
+  font-family: "regularFont";
   font-size: 14px;
   color: rgb(255,255,255);
 }
@@ -113,14 +118,18 @@ body {
 }
 
 .card {
-  margin-top: 10px;
+  margin-top: 7px;
   margin-left: 10px;
   float: left;
   width: 60px;
   height: 90px;
-  background-color: rgb(43, 51, 91);
+  background-color: rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 10px;
+  box-shadow: 0 0 1rem 0 rgba(0, 0, 0, 0.6);
   overflow: hidden;
   text-align: center;
+  color: rgba(0, 0, 0, 0.7);
 }
 
 .card[figurine=true] {
@@ -128,11 +137,39 @@ body {
 }
 
 .card:hover {
-  background-color: rgb(19, 25, 58);
+  background-color: rgba(255, 255, 255, 0.7);
 }
 
-.baseCardImg{
-  width: 100%;
+.card:hover p { opacity: 100%; color: black; }
+.card:hover .baseCardImg1 { opacity: 80%; }
+.card:hover .baseCardImg2 { opacity: 80%; }
+
+.baseCardImgHolder{
+  position: relative;
+}
+
+.baseCardImg1{
+  position: absolute;
+  top:5px;
+  left:4px;
+  width: 85%;
+  filter: invert(1.0) blur(5px);
+}
+
+.baseCardImg2{
+  margin-top:5px;
+  width: 85%;
+  opacity: 50%;
+}
+
+.baseCardName{
+  margin-top:5px;
+  margin-bottom:0px;
+}
+
+.smallFont{
+  margin-top: 7px;
+  font-size:10px;
 }
 
 .hoverInfo {
@@ -143,7 +180,13 @@ body {
   height: 160px;
 }
 
-h3 {
+/* INFO BOX RULES */
+#gameInfoBox {
+  font-family: Georgia;
+}
+
+#hoverInfoTitle {
+  font-family: "regularFont";
   font-size: medium;
   margin-left: 10px;
   margin-bottom: 2px;

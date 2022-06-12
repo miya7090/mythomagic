@@ -1,6 +1,15 @@
+@font-face {
+    font-family: "regularFont";
+    src: url("../fonts/DalekPinpointBold.ttf");
+}
+
 body {
-    font-family: arial, sans-serif;
-    font-size: small;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: medium;
+}
+
+h2 {
+    font-family: "regularFont";
 }
 
 #regionselect {

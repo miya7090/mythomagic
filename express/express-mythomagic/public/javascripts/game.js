@@ -85,7 +85,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.addEventListener('keydown', keyProcessing);
   mainGrid.addEventListener('mouseleave', mouseOutOfGrid);
-  console.log("help");
 
   // add tiles to game board
   for (let r = -HEX_RADIUS; r <= HEX_RADIUS; r++) {

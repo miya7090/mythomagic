@@ -187,8 +187,16 @@ function rerenderAllGamecardsAndTokens() {
 // for formatting display of cards available to player
 function getBaseCardHTML(cardName) {
   // cardName, imgLink, cardHP, cardMana, statusList
-  var res = cardName + "\n";
-  res += '<img class="baseCardImg" src="../images/portraits/'+cardName+'.png" onerror="javascript:this.src=\'../images/portraits/default.png\'"/>';
+  let fontString = "";
+  if (cardName.length > 7) {
+    fontString = " smallFont";
+  }
+
+  let res = '<p class="baseCardName'+fontString+'">'+cardName + "</p>";
+  res += '<div class="baseCardImgHolder">';
+  res += '<img class="baseCardImg1'+fontString+'" src="../images/portraits/'+cardName+'.png" onerror="javascript:this.src=\'../images/portraits/default.png\'"/>';
+  res += '<img class="baseCardImg2'+fontString+'" src="../images/portraits/'+cardName+'.png" onerror="javascript:this.src=\'../images/portraits/default.png\'"/>';
+  res += '</div>';
   return res;
 }
 
@@ -217,7 +225,7 @@ function getGameCardHTML(PCard) {
 function get_BC_BroadcastForInfoBox(BCard) {
   var res = "";
   res += '<div class="hoverColWrap">';
-  res += "<h3>" + BCard.cardName + "</h3>";
+  res += '<h3 id="hoverInfoTitle">' + BCard.cardName + "</h3>";
 
   res += '<div class="hoverColumn">';
     res += "<p>ATK: " + BCard.base_attack + "</p>";
@@ -251,7 +259,7 @@ function get_PC_BroadcastForInfoBox(PCard) {
   var res = "";
   
   res += '<div class="hoverColWrap">';
-    res += '<p><b style="font-size: medium;">' + PCard.cardName + "</b> - " + PCard.dead;
+    res += '<p id="hoverInfoTitle"><b style="font-size: medium;">' + PCard.cardName + "</b> - " + PCard.dead;
     var statusTxt = ", statuses: ";
     for (var sKey in PCard.statuses){
         if (PCard.statuses[sKey] == 1){
