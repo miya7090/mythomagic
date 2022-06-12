@@ -1,22 +1,5 @@
 // @miya7090
 
-function nextTurn() {
-  if (GAME_MODE == "startup") {
-    console.log("now player 1's turn");
-    GAME_MODE = "p1-active";
-  } else if (GAME_MODE == "p1-active" || GAME_MODE == "p1-moveToken") {
-    console.log("now player 2's turn");
-    GAME_MODE = "p2-active";
-  } else if (GAME_MODE == "p2-active" || GAME_MODE == "p2-moveToken") {
-    console.log("now player 1's turn");
-    GAME_MODE = "p1-active";
-  } else {
-    console.error("error continuing to next turn from", GAME_MODE);
-  }
-
-  updateTurnText();
-}
-
 function changeGameModeTo(newMode) {
   GAME_MODE = newMode;
   updateTurnText();

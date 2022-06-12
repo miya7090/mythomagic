@@ -1,18 +1,27 @@
 // @miya7090
 
+const MY_SOCKET = io(); // create new instance
+
 document.addEventListener("DOMContentLoaded", () => {
-  const socket = io(); // create new instance
   const urlParams = new URLSearchParams(window.location.search);
   const roomCode = urlParams.get('room');
   const selfName = urlParams.get('self');
   const otherName = urlParams.get('other');
-  console.log("beep", roomCode, selfName, otherName);
-  socket.on('connect', ()=>{
-    socket.emit("registerPlayer", roomCode, selfName);
+  var otherSocketId;
+
+  MY_SOCKET.on('connect', ()=>{
+    MY_SOCKET.emit("registerPlayer", roomCode);
   });
-  socket.on('gameSetupComplete', ()=>{
-    console.log("setup OK");
-  })
+
+  MY_SOCKET.on('yourTurn', ()=>{
+    changeGameModeTo("p1-active");
+    console.log("it's my turn!");
+  });
+
+  MY_SOCKET.on('waitTurn', ()=>{
+    changeGameModeTo("p2-active");
+    console.log("need to wait for opponent...");
+  });
 
   ///////////////////////////// JOIN ROOM????????????????????????
 

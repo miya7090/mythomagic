@@ -4,6 +4,7 @@
 function keyProcessing(event) {
   if (event.keyCode === 80) { // switch player turn (for debugging)
     nextTurn();
+    console.error("note this does not update opponent");
   }
   if (event.keyCode === 90 || event.keyCode === 88) { // mouse hover radius stuff
     // first clear hover highlights
@@ -64,7 +65,8 @@ function mouseClickTile(evt) {
       const tQ = evt.target.cube_q;
       const tR = evt.target.cube_r;
       moveToken(GAME_MODE_MEMORYTARGET, true, tQ, tR); // #TODO check if this is a valid move for the tile first
-      nextTurn();
+      changeGameModeTo('p2-active');
+      MY_SOCKET.emit("tellRival_yourTurn");
       GAME_MODE_MEMORYTARGET = undefined;
     }
   } else if (GAME_MODE == "p1-active" && tokenOnTile != null) {

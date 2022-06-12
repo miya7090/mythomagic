@@ -3,75 +3,93 @@ var app = express();
 const server = require("http").Server(app); // create server
 const io = require("socket.io")(server); // create instance of socketio
 
-// {region: {socketid: nickname}}
-const regionUsers = {"olympia=====": {}, "corinth=====": {}, "athens=====": {}};
-function rk(regionName){
-  return regionName + "=====";
-}
-function nk(rkRegion){
-  return rkRegion.slice(0, -5);
-}
+// lobby tracker, regions only, {region: {socketid: nickname}}
+var regionUsers = {"olympia=====": {}, "corinth=====": {}, "athens=====": {}};
+// room tracker, both regions and games, {socketid: room}
+var roomBook = {};
+// player tracker, games only
+var roommateFinder = {}; // {room: [socketid, socketid]}
+var rivalFinder = {}; // {socketid: socketid}
+
+// lobby code processing
+function rk(regionName){ return regionName + "====="; }
+function nk(rkRegion){ return rkRegion.slice(0, -5); }
+function isLobbyId(roomcode) { return (roomcode.slice(0, -5) == "====="); }
 
 app.use(express.static("public")); // use "public" directory for static files
 
-io.on("connection", socket => {
-  socket.on("lobbyJoin", (nickname, region) => {
-    // check that doesn't exist in other regions
-    Object.keys(regionUsers).forEach(rkregion => {
-      if (regionUsers[rkregion][socket.id] != undefined) {
-        const nickname = regionUsers[rkregion][socket.id];
-        delete regionUsers[rkregion][socket.id];
-        io.to(rkregion).emit("lobbyLeft", nickname, nk(rkregion), regionUsers[rkregion]);
-      }
-    })
+function kickOutFromLastRoom(socketId) {
+  if (socketId in roomBook) { // remove from its room
+    let thisRoomCode = roomBook[socketId];
+    delete roomBook[socketId];
+    if (isLobbyId(thisRoomCode)) { // if it's in a lobby room, remove from lobby and notify
+      let nickname = regionUsers[thisRoomCode][socketId];
+      delete regionUsers[thisRoomCode][socketId];
+      io.to(thisRoomCode).emit("lobbyLeft", nickname, nk(thisRoomCode), regionUsers[thisRoomCode]);
+    } else {
+      console.error("unimplemented"); // notify game partner that left & forfeit game
+      // clear rivalfinder #TODO
+    }
+  }
+}
 
-    regionUsers[rk(region)][socket.id] = nickname;
+io.on("connection", socket => {
+  /* ~~~~~ managing sockets of any type ~~~~~ */
+  socket.on("disconnect", () => {
+    kickOutFromLastRoom(socket.id);
+  });
+
+  /* ~~~~~ lobby socket operations ~~~~~ */
+  socket.on("lobbyJoin", (nickname, region) => {
+    kickOutFromLastRoom(socket.id);
     socket.join(rk(region));
+    regionUsers[rk(region)][socket.id] = nickname;
+    roomBook[socket.id] = rk(region);
     io.to(rk(region)).emit("lobbyJoined", nickname, region, regionUsers[rk(region)]);
   });
-  socket.on("lobbyLeave", (nickname, region) => {
-    socket.leave(rk(region));
-    delete regionUsers[rk(region)][socket.id];
-    io.to(rk(region)).emit("lobbyLeft", nickname, region, regionUsers[rk(region)]);
+
+  socket.on("lobbyLeave", () => {
+    kickOutFromLastRoom(socket.id);
   });
 
-  socket.on("gameInvite", (inviterNickname, inviterId, recipientNickname, recipientId)=>{
-    io.to(recipientId).emit("gameInvite", inviterNickname, inviterId);
+  socket.on("gameInvite", (inviterNickname, recipientId)=>{
+    io.to(recipientId).emit("gameInvite", inviterNickname, socket.id);
   });
   
-  socket.on("roomRequest", (region, room, inviterNickname, inviterId, recipientNickname, recipientId)=>{
-    delete regionUsers[rk(region)][inviterId];
-    delete regionUsers[rk(region)][socket.id];
-    io.to(rk(region)).emit("lobbyLeft2", inviterNickname, recipientNickname, region, regionUsers[rk(region)]);
+  socket.on("roomRequest", (room, inviterNickname, inviterId, recipientNickname)=>{
+    kickOutFromLastRoom(socket.id);
+    kickOutFromLastRoom(inviterId);
+    // #TODO emit only one update for removing 2 lobbiers
+    //io.to(rk(region)).emit("lobbyLeft2", inviterNickname, recipientNickname, region, regionUsers[rk(region)]);
     io.to(inviterId).emit("redirectToGame", inviterNickname, recipientNickname, room);
     io.to(socket.id).emit("redirectToGame", recipientNickname, inviterNickname, room);
   })
 
-  socket.on("registerPlayer", (roomCode, selfName) => {
+  /* ~~~~~ player socket operations ~~~~~ */
+  socket.on("registerPlayer", (roomCode) => {
     socket.join(roomCode);
-    io.to(roomCode).emit("gameSetupComplete");
+    roomBook[socket.id] = roomCode;
+    if (roomCode in roommateFinder){
+      roommateFinder[roomCode].push(socket.id);
+      rivalFinder[roommateFinder[roomCode][0]] = roommateFinder[roomCode][1];
+      rivalFinder[roommateFinder[roomCode][1]] = roommateFinder[roomCode][0];
+
+      roommateFinder[roomCode].sort();
+      io.to(roommateFinder[roomCode][0]).emit("yourTurn");
+      io.to(roommateFinder[roomCode][1]).emit("waitTurn");
+    } else {
+      roommateFinder[roomCode] = [socket.id];
+    }
   });
 
-  socket.on("joined", (nickname, region) => { // when server receives the "joined" message
-  });
-  socket.on("disconnect", () => { // when someone closes the tab
-    Object.keys(regionUsers).forEach(rkregion => {
-      if (regionUsers[rkregion][socket.id] != undefined) {
-        const nickname = regionUsers[rkregion][socket.id];
-        delete regionUsers[rkregion][socket.id];
-        io.to(rkregion).emit("lobbyLeft", nickname, nk(rkregion), regionUsers[rkregion]);
-      }
-    })
+  socket.on("tellRival_yourTurn", () => {
+    let rivalId = rivalFinder[socket.id];
+    io.to(rivalId).emit("yourTurn");
   });
 });
 
 server.listen(3000);
 console.log("localhost:3000");
-
-// post parsing setup
-const bodyParser = require("body-parser");
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
 
 // pug router setup
 var path = require('path');
@@ -90,62 +108,4 @@ router.get('/game',(req,res) => {
   res.render("game", {room: req.query.room, self: req.query.self, other:req.query.other});
 });
 
-/*
-router.post("/game/", (req, res) => {
-  res.render("game", { title: "Hey", message: "Hello there!" });
-});
-*/
 app.use('/', router);
-
-
-/*
-app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
-
-/////////////////////////////////////////////////////
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-/////////////////////////////////////////////////////////////////
-*/
-
-// mongoose stuff
-/*
-var mongoose = require('mongoose');//Import the mongoose module
-
-// mongoose set up and debug
-var login = require('../express-mythomagic/login');
-var mongoDB = login.mongoDB;
-mongoose.connect(mongoDB, {useNewUrlParser: true, useUnifiedTopology: true});
-var db = mongoose.connection; //Get the default connection
-db.on('error', console.error.bind(console, 'MongoDB connection error:'));
-var BaseCardModel = require('../express-mythomagic/models/basecard')
-var samplecardX = new BaseCardModel({ name: 'aaaaaa', base_atk: 500 });
-console.log(samplecardX.name);
-samplecardX.name="New cool name";
-samplecardX.save(function (err) { if (err) return console.error(err); });
-*/
-
-/////////////////////////////////////////////////////////////////
-
-/*
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  next(createError(404));
-});
-
-// error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
-});
-
-module.exports = app;
-*/

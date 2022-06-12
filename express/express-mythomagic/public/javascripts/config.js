@@ -1,5 +1,7 @@
 // @miya7090
 
+MY_SOCKET = undefined;
+
 BASE_DAMAGE_DIFF_SCALE_TO_HP = 20
 MVMT_SPD_SCALE_TO_SAVE_THROW = 20
 DEFENCE_SCALE_TO_SAVE_THROW = 20
@@ -19,7 +21,7 @@ CURRENT_MOUSE_S = undefined;
 MAX_MANA = 1000;
 HEXTILE_CUBIC_INDEX = {}; // keys: "q,r,s", maps to divs that are hextiles
 
-GAME_MODE = "p1-active"; // startup, p1-active, p2-active
+GAME_MODE = "startup"; // startup, p1-active, p2-active, p1-moveToken, p2-moveToken
 GAME_MODE_MEMORYTARGET = undefined; // used if moving tokens, etc
 
 const BASE_STAT_DICT = {

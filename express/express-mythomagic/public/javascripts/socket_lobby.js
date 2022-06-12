@@ -24,9 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const lLeaveButton = document.getElementById("lobbyLeaveButton");
   lLeaveButton.addEventListener("click", ()=>{
-    const nickname = document.getElementById("nickname").value;
-    const region = document.getElementById("region").value;
-    socket.emit("lobbyLeave", nickname, region);
+    socket.emit("lobbyLeave");
     clearRegionList();
     // un-alter css to show waiting, allow nickname and region changes
   });
@@ -55,8 +53,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const myNickname = document.getElementById("nickname").value;
     if (confirm("accept challenge from "+enemyNickname+"?")){
       const genRoomCode = Math.random().toString(36).slice(2);
-      const region = document.getElementById("region").value;
-      socket.emit("roomRequest", region, genRoomCode, enemyNickname, enemyId, myNickname, socket.id);
+      socket.emit("roomRequest", genRoomCode, enemyNickname, enemyId, myNickname);
     } else {
       socket.broadcast.to(socketid).emit("gameRequestDenied", myNickname, socket.id);
     }
@@ -85,7 +82,7 @@ function populateRegionList(regionUsers){
     rUser.name = nickname;
     rUser.addEventListener("click", (evt)=>{
       console.log("*");
-      socket.emit("gameInvite", myNickname, socket.id, nickname, socketid);
+      socket.emit("gameInvite", myNickname, socketid);
     })
     lobbiersInRegion.appendChild(rUser);
   }); 
