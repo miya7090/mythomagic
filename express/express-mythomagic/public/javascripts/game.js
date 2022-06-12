@@ -9,7 +9,7 @@ function updateTokenClock(){ // #TODO move to listeners
   if (secLeft <= 0) {
     clock.textContent = "";
     changeGameModeTo("startup");
-    MY_SOCKET.emit("doneWithTokenPick");
+    MY_SOCKET.emit("doneWithTokenPick", PLAYER_GAMECARD_OBJS);
   } else {
     setTimeout(updateTokenClock, 1000);
   }
@@ -32,14 +32,17 @@ document.addEventListener("DOMContentLoaded", () => {
     setTimeout(updateTokenClock, 1000); // update token clock every second
   });
 
-  MY_SOCKET.on('yourTurn', ()=>{
+  MY_SOCKET.on('yourTurn', (yourEnemysCards, yourEnemysVerOfYourCards)=>{
     changeGameModeTo("p1-active");
     console.log("it's my turn!");
+    console.log("opponent cards look like", yourEnemysCards); //#TODO render
+    //renderEnemyCards(yourEnemysCards);
   });
 
-  MY_SOCKET.on('waitTurn', ()=>{
+  MY_SOCKET.on('waitTurn', (yourEnemysCards, yourEnemysVerOfYourCards)=>{
     changeGameModeTo("p2-active");
     console.log("need to wait for opponent...");
+    console.log("opponent cards look like", yourEnemysCards); //#TODO render
   });
 
   ///////////////////////////// JOIN ROOM????????????????????????

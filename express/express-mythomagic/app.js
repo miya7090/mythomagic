@@ -10,7 +10,7 @@ var roomBook = {};
 // player tracker, games only
 var roommateFinder = {}; // {room: [socketid, socketid]}
 var rivalFinder = {}; // {socketid: socketid}
-var doneTokenPick = new Set(); // {room} where room included if 1 person finished token pick
+var doneTokenPick = {}; // {room: gameCardObjs} where objs array is included if 1 person finished token pick
 
 // lobby code processing
 function rk(regionName){ return regionName + "====="; }
@@ -72,7 +72,6 @@ io.on("connection", socket => {
     roomBook[socket.id] = roomCode;
     if (roomCode in roommateFinder){
       roommateFinder[roomCode].push(socket.id);
-      roommateFinder[roomCode].sort();
       rivalFinder[roommateFinder[roomCode][0]] = roommateFinder[roomCode][1];
       rivalFinder[roommateFinder[roomCode][1]] = roommateFinder[roomCode][0];
 
@@ -83,10 +82,19 @@ io.on("connection", socket => {
     }
   });
 
-  socket.on("doneWithTokenPick", ()=>{
-    if (doneTokenPick.has(roomBook[socket.id])){
-      io.to(roommateFinder[roomCode][0]).emit("yourTurn");
-      io.to(roommateFinder[roomCode][1]).emit("waitTurn");
+  socket.on("doneWithTokenPick", (gameCardObjs)=>{
+    let roomCode = roomBook[socket.id];
+    let rivalId = rivalFinder[socket.id];
+    if (roomCode in doneTokenPick){
+      if (socket.id > rivalId){ // this socket goes first
+        io.to(socket.id).emit("yourTurn", doneTokenPick[roomCode], undefined); // syntax: 'yourTurn', (yourEnemysCards, yourEnemysVerOfYourCards)
+        io.to(rivalId).emit("waitTurn", gameCardObjs, undefined);
+      } else {
+        io.to(rivalId).emit("yourTurn", gameCardObjs, undefined);
+        io.to(socket.id).emit("waitTurn", doneTokenPick[roomCode], undefined);
+      }
+    } else {
+      doneTokenPick[roomCode] = gameCardObjs;
     }
   });
 
