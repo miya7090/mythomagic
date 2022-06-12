@@ -9,6 +9,8 @@ function getPlayerTurnText() {
     return "Your turn";
   } else if (GAME_MODE == "p1-moveToken") {
     return "Your turn (placing token...)";
+  } else if (GAME_MODE == "p1-autoattack" || GAME_MODE == "p2-autoattack") {
+    return "Autoattacking...";
   } else if (GAME_MODE == "p2-active") {
     return "Waiting for other player...";
   } else if (GAME_MODE == "p2-moveToken") {
@@ -141,7 +143,7 @@ function createEnemyTokenDiv(pcToRender) {
   HEXTILE_CUBIC_INDEX[pcToRender.tag].appendChild(token);
 };
 
-function rerenderAllGamecards() {
+function rerenderAllGamecardsAndTokens() {
   // clear game info hover box
   gameInfoBox.innerHTML = "";
 

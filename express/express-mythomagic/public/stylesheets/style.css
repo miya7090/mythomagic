@@ -164,7 +164,12 @@ background-color: #ddd;
 
 /* TOKEN BASE RULES */
 .player1 {
-  border: 2px solid #785788;
+  border: 3px solid #00bbff;
+  box-sizing: border-box; /* border goes inside box not outside */
+}
+
+.player2 {
+  border: 3px solid #000000;
   box-sizing: border-box; /* border goes inside box not outside */
 }
 
@@ -174,7 +179,7 @@ background-color: #ddd;
   left: 6px;
   width: 14px;
   height: 15px;
-  background-color: red;
+  background-color: rgb(255, 0, 0)
 }
 
 .token[figurine=true] {

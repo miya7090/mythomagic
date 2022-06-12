@@ -10,13 +10,28 @@ function getTurn() {
     return "startup";
   } else if (GAME_MODE == "pick-phase") {
     return "pick";
-  } else if (GAME_MODE == "p1-active" || GAME_MODE == "p1-moveToken") {
+  } else if (GAME_MODE == "p1-active" || GAME_MODE == "p1-moveToken" || GAME_MODE == "p1-autoattack") {
     return "p1";
-  } else if (GAME_MODE == "p2-active" || GAME_MODE == "p2-moveToken") {
+  } else if (GAME_MODE == "p2-active" || GAME_MODE == "p2-moveToken" || GAME_MODE == "p2-autoattack") {
     return "p2";
   } else {
     console.error("can't determine which player's turn it is", GAME_MODE);
   }
+}
+
+function autoattack(pcard){
+  console.log(pcard.cardName+" attacks all in radius " + pcard.current_normal_attack_range + " #unimplemented");
+  let coordTagsInRangeAll = getCoordinatesWithinRadius(pcard.q, pcard.r, pcard.s, pcard.current_normal_attack_range, false);
+  const coordTagsInRange = filterOnlyCoordinatesOnBoard(coordTagsInRangeAll);
+  coordTagsInRange.forEach(hitTag => {
+    let hitTile = HEXTILE_CUBIC_INDEX[hitTag];
+    let tokenOnTile = hitTile.querySelector('.token');
+    if (tokenOnTile != undefined && tokenOnTile.classList.contains("player2")) {
+      console.log("hit!!", tokenOnTile.pcardLink.cardName);
+      let damageCalc = 200; // #TODO
+      tokenOnTile.pcardLink.takeDamage(damageCalc);
+    }
+  });
 }
 
 // retrieve base stats of a card, return array

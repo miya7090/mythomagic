@@ -24,7 +24,7 @@ HEXTILE_CUBIC_INDEX = {}; // keys: "q,r,s", maps to divs that are hextiles
 
 PICK_PHASE_TIMER = 15000; // 15 sec in ms
 PICK_PHASE_STARTED_AT = undefined;
-GAME_MODE = "startup"; // startup, pick-phase, p1-active, p2-active, p1-moveToken, p2-moveToken
+GAME_MODE = "startup"; // startup, pick-phase, p1-active, p2-active, p1-moveToken, p2-moveToken, p1-autoattack, p2-autoattack
 GAME_MODE_MEMORYTARGET = undefined; // used if moving tokens, etc
 
 const BASE_STAT_DICT = {

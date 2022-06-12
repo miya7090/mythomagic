@@ -100,6 +100,15 @@ function importAllP2Cs(pcListObj){
       this.s = pc_s;
       this.refreshTag();
     }
+    takeDamage(flatNum){
+      this.current_health -= flatNum;
+      console.log(this.cardName, "took", flatNum, "damage");
+      if (this.current_health <= 0) {
+        this.current_health = 0;
+        this.dead = "defeated";
+        console.log(this.cardName, "has been defeated"); // #TODO change color, remove function of defeated card
+      }
+    }
     refreshTag(){
       this.tag = this.q+","+this.r+","+this.s;
     }

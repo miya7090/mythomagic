@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", () => {
     MY_SOCKET.emit("registerPlayer", roomCode);
   });
 
-  MY_SOCKET.on('tokenPickPhase', (otherId)=>{
+  MY_SOCKET.on('tokenPickPhase', (otherId)=>{ // #TODO make opponent plans visible live (ghost coloring?)
     OPPONENT_SOCKET_ID = otherId;
     changeGameModeTo("pick-phase");
     PICK_PHASE_STARTED_AT = Date.now();
@@ -43,19 +43,20 @@ document.addEventListener("DOMContentLoaded", () => {
       importAllP1Cs(yourEnemysVerOfYourCards);
     }
 
-    rerenderAllGamecards();
+    rerenderAllGamecardsAndTokens();
   });
 
   MY_SOCKET.on('waitTurnAndPopulate', (yourEnemysCards)=>{
     changeGameModeTo("p2-active");
     console.log("opponent cards look like", yourEnemysCards);
     importAllP2Cs(yourEnemysCards);
-    rerenderAllGamecards();
+    rerenderAllGamecardsAndTokens();
   });
 
   MY_SOCKET.on('waitTurn', ()=>{
     changeGameModeTo("p2-active");
     console.log("need to wait for opponent...");
+    rerenderAllGamecardsAndTokens();
   });
 
   ///////////////////////////// JOIN ROOM????????????????????????

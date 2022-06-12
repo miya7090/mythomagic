@@ -42,7 +42,7 @@ function mouseOutOfGrid(evt) {
 }
 
 function mouseClickTile(evt) {
-  if (getTurn() != "p1" && getTurn() != "pick") {
+  if (GAME_MODE != "p1-active" && GAME_MODE != "p1-moveToken") {
     console.error("not the active player's turn", GAME_MODE, getTurn());
     return;
   }
@@ -58,15 +58,18 @@ function mouseClickTile(evt) {
   // logic for moving tokens
   if (GAME_MODE == "p1-moveToken") {
     if (tokenOnTile != null) {
-      console.error("there is already a tile at this location, try again");
+      console.error("there is already a tile at this location, try again"); // #TODO allow the token to stay still and re-autoattack
       changeGameModeTo("p1-active");
       GAME_MODE_MEMORYTARGET = undefined;
     } else {
       const tQ = evt.target.cube_q;
       const tR = evt.target.cube_r;
       moveToken(GAME_MODE_MEMORYTARGET, true, tQ, tR); // #TODO check if this is a valid move for the tile first
+      changeGameModeTo('p1-autoattack');
+      autoattack(GAME_MODE_MEMORYTARGET);
       changeGameModeTo('p2-active');
       MY_SOCKET.emit("tellRival_yourTurn", exportAllP1Cs(false), exportAllP2Cs(true));
+      rerenderAllGamecardsAndTokens();
       GAME_MODE_MEMORYTARGET = undefined;
     }
   } else {
