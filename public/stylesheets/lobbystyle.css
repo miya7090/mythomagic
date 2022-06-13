@@ -10,6 +10,11 @@ body {
 
 h2 {
     font-family: "regularFont";
+    margin-left: 0px;
+}
+
+#nickname {
+    margin-right: 5px;
 }
 
 #regionselect {
@@ -20,4 +25,16 @@ h2 {
 #queueNotes {
     margin-left: 5px;
     color: red;
+}
+
+#creds {
+    position: fixed;
+    width: 50%;
+    bottom: 0px;
+    background-color: rgb(237, 237, 237);
+    font-size: small;
+}
+
+a{
+    color: rgb(48, 42, 214);
 }
