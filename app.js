@@ -2,6 +2,7 @@ var express = require('express');
 var app = express();
 const server = require("http").Server(app); // create server
 const io = require("socket.io")(server); // create instance of socketio
+const PORT = process.env.PORT || 3000;
 
 // lobby tracker, regions only, {region: {socketid: nickname}}
 var regionUsers = {"olympia=====": {}, "corinth=====": {}, "athens=====": {}};
@@ -132,8 +133,8 @@ io.on("connection", socket => {
   });
 });
 
-server.listen(3000);
-console.log("localhost:3000");
+server.listen(PORT);
+console.log("listening on", PORT);
 
 // pug router setup
 var path = require('path');
