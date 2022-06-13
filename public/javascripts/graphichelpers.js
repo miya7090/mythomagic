@@ -86,9 +86,8 @@ function createTileDiv(rowDiv, q, r) {
 
 function createAvailableCardDiv(pcToRender) {
   const acard = document.createElement("div");
-  acard.classList.add("card");
-  acard.name = pcToRender;
   acard.innerHTML = getBaseCardHTML(pcToRender);
+  acard.classList.add("card");
   myAvailableCards.appendChild(acard);
 
   const referenceCard = new Card(pcToRender); // show stats on hover
@@ -98,12 +97,10 @@ function createAvailableCardDiv(pcToRender) {
 
 function createGameCardDiv(pcToRender) {
   const ccard = document.createElement("div");
-
+  ccard.innerHTML = getGameCardHTML(pcToRender);
   ccard.classList.add("player1");
   ccard.classList.add("card");
   ccard.id = "p1card-"+pcToRender.cardName;
-  ccard.innerHTML = getGameCardHTML(pcToRender);
-  ccard.name = pcToRender.cardName;
   ccard.setAttribute("figurine",pcToRender.is_figurine);
   
   onFieldCards.appendChild(ccard);
@@ -119,7 +116,6 @@ function createEnemyGameCardDiv(pcToRender) { //#TODO reduce redundant code ^
   ccard.classList.add("card");
   ccard.id = "p2card-"+pcToRender.cardName;
   ccard.innerHTML = getGameCardHTML(pcToRender);
-  ccard.name = pcToRender.cardName;
   ccard.setAttribute("figurine",pcToRender.is_figurine);
   
   enemyCardReference.appendChild(ccard);
@@ -132,7 +128,6 @@ function createTokenDiv(pcToRender) {
   token.classList.add("player1");
   token.classList.add("token");
   token.id = "p1token-" + pcToRender.cardName;
-  token.name = pcToRender.cardName;
   token.pcardLink = pcToRender;
   token.setAttribute("figurine",pcToRender.is_figurine);
   token.q = pcToRender.q; // used for location initialization
@@ -148,7 +143,6 @@ function createEnemyTokenDiv(pcToRender) {
   token.classList.add("player2");
   token.classList.add("token");
   token.id = "p2token-" + pcToRender.cardName;
-  token.name = pcToRender.cardName;
   token.pcardLink = pcToRender;
   token.setAttribute("figurine",pcToRender.is_figurine);
   token.q = pcToRender.q; // used for location initialization
@@ -189,7 +183,7 @@ function getBaseCardHTML(cardName) {
   // cardName, imgLink, cardHP, cardMana, statusList
   let fontString = "";
   if (cardName.length > 7) {
-    fontString = " smallFont";
+    fontString = " smallFont"; // note the space in front
   }
 
   let res = '<p class="baseCardName'+fontString+'">'+cardName + "</p>";
