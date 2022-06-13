@@ -11,6 +11,54 @@
   <link rel="icon" type="image/png" sizes="16x16" href="../images/favicon/favicon-16x16.png">
   <link rel="manifest" href="../images/favicon/site.webmanifest">
 </head>
-<div>
-  <p>nothing written here yet</p>
-</div>
+<body>
+  <h2>mythomagic</h2>
+  <p>page in progress</p>
+  
+  <input type="button" value="1">
+  <input type="button" value="2">
+  <input type="button" value="3">
+  <input type="button" value="4">
+  <br>
+  <h3>pick phase: choose which heroes to play</h3>
+  <p>click on a hero card in the <span style="color:dodgerblue;">index</span> to bring it into your <span style="color: dodgerblue;">deck</span>.</p>
+  <p>you can view hero details by hovering over any card with your mouse.</p>
+  <p>while the <span style="color: dodgerblue;">pick phase</span> is ongoing, you can click on any card in your deck to remove it.</p>
+  <p>if you haven't picked any heroes by the time that the pick phase completes, you and your opponent will be returned to the lobby.</p>
+  <h3>your turn: select a hero token and move it</h3>
+  <p>click one of your <span style="color: dodgerblue;">tokens&nbsp;</span>on the map to move it, and click again to place it.</p>
+  <p>the maximum distance that you can move the token depends on the hero's <span style="color: dodgerblue;">movement</span> (MVT) stat.</p>
+  <p>in <span style="color: dodgerblue;">timed</span> mythomagic, you have a limited amount of time in which to complete your turn.</p>
+  <p><strong>choose an action: autoattack, use your ability, or use your ultimate</strong></p>
+  <p>the hero's autoattack will attack all opponents within their <span style="color: dodgerblue;">reach&nbsp;</span>(RC).</p>
+  <p>each hero has a unique ability and an ultimate. both of these typically consume <span style="color: dodgerblue;">mana points</span> (MP).</p>
+  <p>all heroes gain MP after each round. autoattack grant extra MP to the character.</p>
+  <p>in addition to an ability and an ultimate, each hero has a&nbsp;<span style="color: dodgerblue;">passive</span> that is automatically applied each turn.</p>
+  <h3>damaging opponents</h3>
+  <p>the base amount of damage done is calculated by the hero's ATK divided by their DEF.</p>
+  <p>there are six status effects that modify the base amount of damage:</p>
+  <ol>
+      <li>blinded: attacks performed by a blinded hero have a 75% chance of missing and dealing no damage. attacks targeting this hero deal 25% extra damage.</li>
+      <li>charmed: the hero loses their defense stat, causing the base amount of damage to scale solely with ATK.</li>
+      <li>distracted: the hero will not gain MP after a turn or after an autoattack.</li>
+      <li>poisoned: the hero will lose a certain amount of HP (10% at moment of poisoning) each turn.</li>
+      <li>stunned: the hero's ATK and MVT are reduced to zero, and RC is reduced to one.</li>
+      <li>terrified: the hero's ATK is reduced by 50%.</li>
+  </ol>
+  <p>status effects <span style="color: dodgerblue;">expire</span> after a certain number of turns and can also be removed by certain abilities.</p>
+  <p>some heroes have <span style="color: dodgerblue;">immunities</span> to certain status effects.</p>
+  <p>example: a terrified hero with ATK=2000 and DEF=10 would deal (2000/10)/2=100 HP of damage.</p>
+  <p>heroes are defeated when their HP reaches zero. defeated heroes can no longer be played in game, and their <span style="color: dodgerblue;">passives</span> become inactive.</p>
+  <p>mythomagic is won when all enemy heroes are defeated, or your opponent concedes.</p>
+  <br><br><br>
+  
+  <p id="credsUnfixed">
+    <a href="https://github.com/miya7090/mythomagic" target="_blank">source code</a>
+    <br/>
+    namesake from the 
+    <a href="https://rickriordan.com/series/percy-jackson-and-the-olympians/" target="_blank">percy jackson series</a>
+    <br/>
+    icons for game cards from <a href="https://www.flaticon.com/free-icons/greek-mythology" title="Greek mythology icons created by Freepik - Flaticon" target="_blank">freepik - flaticon</a>
+  </p>
+</body>
+

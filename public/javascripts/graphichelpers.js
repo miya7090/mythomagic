@@ -265,7 +265,7 @@ function get_BC_BroadcastForInfoBox(BCard) {
     res += "</div>";
 
     res += '<div class="hoverColumn">';
-    res += "<p>RNG: " + BCard.base_normal_attack_range + "</p>";
+    res += "<p>RC: " + BCard.base_normal_attack_range + "</p>";
     res += "<p>MVT: " + BCard.base_movement + "</p>";
     res += "</div>";
 
@@ -313,7 +313,7 @@ function get_PC_BroadcastForInfoBox(PCard) {
     res += "<p>DEF: " + PCard.current_defense + " <i>(+" + (PCard.current_defense - PCard.base_defense) + ")</i></p>";
 
     
-    res += "<p>RNG: " + PCard.current_normal_attack_range + " <i>(+" + (PCard.current_normal_attack_range - PCard.base_normal_attack_range) + ")</i></p>";
+    res += "<p>RC: " + PCard.current_normal_attack_range + " <i>(+" + (PCard.current_normal_attack_range - PCard.base_normal_attack_range) + ")</i></p>";
     res += "<p>MVT: " + PCard.current_movement + " <i>(+" + (PCard.current_movement - PCard.base_movement) + ")</i></p>";
     res += "</div>";
 
