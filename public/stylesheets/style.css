@@ -1,10 +1,18 @@
 :root {
   --normalTile: rgba(54, 71, 253, 0.5);
-  --highlightedTileMemory: rgba(59, 59, 240, 0.9);
-  --highlightedTileAttack: rgba(36, 125, 170, 0.9);
+  --aimingHighlightedTile: rgb(255, 62, 114);
+  --aimingReachHighlightedTile: rgb(157, 71, 94);
+  --rangeHighlightedTile: rgb(204, 87, 118);
   --highlightedTile: rgba(59, 59, 240, 0.9);
+  --default_highlightedTile: rgba(59, 59, 240, 0.9);
   --offgridTile: rgba(0, 0, 0, 0.4);
   --highlightedOffgrid: rgba(0, 0, 0, 0.9);
+  --default_highlightedOffgrid: rgba(0, 0, 0, 0.9);
+  --rangeHighlightedOffgrid: rgba(106, 88, 88, 0.9);
+  --aimingHighlightedOffgrid: rgba(71, 206, 66, 0.9);
+  --aimingReachHighlightedOffgrid: rgba(73, 68, 68, 0.9);
+  --overlapOn: rgba(40,30,65,0.9);
+  --overlapOnOffgrid: rgba(30,205,304,0.4);
 }
 
 @font-face {
@@ -74,13 +82,12 @@ body {
 }
   
 /* HEXAGON GAMETILE INTERACTION RULES */
-.gameSquare[hoverHighlight=true] {
-  background-color: var(--highlightedTile);
-}
+.gameSquare[hoverHighlight=false] { background-color: var(--normalTile); }
 
-.gameSquare[hoverHighlight=false] {
-  background-color: var(--normalTile);
-}
+.gameSquare[rangeHighlight=true] { background-color: var(--rangeHighlightedTile); }
+.gameSquare[aimingReachHighlight=true] { background-color: var(--aimingReachHighlightedTile); }
+.gameSquare[hoverHighlight=true] { background-color: var(--highlightedTile); }
+.gameSquare[hoverHighlight=true][aimingReachHighlight=true] { background-color: var(--overlapOn); }
 
 .jungle { background-color: rgb(44, 103, 71); }
 .water { background-color: rgb(79, 92, 193); }
@@ -88,13 +95,12 @@ body {
 .obstacle { background-color: rgb(57, 57, 57); }
 .offgrid { background-color: var(--offgridTile); }
 
-.offgrid[hoverHighlight=true] {
-  background-color: var(--highlightedOffgrid);
-}
+.offgrid[hoverHighlight=false] { background-color: var(--offgridTile); }
 
-.offgrid[hoverHighlight=false] {
-  background-color: var(--offgridTile);
-}
+.offgrid[rangeHighlight=true] { background-color: var(--rangeHighlightedOffgrid); }
+.offgrid[aimingReachHighlight=true] { background-color: var(--aimingReachHighlightedOffgrid); }
+.offgrid[hoverHighlight=true] { background-color: var(--highlightedOffgrid); }
+.offgrid[hoverHighlight=true][aimingReachHighlight=true] { background-color: var(--overlapOnOffgrid); }
 
 /* POWER BOX RULES */
 .powerbox {

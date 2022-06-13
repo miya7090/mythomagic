@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const urlParams = new URLSearchParams(window.location.search);
   const roomCode = urlParams.get('room');
   const selfName = urlParams.get('self');
-  const otherName = urlParams.get('other');
+  OTHER_NAME = urlParams.get('other');
 
   MY_SOCKET.on('connect', ()=>{
     MY_SOCKET.emit("registerPlayer", roomCode);
@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   MY_SOCKET.on('winThroughForfeit', (reason)=>{
-    alert(otherName+" has forfeited the game ("+reason+")");
+    alert(OTHER_NAME+" has forfeited the game ("+reason+")");
     window.location.href = "/";
   });
 

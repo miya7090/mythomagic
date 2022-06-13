@@ -1,23 +1,29 @@
 // @miya7090
 
 function getPlayerTurnText() {
-  if (GAME_MODE == "startup") {
-    return "n/a";
-  } else if (GAME_MODE == "pick-phase") {
-    return "Pick your cards";
-  } else if (GAME_MODE == "p1-active") {
-    return "Your turn";
-  } else if (GAME_MODE == "p1-moveToken") {
-    return "Your turn (placing token...)";
-  } else if (GAME_MODE == "p1-autoattack" || GAME_MODE == "p2-autoattack") {
-    return "Autoattacking...";
-  } else if (GAME_MODE == "p2-active") {
-    return "Waiting for other player...";
-  } else if (GAME_MODE == "p2-moveToken") {
-    return "Waiting for other player... (placing token...)";
-  } else {
-    console.error("issue with GAME_MODE", GAME_MODE);
+  switch (GAME_MODE) {
+    case "startup":         return "n/a";
+    case "pick-phase":      return "Pick your cards";
+    case "p1-active":       return "Select a token";
+
+    case "p1-moveToken":    return "Move token to a new location";
+    case "p1-attackSelect": return "Choose an action";
+    case "p1-autoattack":   return "Autoattacking...";
+    case "p1-ability":      return "Using ability..."; // #TODO put ability name
+    case "p1-abilityAim":   return "Aiming ability...";
+    case "p1-ultimate":     return "Using ultimate...";
+    case "p1-ultimateAim":  return "Aiming ultimate...";
+
+    case "p2-active":       return OTHER_NAME+" is selecting a token";
+    case "p2-moveToken":    return OTHER_NAME+" is moving their token...";
+    case "p2-attackSelect": return OTHER_NAME+" is choosing an action";
+    case "p2-autoattack":   return OTHER_NAME+" is autoattacking...";
+    case "p2-ability":      return OTHER_NAME+" is using an ability...";
+    case "p2-abilityAim":   return OTHER_NAME+" is aiming an ability...";
+    case "p2-ultimate":     return OTHER_NAME+" is using their ultimate...";
+    case "p2-ultimateAim":  return OTHER_NAME+" is aiming their ultimate...";
   }
+  return GAME_MODE;
 }
 
 function updateTurnText() {
@@ -26,16 +32,47 @@ function updateTurnText() {
 }
 
 // fancy tile highlighting and clearing of highlights
-function highlightSelfAndRadius(turnOn, cubeQ, cubeR, cubeS){
-  const coordsInRange = getCoordinatesWithinRadius(cubeQ,cubeR,cubeS,MOUSE_HOVER_RADIUS,true);
+function highlightSelfAndRadius(highlightType, turnOn, radius, cubeQ, cubeR, cubeS){
+  const coordsInRange = getCoordinatesWithinRadius(cubeQ,cubeR,cubeS,radius,true);
   const tileNeighbors = filterOnlyCoordinatesOnBoard(coordsInRange);
   // console.log(cubeQ+"/"+cubeR+"/"+cubeS); // for debug
 
   if (tileNeighbors !== undefined) {
     tileNeighbors.forEach((tileNeighbor) => {
-        HEXTILE_CUBIC_INDEX[tileNeighbor].setAttribute("hoverHighlight", turnOn);
+        HEXTILE_CUBIC_INDEX[tileNeighbor].setAttribute(highlightType, turnOn);
     });
   }
+}
+
+function hoverMouseHighlight(turnOn){
+  highlightSelfAndRadius("hoverHighlight", turnOn, MOUSE_HOVER_RADIUS, CURRENT_MOUSE_Q, CURRENT_MOUSE_R, CURRENT_MOUSE_S);
+}
+
+function aimAndHijackMouseHighlight(radius){
+  hoverMouseHighlight(false);
+  MOUSE_HOVER_RADIUS = radius;
+  let aht = getComputedStyle(document.documentElement).getPropertyValue('--aimingHighlightedTile');
+  document.documentElement.style.setProperty('--highlightedTile', aht);
+  let aho = getComputedStyle(document.documentElement).getPropertyValue('--aimingHighlightedOffgrid');
+  document.documentElement.style.setProperty('--highlightedOffgrid', aho);
+  hoverMouseHighlight(true);
+}
+
+function relinquishAimingMouseHighlight(){
+  hoverMouseHighlight(false);
+  MOUSE_HOVER_RADIUS = 0;
+  let dht = getComputedStyle(document.documentElement).getPropertyValue('--default_highlightedTile');
+  document.documentElement.style.setProperty('--highlightedTile', dht);
+  let dho = getComputedStyle(document.documentElement).getPropertyValue('--default_highlightedOffgrid');
+  document.documentElement.style.setProperty('--highlightedOffgrid', dho);
+  hoverMouseHighlight(true);
+}
+
+function aimingTargetReachHighlight(turnOn, radius){
+  if (GAME_MODE_MEMORYTARGET == undefined){
+    console.error("warning: pcard memory target cleared too early");
+  }
+  highlightSelfAndRadius("aimingReachHighlight", turnOn, radius, GAME_MODE_MEMORYTARGET.getQ(), GAME_MODE_MEMORYTARGET.getR(), GAME_MODE_MEMORYTARGET.getS());
 }
 
 // animation
@@ -130,7 +167,7 @@ function createTokenDiv(pcToRender) {
   token.id = "p1token-" + pcToRender.cardName;
   token.pcardLink = pcToRender;
   token.setAttribute("figurine",pcToRender.is_figurine);
-  token.q = pcToRender.q; // used for location initialization
+  token.q = pcToRender.getQ(); // used ONLY for location initialization
 
   // place token on board
   HEXTILE_CUBIC_INDEX[pcToRender.tag].appendChild(token);
@@ -145,7 +182,7 @@ function createEnemyTokenDiv(pcToRender) {
   token.id = "p2token-" + pcToRender.cardName;
   token.pcardLink = pcToRender;
   token.setAttribute("figurine",pcToRender.is_figurine);
-  token.q = pcToRender.q; // used for location initialization
+  token.q = pcToRender.getQ(); // used for location initialization
 
   // place token on board
   HEXTILE_CUBIC_INDEX[pcToRender.tag].appendChild(token);

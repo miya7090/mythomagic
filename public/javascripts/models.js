@@ -12,6 +12,13 @@
       this.base_mana_per_turn = base_stats[4];
       this.base_mana_per_atk = base_stats[5];
       this.base_movement = base_stats[6];
+
+      this.ability_aim_range = base_stats[7];
+      this.ability_is_aimed = (this.ability_aim_range != undefined);
+      this.ability_aim_aoe = base_stats[8];
+      this.ult_aim_range = base_stats[9];
+      this.ult_is_aimed = (this.ult_aim_range != undefined);
+      this.ult_aim_aoe = base_stats[10];
     }
   }
 
@@ -21,7 +28,7 @@ function exportPC(pcard){
     "cd": pcard.current_defense, "ch": pcard.current_health, "cm": pcard.current_mana,
     "cmpt": pcard.current_mana_per_turn, "cmpa": pcard.current_mana_per_atk,
     "m": pcard.current_movement, "d": pcard.dead, "hb": pcard.health_bonus, "mb": pcard.mana_bonus,
-    "if": pcard.is_figurine, "s": pcard.statuses, "qq": pcard.q, "rr": pcard.r, "ss": pcard.s // #TODO compress this?
+    "if": pcard.is_figurine, "s": pcard.statuses, "qq": pcard.getQ(), "rr": pcard.getR(), "ss": pcard.getS() // #TODO compress this?
   };
 }
 
@@ -74,6 +81,7 @@ function importAllP2Cs(pcListObj){
 }
 
   class PlayerCard extends Card {
+    #q; #r; #s; // private variables for position for better debugging
     constructor(cardName, isFigurine, pc_q, pc_r, pc_s) {
       super(cardName);
       this.current_attack = this.base_attack;
@@ -92,12 +100,10 @@ function importAllP2Cs(pcListObj){
       this.is_figurine = isFigurine;
       this.statuses = {"blinded":0, "charmed":0, "poisoned":0, "stunned":0, "terrified":0};
 
-      this.q = pc_q; // location on grid
-      this.r = pc_r;
       if (pc_s !== -pc_q -pc_r){
-          console.error("attempted to make a player card with invalid cubic coordinates: "+pc_q+","+pc_r+","+pc_s);
+          console.error("warning, requested to make a player card with invalid cubic coordinates: "+pc_q+","+pc_r+","+pc_s);
       }
-      this.s = pc_s;
+      this.changeLocationTo(pc_q, pc_r);
       this.refreshTag();
     }
     takeDamage(flatNum){
@@ -110,23 +116,32 @@ function importAllP2Cs(pcListObj){
       }
     }
     refreshTag(){
-      this.tag = this.q+","+this.r+","+this.s;
+      this.tag = this.#q+","+this.#r+","+this.#s;
     }
     changeLocationTo(nq,nr){
-      this.q = nq;
-      this.r = nr;
-      this.s = -nq - nr;
+      this.#q = nq;
+      this.#r = nr;
+      this.#s = -nq - nr;
       this.refreshTag();
     }
     moveLocationBy(nq,nr){
-      this.q += nq;
-      this.r += nr;
-      this.s = -this.q - this.r;
+      this.#q += nq;
+      this.#r += nr;
+      this.#s = -this.#q - this.#r;
       this.refreshTag();
     }
     flipAcrossBoard(){
-      [this.q, this.r, this.s] = getReflectedCoordinate(this.q, this.r, this.s);
+      [this.#q, this.#r, this.#s] = getReflectedCoordinate(this.#q, this.#r, this.#s);
       this.refreshTag();
+    }
+    getQ(){
+      return this.#q;
+    }
+    getR(){
+      return this.#r;
+    }
+    getS(){
+      return this.#s;
     }
     /*getRangeOfMotion(){
       return 

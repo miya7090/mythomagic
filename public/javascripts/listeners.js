@@ -12,7 +12,7 @@ function keyProcessing(event) {
   if ((event.keyCode === 90 || event.keyCode === 88) && GAME_MODE != "p1-moveToken") { // mouse hover radius stuff
     // first clear hover highlights
     if (CURRENT_MOUSE_Q !== undefined) {
-      highlightSelfAndRadius(false, CURRENT_MOUSE_Q, CURRENT_MOUSE_R, CURRENT_MOUSE_S);
+      hoverMouseHighlight(false);
     }
     if (event.keyCode === 90 && MOUSE_HOVER_RADIUS > 0) { // z, reduce radius
       MOUSE_HOVER_RADIUS -= 1;
@@ -23,82 +23,172 @@ function keyProcessing(event) {
     }
     // then redo hover highlights
     if (CURRENT_MOUSE_Q !== undefined) {
-      highlightSelfAndRadius(true, CURRENT_MOUSE_Q, CURRENT_MOUSE_R, CURRENT_MOUSE_S);
+      hoverMouseHighlight(true);
     }
   }
   return;
 }
 
 function mouseOverTile(evt) {
-    highlightSelfAndRadius(false, CURRENT_MOUSE_Q, CURRENT_MOUSE_R, CURRENT_MOUSE_S);
+    hoverMouseHighlight(false);
     CURRENT_MOUSE_Q = evt.target.cube_q;
     CURRENT_MOUSE_R = evt.target.cube_r;
     CURRENT_MOUSE_S = evt.target.cube_s;
-    highlightSelfAndRadius(true, CURRENT_MOUSE_Q, CURRENT_MOUSE_R, CURRENT_MOUSE_S);
+    hoverMouseHighlight(true);
 }
 
 function mouseOutOfGrid(evt) {
-    highlightSelfAndRadius(false, CURRENT_MOUSE_Q, CURRENT_MOUSE_R, CURRENT_MOUSE_S);
+    hoverMouseHighlight(false);
     CURRENT_MOUSE_Q = undefined;
     CURRENT_MOUSE_R = undefined;
     CURRENT_MOUSE_S = undefined;
 }
 
+function resetToActiveMode(){
+  changeGameModeTo("p1-active");
+  highlightSelfAndRadius("rangeHighlight", false, GAME_MODE_MEMORYTARGET.current_movement,
+  GAME_MODE_MEMORYTARGET.getQ(), GAME_MODE_MEMORYTARGET.getR(), GAME_MODE_MEMORYTARGET.getS());
+  GAME_MODE_MEMORYTARGET = undefined;
+}
+
+function toSelectAttackMode(){
+  changeGameModeTo("p1-attackSelect");
+  document.getElementById("autoButton").disabled = false;
+  document.getElementById("abilityButton").disabled = false; //#TODO check mana first
+  document.getElementById("ultButton").disabled = false;
+}
+
+function transitionToMoveTokenMode(tokenOnTile){
+  changeGameModeTo("p1-moveToken");
+  GAME_MODE_MEMORYTARGET = tokenOnTile.pcardLink;
+  highlightSelfAndRadius("rangeHighlight", true, GAME_MODE_MEMORYTARGET.current_movement,
+    GAME_MODE_MEMORYTARGET.getQ(), GAME_MODE_MEMORYTARGET.getR(), GAME_MODE_MEMORYTARGET.getS());
+}
+
 function mouseClickTile(evt) {
-  if (GAME_MODE != "p1-active" && GAME_MODE != "p1-moveToken") {
-    console.error("not the active player's turn", GAME_MODE, getTurn());
-    return;
-  }
+  // this should prepare to move token if in p1-active (1)
+  // or move the token to this spot if in p1-moveToken (2)
+  // or make an attack if in p1-abilityAim or p1-ultimateAim (3, 4)
 
   // find any token on the tile
+  var thisTile;
   var tokenOnTile;
   if (evt.target.classList.contains("token")){
+    thisTile = evt.target.parentNode;
     tokenOnTile = evt.target;
   } else {
+    thisTile = evt.target;
     tokenOnTile = evt.target.querySelector('.token');
   }
-
-  // logic for moving tokens
-  if (GAME_MODE == "p1-moveToken") {
-    if (tokenOnTile != null) {
-      console.error("there is already a tile at this location, try again"); // #TODO allow the token to stay still and re-autoattack
-      changeGameModeTo("p1-active");
-      GAME_MODE_MEMORYTARGET = undefined;
-      highlightSelfAndRadius(false, CURRENT_MOUSE_Q, CURRENT_MOUSE_R, CURRENT_MOUSE_S);
-      MOUSE_HOVER_RADIUS = 0;
-      document.documentElement.style.setProperty('--highlightedTile', HIGHLIGHT_TILE_MEMORY_COLOR);
-      highlightSelfAndRadius(true, CURRENT_MOUSE_Q, CURRENT_MOUSE_R, CURRENT_MOUSE_S);
-    } else {
-      const tQ = evt.target.cube_q;
-      const tR = evt.target.cube_r;
-      moveToken(GAME_MODE_MEMORYTARGET, true, tQ, tR); // #TODO check if this is a valid move for the tile first
-      changeGameModeTo('p1-autoattack');
-      autoattack(GAME_MODE_MEMORYTARGET);
-      changeGameModeTo('p2-active');
-      MY_SOCKET.emit("tellRival_yourTurn", exportAllP1Cs(false), exportAllP2Cs(true));
-      rerenderAllGamecardsAndTokens();
-      GAME_MODE_MEMORYTARGET = undefined;
-      highlightSelfAndRadius(false, CURRENT_MOUSE_Q, CURRENT_MOUSE_R, CURRENT_MOUSE_S);
-      MOUSE_HOVER_RADIUS = 0;
-      document.documentElement.style.setProperty('--highlightedTile', HIGHLIGHT_TILE_MEMORY_COLOR);
-      highlightSelfAndRadius(true, CURRENT_MOUSE_Q, CURRENT_MOUSE_R, CURRENT_MOUSE_S);
-    }
-  } else {
-    console.error("cannot place tokens until your turn begins");
+  var cQ = thisTile.cube_q;
+  var cR = thisTile.cube_r;
+  var cS = thisTile.cube_s;
+  
+  var distanceDifference;
+  if (GAME_MODE_MEMORYTARGET != undefined) {
+    distanceDifference = getTileDistance(cQ, cR, cS, GAME_MODE_MEMORYTARGET.getQ(), GAME_MODE_MEMORYTARGET.getR(), GAME_MODE_MEMORYTARGET.getS()); // #TODO visually pick token up with mouse click as well
   }
 
-  if (GAME_MODE == "p1-active" && tokenOnTile != null) {
-    if (tokenOnTile.classList.contains("player1")) {
-      changeGameModeTo("p1-moveToken");
-      
-      highlightSelfAndRadius(false, CURRENT_MOUSE_Q, CURRENT_MOUSE_R, CURRENT_MOUSE_S);
-      GAME_MODE_MEMORYTARGET = tokenOnTile.pcardLink;
-      MOUSE_HOVER_RADIUS = tokenOnTile.pcardLink.current_normal_attack_range;
-      document.documentElement.style.setProperty('--highlightedTile', HIGHLIGHT_TILE_ATTACK_COLOR);
-      highlightSelfAndRadius(true, CURRENT_MOUSE_Q, CURRENT_MOUSE_R, CURRENT_MOUSE_S);
+  if (GAME_MODE == "p1-active") { ///// (1) p1-active
+    if (tokenOnTile == null) {
+      console.error("there is no token to move on this tile"); return;
+    } else if (tokenOnTile.classList.contains("player1") == false) {
+      console.error("this is not your token"); return;
+    } else { // success
+      transitionToMoveTokenMode(tokenOnTile);
     }
-  } else {
-    console.error("this tile has no token");
+
+  } else if (GAME_MODE == "p1-moveToken") {  ///// (2) p1-moveToken
+    if (tokenOnTile != null && tokenOnTile.pcardLink != GAME_MODE_MEMORYTARGET) {
+      console.error("there is already a tile at this location, try again");
+      resetToActiveMode(); return;
+    }
+    if (distanceDifference > GAME_MODE_MEMORYTARGET.current_movement) {
+      console.error("tile of distance", distanceDifference, "cannot be reached with movement", GAME_MODE_MEMORYTARGET.current_movement);
+      resetToActiveMode(); return;
+    }
+    // success
+    highlightSelfAndRadius("rangeHighlight", false, GAME_MODE_MEMORYTARGET.current_movement,
+    GAME_MODE_MEMORYTARGET.getQ(), GAME_MODE_MEMORYTARGET.getR(), GAME_MODE_MEMORYTARGET.getS());
+    moveToken(GAME_MODE_MEMORYTARGET, true, cQ, cR);
+    toSelectAttackMode();
+
+  } else if (GAME_MODE == "p1-abilityAim") {  ///// (3) p1-abilityAim
+    if (distanceDifference > GAME_MODE_MEMORYTARGET.ability_aim_range) {
+      console.error("tile of distance", distanceDifference, "cannot be reached with ability range", GAME_MODE_MEMORYTARGET.ability_aim_range);
+      relinquishAimingMouseHighlight()
+      aimingTargetReachHighlight(false, GAME_MODE_MEMORYTARGET.ability_aim_range);
+      toSelectAttackMode(); return;
+    }
+    // success
+    relinquishAimingMouseHighlight();
+    aimingTargetReachHighlight(false, GAME_MODE_MEMORYTARGET.ability_aim_range);
+    abilityAttack(cQ, cR, cS);
+    attackComplete();
+  } else if (GAME_MODE == "p1-ultimateAim") {  ///// (3) p1-ultimateAim
+    if (distanceDifference > GAME_MODE_MEMORYTARGET.ult_aim_range) {
+      console.error("tile of distance", distanceDifference, "cannot be reached with ultimate range", GAME_MODE_MEMORYTARGET.ult_aim_range);
+      relinquishAimingMouseHighlight();
+      aimingTargetReachHighlight(false, GAME_MODE_MEMORYTARGET.ult_aim_range);
+      toSelectAttackMode(); return;
+    }
+    // success
+    relinquishAimingMouseHighlight();
+    aimingTargetReachHighlight(false, GAME_MODE_MEMORYTARGET.ult_aim_range);
+    ultimateAttack(cQ, cR, cS);
+    attackComplete();
+  }
+}
+
+function attackComplete(){
+  changeGameModeTo('p2-active');
+  MY_SOCKET.emit("tellRival_yourTurn", exportAllP1Cs(false), exportAllP2Cs(true));
+  GAME_MODE_MEMORYTARGET = undefined;
+  rerenderAllGamecardsAndTokens();
+}
+
+function autoButtonClick(){
+  document.getElementById("autoButton").disabled = true;
+  document.getElementById("abilityButton").disabled = true;
+  document.getElementById("ultButton").disabled = true;
+  if (GAME_MODE == "p1-attackSelect"){
+    changeGameModeTo('p1-autoattack');
+    autoattack(GAME_MODE_MEMORYTARGET);
+    attackComplete();
+  }
+}
+
+function abilityButtonClick(){
+  document.getElementById("autoButton").disabled = true;
+  document.getElementById("abilityButton").disabled = true;
+  document.getElementById("ultButton").disabled = true;
+  if (GAME_MODE == "p1-attackSelect"){
+    if (GAME_MODE_MEMORYTARGET.ability_is_aimed) {
+      changeGameModeTo('p1-abilityAim');
+      aimAndHijackMouseHighlight(GAME_MODE_MEMORYTARGET.ability_aim_aoe);
+      aimingTargetReachHighlight(true, GAME_MODE_MEMORYTARGET.ability_aim_range);
+    } else {
+      changeGameModeTo('p1-ability');
+      abilityAttack();
+      attackComplete();
+    }
+  }
+}
+
+function ultButtonClick(){
+  document.getElementById("autoButton").disabled = true;
+  document.getElementById("abilityButton").disabled = true;
+  document.getElementById("ultButton").disabled = true;
+  if (GAME_MODE == "p1-attackSelect"){
+    if (GAME_MODE_MEMORYTARGET.ult_is_aimed) {
+      changeGameModeTo('p1-ultimateAim');
+      aimAndHijackMouseHighlight(GAME_MODE_MEMORYTARGET.ult_aim_aoe);
+      aimingTargetReachHighlight(true, GAME_MODE_MEMORYTARGET.ult_aim_range);
+    } else {
+      changeGameModeTo('p1-ultimate');
+      ultimateAttack();
+      attackComplete();
+    }
   }
 }
 
