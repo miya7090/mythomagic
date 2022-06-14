@@ -239,14 +239,15 @@ function putBaseCardHTML(cardName, cardDiv) {
   const bci1 = document.createElement("img"); // add image backing
   bci1.classList.add("baseCardImg1");
   if (fontString != undefined) { bci1.classList.add(fontString); }
-  bci1.src = "public/images/portraits/"+cardName+".png";
+  bci1.src = GITHUB_PUBLIC_PATH + "images/portraits/"+cardName.toLowerCase()+".png";
+  console.log();
   bci1.alt = "card image";
   bcih.appendChild(bci1);
 
   const bci2 = document.createElement("img"); // add image front
   bci2.classList.add("baseCardImg2");
   if (fontString != undefined) { bci2.classList.add(fontString); }
-  bci2.src = "public/images/portraits/"+cardName+".png";
+  bci2.src = GITHUB_PUBLIC_PATH + "images/portraits/"+cardName.toLowerCase()+".png";
   bci2.alt = "card image";
   bcih.appendChild(bci2);
 }

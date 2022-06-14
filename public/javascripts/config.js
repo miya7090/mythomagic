@@ -4,6 +4,8 @@ MY_SOCKET = undefined;
 OPPONENT_SOCKET_ID = undefined;
 OTHER_NAME = undefined;
 
+GITHUB_PUBLIC_PATH = "https://raw.githubusercontent.com/miya7090/mythomagic/main/public/";
+
 BASE_DAMAGE_DIFF_SCALE_TO_HP = 20
 MVMT_SPD_SCALE_TO_SAVE_THROW = 20
 DEFENCE_SCALE_TO_SAVE_THROW = 20

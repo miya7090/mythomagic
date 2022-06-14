@@ -1,14 +1,14 @@
 // @miya7090
 
-const clack1 = 'sounds/clack1.mp3'
-const clack2 = '../sounds/clack2.mp3'
-const clack3 = 'sounds/clack3.mp3'
-const clack4 = 'sounds/clack4.mp3'
-const clack5 = '/sounds/clack5.mp3'
-const clack6 = '/sounds/clack6.mp3'
-const boop = '/sounds/boop.mp3'
-const beep = 'sounds/beep.mp3'
-const bgmSource = '../sounds/50 mulling.mp3';
+const clack1 = GITHUB_PUBLIC_PATH+'sounds/clack1.mp3'
+const clack2 = GITHUB_PUBLIC_PATH+'sounds/clack2.mp3'
+const clack3 = GITHUB_PUBLIC_PATH+'sounds/clack3.mp3'
+const clack4 = GITHUB_PUBLIC_PATH+'sounds/clack4.mp3'
+const clack5 = GITHUB_PUBLIC_PATH+'sounds/clack5.mp3'
+const clack6 = GITHUB_PUBLIC_PATH+'sounds/clack6.mp3'
+const boop = GITHUB_PUBLIC_PATH+'sounds/boop.mp3'
+const beep = GITHUB_PUBLIC_PATH+'sounds/beep.mp3'
+const bgmSource = GITHUB_PUBLIC_PATH+'sounds/50 mulling.mp3';
 
 HIGHLIGHT_TILE_MEMORY_COLOR = getComputedStyle(document.documentElement).getPropertyValue('--highlightedTileMemory');
 HIGHLIGHT_TILE_ATTACK_COLOR = getComputedStyle(document.documentElement).getPropertyValue('--highlightedTileAttack');
