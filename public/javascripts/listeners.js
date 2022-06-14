@@ -1,13 +1,13 @@
 // @miya7090
 
-const clack1 = '../sounds/clack1.mp3'
+const clack1 = 'sounds/clack1.mp3'
 const clack2 = '../sounds/clack2.mp3'
-const clack3 = '../sounds/clack3.mp3'
-const clack4 = '../sounds/clack4.mp3'
-const clack5 = '../sounds/clack5.mp3'
-const clack6 = '../sounds/clack6.mp3'
-const boop = '../sounds/boop.mp3'
-const beep = '../sounds/beep.mp3'
+const clack3 = 'sounds/clack3.mp3'
+const clack4 = 'sounds/clack4.mp3'
+const clack5 = '/sounds/clack5.mp3'
+const clack6 = '/sounds/clack6.mp3'
+const boop = '/sounds/boop.mp3'
+const beep = 'sounds/beep.mp3'
 const bgmSource = '../sounds/50 mulling.mp3';
 
 HIGHLIGHT_TILE_MEMORY_COLOR = getComputedStyle(document.documentElement).getPropertyValue('--highlightedTileMemory');
