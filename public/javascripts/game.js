@@ -2,22 +2,6 @@
 
 const MY_SOCKET = io(); // create new instance
 
-function updateTokenClock(){ // #TODO move to listeners
-  let clock = document.getElementById("tokenCountdown"); // #TODO make this & similar jquery
-  let secLeft = (PICK_PHASE_TIMER - (Date.now() - PICK_PHASE_STARTED_AT))/1000;
-  clock.textContent = "pick your cards and place your tokens ("+Math.round(secLeft)+" seconds left)";
-  if (secLeft <= 0) {
-    clockBeep(1.0);
-    clock.textContent = "";
-    changeGameModeTo("startup");
-    console.log("tokentransmitting", exportAllP1Cs(false));
-    MY_SOCKET.emit("doneWithTokenPick", exportAllP1Cs(false));
-  } else {
-    clockBoop(0.9);
-    setTimeout(updateTokenClock, 1000);
-  }
-}
-
 document.addEventListener("DOMContentLoaded", () => {
   /* ui bgm set up */
   setTimeout(startBgm, 2000); // start music 2 secs in

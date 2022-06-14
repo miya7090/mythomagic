@@ -2,7 +2,7 @@
 
 function getPlayerTurnText() {
   switch (GAME_MODE) {
-    case "startup":         return "n/a";
+    case "startup":         return "Loading...";
     case "pick-phase":      return "Pick your cards";
     case "p1-active":       return "Select a token";
 

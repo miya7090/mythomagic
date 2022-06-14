@@ -2,7 +2,7 @@
   --normalTile: rgba(54, 71, 253, 0.5);
   --highlightedTile: rgba(93, 93, 255, 0.9);
   --default_highlightedTile: rgba(93, 93, 255, 0.9);
-  --rangeHighlightedTile: rgba(123, 89, 151, 0.5);
+  --rangeHighlightedTile: rgba(127, 89, 157, 0.6);
   --aimingReachHighlightedTile: rgba(54, 117, 108, 0.9);
   --aimingHighlightedTile: rgba(34, 156, 152, 0.9);
 
@@ -25,7 +25,7 @@
 /* GENERAL RULES */
 body {
   margin: 20px;
-  background-image: url("../images/forestbg.jpg");
+  background: url("../images/forestbg.jpg") no-repeat center center fixed;
   background-size: cover;
   background-color: rgba(0,0,0,0.2);
   background-blend-mode: darken;
@@ -134,6 +134,7 @@ body {
   color: rgba(255,255,255,0.1);
 }
 
+/* footer */
 .lowerPageText{
   margin-top: 20px;
   position:relative;
@@ -143,10 +144,24 @@ body {
   margin:0px;
 }
 
+#playerTurn {
+  color: rgb(211, 199, 255);
+  font-size: 18px;
+}
+
+#previewRadius {
+  font-size: 14px;
+}
+
+#previewRadiusInstructions {
+  color:gray;
+  font-size: 12px;
+}
+
 #mythomagicTitle{
   position:absolute;
   bottom:0;
-  right:5px;
+  right:8px;
   margin:0px;
   font-size: 40px;
 }
@@ -173,6 +188,35 @@ body {
   overflow: hidden;
   text-align: center;
   color: rgba(0, 0, 0, 0.7);
+}
+
+#myAvailableCards {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  overflow: overlay;
+}
+
+#myAvailableCards div {
+  flex: 0 0 auto;
+}
+
+::-webkit-scrollbar {
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0,0,0,0);
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 5px;
+  background: rgba(255,255,255,0.2);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255,255,255,0.3);
 }
 
 .card[figurine=true] {
@@ -220,17 +264,17 @@ body {
   font-size:12px;
 }
 
+/* INFO BOX RULES */
+#gameInfoBox {
+  font-family: Georgia;
+}
+
 .hoverInfo {
   margin-top: 20px;
   margin-left: 20px;
   margin-right: 20px;
   margin-bottom: 20px;
   height: 160px;
-}
-
-/* INFO BOX RULES */
-#gameInfoBox {
-  font-family: Georgia;
 }
 
 #hoverInfoTitle {
@@ -285,10 +329,10 @@ background-color: #ddd;
 
 .token {
   position:relative;
-  top: 6px;
-  left: 6px;
-  width: 14px;
-  height: 15px;
+  top: 9px;
+  left: 8px;
+  width: 10px;
+  height: 10px;
   background-color: #ded6c9;
 }
 
