@@ -307,11 +307,11 @@ function capitalize(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-function get_PC_BroadcastForInfoBox(PCard) {
+function get_PC_BroadcastForInfoBox(PCard, isPlayer1) {
   var res = "";
   
   res += '<div class="hoverColWrap">';
-    res += '<p id="hoverInfoTitle"><b style="font-size: medium;">' + PCard.cardName + "</b> - " + PCard.dead;
+    res += '<p id="hoverInfoTitle" p1='+isPlayer1+'><b style="font-size: medium;">' + PCard.cardName + "</b> - " + PCard.dead;
     var statusTxt = ", statuses: ";
     for (var sKey in PCard.statuses){
         if (PCard.statuses[sKey] == 1){
@@ -332,25 +332,21 @@ function get_PC_BroadcastForInfoBox(PCard) {
     res += '<div class="hoverColumn">';
     res += "<p>ATK: " + PCard.current_attack + " <i>(+" + (PCard.current_attack - PCard.base_attack) + ")</i></p>";
     res += "<p>DEF: " + PCard.current_defense + " <i>(+" + (PCard.current_defense - PCard.base_defense) + ")</i></p>";
-
-    
-    res += "<p>RC: " + PCard.current_normal_attack_range + " <i>(+" + (PCard.current_normal_attack_range - PCard.base_normal_attack_range) + ")</i></p>";
-    res += "<p>MVT: " + PCard.current_movement + " <i>(+" + (PCard.current_movement - PCard.base_movement) + ")</i></p>";
     res += "</div>";
 
     res += '<div class="hoverColumn">';
+    res += "<p>RC: " + PCard.current_normal_attack_range + " <i>(+" + (PCard.current_normal_attack_range - PCard.base_normal_attack_range) + ")</i></p>";
+    res += "<p>MVT: " + PCard.current_movement + " <i>(+" + (PCard.current_movement - PCard.base_movement) + ")</i></p>";
     res += "<p>MP/turn: " + PCard.current_mana_per_turn + " <i>(+" + (PCard.current_mana_per_turn - PCard.base_mana_per_turn) + ")</i></p>";
     res += "<p>MP/atk: " + PCard.current_mana_per_atk + " <i>(+" + (PCard.current_mana_per_atk - PCard.base_mana_per_atk) + ")</i></p>";
     res += "</div>";
 
   res += "</div>";
-    
-  if (PCard.is_figurine == true) {
-    res += "<p>********* display holofoil power here ***********</p>";
-  } else {
-    res += "<p>Holofoil unavailable</p>";
-  }
 
+  res += '<p><span id="abilityTitle">'+PCard.ability_title+'</span>: '+PCard.ability_text+'</p>';
+  res += '<p><span id="ultTitle">'+PCard.ult_title+'</span>: '+PCard.ult_text+'</p>';
+  res += '<p><span id="passiveTitle">'+PCard.passive_title+'</span>: '+PCard.passive_text+'</p>';
+  
   return res;
 }
 

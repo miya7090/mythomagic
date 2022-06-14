@@ -25,7 +25,7 @@ CURRENT_MOUSE_S = undefined;
 MAX_MANA = 1000;
 HEXTILE_CUBIC_INDEX = {}; // keys: "q,r,s", maps to divs that are hextiles
 
-PICK_PHASE_TIMER = 15000; // 15 sec in ms
+PICK_PHASE_TIMER = 30000; // 30 sec in ms
 PICK_PHASE_STARTED_AT = undefined;
 GAME_MODE = "startup"; // startup, pick-phase; [p1-, p2-]active, moveToken, attackSelect, autoattack, ability, abilityAim, ultimate, ultimateAim
 GAME_MODE_MEMORYTARGET = undefined; // used if moving tokens, etc

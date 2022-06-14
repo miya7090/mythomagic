@@ -35,7 +35,7 @@
   <p>all heroes gain MP after each round. autoattack grant extra MP to the character.</p>
   <p>in addition to an ability and an ultimate, each hero has a&nbsp;<span style="color: dodgerblue;">passive</span> that is automatically applied each turn.</p>
   <h3>damaging opponents</h3>
-  <p>the base amount of damage done is calculated by the hero's ATK divided by their DEF.</p>
+  <p>the base amount of damage done is calculated by the hero's ATK divided by their opponent's DEF.</p>
   <p>there are six status effects that modify the base amount of damage:</p>
   <ol>
       <li>blinded: attacks performed by a blinded hero have a 75% chance of missing and dealing no damage. attacks targeting this hero deal 25% extra damage.</li>
@@ -48,7 +48,7 @@
   </ol>
   <p>status effects <span style="color: dodgerblue;">expire</span> after a certain number of turns and can also be removed by certain abilities.</p>
   <p>some heroes have <span style="color: dodgerblue;">immunities</span> to certain status effects.</p>
-  <p>example: a terrified hero with ATK=2000 and DEF=10 would deal (2000/10)/2=100 HP of damage.</p>
+  <p>example: a terrified hero with ATK=2000 would deal (2000/10)/2=100 HP of damage to a hero with DEF=10.</p>
   <p><span style="color: dodgerblue;">true</span> damage is never affected by hero stats or statuses.</p>
   <p>heroes are defeated when their HP reaches zero. defeated heroes can no longer be played in game, and their <span style="color: dodgerblue;">passives</span> become inactive.</p>
   <p>mythomagic is won when all enemy heroes are defeated, or your opponent concedes.</p>

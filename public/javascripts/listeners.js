@@ -42,6 +42,18 @@ function mouseOverTile(evt) {
     CURRENT_MOUSE_S = evt.target.cube_s;
     hoverMouseHighlight(true);
     playSoundRandom([clack4, clack5, clack6], rand(0.3,0.5));
+
+    // update info box
+    const gameInfoBox = document.getElementById("gameInfoBox");
+    var tokenOnTile;
+    if (evt.target.classList.contains("token")){
+      tokenOnTile = evt.target;
+    } else {
+      tokenOnTile = evt.target.querySelector('.token');
+    }
+    if (tokenOnTile != undefined) {
+      gameInfoBox.innerHTML = get_PC_BroadcastForInfoBox(tokenOnTile.pcardLink, tokenOnTile.classList.contains("player1"));
+    }
 }
 
 function mouseOutOfGrid(evt) {
@@ -287,7 +299,7 @@ function mouseClickAvailableCard(evt) {
 
 function mouseOverGameCard(evt, referenceCard) {
   const gameInfoBox = document.getElementById("gameInfoBox");
-  gameInfoBox.innerHTML = get_PC_BroadcastForInfoBox(referenceCard);
+  gameInfoBox.innerHTML = get_PC_BroadcastForInfoBox(referenceCard, evt.target.classList.contains("player1"));
   playSoundRandom([clack3, clack4], rand(0.4,0.6));
 }
 
