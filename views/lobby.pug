@@ -15,7 +15,7 @@ br
 #gameStart
   form#gameform(method='POST' action='/game')
     label(for='nickname') nickname 
-    input#nickname(type='text' name='nickname' maxlength='10')
+    input#nickname(type='text' name='nickname' maxlength='10' onkeydown=" if(event.keyCode==13){ $('#lobbyJoinButton').focus(); event.preventDefault(); }")
     a(href="../help.html" target="_blank") how to play
     br
     br
