@@ -6,6 +6,8 @@ const clack3 = '../sounds/clack3.mp3'
 const clack4 = '../sounds/clack4.mp3'
 const clack5 = '../sounds/clack5.mp3'
 const clack6 = '../sounds/clack6.mp3'
+const boop = '../sounds/boop.mp3'
+const beep = '../sounds/beep.mp3'
 const bgmSource = '../sounds/50 mulling.mp3';
 
 HIGHLIGHT_TILE_MEMORY_COLOR = getComputedStyle(document.documentElement).getPropertyValue('--highlightedTileMemory');
@@ -219,6 +221,18 @@ function startBgm(){
 function playSoundRandom(choices, volume){
   let chosenSound = choices[Math.floor(Math.random() * choices.length)];
   let snd = new Audio(chosenSound);
+  snd.volume = volume;
+  snd.play();
+}
+
+function clockBoop(volume){
+  let snd = new Audio(boop);
+  snd.volume = volume;
+  snd.play();
+}
+
+function clockBeep(volume){
+  let snd = new Audio(beep);
   snd.volume = volume;
   snd.play();
 }

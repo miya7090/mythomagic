@@ -123,13 +123,13 @@ function createTileDiv(rowDiv, q, r) {
   square.addEventListener('mouseup', mouseClickTile);
 };
 
-function createAvailableCardDiv(pcToRender) {
+function createAvailableCardDiv(pcNameToRender) {
   const acard = document.createElement("div");
-  acard.innerHTML = getBaseCardHTML(pcToRender);
+  putBaseCardHTML(pcNameToRender, acard);
   acard.classList.add("card");
   myAvailableCards.appendChild(acard);
 
-  const referenceCard = new Card(pcToRender); // show stats on hover
+  const referenceCard = new Card(pcNameToRender); // show stats on hover
   acard.addEventListener('mouseenter', function(evt){mouseOverAvailableCard(evt, referenceCard);});
   acard.addEventListener('mouseup', mouseClickAvailableCard);
 };
@@ -209,7 +209,7 @@ function rerenderAllGamecardsAndTokens() {
   let enemyTokens = document.getElementsByClassName("player2 token");
   while(enemyGCards.length > 0){ enemyGCards[0].remove(); }
   while(enemyTokens.length > 0){ enemyTokens[0].remove(); }
-  console.log(PLAYER_GAMECARD_OBJS, ENEMY_GAMECARD_OBJS);
+  
   ENEMY_GAMECARD_OBJS.forEach(newGCard => { // enemyCardReference
     newGCard.flipAcrossBoard();
     createEnemyGameCardDiv(newGCard);
@@ -218,21 +218,37 @@ function rerenderAllGamecardsAndTokens() {
 }
 
 // for formatting display of cards available to player
-function getBaseCardHTML(cardName) {
-  // cardName, imgLink, cardHP, cardMana, statusList
-  let fontString = "";
+function putBaseCardHTML(cardName, cardDiv) {
+  let fontString = undefined;
   if (cardName.length > 9) {
-    fontString = " smallestFont"; // note the space in front
+    fontString = "smallestFont";
   } else if (cardName.length > 7) {
-    fontString = " smallFont"; // note the space in front
+    fontString = "smallFont";
   }
 
-  let res = '<p class="baseCardName'+fontString+'">'+cardName + "</p>";
-  res += '<div class="baseCardImgHolder">';
-  res += '<img class="baseCardImg1'+fontString+'" src="../images/portraits/'+cardName+'.png" onerror="javascript:this.src=\'../images/portraits/default.png\'"/>';
-  res += '<img class="baseCardImg2'+fontString+'" src="../images/portraits/'+cardName+'.png" onerror="javascript:this.src=\'../images/portraits/default.png\'"/>';
-  res += '</div>';
-  return res;
+  const bcn = document.createElement("p"); // add name
+  bcn.classList.add("baseCardName");
+  if (fontString != undefined) { bcn.classList.add(fontString); }
+  bcn.textContent = cardName;
+  cardDiv.appendChild(bcn);
+
+  const bcih = document.createElement("div"); // add image holder
+  bcih.classList.add("baseCardImgHolder");
+  cardDiv.appendChild(bcih);
+
+  const bci1 = document.createElement("img"); // add image backing
+  bci1.classList.add("baseCardImg1");
+  if (fontString != undefined) { bci1.classList.add(fontString); }
+  bci1.src = "../images/portraits/"+cardName+".png";
+  bci1.alt = "card image";
+  bcih.appendChild(bci1);
+
+  const bci2 = document.createElement("img"); // add image front
+  bci2.classList.add("baseCardImg2");
+  if (fontString != undefined) { bci2.classList.add(fontString); }
+  bci2.src = "../images/portraits/"+cardName+".png";
+  bci2.alt = "card image";
+  bcih.appendChild(bci2);
 }
 
 // for formatting display of cards that player is using in game
