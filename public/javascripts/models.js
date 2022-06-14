@@ -19,6 +19,13 @@
       this.ult_aim_range = base_stats[9];
       this.ult_is_aimed = (this.ult_aim_range != undefined);
       this.ult_aim_aoe = base_stats[10];
+
+      this.ability_title = base_stats[11];
+      this.ability_text = base_stats[12];
+      this.ult_title = base_stats[13];
+      this.ult_text = base_stats[14];
+      this.passive_title = base_stats[15];
+      this.passive_text = base_stats[16];
     }
   }
 

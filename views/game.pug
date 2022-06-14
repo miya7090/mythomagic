@@ -25,24 +25,19 @@ head
       .hexgrid
         #hexContainer.container
       .powerbox
-        input#autoButton(type='button' value='autoattack' onclick="autoButtonClick()" disabled)
+        input#autoButton.button(type='button' value='attack' onclick="autoButtonClick()" disabled)
         p &nbsp; &nbsp;
-        input#abilityButton(type='button' value='use ability' onclick="abilityButtonClick()" disabled)
+        input#abilityButton.button(type='button' value='ability' onclick="abilityButtonClick()" disabled)
         p &nbsp; &nbsp;
-        input#ultButton(type='button' value='use ultimate' onclick="ultButtonClick()" disabled)
+        input#ultButton.button(type='button' value='ultimate' onclick="ultButtonClick()" disabled)
     .rightcolumn
       #enemyCardReference.cards
       #onFieldCards.cards
       #gameInfoBox.hoverInfo
       #gameOptions.optionBox
   #myAvailableCards.cards
-  p#tokenCountdown
-  p#previewRadius Preview radius: undefined
-  p#playerTurn Current player: undefined
-  .instructions
-    p shift/z/x ... reset/-/+ preview radius [#TODO shift]
-    p p ... switch player turn (debug only)
-    p q ... pick heroes [DEBUG] [TODO] [priority 1!!!!!!!!!!!!!!!!!!!!!!!]
-    p w ... initiate hero placement [DEBUG] [TODO]
-    p e ... begin new player 1 turn [DEBUG] [TODO]
-| &gt;
+  div.lowerPageText
+    p#tokenCountdown
+    p#previewRadius Preview radius: undefined
+    p#playerTurn Current player: undefined
+    p z/x ... -/+ preview radius

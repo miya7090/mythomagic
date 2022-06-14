@@ -77,14 +77,16 @@ function aimingTargetReachHighlight(turnOn, radius){
 
 // animation
 function anim_tileHitByAttack(hitTileDiv){ //#TODO also animate the game card
+  let animColor = getComputedStyle(document.documentElement).getPropertyValue('--animAtkHit');
   hitTileDiv.animate({
-    backgroundColor: "#aa0000",
+    backgroundColor: animColor,
   }, 700 );
 };
 
 function anim_tileInAttackRange(hitTileDiv){
+  let animColor = getComputedStyle(document.documentElement).getPropertyValue('--animAtkInRange');
   hitTileDiv.animate({
-    backgroundColor: "#3c52c9",
+    backgroundColor: animColor,
   }, 700 );
 };
 
@@ -219,7 +221,9 @@ function rerenderAllGamecardsAndTokens() {
 function getBaseCardHTML(cardName) {
   // cardName, imgLink, cardHP, cardMana, statusList
   let fontString = "";
-  if (cardName.length > 7) {
+  if (cardName.length > 9) {
+    fontString = " smallestFont"; // note the space in front
+  } else if (cardName.length > 7) {
     fontString = " smallFont"; // note the space in front
   }
 
@@ -275,9 +279,9 @@ function get_BC_BroadcastForInfoBox(BCard) {
     res += "</div>";
   res += "</div>";
   
-  res += "<p>Sample skill: holofoil power</p>"; // #TODO display only if owned
-  res += "<p>Sample skill: figurine power</p>";
-  res += "<p>Sample skill: ???? power</p>";
+  res += '<p><span id="abilityTitle">'+BCard.ability_title+'</span>: '+BCard.ability_text+'</p>';
+  res += '<p><span id="ultTitle">'+BCard.ult_title+'</span>: '+BCard.ult_text+'</p>';
+  res += '<p><span id="passiveTitle">'+BCard.passive_title+'</span>: '+BCard.passive_text+'</p>';
 
   return res;
 }

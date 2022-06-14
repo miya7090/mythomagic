@@ -18,19 +18,22 @@ document.addEventListener("DOMContentLoaded", () => {
   const regionNotesText = document.getElementById("queueNotes");
 
   const lJoinButton = document.getElementById("lobbyJoinButton");
+  const lLeaveButton = document.getElementById("lobbyLeaveButton");
+
   lJoinButton.addEventListener("click", ()=>{
     const regionDiv = document.getElementById("region");
     socket.emit("lobbyJoin", nicknameDiv.value, regionDiv.value);
     regionNotesText.textContent = "joining "+regionDiv.value+" lobby...";
     nicknameDiv.disabled = true;
+    lLeaveButton.hidden = false;
   });
 
-  const lLeaveButton = document.getElementById("lobbyLeaveButton");
   lLeaveButton.addEventListener("click", ()=>{
     socket.emit("lobbyLeave");
     clearRegionList();
     regionNotesText.textContent = "";
     nicknameDiv.disabled = false;
+    lLeaveButton.hidden = true;
   });
 
   socket.on("lobbyJoined", (nickname, region, regionUsers)=>{
@@ -83,7 +86,7 @@ function clearRegionList(){
 function populateRegionList(regionUsers){
   const regionNotesText = document.getElementById("queueNotes");
   if (Object.keys(regionUsers).length == 1){
-    regionNotesText.textContent = "nobody else here yet... (will automatically refresh)";
+    regionNotesText.textContent = "nobody else here yet... invite your friends? (automatically refreshes)";
   } else {
     regionNotesText.textContent = "";
   }
@@ -91,12 +94,14 @@ function populateRegionList(regionUsers){
   const lobbiersInRegion = document.getElementById("lobbiersinregion");
   lobbiersInRegion.innerHTML = ""; // clear div
   Object.keys(regionUsers).forEach(socketid => {
-    if (socketid != socket.id) {
-      const rUser = document.createElement("button");
-      const nickname = regionUsers[socketid];
-      rUser.classList.add("lobbier");
-      rUser.textContent = nickname;
-      rUser.name = nickname;
+    const rUser = document.createElement("button");
+    const nickname = regionUsers[socketid];
+    rUser.classList.add("lobbier");
+    rUser.textContent = nickname;
+    rUser.name = nickname;
+    if (socketid == socket.id) {
+      rUser.disabled = true;
+    } else {
       rUser.addEventListener("click", (evt)=>{
         if (PENDING_INVITE_RESPONSE == false) {
           PENDING_INVITE_RESPONSE = true;
@@ -106,7 +111,7 @@ function populateRegionList(regionUsers){
           console.error("you are still waiting for an invitation response");
         }
       })
-      lobbiersInRegion.appendChild(rUser);
     }
+    lobbiersInRegion.appendChild(rUser);
   }); 
 }

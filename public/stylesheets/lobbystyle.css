@@ -24,7 +24,7 @@ h2 {
 
 #queueNotes {
     margin-left: 5px;
-    color: red;
+    color: blueviolet;
 }
 
 #creds {
@@ -44,5 +44,6 @@ h2 {
 }
 
 a{
-    color: rgb(48, 42, 214);
+    color: dodgerblue;
+    text-decoration: none;
 }

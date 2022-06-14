@@ -1,18 +1,20 @@
 :root {
   --normalTile: rgba(54, 71, 253, 0.5);
-  --aimingHighlightedTile: rgb(255, 62, 114);
-  --aimingReachHighlightedTile: rgb(157, 71, 94);
-  --rangeHighlightedTile: rgb(204, 87, 118);
-  --highlightedTile: rgba(59, 59, 240, 0.9);
-  --default_highlightedTile: rgba(59, 59, 240, 0.9);
+  --highlightedTile: rgba(93, 93, 255, 0.9);
+  --default_highlightedTile: rgba(93, 93, 255, 0.9);
+  --rangeHighlightedTile: rgba(123, 89, 151, 0.5);
+  --aimingReachHighlightedTile: rgba(54, 117, 108, 0.9);
+  --aimingHighlightedTile: rgba(34, 156, 152, 0.9);
+
   --offgridTile: rgba(0, 0, 0, 0.4);
   --highlightedOffgrid: rgba(0, 0, 0, 0.9);
   --default_highlightedOffgrid: rgba(0, 0, 0, 0.9);
-  --rangeHighlightedOffgrid: rgba(106, 88, 88, 0.9);
-  --aimingHighlightedOffgrid: rgba(71, 206, 66, 0.9);
-  --aimingReachHighlightedOffgrid: rgba(73, 68, 68, 0.9);
-  --overlapOn: rgba(40,30,65,0.9);
-  --overlapOnOffgrid: rgba(30,205,304,0.4);
+  --rangeHighlightedOffgrid: rgba(60, 40, 81, 0.9);
+  --aimingReachHighlightedOffgrid: rgba(15, 38, 42, 0.8);
+  --aimingHighlightedOffgrid: rgba(15, 76, 75, 0.9);
+
+  --animAtkHit: rgba(0, 240, 240, 1.0);
+  --animAtkInRange: rgba(16, 204, 225, 0.9);
 }
 
 @font-face {
@@ -87,7 +89,6 @@ body {
 .gameSquare[rangeHighlight=true] { background-color: var(--rangeHighlightedTile); }
 .gameSquare[aimingReachHighlight=true] { background-color: var(--aimingReachHighlightedTile); }
 .gameSquare[hoverHighlight=true] { background-color: var(--highlightedTile); }
-.gameSquare[hoverHighlight=true][aimingReachHighlight=true] { background-color: var(--overlapOn); }
 
 .jungle { background-color: rgb(44, 103, 71); }
 .water { background-color: rgb(79, 92, 193); }
@@ -100,7 +101,6 @@ body {
 .offgrid[rangeHighlight=true] { background-color: var(--rangeHighlightedOffgrid); }
 .offgrid[aimingReachHighlight=true] { background-color: var(--aimingReachHighlightedOffgrid); }
 .offgrid[hoverHighlight=true] { background-color: var(--highlightedOffgrid); }
-.offgrid[hoverHighlight=true][aimingReachHighlight=true] { background-color: var(--overlapOnOffgrid); }
 
 /* POWER BOX RULES */
 .powerbox {
@@ -112,6 +112,33 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  box-shadow: inset 1px 1px 2px 2px rgba(0,0,0,0.3);
+}
+
+.button {
+  background-color: rgba(0, 0, 0, 0.4); /* Green */
+  color: white;
+  padding: 5px 10px;
+  font-family: inherit;
+  font-size: 16px;
+}
+
+.button:hover {
+  background-color: rgba(255, 255, 255, 0.6);
+  color: rgba(0, 0, 0, 1.0);
+}
+
+.button:disabled {
+  background-color: rgba(0, 0, 0, 0.3);
+  color: rgba(255,255,255,0.1);
+}
+
+.lowerPageText{
+  margin-top: 20px;
+}
+
+.lowerPageText p{
+  margin:0px;
 }
 
 /* CARD AREA BASE RULES */
@@ -124,8 +151,8 @@ body {
 }
 
 .card {
-  margin-top: 7px;
-  margin-left: 10px;
+  margin-top: 13px;
+  margin-left: 11px;
   float: left;
   width: 60px;
   height: 90px;
@@ -173,9 +200,14 @@ body {
   margin-bottom:0px;
 }
 
-.smallFont{
+.smallestFont{
   margin-top: 7px;
   font-size:10px;
+}
+
+.smallFont{
+  margin-top: 6px;
+  font-size:12px;
 }
 
 .hoverInfo {
@@ -194,8 +226,17 @@ body {
 #hoverInfoTitle {
   font-family: "regularFont";
   font-size: medium;
+  color: rgb(167, 223, 255);
   margin-left: 10px;
   margin-bottom: 2px;
+}
+
+#abilityTitle,#ultTitle {
+  color: rgb(135, 173, 255);
+}
+
+#passiveTitle {
+  color: rgb(96, 165, 243);
 }
 
 .hoverColWrap {
@@ -227,15 +268,6 @@ background-color: #ddd;
 .manaBar {background-color: #5e6bff; font-size: 11px;}
 
 /* TOKEN BASE RULES */
-.player1 {
-  border: 1px solid #000000;
-  box-sizing: border-box; /* border goes inside box not outside */
-}
-
-.player2 {
-  border: 2px solid #000000;
-  box-sizing: border-box; /* border goes inside box not outside */
-}
 
 .token {
   position:relative;
@@ -243,9 +275,14 @@ background-color: #ddd;
   left: 6px;
   width: 14px;
   height: 15px;
+  background-color: #ded6c9;
+}
+
+.player2.token {
   background-color: #84746c;
 }
 
 .token[figurine=true] {
-  background-color: #ded6c9;
+  border: 2px solid rgb(255, 0, 0);
+  box-sizing: border-box; /* border goes inside box not outside */
 }

@@ -5,10 +5,6 @@ HIGHLIGHT_TILE_ATTACK_COLOR = getComputedStyle(document.documentElement).getProp
 
 // what to do when key pressed
 function keyProcessing(event) {
-  if (event.keyCode === 80) { // switch player turn (for debugging)
-    nextTurn();
-    console.error("note this does not update opponent");
-  }
   if ((event.keyCode === 90 || event.keyCode === 88) && GAME_MODE != "p1-moveToken") { // mouse hover radius stuff
     // first clear hover highlights
     if (CURRENT_MOUSE_Q !== undefined) {
