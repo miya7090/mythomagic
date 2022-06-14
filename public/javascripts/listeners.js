@@ -1,5 +1,13 @@
 // @miya7090
 
+const clack1 = '../sounds/clack1.mp3'
+const clack2 = '../sounds/clack2.mp3'
+const clack3 = '../sounds/clack3.mp3'
+const clack4 = '../sounds/clack4.mp3'
+const clack5 = '../sounds/clack5.mp3'
+const clack6 = '../sounds/clack6.mp3'
+const bgmSource = '../sounds/50 mulling.mp3';
+
 HIGHLIGHT_TILE_MEMORY_COLOR = getComputedStyle(document.documentElement).getPropertyValue('--highlightedTileMemory');
 HIGHLIGHT_TILE_ATTACK_COLOR = getComputedStyle(document.documentElement).getPropertyValue('--highlightedTileAttack');
 
@@ -31,6 +39,7 @@ function mouseOverTile(evt) {
     CURRENT_MOUSE_R = evt.target.cube_r;
     CURRENT_MOUSE_S = evt.target.cube_s;
     hoverMouseHighlight(true);
+    playSoundRandom([clack4, clack5, clack6], rand(0.3,0.5));
 }
 
 function mouseOutOfGrid(evt) {
@@ -62,6 +71,7 @@ function transitionToMoveTokenMode(tokenOnTile){
 }
 
 function mouseClickTile(evt) {
+  playSoundRandom([clack2, clack3], 0.9);
   // this should prepare to move token if in p1-active (1)
   // or move the token to this spot if in p1-moveToken (2)
   // or make an attack if in p1-abilityAim or p1-ultimateAim (3, 4)
@@ -196,9 +206,38 @@ function mouseClickToken(evt) {
   evt.target.parentNode.click();
 }
 
+function startBgm(){
+  var bgm = new Audio(bgmSource); 
+  bgm.addEventListener('ended', function() {
+      this.currentTime = 0;
+      this.play();
+  }, false);
+  bgm.volume = 0.6;
+  bgm.play();
+}
+
+function playSoundRandom(choices, volume){
+  let chosenSound = choices[Math.floor(Math.random() * choices.length)];
+  let snd = new Audio(chosenSound);
+  snd.volume = volume;
+  snd.play();
+}
+
 function mouseOverAvailableCard(evt, referenceCard) {
   const gameInfoBox = document.getElementById("gameInfoBox");
   gameInfoBox.innerHTML = get_BC_BroadcastForInfoBox(referenceCard);
+
+  playSoundRandom([clack3, clack4, clack5], rand(0.4,0.6));
+}
+
+function mouseOverPowerbutton(evt) {
+  return; // no sound
+}
+
+function mouseClickPowerbutton(evt) {
+  if (evt.target.disabled == false) {
+    playSoundRandom([clack1, clack2], 0.7);
+  }
 }
 
 function mouseClickAvailableCard(evt) {
@@ -223,6 +262,7 @@ function mouseClickAvailableCard(evt) {
         console.error(thisCardName+" card already picked");
     } else {
         // define a new player card with a starter position
+        playSoundRandom([clack1, clack2], 0.7);
         var hasHolo = PLAYER_HOLOFOIL.includes(thisCardName);
         var newPC = new PlayerCard(thisCardName, hasHolo, -(HEX_RADIUS-1)+countPlayersPicks,HEX_RADIUS,-1-countPlayersPicks);
         createGameCardDiv(newPC);
@@ -234,6 +274,7 @@ function mouseClickAvailableCard(evt) {
 function mouseOverGameCard(evt, referenceCard) {
   const gameInfoBox = document.getElementById("gameInfoBox");
   gameInfoBox.innerHTML = get_PC_BroadcastForInfoBox(referenceCard);
+  playSoundRandom([clack3, clack4], rand(0.4,0.6));
 }
 
 function mouseClickGameCard(evt, pcardRef) {
@@ -241,5 +282,6 @@ function mouseClickGameCard(evt, pcardRef) {
     PLAYER_GAMECARD_OBJS.splice(PLAYER_GAMECARD_OBJS.indexOf(pcardRef), 1); // remove from game cards
     evt.target.remove(); // remove div
     removeTokenAndShiftOthers(pcardRef);
+    playSoundRandom([clack2, clack3], 0.7);
   }
 }

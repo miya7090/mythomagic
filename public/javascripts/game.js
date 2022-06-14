@@ -3,7 +3,7 @@
 const MY_SOCKET = io(); // create new instance
 
 function updateTokenClock(){ // #TODO move to listeners
-  let clock = document.getElementById("tokenCountdown");
+  let clock = document.getElementById("tokenCountdown"); // #TODO make this & similar jquery
   let secLeft = (PICK_PHASE_TIMER - (Date.now() - PICK_PHASE_STARTED_AT))/1000;
   clock.textContent = "pick your cards and place your tokens ("+Math.round(secLeft)+" seconds left)";
   if (secLeft <= 0) {
@@ -17,11 +17,23 @@ function updateTokenClock(){ // #TODO move to listeners
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+  /* ui bgm set up */
+  setTimeout(startBgm, 2000); // start music 2 secs in
+
+  // clack the powerbox buttons
+  var powerButtons = document.getElementsByClassName("button");
+  for(let i=0; i < powerButtons.length; i++){
+    powerButtons[i].addEventListener('mouseenter', mouseOverPowerbutton);
+    powerButtons[i].addEventListener('mouseup', mouseClickPowerbutton);
+  }
+  
+  /* get url parameters */
   const urlParams = new URLSearchParams(window.location.search);
   const roomCode = urlParams.get('room');
   const selfName = urlParams.get('self');
   OTHER_NAME = urlParams.get('other');
 
+  /* socket stuff */
   MY_SOCKET.on('connect', ()=>{
     MY_SOCKET.emit("registerPlayer", roomCode);
   });

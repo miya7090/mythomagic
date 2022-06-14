@@ -135,10 +135,19 @@ body {
 
 .lowerPageText{
   margin-top: 20px;
+  position:relative;
 }
 
 .lowerPageText p{
   margin:0px;
+}
+
+#mythomagicTitle{
+  position:absolute;
+  bottom:0;
+  right:5px;
+  margin:0px;
+  font-size: 40px;
 }
 
 /* CARD AREA BASE RULES */

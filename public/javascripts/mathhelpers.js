@@ -23,3 +23,7 @@ function getCoordinatesWithinRadius(cQ, cR, cS, radius, includeSelf=true){
 function getReflectedCoordinate(q, r, s){
   return [-q, -r, -s];
 }
+
+function rand(low, high){
+  return (Math.random() * (high - low) + low);
+}
