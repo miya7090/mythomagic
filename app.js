@@ -18,7 +18,7 @@ function rk(regionName){ return regionName + "====="; }
 function nk(rkRegion){ return rkRegion.slice(0, -5); }
 function isLobbyId(roomcode) { return (roomcode.slice(roomcode.length-5) == "====="); }
 
-app.use(express.static("public")); // use "public" directory for static files
+app.use(express.static(__dirname + "/public")); // use "public" directory for static files
 
 function kickOutFromLastRoom(socketId) {
   if (socketId in roomBook) { // remove from its room
