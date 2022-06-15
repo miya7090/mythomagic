@@ -22,6 +22,7 @@ MOUSE_HOVER_RADIUS = 0;
 CURRENT_MOUSE_Q = undefined;
 CURRENT_MOUSE_R = undefined;
 CURRENT_MOUSE_S = undefined;
+ABILITY_MANA_REQ = 200;
 MAX_MANA = 1000;
 HEXTILE_CUBIC_INDEX = {}; // keys: "q,r,s", maps to divs that are hextiles
 

@@ -19,47 +19,75 @@ function getTurn() {
   }
 }
 
+function giveAllTurnMana() {
+  Object.keys(PLAYER_GAMECARD_OBJS).forEach(key => {
+    const pcardTarget = PLAYER_GAMECARD_OBJS[key];
+    pcardTarget.giveTurnMana();
+  });
+}
+
 function autoattack(pcard){
-  console.log(pcard.cardName+" attacks all in radius " + pcard.current_normal_attack_range);
-  attack(pcard.getQ(), pcard.getR(), pcard.getS(), pcard.current_normal_attack_range, 200); //#TODO change from flat dmg
+  attack(0, pcard, pcard.getQ(), pcard.getR(), pcard.getS(), pcard.current_normal_attack_range);
+  GAME_MODE_MEMORYTARGET.giveAttackMana();
 }
 
-function abilityAttack(q, r, s){
+function abilityAttack(pcard, q, r, s){
   let [cQ,cR,cS] = [q,r,s];
   if (q == undefined) { // if not an aimed attack
     cQ = GAME_MODE_MEMORYTARGET.getQ();
     cR = GAME_MODE_MEMORYTARGET.getR();
     cS = GAME_MODE_MEMORYTARGET.getS();
   }
-  attack(cQ, cR, cS, GAME_MODE_MEMORYTARGET.ability_aim_aoe, 300); //#TODO change from flat dmg
+  GAME_MODE_MEMORYTARGET.current_mana -= ABILITY_MANA_REQ;
+  attack(1, pcard, cQ, cR, cS, GAME_MODE_MEMORYTARGET.ability_aim_aoe, undefined); //#TODO change from flat dmg
 }
 
-function ultimateAttack(q, r, s){
+function ultimateAttack(pcard, q, r, s){
   let [cQ,cR,cS] = [q,r,s];
   if (q == undefined) { // if not an aimed attack
     cQ = GAME_MODE_MEMORYTARGET.getQ();
     cR = GAME_MODE_MEMORYTARGET.getR();
     cS = GAME_MODE_MEMORYTARGET.getS();
   }
-  attack(cQ, cR, cS, GAME_MODE_MEMORYTARGET.ult_aim_aoe, 400); //#TODO change from flat dmg
+  GAME_MODE_MEMORYTARGET.current_mana -= MAX_MANA;
+  attack(2, pcard, cQ, cR, cS, GAME_MODE_MEMORYTARGET.ult_aim_aoe, undefined); //#TODO change from flat dmg
 }
 
-function attack(centerQ, centerR, centerS, aoe, incomingDamage) {
+function attack(atkType, attacker, centerQ, centerR, centerS, aoe) {
   let coordTagsInRangeAll = getCoordinatesWithinRadius(centerQ, centerR, centerS, aoe, false);
   const coordTagsInRange = filterOnlyCoordinatesOnBoard(coordTagsInRangeAll);
   coordTagsInRange.forEach(hitTag => {
     let hitTile = HEXTILE_CUBIC_INDEX[hitTag];
     let tokenOnTile = hitTile.querySelector('.token');
     if (tokenOnTile != undefined && tokenOnTile.classList.contains("player2")) {
-      console.log("hit!!", tokenOnTile.pcardLink.cardName);
-      let damageCalc = incomingDamage; // #TODO mitigate
-      tokenOnTile.pcardLink.takeDamage(damageCalc);
+      let dmg = calcDamage(atkType, attacker, tokenOnTile.pcardLink);
+      tokenOnTile.pcardLink.takeDamage(dmg);
       anim_tileHitByAttack(hitTile); // #TODO add sound
     } else {
       anim_tileInAttackRange(hitTile);
     }
   });
 }
+
+function calcDamage(atkType, attacker, target){ // atkType: 0=autoattack, 1=ability, 2=ultimate #TODO implement diff dmg
+  var effectiveAttack = attacker.current_attack;
+  if (attacker.statuses["obscured"] == 1) { effectiveAttack -= (0.1 * attacker.current_attack); }
+  if (attacker.statuses["terrified"] == 1) { effectiveAttack -= (0.5 * attacker.current_attack); }
+  if (attacker.statuses["stunned"] == 1) { effectiveAttack = 0; }
+
+  var effectiveDefense = target.current_defense;
+  if (target.statuses["distracted" == 1]) { effectiveDefense -= (0.1 * target.current_defense); }
+  if (target.statuses["charmed" == 1]) { effectiveDefense = 1; }
+
+  if (effectiveAttack < 0) { effectiveAttack = 0; }
+  if (effectiveDefense < 1) { effectiveDefense = 1; }
+
+  let dmg = Math.round(effectiveAttack / effectiveDefense);
+  console.log(dmg, "damage :", effectiveAttack, "/", effectiveDefense, ": to", target.cardName);
+
+  return dmg;
+}
+
 
 // retrieve base stats of a card, return array
 function getBaseStats(cardType) {

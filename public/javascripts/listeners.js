@@ -35,6 +35,22 @@ function keyProcessing(event) {
   return;
 }
 
+function updateTokenClock(){
+  let clock = document.getElementById("playerTurn"); // #TODO make this & similar jquery
+  let secLeft = (PICK_PHASE_TIMER - (Date.now() - PICK_PHASE_STARTED_AT))/1000;
+  clock.textContent = "pick your cards\n("+Math.round(secLeft)+" seconds left)";
+  if (secLeft <= 0) {
+    clockBeep(1.0);
+    clock.textContent = "";
+    changeGameModeTo("startup");
+    console.log("tokentransmitting", exportAllP1Cs(false));
+    MY_SOCKET.emit("doneWithTokenPick", exportAllP1Cs(false));
+  } else {
+    clockBoop(0.9);
+    setTimeout(updateTokenClock, 1000);
+  }
+}
+
 function mouseOverTile(evt) {
     hoverMouseHighlight(false);
     CURRENT_MOUSE_Q = evt.target.cube_q;
@@ -73,8 +89,12 @@ function resetToActiveMode(){
 function toSelectAttackMode(){
   changeGameModeTo("p1-attackSelect");
   document.getElementById("autoButton").disabled = false;
-  document.getElementById("abilityButton").disabled = false; //#TODO check mana first
-  document.getElementById("ultButton").disabled = false;
+  if (GAME_MODE_MEMORYTARGET.current_mana >= ABILITY_MANA_REQ) {
+    document.getElementById("abilityButton").disabled = false;
+  }
+  if (GAME_MODE_MEMORYTARGET.current_mana >= MAX_MANA) {
+    document.getElementById("ultButton").disabled = false;
+  }
 }
 
 function transitionToMoveTokenMode(tokenOnTile){
@@ -143,7 +163,7 @@ function mouseClickTile(evt) {
     // success
     relinquishAimingMouseHighlight();
     aimingTargetReachHighlight(false, GAME_MODE_MEMORYTARGET.ability_aim_range);
-    abilityAttack(cQ, cR, cS);
+    abilityAttack(GAME_MODE_MEMORYTARGET, cQ, cR, cS);
     attackComplete();
   } else if (GAME_MODE == "p1-ultimateAim") {  ///// (3) p1-ultimateAim
     if (distanceDifference > GAME_MODE_MEMORYTARGET.ult_aim_range) {
@@ -155,13 +175,14 @@ function mouseClickTile(evt) {
     // success
     relinquishAimingMouseHighlight();
     aimingTargetReachHighlight(false, GAME_MODE_MEMORYTARGET.ult_aim_range);
-    ultimateAttack(cQ, cR, cS);
+    ultimateAttack(GAME_MODE_MEMORYTARGET, cQ, cR, cS);
     attackComplete();
   }
 }
 
 function attackComplete(){
   changeGameModeTo('p2-active');
+  giveAllTurnMana(); // attack mana is given in autoattack
   MY_SOCKET.emit("tellRival_yourTurn", exportAllP1Cs(false), exportAllP2Cs(true));
   GAME_MODE_MEMORYTARGET = undefined;
   rerenderAllGamecardsAndTokens();
@@ -189,7 +210,7 @@ function abilityButtonClick(){
       aimingTargetReachHighlight(true, GAME_MODE_MEMORYTARGET.ability_aim_range);
     } else {
       changeGameModeTo('p1-ability');
-      abilityAttack();
+      abilityAttack(GAME_MODE_MEMORYTARGET);
       attackComplete();
     }
   }
@@ -206,7 +227,7 @@ function ultButtonClick(){
       aimingTargetReachHighlight(true, GAME_MODE_MEMORYTARGET.ult_aim_range);
     } else {
       changeGameModeTo('p1-ultimate');
-      ultimateAttack();
+      ultimateAttack(GAME_MODE_MEMORYTARGET);
       attackComplete();
     }
   }

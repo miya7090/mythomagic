@@ -105,13 +105,25 @@ function importAllP2Cs(pcListObj){
       this.mana_bonus = 0;
 
       this.is_figurine = isFigurine;
-      this.statuses = {"blinded":0, "charmed":0, "poisoned":0, "stunned":0, "terrified":0};
+      this.statuses = {"charmed":0, "distracted":0, "poisoned":0, "stunned":0, "terrified":0, "obscured":0};
 
       if (pc_s !== -pc_q -pc_r){
           console.error("warning, requested to make a player card with invalid cubic coordinates: "+pc_q+","+pc_r+","+pc_s);
       }
       this.changeLocationTo(pc_q, pc_r);
       this.refreshTag();
+    }
+    giveTurnMana(){
+      this.current_mana += this.current_mana_per_turn;
+      if (this.current_mana >= MAX_MANA + this.mana_bonus) {
+        this.current_mana = MAX_MANA + this.mana_bonus;
+      }
+    }
+    giveAttackMana(){
+      this.current_mana += this.current_mana_per_atk;
+      if (this.current_mana >= MAX_MANA + this.mana_bonus) {
+        this.current_mana = MAX_MANA + this.mana_bonus;
+      }
     }
     takeDamage(flatNum){
       this.current_health -= flatNum;
@@ -149,38 +161,5 @@ function importAllP2Cs(pcListObj){
     }
     getS(){
       return this.#s;
-    }
-    /*getRangeOfMotion(){
-      return 
-
-      function getCoordinatesWithinRadius(cQ, cR, cS, radius, includeSelf=true){
-        var results = []; // returns list of strings
-    
-        for (let q = -radius; q <= radius; q++) {
-          for (let r = Math.max(-radius, -q-radius); r <= Math.min(radius, -q+radius); r++) {
-            var s = -q-r;
-            const neighborInfo = (cQ+q)+","+(cR+r)+","+(cS+s);
-            if (HEXTILE_CUBIC_INDEX[neighborInfo] !== undefined){
-              results.push(neighborInfo);
-            }
-          }
-        }
-    
-        if (includeSelf == false) { results.splice(results.indexOf(cQ+","+cR+","+cS),1); }
-        return results;
-      }
-    }*/
-  }
-
-  class Player {
-    constructor(name, figurine, cardsPicked) {
-      /////////////////////////////////////////////////// fill in from here #TODO
-      const base_stats = getBaseStats(cardName);
-      this.cardName = cardName;
-      this.base_attack = base_stats[0];
-      this.base_defense = base_stats[1];
-      this.base_health = base_stats[2];
-      this.base_mana = base_stats[3];
-      this.base_movement = base_stats[4];
     }
   }
