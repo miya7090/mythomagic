@@ -97,6 +97,27 @@ function getBaseStats(cardType) {
   return BASE_STAT_DICT[cardType];
 }
 
+function clearSelection(){
+  if (GAME_MODE == "p1-moveToken") {
+    resetToActiveMode();
+  } else if (GAME_MODE == "pick-phase") {
+    let lastPcard = PLAYER_GAMECARD_OBJS[PLAYER_GAMECARD_OBJS.length - 1];
+    removeTokenAndShiftOthers(lastPcard);
+    document.getElementById("p1card-" + lastPcard.cardName).remove(); // remove last gamecard's div
+    PLAYER_GAMECARD_OBJS.splice(PLAYER_GAMECARD_OBJS.length - 1, 1); // remove last gamecard's obj
+  } else if (GAME_MODE == "p1-abilityAim") {
+    relinquishAimingMouseHighlight();
+    aimingTargetReachHighlight(false, GAME_MODE_MEMORYTARGET.ability_aim_range);
+    toSelectAttackMode();
+  } else if (GAME_MODE == "p1-ultimateAim") {
+    relinquishAimingMouseHighlight();
+    aimingTargetReachHighlight(false, GAME_MODE_MEMORYTARGET.ult_aim_range);
+    toSelectAttackMode();
+  } else {
+    console.error("nothing to cancel with C");
+  }
+}
+
 // #TODO change this up
 function savingThrow(savingThrowThreshold) {
     // augmented by movement speed and defense

@@ -16,6 +16,7 @@ HIGHLIGHT_TILE_ATTACK_COLOR = getComputedStyle(document.documentElement).getProp
 
 // what to do when key pressed
 function keyProcessing(event) {
+  // Z/X
   if ((event.keyCode === 90 || event.keyCode === 88) && GAME_MODE != "p1-moveToken") { // mouse hover radius stuff
     // first clear hover highlights
     if (CURRENT_MOUSE_Q !== undefined) {
@@ -32,6 +33,11 @@ function keyProcessing(event) {
     if (CURRENT_MOUSE_Q !== undefined) {
       hoverMouseHighlight(true);
     }
+  }
+
+  // C
+  if (event.keyCode === 67) { // z, reduce radius
+    clearSelection();
   }
   return;
 }

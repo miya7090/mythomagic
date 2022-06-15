@@ -21,11 +21,15 @@ document.addEventListener("DOMContentLoaded", () => {
   const lLeaveButton = document.getElementById("lobbyLeaveButton");
 
   lJoinButton.addEventListener("click", ()=>{
-    const regionDiv = document.getElementById("region");
-    socket.emit("lobbyJoin", nicknameDiv.value, regionDiv.value);
-    regionNotesText.textContent = "joining "+regionDiv.value+" lobby...";
-    nicknameDiv.disabled = true;
-    lLeaveButton.hidden = false;
+    if (nicknameDiv.value.length == 0){
+      regionNotesText.textContent = "please enter a nickname first";
+    } else {
+      const regionDiv = document.getElementById("region");
+      socket.emit("lobbyJoin", nicknameDiv.value, regionDiv.value);
+      regionNotesText.textContent = "joining "+regionDiv.value+" lobby...";
+      nicknameDiv.disabled = true;
+      lLeaveButton.hidden = false;
+    }
   });
 
   lLeaveButton.addEventListener("click", ()=>{

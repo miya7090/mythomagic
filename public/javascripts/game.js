@@ -84,7 +84,7 @@ document.addEventListener("DOMContentLoaded", () => {
   previewRadius.textContent="Preview radius: "+MOUSE_HOVER_RADIUS;
   playerTurn.textContent=getPlayerTurnText();
 
-  document.addEventListener('keydown', keyProcessing);
+  document.addEventListener('keyup', keyProcessing);
   mainGrid.addEventListener('mouseleave', mouseOutOfGrid);
 
   // add tiles to game board

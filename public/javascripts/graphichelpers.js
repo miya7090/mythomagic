@@ -375,9 +375,9 @@ function get_PC_BroadcastForInfoBox(PCard, isPlayer1) {
 
   res += "</div>";
 
-  res += '<p><span id="abilityTitle">'+PCard.ability_title+'</span>: '+PCard.ability_text+'</p>';
-  res += '<p><span id="ultTitle">'+PCard.ult_title+'</span>: '+PCard.ult_text+'</p>';
-  res += '<p><span id="passiveTitle">'+PCard.passive_title+'</span>: '+PCard.passive_text+'</p>';
+  res += '<p><span id="abilityTitle" p1='+isPlayer1+'>'+PCard.ability_title+'</span>: '+PCard.ability_text+'</p>';
+  res += '<p><span id="ultTitle" p1='+isPlayer1+'>'+PCard.ult_title+'</span>: '+PCard.ult_text+'</p>';
+  res += '<p><span id="passiveTitle" p1='+isPlayer1+'>'+PCard.passive_title+'</span>: '+PCard.passive_text+'</p>';
   
   return res;
 }
