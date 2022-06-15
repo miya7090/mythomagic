@@ -93,9 +93,12 @@ function anim_tileInAttackRange(hitTileDiv){
 // div creation
 function createTileDiv(rowDiv, q, r) {
   const square = document.createElement("div"); // create tile and add to row
-
   square.classList.add("gameSquare"); // #TODO rename as tiles not squares
-  rowDiv.appendChild(square);
+
+  const wrap = document.createElement("div"); // create tile and add to row
+  wrap.classList.add("tileWrap");
+  wrap.appendChild(square);
+  rowDiv.appendChild(wrap);
 
   // store tile coordinates
   square.offset_q = q;
@@ -182,7 +185,7 @@ function createTokenDiv(pcToRender) {
   tooltip.classList.add("player1");
   tooltip.classList.add("tokenNameTooltip");
   tooltip.textContent = pcToRender.cardName;
-  HEXTILE_CUBIC_INDEX[pcToRender.tag].appendChild(tooltip);
+  HEXTILE_CUBIC_INDEX[pcToRender.tag].parentNode.appendChild(tooltip);
 };
 
 function createEnemyTokenDiv(pcToRender) {
@@ -215,7 +218,11 @@ function rerenderAllGamecardsAndTokens() {
   let myTokens = document.getElementsByClassName("player1 token");
   let myTokenTooltips = document.getElementsByClassName("player1 tokenNameTooltip");
   while(myGCards.length > 0){ myGCards[0].remove(); }
-  while(myTokens.length > 0){ myTokens[0].remove(); }
+  while(myTokens.length > 0){
+    myTokens[0].parentNode.setAttribute("hasP1Token", false);
+    myTokens[0].parentNode.setAttribute("hasP2Token", false);
+    myTokens[0].remove();
+  }
   while(myTokenTooltips.length > 0){ myTokenTooltips[0].remove(); }
   PLAYER_GAMECARD_OBJS.forEach(newGCard => { // enemyCardReference
     createGameCardDiv(newGCard);
@@ -227,7 +234,11 @@ function rerenderAllGamecardsAndTokens() {
   let enemyTokens = document.getElementsByClassName("player2 token");
   let enemyTokenTooltips = document.getElementsByClassName("player2 tokenNameTooltip");
   while(enemyGCards.length > 0){ enemyGCards[0].remove(); }
-  while(enemyTokens.length > 0){ enemyTokens[0].remove(); }
+  while(enemyTokens.length > 0){
+    enemyTokens[0].parentNode.setAttribute("hasP1Token", false);
+    enemyTokens[0].parentNode.setAttribute("hasP2Token", false);
+    enemyTokens[0].remove();
+  }
   while(enemyTokenTooltips.length > 0){ enemyTokenTooltips[0].remove(); }
   
   ENEMY_GAMECARD_OBJS.forEach(newGCard => { // enemyCardReference

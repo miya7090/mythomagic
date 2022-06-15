@@ -123,6 +123,8 @@ function filterOnlyCoordinatesOnBoard(qrsList){
   function removeTokenAndShiftOthers(pcardOfThisToken) { // only valid before game starts
     const tokenToRemove = document.getElementById("p1token-" + pcardOfThisToken.cardName);
     const ttrQ = pcardOfThisToken.getQ();
+    tokenToRemove.parentNode.setAttribute("hasP1Token", false);
+    tokenToRemove.parentNode.setAttribute("hasP2Token", false);
     tokenToRemove.remove();
     // move tokens to the right, left one space
     Object.keys(PLAYER_GAMECARD_OBJS).forEach(key => {
@@ -136,6 +138,8 @@ function filterOnlyCoordinatesOnBoard(qrsList){
 
   function moveToken(tokenPcard, absolute, diffQ, diffR) {
     const tokenDiv = document.getElementById("p1token-" + tokenPcard.cardName);
+    tokenDiv.parentNode.setAttribute("hasP1Token", false);
+    tokenDiv.parentNode.setAttribute("hasP2Token", false);
     tokenDiv.remove();
     if (absolute == true) {
       tokenPcard.changeLocationTo(diffQ, diffR);
