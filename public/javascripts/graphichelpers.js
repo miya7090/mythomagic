@@ -163,7 +163,8 @@ function createEnemyGameCardDiv(pcToRender) { //#TODO reduce redundant code ^
 };
 
 function createTokenDiv(pcToRender) {
-  const token = document.createElement("div");
+  const token = document.createElement("img");
+  token.src = GITHUB_PUBLIC_PATH + "images/tokens/blacktoken.png";
   token.classList.add("player1");
   token.classList.add("token");
   token.id = "p1token-" + pcToRender.cardName;
@@ -178,7 +179,8 @@ function createTokenDiv(pcToRender) {
 };
 
 function createEnemyTokenDiv(pcToRender) {
-  const token = document.createElement("div");
+  const token = document.createElement("img");
+  token.src = GITHUB_PUBLIC_PATH + "images/tokens/whitetoken.png";
   token.classList.add("player2");
   token.classList.add("token");
   token.id = "p2token-" + pcToRender.cardName;

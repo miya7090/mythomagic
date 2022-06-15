@@ -329,18 +329,13 @@ background-color: #ddd;
 
 .token {
   position:relative;
-  top: 9px;
-  left: 8px;
-  width: 10px;
-  height: 10px;
-  background-color: #ded6c9;
+  top: 3px;
+  left: 1px;
+  width: 23px;
+  height: 23px;
+  filter: invert(0.8);
 }
 
-.player2.token {
-  background-color: #84746c;
-}
-
-.token[figurine=true] {
-  border: 2px solid rgb(255, 0, 0);
-  box-sizing: border-box; /* border goes inside box not outside */
+.token:hover {
+  filter: invert(0.9);
 }
