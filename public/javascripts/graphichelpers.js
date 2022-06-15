@@ -211,6 +211,12 @@ function createEnemyTokenDiv(pcToRender) {
   HEXTILE_CUBIC_INDEX[pcToRender.tag].parentNode.appendChild(tooltip);
 };
 
+function markTokenDefeated(tag) {
+  let hitTile = HEXTILE_CUBIC_INDEX[tag];
+  let tokenOnTile = hitTile.querySelector('.token');
+  tokenOnTile.setAttribute("isDefeated",true);
+}
+
 function rerenderAllGamecardsAndTokens() {
   // clear game info hover box
   gameInfoBox.innerHTML = "";

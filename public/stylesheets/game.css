@@ -19,11 +19,11 @@
   --p0ActionTextColor: rgb(183, 183, 183);
   --p0PassiveTextColor: rgb(143, 143, 143);
   --p1ActionTextColor: rgb(237, 159, 177);
-  --p1PassiveTextColor: rgb(227, 145, 155);
+  --p1PassiveTextColor: rgb(209, 124, 134);
   --p2ActionTextColor: rgb(135, 193, 255);
   --p2PassiveTextColor: rgb(96, 165, 243);
 
-  --p0FontColor: rgb(200, 200, 200);
+  --p0FontColor: rgb(255, 255, 255);
   --p1FontColor: rgb(255, 189, 167);
   --p2FontColor: rgb(167, 223, 255);
   --p1CardAreaBGColor: rgba(72, 0, 0, 0.3);

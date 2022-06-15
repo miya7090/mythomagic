@@ -86,38 +86,6 @@ function mouseOutOfGrid(evt) {
     CURRENT_MOUSE_S = undefined;
 }
 
-function resetToActiveMode(){
-  changeGameModeTo("p1-active");
-  highlightSelfAndRadius("rangeHighlight", false, GAME_MODE_MEMORYTARGET.current_movement,
-  GAME_MODE_MEMORYTARGET.getQ(), GAME_MODE_MEMORYTARGET.getR(), GAME_MODE_MEMORYTARGET.getS());
-  GAME_MODE_MEMORYTARGET = undefined;
-}
-
-function toSelectAttackMode(){
-  changeGameModeTo("p1-attackSelect");
-  document.getElementById("passButton").disabled = false;
-  document.getElementById("autoButton").disabled = false;
-  if (GAME_MODE_MEMORYTARGET.current_mana >= ABILITY_MANA_REQ) {
-    document.getElementById("abilityButton").disabled = false;
-  }
-  if (GAME_MODE_MEMORYTARGET.current_mana >= MAX_MANA) {
-    document.getElementById("ultButton").disabled = false;
-  }
-}
-
-function transitionToMoveTokenMode(tokenOnTile){
-  changeGameModeTo("p1-moveToken");
-  GAME_MODE_MEMORYTARGET = tokenOnTile.pcardLink;
-  highlightSelfAndRadius("rangeHighlight", true, GAME_MODE_MEMORYTARGET.current_movement,
-    GAME_MODE_MEMORYTARGET.getQ(), GAME_MODE_MEMORYTARGET.getR(), GAME_MODE_MEMORYTARGET.getS());
-}
-
-function markTokenDefeated(tag) {
-  let hitTile = HEXTILE_CUBIC_INDEX[tag];
-  let tokenOnTile = hitTile.querySelector('.token');
-  tokenOnTile.setAttribute("isDefeated",true);
-}
-
 function mouseClickTile(evt) {
   // this should prepare to move token if in p1-active (1)
   // or move the token to this spot if in p1-moveToken (2)
@@ -330,12 +298,7 @@ function mouseClickAvailableCard(evt) {
       return;
     }
 
-    // avoid clicking on card children instead
-    var clickTarget = evt.target;
-    if (clickTarget.classList.contains("card") == false){
-      clickTarget = clickTarget.closest(".card");
-    }
-    const thisCardName = clickTarget.querySelector('.baseCardName').textContent;
+    const thisCardName = evt.target.querySelector('.baseCardName').textContent;
 
     if (onFieldCards.querySelector('#p1card-'+thisCardName) != null) { // search if card with that ID already selected to be played
         console.error(thisCardName+" card already picked");

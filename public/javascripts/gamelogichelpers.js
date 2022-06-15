@@ -19,6 +19,32 @@ function getTurn() {
   }
 }
 
+function resetToActiveMode(){
+  changeGameModeTo("p1-active");
+  highlightSelfAndRadius("rangeHighlight", false, GAME_MODE_MEMORYTARGET.current_movement,
+  GAME_MODE_MEMORYTARGET.getQ(), GAME_MODE_MEMORYTARGET.getR(), GAME_MODE_MEMORYTARGET.getS());
+  GAME_MODE_MEMORYTARGET = undefined;
+}
+
+function toSelectAttackMode(){
+  changeGameModeTo("p1-attackSelect");
+  document.getElementById("passButton").disabled = false;
+  document.getElementById("autoButton").disabled = false;
+  if (GAME_MODE_MEMORYTARGET.current_mana >= ABILITY_MANA_REQ) {
+    document.getElementById("abilityButton").disabled = false;
+  }
+  if (GAME_MODE_MEMORYTARGET.current_mana >= MAX_MANA) {
+    document.getElementById("ultButton").disabled = false;
+  }
+}
+
+function transitionToMoveTokenMode(tokenOnTile){
+  changeGameModeTo("p1-moveToken");
+  GAME_MODE_MEMORYTARGET = tokenOnTile.pcardLink;
+  highlightSelfAndRadius("rangeHighlight", true, GAME_MODE_MEMORYTARGET.current_movement,
+    GAME_MODE_MEMORYTARGET.getQ(), GAME_MODE_MEMORYTARGET.getR(), GAME_MODE_MEMORYTARGET.getS());
+}
+
 function giveAllTurnMana() {
   Object.keys(PLAYER_GAMECARD_OBJS).forEach(key => {
     const pcardTarget = PLAYER_GAMECARD_OBJS[key];
@@ -88,7 +114,6 @@ function calcDamage(atkType, attacker, target){ // atkType: 0=autoattack, 1=abil
   return dmg;
 }
 
-
 // retrieve base stats of a card, return array
 function getBaseStats(cardType) {
   if (BASE_STAT_DICT[cardType] == undefined){
@@ -116,18 +141,6 @@ function clearSelection(){
   } else {
     console.error("nothing to cancel with C");
   }
-}
-
-// #TODO change this up
-function savingThrow(savingThrowThreshold) {
-    // augmented by movement speed and defense
-    const mvmtOffset = (this.current_movement + this.movement_bonus) / MVMT_SPD_SCALE_TO_SAVE_THROW;
-    const defOffset = (this.current_defense + this.defense_bonus) / DEFENCE_SCALE_TO_SAVE_THROW;
-    var figBoost = 0;
-    if (this.is_figurine){
-        figBoost = FIGURINE_SAVING_THROW_FLAT_BOOST;
-    }
-    return (Math.floor(Math.random()*20) + mvmtOffset + defOffset + figBoost) > savingThrowThreshold;
 }
 
 // given coordinate list, keep only coordinates which are on board
