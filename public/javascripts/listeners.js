@@ -8,6 +8,7 @@ const clack5 = GITHUB_PUBLIC_PATH+'sounds/clack5.mp3'
 const clack6 = GITHUB_PUBLIC_PATH+'sounds/clack6.mp3'
 const boop = GITHUB_PUBLIC_PATH+'sounds/boop.mp3'
 const beep = GITHUB_PUBLIC_PATH+'sounds/beep.mp3'
+const turn = GITHUB_PUBLIC_PATH+'sounds/turn.mp3'
 const bgmSource = GITHUB_PUBLIC_PATH+'sounds/50 mulling.mp3';
 
 HIGHLIGHT_TILE_MEMORY_COLOR = getComputedStyle(document.documentElement).getPropertyValue('--highlightedTileMemory');
@@ -247,7 +248,7 @@ function startBgm(){
       this.currentTime = 0;
       this.play();
   }, false);
-  bgm.volume = 0.6;
+  bgm.volume = 0.5;
   bgm.play();
 }
 
@@ -266,6 +267,12 @@ function clockBoop(volume){
 
 function clockBeep(volume){
   let snd = new Audio(beep);
+  snd.volume = volume;
+  snd.play();
+}
+
+function soundNextTurn(volume){
+  let snd = new Audio(turn);
   snd.volume = volume;
   snd.play();
 }

@@ -2,6 +2,8 @@
 
 const MY_SOCKET = io(); // create new instance
 
+// #TODO get rid of figurine code
+
 document.addEventListener("DOMContentLoaded", () => {
   /* ui bgm set up */
   setTimeout(startBgm, 2000); // start music 2 secs in
@@ -43,6 +45,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   MY_SOCKET.on('yourTurn', (yourEnemysCards, yourEnemysVerOfYourCards)=>{
     changeGameModeTo("p1-active");
+    soundNextTurn(1.0);
     console.log("it's my turn!");
     console.log("opponent cards look like", yourEnemysCards);
 

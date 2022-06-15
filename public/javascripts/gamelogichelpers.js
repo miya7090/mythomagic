@@ -39,7 +39,7 @@ function abilityAttack(pcard, q, r, s){
     cS = GAME_MODE_MEMORYTARGET.getS();
   }
   GAME_MODE_MEMORYTARGET.current_mana -= ABILITY_MANA_REQ;
-  attack(1, pcard, cQ, cR, cS, GAME_MODE_MEMORYTARGET.ability_aim_aoe, undefined); //#TODO change from flat dmg
+  attack(1, pcard, cQ, cR, cS, GAME_MODE_MEMORYTARGET.ability_aim_aoe); //#TODO change from flat dmg
 }
 
 function ultimateAttack(pcard, q, r, s){
@@ -50,7 +50,7 @@ function ultimateAttack(pcard, q, r, s){
     cS = GAME_MODE_MEMORYTARGET.getS();
   }
   GAME_MODE_MEMORYTARGET.current_mana -= MAX_MANA;
-  attack(2, pcard, cQ, cR, cS, GAME_MODE_MEMORYTARGET.ult_aim_aoe, undefined); //#TODO change from flat dmg
+  attack(2, pcard, cQ, cR, cS, GAME_MODE_MEMORYTARGET.ult_aim_aoe); //#TODO change from flat dmg
 }
 
 function attack(atkType, attacker, centerQ, centerR, centerS, aoe) {

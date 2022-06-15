@@ -164,32 +164,46 @@ function createEnemyGameCardDiv(pcToRender) { //#TODO reduce redundant code ^
 
 function createTokenDiv(pcToRender) {
   const token = document.createElement("img");
-  token.src = GITHUB_PUBLIC_PATH + "images/tokens/blacktoken.png";
+  token.src = GITHUB_PUBLIC_PATH + "images/portraits/"+pcToRender.cardName.toLowerCase()+".png";
   token.classList.add("player1");
   token.classList.add("token");
   token.id = "p1token-" + pcToRender.cardName;
   token.pcardLink = pcToRender;
-  token.setAttribute("figurine",pcToRender.is_figurine);
   token.q = pcToRender.getQ(); // used ONLY for location initialization
+
+  token.addEventListener('mouseup', mouseClickToken);
 
   // place token on board
   HEXTILE_CUBIC_INDEX[pcToRender.tag].appendChild(token);
+  HEXTILE_CUBIC_INDEX[pcToRender.tag].setAttribute("hasP1Token", true);
 
-  token.addEventListener('mouseup', mouseClickToken);
+  // add tooltip with hero name to tile
+  const tooltip = document.createElement("div");
+  tooltip.classList.add("player1");
+  tooltip.classList.add("tokenNameTooltip");
+  tooltip.textContent = pcToRender.cardName;
+  HEXTILE_CUBIC_INDEX[pcToRender.tag].appendChild(tooltip);
 };
 
 function createEnemyTokenDiv(pcToRender) {
   const token = document.createElement("img");
-  token.src = GITHUB_PUBLIC_PATH + "images/tokens/whitetoken.png";
+  token.src = GITHUB_PUBLIC_PATH + "images/portraits/"+pcToRender.cardName.toLowerCase()+".png";
   token.classList.add("player2");
   token.classList.add("token");
   token.id = "p2token-" + pcToRender.cardName;
   token.pcardLink = pcToRender;
-  token.setAttribute("figurine",pcToRender.is_figurine);
   token.q = pcToRender.getQ(); // used for location initialization
 
   // place token on board
   HEXTILE_CUBIC_INDEX[pcToRender.tag].appendChild(token);
+  HEXTILE_CUBIC_INDEX[pcToRender.tag].setAttribute("hasP2Token", true);
+
+  // add tooltip with hero name to tile
+  const tooltip = document.createElement("div");
+  tooltip.classList.add("player2");
+  tooltip.classList.add("tokenNameTooltip");
+  tooltip.textContent = pcToRender.cardName;
+  HEXTILE_CUBIC_INDEX[pcToRender.tag].appendChild(tooltip);
 };
 
 function rerenderAllGamecardsAndTokens() {
@@ -199,8 +213,10 @@ function rerenderAllGamecardsAndTokens() {
   // SELF: remove and remake gamecards and tokens
   let myGCards = document.getElementsByClassName("player1 card");
   let myTokens = document.getElementsByClassName("player1 token");
+  let myTokenTooltips = document.getElementsByClassName("player1 tokenNameTooltip");
   while(myGCards.length > 0){ myGCards[0].remove(); }
   while(myTokens.length > 0){ myTokens[0].remove(); }
+  while(myTokenTooltips.length > 0){ myTokenTooltips[0].remove(); }
   PLAYER_GAMECARD_OBJS.forEach(newGCard => { // enemyCardReference
     createGameCardDiv(newGCard);
     createTokenDiv(newGCard);
@@ -209,8 +225,10 @@ function rerenderAllGamecardsAndTokens() {
   // ENEMY: remove and remake gamecards and tokens
   let enemyGCards = document.getElementsByClassName("player2 card");
   let enemyTokens = document.getElementsByClassName("player2 token");
+  let enemyTokenTooltips = document.getElementsByClassName("player2 tokenNameTooltip");
   while(enemyGCards.length > 0){ enemyGCards[0].remove(); }
   while(enemyTokens.length > 0){ enemyTokens[0].remove(); }
+  while(enemyTokenTooltips.length > 0){ enemyTokenTooltips[0].remove(); }
   
   ENEMY_GAMECARD_OBJS.forEach(newGCard => { // enemyCardReference
     newGCard.flipAcrossBoard();
@@ -242,7 +260,6 @@ function putBaseCardHTML(cardName, cardDiv) {
   bci1.classList.add("baseCardImg1");
   if (fontString != undefined) { bci1.classList.add(fontString); }
   bci1.src = GITHUB_PUBLIC_PATH + "images/portraits/"+cardName.toLowerCase()+".png";
-  console.log();
   bci1.alt = "card image";
   bcih.appendChild(bci1);
 
