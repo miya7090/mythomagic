@@ -13,6 +13,8 @@
 
 .token.player2 { filter: invert(89%) sepia(5%) saturate(6229%) hue-rotate(176deg) brightness(101%) contrast(101%); }
 
+.token[isDefeated=true] { filter: invert(0.0); }
+
 /* TOKEN TOOLTIP RULES */
 
 .tokenNameTooltip{

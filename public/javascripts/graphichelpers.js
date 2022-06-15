@@ -143,7 +143,6 @@ function createGameCardDiv(pcToRender) {
   ccard.classList.add("player1");
   ccard.classList.add("card");
   ccard.id = "p1card-"+pcToRender.cardName;
-  ccard.setAttribute("figurine",pcToRender.is_figurine);
   
   onFieldCards.appendChild(ccard);
 
@@ -158,7 +157,6 @@ function createEnemyGameCardDiv(pcToRender) { //#TODO reduce redundant code ^
   ccard.classList.add("card");
   ccard.id = "p2card-"+pcToRender.cardName;
   ccard.innerHTML = getGameCardHTML(pcToRender);
-  ccard.setAttribute("figurine",pcToRender.is_figurine);
   
   enemyCardReference.appendChild(ccard);
 
@@ -173,6 +171,7 @@ function createTokenDiv(pcToRender) {
   token.id = "p1token-" + pcToRender.cardName;
   token.pcardLink = pcToRender;
   token.q = pcToRender.getQ(); // used ONLY for location initialization
+  token.setAttribute("isDefeated", pcToRender.dead == "defeated");
 
   token.addEventListener('mouseup', mouseClickToken);
 
@@ -184,6 +183,7 @@ function createTokenDiv(pcToRender) {
   const tooltip = document.createElement("div");
   tooltip.classList.add("player1");
   tooltip.classList.add("tokenNameTooltip");
+  tooltip.id ="p1tooltip-" + pcToRender.cardName;
   tooltip.textContent = pcToRender.cardName;
   HEXTILE_CUBIC_INDEX[pcToRender.tag].parentNode.appendChild(tooltip);
 };
@@ -196,6 +196,7 @@ function createEnemyTokenDiv(pcToRender) {
   token.id = "p2token-" + pcToRender.cardName;
   token.pcardLink = pcToRender;
   token.q = pcToRender.getQ(); // used for location initialization
+  token.setAttribute("isDefeated", pcToRender.dead == "defeated");
 
   // place token on board
   HEXTILE_CUBIC_INDEX[pcToRender.tag].appendChild(token);
@@ -205,8 +206,9 @@ function createEnemyTokenDiv(pcToRender) {
   const tooltip = document.createElement("div");
   tooltip.classList.add("player2");
   tooltip.classList.add("tokenNameTooltip");
+  tooltip.id ="p2tooltip-" + pcToRender.cardName;
   tooltip.textContent = pcToRender.cardName;
-  HEXTILE_CUBIC_INDEX[pcToRender.tag].appendChild(tooltip);
+  HEXTILE_CUBIC_INDEX[pcToRender.tag].parentNode.appendChild(tooltip);
 };
 
 function rerenderAllGamecardsAndTokens() {

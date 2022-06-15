@@ -114,24 +114,32 @@ function importAllP2Cs(pcListObj){
       this.refreshTag();
     }
     giveTurnMana(){
-      this.current_mana += this.current_mana_per_turn;
-      if (this.current_mana >= MAX_MANA + this.mana_bonus) {
-        this.current_mana = MAX_MANA + this.mana_bonus;
+      if (this.dead != "defeated") {
+        this.current_mana += this.current_mana_per_turn;
+        if (this.current_mana >= MAX_MANA + this.mana_bonus) {
+          this.current_mana = MAX_MANA + this.mana_bonus;
+        }
       }
     }
     giveAttackMana(){
-      this.current_mana += this.current_mana_per_atk;
-      if (this.current_mana >= MAX_MANA + this.mana_bonus) {
-        this.current_mana = MAX_MANA + this.mana_bonus;
+      if (this.dead != "defeated") {
+        this.current_mana += this.current_mana_per_atk;
+        if (this.current_mana >= MAX_MANA + this.mana_bonus) {
+          this.current_mana = MAX_MANA + this.mana_bonus;
+        }
       }
     }
     takeDamage(flatNum){
-      this.current_health -= flatNum;
-      console.log(this.cardName, "took", flatNum, "damage");
-      if (this.current_health <= 0) {
-        this.current_health = 0;
-        this.dead = "defeated";
-        console.log(this.cardName, "has been defeated"); // #TODO change color, remove function of defeated card
+      if (this.dead != "defeated") {
+        this.current_health -= flatNum;
+        console.log(this.cardName, "took", flatNum, "damage");
+        if (this.current_health <= 0) {
+          this.current_health = 0;
+          this.current_mana = 0;
+          this.dead = "defeated";
+          markTokenDefeated(this.tag);
+          console.log(this.cardName, "has been defeated"); // #TODO change color, remove function of defeated card
+        }
       }
     }
     refreshTag(){

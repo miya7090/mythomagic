@@ -105,22 +105,27 @@ function transitionToMoveTokenMode(tokenOnTile){
     GAME_MODE_MEMORYTARGET.getQ(), GAME_MODE_MEMORYTARGET.getR(), GAME_MODE_MEMORYTARGET.getS());
 }
 
+function markTokenDefeated(tag) {
+  let hitTile = HEXTILE_CUBIC_INDEX[tag];
+  let tokenOnTile = hitTile.querySelector('.token');
+  tokenOnTile.setAttribute("isDefeated",true);
+}
+
 function mouseClickTile(evt) {
-  playSoundRandom([clack2, clack3], 0.9);
   // this should prepare to move token if in p1-active (1)
   // or move the token to this spot if in p1-moveToken (2)
   // or make an attack if in p1-abilityAim or p1-ultimateAim (3, 4)
 
   // find any token on the tile
-  var thisTile;
-  var tokenOnTile;
-  if (evt.target.classList.contains("token")){
-    thisTile = evt.target.parentNode;
-    tokenOnTile = evt.target;
-  } else {
-    thisTile = evt.target;
-    tokenOnTile = evt.target.querySelector('.token');
+  var thisTile = evt.target;
+  var tokenOnTile = evt.target.querySelector('.token');
+
+  if (tokenOnTile != undefined && tokenOnTile.pcardLink.dead == "defeated"){
+    console.log("this hero has already been defeated");
+    return;
   }
+
+  playSoundRandom([clack2, clack3], 0.9);
   var cQ = thisTile.cube_q;
   var cR = thisTile.cube_r;
   var cS = thisTile.cube_s;

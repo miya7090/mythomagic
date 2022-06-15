@@ -22,8 +22,8 @@
   --p2CardAreaBGColor: rgba(0, 24, 85, 0.3);
   --p1TooltipBGColor: rgba(100, 0, 0,0.7);
   --p2TooltipBGColor: rgba(9, 39, 114, 0.7);
-  --p1TokenColor: rgba(100, 0, 0,0.9);
-  --p2TokenColor: rgba(9, 39, 114, 0.9);
+  --p1TokenColor: rgba(86, 1, 1, 0.9);
+  --p2TokenColor: rgba(8, 46, 144, 0.9);
 }
 
 @font-face {

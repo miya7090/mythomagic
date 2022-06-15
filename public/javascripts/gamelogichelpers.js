@@ -126,6 +126,8 @@ function filterOnlyCoordinatesOnBoard(qrsList){
     tokenToRemove.parentNode.setAttribute("hasP1Token", false);
     tokenToRemove.parentNode.setAttribute("hasP2Token", false);
     tokenToRemove.remove();
+    const tooltipDiv = document.getElementById("p1tooltip-" + pcardOfThisToken.cardName);
+    tooltipDiv.remove();
     // move tokens to the right, left one space
     Object.keys(PLAYER_GAMECARD_OBJS).forEach(key => {
       const pcardOfOtherToken = PLAYER_GAMECARD_OBJS[key];
@@ -141,6 +143,8 @@ function filterOnlyCoordinatesOnBoard(qrsList){
     tokenDiv.parentNode.setAttribute("hasP1Token", false);
     tokenDiv.parentNode.setAttribute("hasP2Token", false);
     tokenDiv.remove();
+    const tooltipDiv = document.getElementById("p1tooltip-" + tokenPcard.cardName);
+    tooltipDiv.remove();
     if (absolute == true) {
       tokenPcard.changeLocationTo(diffQ, diffR);
     } else {
