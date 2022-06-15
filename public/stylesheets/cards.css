@@ -1,0 +1,105 @@
+/* CARD AREA RULES */
+
+.cards {
+    margin-top: 20px;
+    margin-left: 20px;
+    margin-right: 20px;
+    height: 120px;
+    background-color: rgba(146, 146, 146, 0.4);
+    border-radius: 5px;
+}
+
+#onFieldCards { background-color: var(--p1CardAreaBGColor); }
+#enemyCardReference { background-color: var(--p2CardAreaBGColor); }
+
+/* BASECARD AREA: EXTRA RULES */
+
+#myAvailableCards {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    overflow: overlay;
+}
+
+::-webkit-scrollbar { height: 8px; }
+::-webkit-scrollbar-track { background: rgba(0,0,0,0); }
+::-webkit-scrollbar-thumb { border-radius: 5px; background: rgba(255,255,255,0.2); }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.3); }
+
+/* CARD RULES */
+  
+.card {
+    flex: 0 0 auto;
+    float: left;
+    margin-top: 13px;
+    margin-left: 11px;
+    width: 60px;
+    height: 90px;
+
+    background-color: rgba(255, 255, 255, 0.5);
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 10px;
+    box-shadow: 0 0 1rem 0 rgba(0, 0, 0, 0.6);
+    overflow: hidden;
+    text-align: center;
+    color: rgba(0, 0, 0, 0.7);
+}
+
+/* BASECARD STYLING */
+
+.baseCardName{
+    pointer-events: none;
+    margin-top:5px;
+    margin-bottom:0px;
+}
+  
+.smallestFont{
+    margin-top: 7px;
+    font-size:10px;
+}
+  
+.smallFont{
+    margin-top: 6px;
+    font-size:12px;
+}
+
+.baseCardImgHolder{
+    pointer-events: none;
+    position: relative;
+}
+  
+.baseCardImg1{
+    position: absolute;
+    top:5px;
+    left:4px;
+    width: 85%;
+    filter: invert(1.0) blur(5px);
+}
+  
+.baseCardImg2{
+    margin-top:5px;
+    width: 85%;
+    opacity: 50%;
+}
+
+/* GAMECARD STYLING */
+
+.barPreviewContainer {
+    pointer-events: none;
+    width: 100%;
+    font-size: 11px;
+    background-color: #ddd;
+    opacity: 80%;
+}
+  
+.hpBar { background-color: #04AA6D; }
+.manaBar { background-color: #5e6bff; }
+
+/* CARD COLORING RULES */
+
+.card:hover { background-color: rgba(255, 255, 255, 0.7); }
+.card:hover p { opacity: 100%; color: black; }
+.card:hover .baseCardImg1 { opacity: 80%; }
+.card:hover .baseCardImg2 { opacity: 80%; }
+.card:hover .barPreviewContainer { opacity: 100%; }

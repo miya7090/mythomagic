@@ -1,0 +1,63 @@
+/* GRID RULES */
+
+.hexgrid {
+	display: flex;
+    --s: 25px;  /* size  */
+    --m: 2px;   /* margin */
+    --f: calc(1.732 * var(--s) + 4 * var(--m)  - 1px);
+}
+  
+.container {
+    font-size: 0; /*disable white space between inline block element */
+    width: 100%;
+}
+
+.gameSquare {
+    position: relative;
+    width: var(--s);
+    margin: var(--m);
+    height: calc(var(--s)*1.1547); 
+    display: inline-block;
+    font-size: initial;
+    margin-bottom: calc(var(--m) - var(--s)*0.2885);
+}
+  
+.gameSquare::before {
+    position: absolute;
+    content:"";
+    background-color: var(--normalTile);
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+    clip-path: polygon(0% 25%, 0% 75%, 50% 100%, 100% 75%, 100% 25%, 50% 0%);
+}
+
+.container::before {
+	content: "";
+	width: calc(var(--s)/2 + var(--m));
+	float: left;
+	height: 120%;
+	shape-outside: repeating-linear-gradient(     
+					 #0000 0 calc(var(--f) - 3px),      
+					 #000  0 var(--f));
+}
+
+/* TILE COLORING RULES */
+
+.gameSquare[hasP1Token = true]::before { background-color: var(--p1TokenColor); }
+.gameSquare[hasP2Token = true]::before { background-color: var(--p2TokenColor); }
+
+.gameSquare[rangeHighlight=true]::before { background-color: var(--rangeHighlightedTile); }
+.gameSquare[aimingReachHighlight=true]::before { background-color: var(--aimingReachHighlightedTile); }
+.gameSquare[hoverHighlight=true]::before { background-color: var(--highlightedTile); }
+
+.jungle::before { background-color: rgb(44, 103, 71); }
+.water::before { background-color: rgb(79, 92, 193); }
+.sand::before { background-color: rgb(203, 182, 124); }
+.obstacle::before { background-color: rgb(57, 57, 57); }
+
+.offgrid::before { background-color: var(--offgridTile); }
+.offgrid[rangeHighlight=true]::before { background-color: var(--rangeHighlightedOffgrid); }
+.offgrid[aimingReachHighlight=true]::before { background-color: var(--aimingReachHighlightedOffgrid); }
+.offgrid[hoverHighlight=true]::before { background-color: var(--highlightedOffgrid); }

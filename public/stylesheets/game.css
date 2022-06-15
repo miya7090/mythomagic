@@ -1,0 +1,172 @@
+:root {
+  --normalTile: rgba(54, 71, 253, 0.5);
+  --highlightedTile: rgba(93, 93, 255, 0.9);
+  --default_highlightedTile: rgba(93, 93, 255, 0.9);
+  --rangeHighlightedTile: rgba(127, 89, 157, 0.6);
+  --aimingReachHighlightedTile: rgba(54, 117, 108, 0.9);
+  --aimingHighlightedTile: rgba(34, 156, 152, 0.9);
+
+  --offgridTile: rgba(0, 0, 0, 0.4);
+  --highlightedOffgrid: rgba(0, 0, 0, 0.9);
+  --default_highlightedOffgrid: rgba(0, 0, 0, 0.9);
+  --rangeHighlightedOffgrid: rgba(60, 40, 81, 0.9);
+  --aimingReachHighlightedOffgrid: rgba(15, 38, 42, 0.8);
+  --aimingHighlightedOffgrid: rgba(15, 76, 75, 0.9);
+
+  --animAtkHit: rgba(0, 240, 240, 1.0);
+  --animAtkInRange: rgba(16, 204, 225, 0.9);
+
+  --p1FontColor: rgb(255, 189, 167);
+  --p2FontColor: rgb(167, 223, 255);
+  --p1CardAreaBGColor: rgba(72, 0, 0, 0.3);
+  --p2CardAreaBGColor: rgba(0, 24, 85, 0.3);
+  --p1TooltipBGColor: rgba(100, 0, 0,0.7);
+  --p2TooltipBGColor: rgba(9, 39, 114, 0.7);
+  --p1TokenColor: rgba(100, 0, 0,0.9);
+  --p2TokenColor: rgba(9, 39, 114, 0.9);
+}
+
+@font-face {
+  font-family: "regularFont";
+  src: url("../fonts/DalekPinpointBold.ttf");
+}
+
+/* GENERAL RULES */
+
+body {
+  margin: 20px;
+  
+  background: url("../images/forestbg.jpg") no-repeat center center fixed;
+  background-size: cover;
+  background-color: rgba(0,0,0,0.2);
+  background-blend-mode: darken;
+
+  font-family: "regularFont";
+  font-size: 14px;
+  color: rgb(255,255,255);
+}
+
+.player { display: flex; }
+.leftcolumn { width: 380px; }
+.rightcolumn {
+  margin-left: 10px;
+  width: calc(100% - 420px);
+}
+
+/* POWER BOX RULES */
+
+.powerbox {
+  margin-top: 20px;
+  margin-left: 5px;
+  margin-right: 10px;
+  height: 120px;
+  background-color: rgba(71, 67, 124, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: inset 1px 1px 2px 2px rgba(0,0,0,0.3);
+}
+
+.button {
+  background-color: rgba(0, 0, 0, 0.4); /* Green */
+  color: white;
+  padding: 5px 10px;
+  font-family: inherit;
+  font-size: 16px;
+}
+
+.button:hover {
+  background-color: rgba(255, 255, 255, 0.6);
+  color: rgba(0, 0, 0, 1.0);
+}
+
+.button:disabled {
+  background-color: rgba(0, 0, 0, 0.3);
+  color: rgba(255,255,255,0.1);
+}
+
+/* FOOTER RULES */
+
+.lowerPageText{
+  margin-top: 20px;
+  position:relative;
+}
+
+.lowerPageText p{
+  margin:0px;
+}
+
+#playerTurn {
+  color: rgb(211, 199, 255);
+  font-size: 18px;
+}
+
+#previewRadius {
+  font-size: 14px;
+}
+
+#previewRadiusInstructions {
+  color:gray;
+  font-size: 12px;
+}
+
+#mythomagicTitle{
+  position:absolute;
+  bottom:0;
+  right:8px;
+  margin:0px;
+  font-size: 40px;
+}
+
+/* INFO BOX RULES */
+
+#gameInfoBox {
+  font-family: Georgia;
+}
+
+.hoverInfo {
+  margin-top: 20px;
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-bottom: 20px;
+  height: 160px;
+}
+
+#hoverInfoTitle {
+  font-family: "regularFont";
+  font-size: medium;
+  color: var(--p1FontColor);
+  margin-left: 10px;
+  margin-bottom: 2px;
+}
+
+#hoverInfoTitle[p1=false] {
+  color: var(--p2FontColor);
+}
+
+#abilityTitle,#ultTitle {
+  color: rgb(135, 173, 255);
+}
+
+#passiveTitle {
+  color: rgb(96, 165, 243);
+}
+
+.hoverColWrap {
+  height:100px;
+}
+
+.hoverColumn {
+  float: left;
+  width: 33%;
+}
+
+.hoverInfo p {
+  margin-left: 10px;
+  margin-top: 2px;
+  margin-bottom: 2px;
+}
+
+.hoverColumn p {
+  margin-left: 10px;
+}
