@@ -25,6 +25,8 @@ head
       .hexgrid
         #hexContainer.container
       .powerbox
+        input#passButton.button(type='button' value='pass' onclick="passButtonClick()" disabled)
+        p &nbsp; &nbsp;
         input#autoButton.button(type='button' value='attack' onclick="autoButtonClick()" disabled)
         p &nbsp; &nbsp;
         input#abilityButton.button(type='button' value='ability' onclick="abilityButtonClick()" disabled)

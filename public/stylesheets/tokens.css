@@ -3,10 +3,10 @@
 .token {
     pointer-events: none; /* #TODO use this with other stuff as well for easier processing? */
     position:relative;
-    top: 3px;
-    left: 1px;
-    width: 23px;
-    height: 23px;
+    top: 4px;
+    left: 2px;
+    width: 21px;
+    height: 21px;
 }
 
 .token.player1 { filter: invert(72%) sepia(25%) saturate(1427%) hue-rotate(300deg) brightness(97%) contrast(102%); } /* https://codepen.io/sosuke/pen/Pjoqqp used to convert black to target color */

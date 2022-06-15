@@ -89,6 +89,7 @@ function resetToActiveMode(){
 
 function toSelectAttackMode(){
   changeGameModeTo("p1-attackSelect");
+  document.getElementById("passButton").disabled = false;
   document.getElementById("autoButton").disabled = false;
   if (GAME_MODE_MEMORYTARGET.current_mana >= ABILITY_MANA_REQ) {
     document.getElementById("abilityButton").disabled = false;
@@ -194,7 +195,18 @@ function attackComplete(){
   rerenderAllGamecardsAndTokens();
 }
 
+function passButtonClick(){
+  document.getElementById("passButton").disabled = true;
+  document.getElementById("autoButton").disabled = true;
+  document.getElementById("abilityButton").disabled = true;
+  document.getElementById("ultButton").disabled = true;
+  if (GAME_MODE == "p1-attackSelect"){
+    attackComplete();
+  }
+}
+
 function autoButtonClick(){
+  document.getElementById("passButton").disabled = true;
   document.getElementById("autoButton").disabled = true;
   document.getElementById("abilityButton").disabled = true;
   document.getElementById("ultButton").disabled = true;
@@ -206,6 +218,7 @@ function autoButtonClick(){
 }
 
 function abilityButtonClick(){
+  document.getElementById("passButton").disabled = true;
   document.getElementById("autoButton").disabled = true;
   document.getElementById("abilityButton").disabled = true;
   document.getElementById("ultButton").disabled = true;
@@ -223,6 +236,7 @@ function abilityButtonClick(){
 }
 
 function ultButtonClick(){
+  document.getElementById("passButton").disabled = true;
   document.getElementById("autoButton").disabled = true;
   document.getElementById("abilityButton").disabled = true;
   document.getElementById("ultButton").disabled = true;
