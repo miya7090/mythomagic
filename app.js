@@ -131,6 +131,33 @@ io.on("connection", socket => {
     let rivalId = rivalFinder[socket.id];
     io.to(rivalId).emit("yourTurn", yourEnemysJsons, yourEnemysVerOfYourJsons);
   });
+
+  socket.on("gameEnded_withTie", (p1Name, p1cardNames, p2Name, p2cardNames) => {
+    let rivalId = rivalFinder[socket.id];
+    io.to(socket.id).emit("gameTie");
+    io.to(rivalId).emit("gameTie");
+    kickOutFromLastRoom(socket.id);
+    kickOutFromLastRoom(rivalId);
+    console.log("tie", p1Name, p1cardNames, p2Name, p2cardNames);
+  });
+
+  socket.on("gameEnded_withMyWin", (p1Name, p1cardNames, p2Name, p2cardNames) => {
+    let rivalId = rivalFinder[socket.id];
+    io.to(socket.id).emit("gameWin");
+    io.to(rivalId).emit("gameLoss");
+    kickOutFromLastRoom(socket.id);
+    kickOutFromLastRoom(rivalId);
+    console.log("win", p1Name, p1cardNames, p2Name, p2cardNames);
+  });
+
+  socket.on("gameEnded_withEnemyWin", (p1Name, p1cardNames, p2Name, p2cardNames) => {
+    let rivalId = rivalFinder[socket.id];
+    io.to(socket.id).emit("gameLoss");
+    io.to(rivalId).emit("gameWin");
+    kickOutFromLastRoom(socket.id);
+    kickOutFromLastRoom(rivalId);
+    console.log("loss", p1Name, p1cardNames, p2Name, p2cardNames);
+  });
 });
 
 server.listen(PORT);

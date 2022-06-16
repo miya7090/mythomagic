@@ -163,13 +163,25 @@ function mouseClickTile(evt) {
 }
 
 function attackComplete(){
-  changeGameModeTo('p2-active');
   giveAllTurnMana(); // attack mana is given in autoattack
   passive_apollo();
   passive_kronos();
-  MY_SOCKET.emit("tellRival_yourTurn", exportAllP1Cs(false), exportAllP2Cs(true));
-  GAME_MODE_MEMORYTARGET = undefined;
-  rerenderAllGamecardsAndTokens();
+
+  let gameOver = checkGameOver();
+  if (gameOver == "ongoing"){
+    changeGameModeTo('p2-active');
+    MY_SOCKET.emit("tellRival_yourTurn", exportAllP1Cs(false), exportAllP2Cs(true));
+    GAME_MODE_MEMORYTARGET = undefined;
+    rerenderAllGamecardsAndTokens();
+  } else if (gameOver == "tie") {
+    MY_SOCKET.emit("gameEnded_withTie", SELF_NAME, getPCNames(PLAYER_GAMECARD_OBJS), OTHER_NAME, getPCNames(ENEMY_GAMECARD_OBJS));
+  } else if (gameOver == "p1win") {
+    MY_SOCKET.emit("gameEnded_withMyWin", SELF_NAME, getPCNames(PLAYER_GAMECARD_OBJS), OTHER_NAME, getPCNames(ENEMY_GAMECARD_OBJS));
+  } else if (gameOver == "p2win") {
+    MY_SOCKET.emit("gameEnded_withEnemyWin", SELF_NAME, getPCNames(PLAYER_GAMECARD_OBJS), OTHER_NAME, getPCNames(ENEMY_GAMECARD_OBJS));
+  } else {
+    console.error("gameOver issue", gameOver);
+  }  
 }
 
 function passButtonClick(){

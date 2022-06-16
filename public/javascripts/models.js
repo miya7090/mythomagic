@@ -39,6 +39,20 @@ function exportPC(pcard){
   };
 }
 
+function getPCNames(pcArray){
+  if (pcArray.length == 1){
+    return pcArray[0].cardName;
+  } else if (pcArray.length == 2){
+    return pcArray[0].cardName + " and " + pcArray[1].cardName;
+  } else {
+    var ans = "";
+    for(let i = 0; i < pcArray.length - 1; i++){
+      ans += pcArray[i].cardName + ", "
+    }
+    ans += "and " + pcArray[pcArray.length - 1].cardName;
+  }
+}
+
 function exportAllP1Cs(withflip){
   let ans = [];
   PLAYER_GAMECARD_OBJS.forEach(pc => {

@@ -164,6 +164,27 @@ function clearSelection(){
   }
 }
 
+function checkGameOver(){
+  var okP1 = false;
+  var okP2 = false;
+  PLAYER_GAMECARD_OBJS.forEach(pc => {
+    if (pc.dead != "defeated") { okP1 = true; }
+  });
+  ENEMY_GAMECARD_OBJS.forEach(pc => {
+    if (pc.dead != "defeated") { okP2 = true; }
+  });
+  if (okP1 == false && okP2 == false){
+    return "tie";
+  }
+  if (okP1 == false){
+    return "p2win";
+  }
+  if (okP2 == false){
+    return "p1win";
+  }
+  return "ongoing";
+}
+
 // given coordinate list, keep only coordinates which are on board
 function filterOnlyCoordinatesOnBoard(qrsList){
     var results = [];

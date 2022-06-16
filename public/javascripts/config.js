@@ -2,6 +2,7 @@
 
 MY_SOCKET = undefined;
 OPPONENT_SOCKET_ID = undefined;
+SELF_NAME = undefined;
 OTHER_NAME = undefined;
 
 GITHUB_PUBLIC_PATH = "https://raw.githubusercontent.com/miya7090/mythomagic/main/public/";

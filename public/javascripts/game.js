@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
   /* get url parameters */
   const urlParams = new URLSearchParams(window.location.search);
   const roomCode = urlParams.get('room');
-  const selfName = urlParams.get('self');
+  SELF_NAME = urlParams.get('self');
   OTHER_NAME = urlParams.get('other');
 
   /* socket stuff */
@@ -40,6 +40,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
   MY_SOCKET.on('forfeit', (reason)=>{
     alert("you have forfeited the game ("+reason+")");
+    window.location.href = "/";
+  });
+
+  MY_SOCKET.on('gameTie', ()=>{
+    alert("game over: you have tied with "+OTHER_NAME);
+    window.location.href = "/";
+  });
+
+  MY_SOCKET.on('gameWin', ()=>{
+    alert("congrats! you defeated "+OTHER_NAME+"!");
+    window.location.href = "/";
+  });
+
+  MY_SOCKET.on('gameLoss', ()=>{
+    alert(OTHER_NAME+" has won the game");
     window.location.href = "/";
   });
 
@@ -71,7 +86,7 @@ document.addEventListener("DOMContentLoaded", () => {
     rerenderAllGamecardsAndTokens();
   });
 
-  ///////////////////////////// JOIN ROOM????????????????????????
+  /////////////////////////////
 
   const mainGrid = document.getElementById("hexContainer");
   const onFieldCards = document.getElementById("onFieldCards");
