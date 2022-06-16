@@ -116,8 +116,26 @@ function importAllP2Cs(pcListObj){
     getMaxHealth(){
       return this.base_health + this.health_bonus;
     }
+    setMaxHealthTo(fn){
+      let flatNum = Math.round(fn);
+      if (this.dead != "defeated") {
+        this.health_bonus = -(this.base_health - flatNum);
+        if (this.current_health > flatNum){
+          this.current_health = flatNum;
+        }
+      }
+    }
     getMaxMana(){
       return MAX_MANA + this.mana_bonus;
+    }
+    setMaxManaTo(fn){
+      let flatNum = Math.round(fn);
+      if (this.dead != "defeated") {
+        this.mana_bonus = -(this.base_mana - flatNum);
+        if (this.current_mana > flatNum){
+          this.current_mana = flatNum;
+        }
+      }
     }
     clearStatuses() {
       this.statuses = {"charmed":0, "distracted":0, "poisoned":0, "stunned":0, "terrified":0, "obscured":0};

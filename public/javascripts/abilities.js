@@ -1,20 +1,20 @@
 const ABILITY_MAP = {
-    "Athena":[ability_athena,0], // 0 = ally friendly, 1 = attacks enemy, 2 = all valid, 3= no target provided
+    "Athena":[ability_athena,0], // 0 = ally friendly, 1 = attacks enemy, 2 = all valid, 3 = no target provided
     "Apollo":undefined, "Achilles":[ability_achilles,1],
     "Medea":[ability_medea,1], "Poseidon":undefined,
-    "Thanatos":undefined, "Hestia":undefined,
-    "Kronos":undefined, "Perseus":undefined,
-    "Hera":undefined, "Hermes":undefined,
-    "Heracles":undefined};
+    "Thanatos":undefined, "Hestia":[ability_hestia,0],
+    "Kronos":undefined, "Perseus":[ability_perseus,1],
+    "Hera":undefined, "Hermes":[ability_hermes,2],
+    "Heracles":[ability_heracles,1]};
 
 const ULT_MAP = {
     "Athena":[ult_athena,1],
     "Apollo":[ult_apollo,3], "Achilles":[ult_achilles,3],
-    "Medea":[ult_medea,0], "Poseidon":undefined,
-    "Thanatos":undefined, "Hestia":undefined,
-    "Kronos":undefined, "Perseus":undefined,
-    "Hera":undefined, "Hermes":undefined,
-    "Heracles":undefined};
+    "Medea":[ult_medea,0], "Poseidon":[ult_poseidon,1],
+    "Thanatos":[ult_thanatos,3], "Hestia":[ult_hestia,0],
+    "Kronos":undefined, "Perseus":[ult_perseus,3],
+    "Hera":[ult_hera,1], "Hermes":[ult_hermes,3],
+    "Heracles":[ult_heracles,3]};
 
 function doUniqueSkill(atkType, attacker, target, targetIsOpponent) { // atkType 1=ability, 2=ultimate
     let map = ABILITY_MAP;
@@ -72,4 +72,127 @@ function ult_medea(attacker, target) {
     attacker.current_attack += target.current_attack;
     attacker.current_defense += target.current_defense;
     attacker.current_movement += target.current_movement;
+}
+
+function ult_poseidon(attacker, target) {
+    target.takeDamage(300);
+}
+
+function ult_thanatos(attacker, target) {
+    ENEMY_GAMECARD_OBJS.forEach(pc => {
+        if (pc.current_health < 100) {
+            pc.takeDamage(100);
+        }
+    });
+}
+
+function ability_hestia(attacker, target) {
+    target.heal(300);
+}
+
+function ult_hestia(attacker, target) {
+    target.health_bonus += 200;
+    target.heal(300);
+}
+
+function ability_perseus(attacker, target) {
+    var effectiveAttack = attacker.current_attack;
+    var effectiveDefense = target.base_defense;
+    if (target.statuses["distracted" == 1]) { effectiveDefense -= (0.1 * target.current_defense); }
+    if (target.statuses["charmed" == 1]) { effectiveDefense = 1; }
+    if (effectiveAttack < 0) { effectiveAttack = 0; }
+    if (effectiveDefense < 1) { effectiveDefense = 1; }
+    let dmg = effectiveAttack / effectiveDefense;
+    
+    let memHB = target.health_bonus;
+    target.health_bonus = 0;
+    target.takeDamage(dmg);
+    if (target.dead != "defeated") {
+        target.health_bonus = memHB;
+    }
+}
+
+function ult_perseus(attacker, target) {
+    attacker.current_attack += Math.round(0.2 * attacker.current_attack);
+    attacker.current_defense += Math.round(0.2 * attacker.current_defense);
+    attacker.current_movement += 1;
+}
+
+function ult_hera(attacker, target) {
+    target.setMaxHealthTo(100);
+}
+
+function ability_heracles(attacker, target) {
+    let dmg = calcDamage(attacker, target);
+    target.takeDamage(1.5 * dmg);
+}
+
+function ult_heracles(attacker, target) {
+    PLAYER_GAMECARD_OBJS.forEach(pc => {
+        if (pc.current_mana == 0) {
+            pc.giveMana(0.5 * pc.getMaxMana());
+        }
+    });
+}
+
+function ult_hermes(attacker, target) {
+    const randomPC = PLAYER_GAMECARD_OBJS[Math.floor(Math.random() * PLAYER_GAMECARD_OBJS.length)];
+    let mult = 3;
+    if (coinFlip()) {
+        mult = 0.5;
+    }
+    randomPC.current_attack = Math.round(mult * randomPC.current_attack);
+    randomPC.current_normal_attack_range = Math.round(mult * randomPC.current_normal_attack_range);
+    if (randomPC.current_normal_attack_range < 1) {randomPC.current_normal_attack_range = 1; }
+    randomPC.current_defense = Math.round(mult * randomPC.current_defense);
+    if (randomPC.current_defense < 1) {randomPC.current_defense = 1; }
+    randomPC.current_mana_per_turn = Math.round(mult * randomPC.current_mana_per_turn);
+    randomPC.current_mana_per_atk = Math.round(mult * randomPC.current_mana_per_atk);
+    randomPC.current_movement = Math.round(mult * randomPC.current_movement);
+    if (randomPC.current_movement < 1) {randomPC.current_movement = 1; }
+    randomPC.setMaxHealthTo(mult * randomPC.getMaxHealth());
+    randomPC.setMaxManaTo(mult * randomPC.getMaxMana());
+}
+
+function ability_hermes(attacker, target) { // #TODO add more outputting of what happens in abilities, add aesthetic notifications
+    if (attacker.current_attack < target.current_attack && coinFlip()) {
+        let ACA = attacker.current_attack;
+        attacker.current_attack = target.current_attack;
+        target.current_attack = ACA;
+    }
+    if (attacker.current_normal_attack_range < target.current_normal_attack_range && coinFlip()) {
+        let ACNAR = attacker.current_normal_attack_range;
+        attacker.current_normal_attack_range = target.current_normal_attack_range;
+        target.current_normal_attack_range = ACNAR;
+    }
+    if (attacker.current_defense < target.current_defense && coinFlip()) {
+        let ACD = attacker.current_defense;
+        attacker.current_defense = target.current_defense;
+        target.current_defense = ACD;
+    }
+    if (attacker.current_mana_per_turn < target.current_mana_per_turn && coinFlip()) {
+        let ACMPT = attacker.current_mana_per_turn;
+        attacker.current_mana_per_turn = target.current_mana_per_turn;
+        target.current_mana_per_turn = ACMPT;
+    }
+    if (attacker.current_mana_per_atk < target.current_mana_per_atk && coinFlip()) {
+        let ACMPA = attacker.current_mana_per_atk;
+        attacker.current_mana_per_atk = target.current_mana_per_atk;
+        target.current_mana_per_atk = ACMPA;
+    }
+    if (attacker.current_movement < target.current_movement && coinFlip()) {
+        let ACM = attacker.current_movement;
+        attacker.current_movement = target.current_movement;
+        target.current_movement = ACM;
+    }
+    if (attacker.getMaxHealth() < target.getMaxHealth() && coinFlip()) {
+        let AMH = attacker.getMaxHealth();
+        attacker.setMaxHealthTo(target.getMaxHealth());
+        target.setMaxHealthTo(AMH);
+    }
+    if (attacker.getMaxMana() < target.getMaxMana && coinFlip()) {
+        let AMM = attacker.getMaxMana();
+        attacker.setMaxManaTo(target.getMaxMana());
+        target.setMaxManaTo(AMM);
+    }
 }

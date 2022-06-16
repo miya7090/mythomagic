@@ -27,3 +27,7 @@ function getReflectedCoordinate(q, r, s){
 function rand(low, high){
   return (Math.random() * (high - low) + low);
 }
+
+function coinFlip(){
+  return (Math.floor(Math.random() * 2) == 0);
+}

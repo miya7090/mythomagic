@@ -34,7 +34,7 @@ GAME_MODE_MEMORYTARGET = undefined; // used if moving tokens, etc
 const BASE_STAT_DICT = {
     // name, base atk, normal atk range, defense, hp, mana per turn, mana per attack, mvt speed
     // ability aimed/range, ult aimed/range
-    "Athena":[3000,2,15,700,100,100,2, 3,1,5,1,
+    "Athena":[30000,2,15,700,100,100,2, 3,1,5,8,
       "Aegis","Target gains 10 defense, clears statuses",
       "Deliberate Strike","700 true damage to one target",
       "Well-Prepared","Player cards start game with +100 mana"], 

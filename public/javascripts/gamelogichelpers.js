@@ -92,7 +92,7 @@ function attack(atkType, attacker, centerQ, centerR, centerS, aoe) {
         let dmg = calcDamage(attacker, tokenOnTile.pcardLink);
         tokenOnTile.pcardLink.takeDamage(dmg);
         anim_tileHitByAttack(hitTile); // #TODO add sound
-      } else {
+      } else { // #TODO avoid attacking defeated cards
         let animCode = doUniqueSkill(atkType, attacker, tokenOnTile.pcardLink, targetIsOpponent);
         if (animCode == 0) { // do animation
           anim_tileHitByHeal(hitTile);
