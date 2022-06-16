@@ -24,15 +24,6 @@ function passive_apollo(){ // run by player1 at the end of the turn
             pc.takeDamage(30);
         });
     }
-    if (hasEnemyCard("Apollo")) {
-        broadcastMsg("passive", false, "Apollo", "targets");
-        ENEMY_GAMECARD_OBJS.forEach(pc => {
-            pc.heal(30);
-        });
-        PLAYER_GAMECARD_OBJS.forEach(pc => {
-            pc.takeDamage(30);
-        });
-    }
 }
 
 function passive_achilles_onAlly(){ // run when ally card is defeated
@@ -106,12 +97,6 @@ function passive_kronos(){ // run by player1 at the end of the turn
     if (hasAllyCard("Kronos")) {
         broadcastMsg("passive", true, "Kronos", undefined);
         let mc = getAllyCard("Kronos");
-        mc.current_attack += 150;
-        mc.current_defense += 2;
-    }
-    if (hasEnemyCard("Kronos")) {
-        broadcastMsg("passive", false, "Kronos", undefined);
-        let mc = getEnemyCard("Kronos");
         mc.current_attack += 150;
         mc.current_defense += 2;
     }

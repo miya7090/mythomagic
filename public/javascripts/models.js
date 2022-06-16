@@ -120,6 +120,7 @@ function importAllP2Cs(pcListObj){
       if (this.blessings[blessName] == false) {
         this.blessings[blessName] = true;
         if (blessName == "Hestia"){
+          console.log("adding hestia blessing to",this);
           blessing_hestia(true, this);
         } else {
           console.error("blessing code missing for",blessName);
@@ -130,6 +131,7 @@ function importAllP2Cs(pcListObj){
       if (this.blessings[blessName] == true) {
         this.blessings[blessName] = false;
         if (blessName == "Hestia"){
+          console.log("removing hestia blessing for",this);
           blessing_hestia(false, this);
         } else {
           console.error("blessing code missing for",blessName);
@@ -155,8 +157,8 @@ function importAllP2Cs(pcListObj){
       let flatNum = Math.round(fn);
       if (this.dead != "defeated") {
         this.health_bonus += flatNum;
-        if (this.current_health > flatNum){
-          this.current_health = flatNum;
+        if (this.current_health > this.getMaxHealth()){
+          this.current_health = this.getMaxHealth();
         }
         if (this.current_health < 0){
           this.current_health = 0;
@@ -219,7 +221,7 @@ function importAllP2Cs(pcListObj){
       }
       if (this.dead != "defeated") {
         if (flatNum / this.current_health > 0.5) { // lost >50% HP in this attack
-          if (this.p1){ passive_thanatos_onAlly(); } else { passive_thanatos_onEnemy(); }
+          if (this.p1){ passive_thanatos_onAlly(this); } else { passive_thanatos_onEnemy(this); }
         }
         this.current_health -= Math.round(flatNum);
         console.log(this.cardName, "took", flatNum, "damage");

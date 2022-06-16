@@ -132,6 +132,7 @@ function mouseClickTile(evt) {
     highlightSelfAndRadius("rangeHighlight", false, GAME_MODE_MEMORYTARGET.current_movement,
     GAME_MODE_MEMORYTARGET.getQ(), GAME_MODE_MEMORYTARGET.getR(), GAME_MODE_MEMORYTARGET.getS());
     moveToken(GAME_MODE_MEMORYTARGET, true, cQ, cR);
+    passive_hestia();
     toSelectAttackMode();
 
   } else if (GAME_MODE == "p1-abilityAim") {  ///// (3) p1-abilityAim

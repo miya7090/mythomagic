@@ -80,34 +80,40 @@ function ultimateAttack(pcard, q, r, s){
 }
 
 function attack(atkType, attacker, centerQ, centerR, centerS, aoe) {
-  let coordTagsInRangeAll = getCoordinatesWithinRadius(centerQ, centerR, centerS, aoe, false);
-  const coordTagsInRange = filterOnlyCoordinatesOnBoard(coordTagsInRangeAll);
-  coordTagsInRange.forEach(hitTag => {
-    let hitTile = HEXTILE_CUBIC_INDEX[hitTag];
-    let tokenOnTile = hitTile.querySelector('.token');
-    if (tokenOnTile != undefined) {
-      // found a valid target
-      let targetIsOpponent = tokenOnTile.classList.contains("player2");
-      if (atkType == 0){
-        if (targetIsOpponent == true) {
-          let dmg = calcDamage(attacker, tokenOnTile.pcardLink); // autoattack
-          tokenOnTile.pcardLink.takeDamage(dmg);
-          anim_tileHitByAttack(hitTile); // #TODO add sound
+  if (aoe == undefined && atkType != 0){ // needs no target
+    console.log("doing action without aoe",atkType, attacker, centerQ, centerR, centerS, aoe);
+    let animCode = doUniqueSkill(atkType, attacker, undefined, undefined);
+  } else { // needs target
+    console.log("doing action with aoe",atkType, attacker, centerQ, centerR, centerS, aoe);
+    let coordTagsInRangeAll = getCoordinatesWithinRadius(centerQ, centerR, centerS, aoe, false);
+    const coordTagsInRange = filterOnlyCoordinatesOnBoard(coordTagsInRangeAll);
+    coordTagsInRange.forEach(hitTag => {
+      let hitTile = HEXTILE_CUBIC_INDEX[hitTag];
+      let tokenOnTile = hitTile.querySelector('.token');
+      if (tokenOnTile != undefined) {
+        // found a valid target
+        let targetIsOpponent = tokenOnTile.classList.contains("player2");
+        if (atkType == 0){
+          if (targetIsOpponent == true) {
+            let dmg = calcDamage(attacker, tokenOnTile.pcardLink); // autoattack
+            tokenOnTile.pcardLink.takeDamage(dmg);
+            anim_tileHitByAttack(hitTile); // #TODO add sound
+          }
+        } else { // #TODO avoid attacking defeated cards?
+          let animCode = doUniqueSkill(atkType, attacker, tokenOnTile.pcardLink, targetIsOpponent);
+          if (animCode == 0) { // do animation
+            anim_tileHitByHeal(hitTile);
+          } else if (animCode == 1) {
+            anim_tileHitByAttack(hitTile);
+          } else {
+            console.error("need to implement anim for neutral skill");
+          }
         }
-      } else { // #TODO avoid attacking defeated cards
-        let animCode = doUniqueSkill(atkType, attacker, tokenOnTile.pcardLink, targetIsOpponent);
-        if (animCode == 0) { // do animation
-          anim_tileHitByHeal(hitTile);
-        } else if (animCode == 1) {
-          anim_tileHitByAttack(hitTile);
-        } else {
-          console.error("need to implement anim for neutral skill");
-        }
+      } else { // no hit
+        anim_tileInAttackRange(hitTile);
       }
-    } else { // no hit
-      anim_tileInAttackRange(hitTile);
-    }
-  });
+    });
+  }
 }
 
 function calcDamage(attacker, target){

@@ -4,7 +4,7 @@ const ABILITY_MAP = {
     "Medea":[ability_medea,1], "Poseidon":undefined,
     "Thanatos":undefined, "Hestia":[ability_hestia,0],
     "Kronos":undefined, "Perseus":[ability_perseus,1],
-    "Hera":undefined, "Hermes":[ability_hermes,2],
+    "Hera":[ability_hera,0], "Hermes":[ability_hermes,2],
     "Heracles":[ability_heracles,1]};
 
 const ULT_MAP = {
@@ -34,7 +34,7 @@ function doUniqueSkill(atkType, attacker, target, targetIsOpponent) { // atkType
 }
 
 function ability_athena(attacker, target) {
-    broadcastMsg("ability", true, "Athena", undefined);
+    broadcastMsg("ability", true, "Athena", target.cardName);
     target.current_defense += 10;
     target.clearStatuses();
 }
@@ -129,6 +129,13 @@ function ult_perseus(attacker, target) {
     attacker.current_attack += Math.round(0.2 * attacker.current_attack);
     attacker.current_defense += Math.round(0.2 * attacker.current_defense);
     attacker.current_movement += 1;
+}
+
+function ability_hera(attacker, target) {
+    broadcastMsg("ability", true, "Hera", target.cardName);
+    target.current_defense += 10;
+    target.heal(100);
+    target.giveMana(100);
 }
 
 function ult_hera(attacker, target) {
