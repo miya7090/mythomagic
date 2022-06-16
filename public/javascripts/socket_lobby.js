@@ -23,6 +23,8 @@ document.addEventListener("DOMContentLoaded", () => {
   lJoinButton.addEventListener("click", ()=>{
     if (nicknameDiv.value.length == 0){
       regionNotesText.textContent = "please enter a nickname first";
+      nicknameDiv.focus();
+      nicknameDiv.select();
     } else {
       const regionDiv = document.getElementById("region");
       socket.emit("lobbyJoin", nicknameDiv.value, regionDiv.value);

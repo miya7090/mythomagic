@@ -30,6 +30,8 @@ function doUniqueSkill(atkType, attacker, target, targetIsOpponent) { // atkType
             skillFunc(attacker, target);
             return map[attacker.cardName][1]; // return how to highlight the tile
         }
+    } else {
+        console.error("action not defined yet");
     }
 }
 

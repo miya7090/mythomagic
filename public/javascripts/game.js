@@ -69,6 +69,7 @@ document.addEventListener("DOMContentLoaded", () => {
       importAllP1Cs(yourEnemysVerOfYourCards);
     }
     passive_hestia();
+    poisonThePoisoned();
 
     rerenderAllGamecardsAndTokens();
   });

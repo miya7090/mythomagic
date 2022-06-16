@@ -167,6 +167,7 @@ function createGameCardDiv(pcToRender) {
   ccard.classList.add("card");
   ccard.id = "p1card-"+pcToRender.cardName;
   
+  addGameCardStatusesOnDiv(pcToRender, ccard);
   onFieldCards.appendChild(ccard);
 
   ccard.addEventListener('mouseenter', function(evt){mouseOverGameCard(evt, pcToRender);});
@@ -181,6 +182,7 @@ function createEnemyGameCardDiv(pcToRender) { //#TODO reduce redundant code ^
   ccard.id = "p2card-"+pcToRender.cardName;
   ccard.innerHTML = getGameCardHTML(pcToRender);
   
+  addGameCardStatusesOnDiv(pcToRender, ccard);
   enemyCardReference.appendChild(ccard);
 
   ccard.addEventListener('mouseenter', function(evt){mouseOverGameCard(evt, pcToRender);});
@@ -330,9 +332,30 @@ function getGameCardHTML(PCard) {
               +PCard.current_mana+'/'+PCard.getMaxMana()+'</div>'
               +'</div>';
 
-  //this.statuses = {"blinded":0, "charmed":0, "poisoned":0, "stunned":0, "terrified":0};
-
   return pcResult;
+}
+
+function addGameCardStatusesOnDiv(PCard, PCardDiv){
+  let statusIconWrap = document.createElement("div");
+  statusIconWrap.classList.add("statIconWrap");
+
+  for (var status of Object.keys(PCard.statuses)) {
+    if (PCard.statuses[status] != 0){ // has status
+      // add icon for status
+      let statusIcon = document.createElement("img");
+      statusIcon.classList.add("statIcon");
+      statusIcon.src = GITHUB_PUBLIC_PATH + "images/statuses/"+status+".png";
+      statusIconWrap.appendChild(statusIcon);
+      
+      // add tooltip for icon
+      let tooltip = document.createElement("div");
+      tooltip.classList.add("statusTooltip");
+      tooltip.textContent = status;
+      statusIcon.appendChild(tooltip);
+    }
+  }
+
+  PCardDiv.appendChild(statusIconWrap);
 }
 
 function get_BC_BroadcastForInfoBox(BCard) {

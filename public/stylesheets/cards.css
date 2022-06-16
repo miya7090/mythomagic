@@ -96,6 +96,40 @@
 .hpBar { background-color: #04AA6D; }
 .manaBar { background-color: #5e6bff; }
 
+.statIconWrap {
+    pointer-events: none;
+    margin-top: 4px;
+}
+
+.statIcon {
+    position: relative;
+    float: left;
+    margin: 0px;
+    width: 14px;
+    height: 14px;
+}
+
+.statIconTooltip {
+    visibility: hidden;
+    position: absolute;
+    top: 22px;
+    left: 17px;
+  
+    font-size: 12px;
+    text-align: center;
+    padding: 1px 5px;
+    border-radius: 6px;
+  
+    z-index: 10;
+
+    color: black;
+    background-color: rgba(255,255,255,0.5);
+}
+  
+.statIcon:hover .statIconTooltip {
+    visibility: visible;
+}
+
 /* CARD COLORING RULES */
 
 .card:hover { background-color: rgba(255, 255, 255, 0.7); }

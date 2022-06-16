@@ -52,6 +52,16 @@ function giveAllTurnMana() {
   });
 }
 
+function poisonThePoisoned(){
+  PLAYER_GAMECARD_OBJS.forEach(pc => {
+    if (pc.statuses["poisoned"] == 1){
+      let poisonDmg = Math.round(500 / pc.current_defense);
+      console.log(pc.cardName,"takes", poisonDmg, "poison damage");
+      pc.takeDamage(poisonDmg);
+    }
+  });
+}
+
 function autoattack(pcard){
   attack(0, pcard, pcard.getQ(), pcard.getR(), pcard.getS(), pcard.current_normal_attack_range);
   GAME_MODE_MEMORYTARGET.giveAttackMana();
@@ -85,13 +95,15 @@ function attack(atkType, attacker, centerQ, centerR, centerS, aoe) {
     let animCode = doUniqueSkill(atkType, attacker, undefined, undefined);
   } else { // needs target
     console.log("doing action with aoe",atkType, attacker, centerQ, centerR, centerS, aoe);
-    let coordTagsInRangeAll = getCoordinatesWithinRadius(centerQ, centerR, centerS, aoe, false);
+    let coordTagsInRangeAll = getCoordinatesWithinRadius(centerQ, centerR, centerS, aoe, true);
     const coordTagsInRange = filterOnlyCoordinatesOnBoard(coordTagsInRangeAll);
+    console.log(coordTagsInRange,"xxx",coordTagsInRangeAll);
     coordTagsInRange.forEach(hitTag => {
       let hitTile = HEXTILE_CUBIC_INDEX[hitTag];
       let tokenOnTile = hitTile.querySelector('.token');
       if (tokenOnTile != undefined) {
         // found a valid target
+        console.log("intersected target", tokenOnTile.pcardLink.cardName);
         let targetIsOpponent = tokenOnTile.classList.contains("player2");
         if (atkType == 0){
           if (targetIsOpponent == true) {
