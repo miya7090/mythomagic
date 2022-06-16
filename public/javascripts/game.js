@@ -53,6 +53,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (yourEnemysVerOfYourCards != undefined){
       importAllP1Cs(yourEnemysVerOfYourCards);
     }
+    passive_hestia();
 
     rerenderAllGamecardsAndTokens();
   });

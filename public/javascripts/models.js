@@ -35,7 +35,7 @@ function exportPC(pcard){
     "cd": pcard.current_defense, "ch": pcard.current_health, "cm": pcard.current_mana,
     "cmpt": pcard.current_mana_per_turn, "cmpa": pcard.current_mana_per_atk,
     "m": pcard.current_movement, "d": pcard.dead, "hb": pcard.health_bonus, "mb": pcard.mana_bonus,
-    "if": pcard.is_figurine, "s": pcard.statuses, "qq": pcard.getQ(), "rr": pcard.getR(), "ss": pcard.getS() // #TODO compress this?
+    "if": pcard.is_figurine, "s": pcard.statuses, "b": pcard.blessings, "qq": pcard.getQ(), "rr": pcard.getR(), "ss": pcard.getS() // #TODO compress this?
   };
 }
 
@@ -63,34 +63,35 @@ function exportAllP2Cs(withflip){
   return ans;
 }
 
-function importPC(pcJson){
-  let ans = new PlayerCard(pcJson["n"], pcJson["if"], pcJson["qq"], pcJson["rr"], pcJson["ss"]);
+function importPC(pcJson, p1){
+  let ans = new PlayerCard(pcJson["n"], pcJson["if"], pcJson["qq"], pcJson["rr"], pcJson["ss"], p1);
   ans.current_attack = pcJson["ca"]; ans.current_normal_attack_range = pcJson["cnar"];
   ans.current_defense = pcJson["cd"]; ans.current_health = pcJson["ch"]; ans.current_mana = pcJson["cm"];
   ans.current_mana_per_turn = pcJson["cmpt"]; ans.current_mana_per_atk = pcJson["cmpa"];
   ans.current_movement = pcJson["m"]; ans.dead = pcJson["d"]; ans.health_bonus = pcJson["hb"];
-  ans.mana_bonus = pcJson["mb"]; ans.statuses = pcJson["s"];
+  ans.mana_bonus = pcJson["mb"]; ans.statuses = pcJson["s"]; ans.blessings = pcJson["b"];
   return ans;
 }
 
 function importAllP1Cs(pcListObj){
   let ans = [];
   PLAYER_GAMECARD_OBJS = [];
-  Object.keys(pcListObj).forEach(key => { PLAYER_GAMECARD_OBJS.push(importPC(pcListObj[key])); });
+  Object.keys(pcListObj).forEach(key => { PLAYER_GAMECARD_OBJS.push(importPC(pcListObj[key],true)); });
   return ans;
 }
 
 function importAllP2Cs(pcListObj){
   let ans = [];
   ENEMY_GAMECARD_OBJS = [];
-  Object.keys(pcListObj).forEach(key => { ENEMY_GAMECARD_OBJS.push(importPC(pcListObj[key])); });
+  Object.keys(pcListObj).forEach(key => { ENEMY_GAMECARD_OBJS.push(importPC(pcListObj[key],false)); });
   return ans;
 }
 
   class PlayerCard extends Card {
     #q; #r; #s; // private variables for position for better debugging
-    constructor(cardName, isFigurine, pc_q, pc_r, pc_s) {
+    constructor(cardName, isFigurine, pc_q, pc_r, pc_s, p1) {
       super(cardName);
+      this.p1 = p1;
       this.current_attack = this.base_attack;
       this.current_normal_attack_range = this.base_normal_attack_range;
       this.current_defense = this.base_defense;
@@ -104,6 +105,8 @@ function importAllP2Cs(pcListObj){
       this.health_bonus = 0;
       this.mana_bonus = 0;
 
+      this.blessings = {"Hestia": false};
+
       this.is_figurine = isFigurine;
       this.clearStatuses();
 
@@ -112,6 +115,26 @@ function importAllP2Cs(pcListObj){
       }
       this.changeLocationTo(pc_q, pc_r);
       this.refreshTag();
+    }
+    giveBlessing(blessName){
+      if (this.blessings[blessName] == false) {
+        this.blessings[blessName] = true;
+        if (blessName == "Hestia"){
+          blessing_hestia(true, this);
+        } else {
+          console.error("blessing code missing for",blessName);
+        }
+      }
+    }
+    removeBlessing(blessName){
+      if (this.blessings[blessName] == true) {
+        this.blessings[blessName] = false;
+        if (blessName == "Hestia"){
+          blessing_hestia(false, this);
+        } else {
+          console.error("blessing code missing for",blessName);
+        }
+      }
     }
     getMaxHealth(){
       return this.base_health + this.health_bonus;
@@ -122,6 +145,21 @@ function importAllP2Cs(pcListObj){
         this.health_bonus = -(this.base_health - flatNum);
         if (this.current_health > flatNum){
           this.current_health = flatNum;
+        }
+        if (this.current_health < 0){
+          this.current_health = 0;
+        }
+      }
+    }
+    changeMaxHealthBy(fn){
+      let flatNum = Math.round(fn);
+      if (this.dead != "defeated") {
+        this.health_bonus += flatNum;
+        if (this.current_health > flatNum){
+          this.current_health = flatNum;
+        }
+        if (this.current_health < 0){
+          this.current_health = 0;
         }
       }
     }
@@ -171,12 +209,16 @@ function importAllP2Cs(pcListObj){
     }
     takeDamage(flatNum){
       if (this.dead != "defeated") {
+        if (flatNum / this.current_health > 0.5) { // lost >50% HP in this attack
+          if (this.p1){ passive_thanatos_onAlly(); } else { passive_thanatos_onEnemy(); }
+        }
         this.current_health -= Math.round(flatNum);
         console.log(this.cardName, "took", flatNum, "damage");
-        if (this.current_health <= 0) {
+        if (this.current_health <= 0) { // card is defeated
           this.current_health = 0;
           this.current_mana = 0;
           this.dead = "defeated";
+          if (this.p1){ passive_achilles_onAlly(); } else { passive_achilles_onEnemy(); } // was defeated
           markTokenDefeated(this.tag);
           console.log(this.cardName, "has been defeated"); // #TODO change color, remove function of defeated card
         }

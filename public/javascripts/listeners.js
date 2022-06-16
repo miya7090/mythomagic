@@ -50,7 +50,7 @@ function updateTokenClock(){
     clockBeep(1.0);
     clock.textContent = "";
     changeGameModeTo("startup");
-    console.log("tokentransmitting", exportAllP1Cs(false));
+    passive_athena();
     MY_SOCKET.emit("doneWithTokenPick", exportAllP1Cs(false));
   } else {
     clockBoop(0.9);
@@ -164,6 +164,7 @@ function mouseClickTile(evt) {
 function attackComplete(){
   changeGameModeTo('p2-active');
   giveAllTurnMana(); // attack mana is given in autoattack
+  passive_apollo();
   MY_SOCKET.emit("tellRival_yourTurn", exportAllP1Cs(false), exportAllP2Cs(true));
   GAME_MODE_MEMORYTARGET = undefined;
   rerenderAllGamecardsAndTokens();
@@ -306,7 +307,7 @@ function mouseClickAvailableCard(evt) {
         // define a new player card with a starter position
         playSoundRandom([clack1, clack2], 0.7);
         var hasHolo = PLAYER_HOLOFOIL.includes(thisCardName);
-        var newPC = new PlayerCard(thisCardName, hasHolo, -(HEX_RADIUS-1)+countPlayersPicks,HEX_RADIUS,-1-countPlayersPicks);
+        var newPC = new PlayerCard(thisCardName, hasHolo, -(HEX_RADIUS-1)+countPlayersPicks,HEX_RADIUS,-1-countPlayersPicks, true);
         createGameCardDiv(newPC);
         createTokenDiv(newPC);
         PLAYER_GAMECARD_OBJS.push(newPC);
