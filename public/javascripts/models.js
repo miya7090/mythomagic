@@ -207,7 +207,7 @@ function importAllP2Cs(pcListObj){
       this.giveMana(this.current_mana_per_atk);
     }
     giveMana(flatNum){
-      if (this.dead != "defeated") {
+      if (this.dead != "defeated" && this.statuses["distracted"] == 0) {
         this.current_mana += Math.round(flatNum);
         if (this.current_mana >= this.getMaxMana()) {
           this.current_mana = this.getMaxMana();

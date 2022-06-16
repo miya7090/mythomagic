@@ -41,7 +41,7 @@
     border: 1px solid rgba(255,255,255,0.3);
     border-radius: 10px;
     box-shadow: 0 0 1rem 0 rgba(0, 0, 0, 0.6);
-    overflow: hidden;
+    overflow: visible;
     text-align: center;
     color: rgba(0, 0, 0, 0.7);
 }
@@ -97,7 +97,6 @@
 .manaBar { background-color: #5e6bff; }
 
 .statIconWrap {
-    pointer-events: none;
     margin-top: 4px;
 }
 
@@ -105,15 +104,28 @@
     position: relative;
     float: left;
     margin: 0px;
+    overflow: visible;
+}
+
+.statIconPic {
     width: 14px;
     height: 14px;
 }
 
+.statIcon:hover .statIconTooltip {
+    visibility: visible;
+}
+
+.statIcon:active {
+	pointer-events: none;
+}
+
 .statIconTooltip {
+    pointer-events: none;
     visibility: hidden;
     position: absolute;
-    top: 22px;
-    left: 17px;
+    top: 20px;
+    left: 10px;
   
     font-size: 12px;
     text-align: center;
@@ -123,11 +135,7 @@
     z-index: 10;
 
     color: black;
-    background-color: rgba(255,255,255,0.5);
-}
-  
-.statIcon:hover .statIconTooltip {
-    visibility: visible;
+    background-color: rgba(255,255,255,0.7);
 }
 
 /* CARD COLORING RULES */

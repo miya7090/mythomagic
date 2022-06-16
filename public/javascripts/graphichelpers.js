@@ -341,17 +341,22 @@ function addGameCardStatusesOnDiv(PCard, PCardDiv){
 
   for (var status of Object.keys(PCard.statuses)) {
     if (PCard.statuses[status] != 0){ // has status
-      // add icon for status
-      let statusIcon = document.createElement("img");
+      let statusIcon = document.createElement("div");
       statusIcon.classList.add("statIcon");
-      statusIcon.src = GITHUB_PUBLIC_PATH + "images/statuses/"+status+".png";
-      statusIconWrap.appendChild(statusIcon);
+      
+      // add icon for status
+      let statusIconPic = document.createElement("img")
+      statusIconPic.classList.add("statIconPic");
+      statusIconPic.src = GITHUB_PUBLIC_PATH + "images/statuses/"+status+".png";
       
       // add tooltip for icon
-      let tooltip = document.createElement("div");
-      tooltip.classList.add("statusTooltip");
+      let tooltip = document.createElement("span");
+      tooltip.classList.add("statIconTooltip");
       tooltip.textContent = status;
+
       statusIcon.appendChild(tooltip);
+      statusIcon.appendChild(statusIconPic);
+      statusIconWrap.appendChild(statusIcon);
     }
   }
 
@@ -415,7 +420,9 @@ function get_PC_BroadcastForInfoBox(PCard, isPlayer1) {
     
     res += '<div class="hoverColumn">';
     res += "<p>ATK: " + PCard.current_attack + " <i>(+" + (PCard.current_attack - PCard.base_attack) + ")</i></p>";
-    res += "<p>DEF: " + PCard.current_defense + " <i>(+" + (PCard.current_defense - PCard.base_defense) + ")</i></p>";
+    let defToShow = PCard.current_defense;
+    if (PCard.statuses["charmed"] == 1){ defToShow = 1; }
+    res += "<p>DEF: " + defToShow + " <i>(+" + (defToShow - PCard.base_defense) + ")</i></p>";
     res += "</div>";
 
     res += '<div class="hoverColumn">';
