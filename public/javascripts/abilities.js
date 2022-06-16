@@ -1,6 +1,6 @@
 const ABILITY_MAP = {
     "Athena":[ability_athena,0], // 0 = ally friendly, 1 = attacks enemy, 2 = all valid, 3 = no target provided
-    "Apollo":undefined, "Achilles":[ability_achilles,1],
+    "Apollo":[ability_apollo,1], "Achilles":[ability_achilles,1],
     "Medea":[ability_medea,1], "Poseidon":undefined,
     "Thanatos":undefined, "Hestia":[ability_hestia,0],
     "Kronos":undefined, "Perseus":[ability_perseus,1],
@@ -44,6 +44,12 @@ function ult_athena(attacker, target) {
     target.takeDamage(700);
 }
 
+function ability_apollo(attacker, target) {
+    broadcastMsg("ability", true, "Apollo", target.cardName);
+    let dmg = calcDamage(attacker, target);
+    target.takeDamage(1.1 * dmg);
+}
+
 function ult_apollo(attacker, target) {
     broadcastMsg("ultimate", true, "Apollo", "allies");
     PLAYER_GAMECARD_OBJS.forEach(pc => {
@@ -74,11 +80,15 @@ function ability_medea(attacker, target) {
 
 function ult_medea(attacker, target) {
     broadcastMsg("ultimate", true, "Medea", target.cardName);
-    attacker.fullHeal();
-    target.takeDamage(target.current_health);
-    attacker.current_attack += target.current_attack;
-    attacker.current_defense += target.current_defense;
-    attacker.current_movement += target.current_movement;
+    if (target.cardName != "Medea"){
+        attacker.fullHeal();
+        target.takeDamage(target.current_health);
+        attacker.current_attack += target.current_attack;
+        attacker.current_defense += target.current_defense;
+        attacker.current_movement += target.current_movement;
+    } else {
+        console.error("medea cannot apply ult to self");
+    }
 }
 
 function ult_poseidon(attacker, target) {
@@ -150,12 +160,8 @@ function ability_heracles(attacker, target) {
 }
 
 function ult_heracles(attacker, target) {
-    broadcastMsg("ultimate", true, "Heracles", "allies");
-    PLAYER_GAMECARD_OBJS.forEach(pc => {
-        if (pc.current_mana == 0) {
-            pc.giveMana(0.5 * pc.getMaxMana());
-        }
-    });
+    broadcastMsg("ultimate", true, "Heracles", target.cardName);
+    target.current_defense *= 2;
 }
 
 function ult_hermes(attacker, target) {
