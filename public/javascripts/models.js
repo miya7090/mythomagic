@@ -105,7 +105,7 @@ function importAllP2Cs(pcListObj){
       this.mana_bonus = 0;
 
       this.is_figurine = isFigurine;
-      clearStatuses();
+      this.clearStatuses();
 
       if (pc_s !== -pc_q -pc_r){
           console.error("warning, requested to make a player card with invalid cubic coordinates: "+pc_q+","+pc_r+","+pc_s);
@@ -136,6 +136,12 @@ function importAllP2Cs(pcListObj){
           this.current_mana = flatNum;
         }
       }
+    }
+    inflictStatus(iStat){
+      this.statuses[iStat] = 1;
+    }
+    clearStatus(iStat){
+      this.statuses[iStat] = 0;
     }
     clearStatuses() {
       this.statuses = {"charmed":0, "distracted":0, "poisoned":0, "stunned":0, "terrified":0, "obscured":0};

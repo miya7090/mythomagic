@@ -85,13 +85,15 @@ function attack(atkType, attacker, centerQ, centerR, centerS, aoe) {
   coordTagsInRange.forEach(hitTag => {
     let hitTile = HEXTILE_CUBIC_INDEX[hitTag];
     let tokenOnTile = hitTile.querySelector('.token');
-    let targetIsOpponent = tokenOnTile.classList.contains("player2");
     if (tokenOnTile != undefined) {
       // found a valid target
-      if (atkType == 0 && targetIsOpponent == true){
-        let dmg = calcDamage(attacker, tokenOnTile.pcardLink);
-        tokenOnTile.pcardLink.takeDamage(dmg);
-        anim_tileHitByAttack(hitTile); // #TODO add sound
+      let targetIsOpponent = tokenOnTile.classList.contains("player2");
+      if (atkType == 0){
+        if (targetIsOpponent == true) {
+          let dmg = calcDamage(attacker, tokenOnTile.pcardLink); // autoattack
+          tokenOnTile.pcardLink.takeDamage(dmg);
+          anim_tileHitByAttack(hitTile); // #TODO add sound
+        }
       } else { // #TODO avoid attacking defeated cards
         let animCode = doUniqueSkill(atkType, attacker, tokenOnTile.pcardLink, targetIsOpponent);
         if (animCode == 0) { // do animation

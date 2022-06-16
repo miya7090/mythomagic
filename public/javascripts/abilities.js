@@ -31,7 +31,6 @@ function doUniqueSkill(atkType, attacker, target, targetIsOpponent) { // atkType
             return map[attacker.cardName][1]; // return how to highlight the tile
         }
     }
-    re
 }
 
 function ability_athena(attacker, target) {
@@ -64,6 +63,7 @@ function ult_achilles(attacker, target) {
 
 function ability_medea(attacker, target) {
     target.current_mana = 0;
+    target.inflictStatus("poisoned");
 }
 
 function ult_medea(attacker, target) {
