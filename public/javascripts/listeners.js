@@ -165,6 +165,7 @@ function attackComplete(){
   changeGameModeTo('p2-active');
   giveAllTurnMana(); // attack mana is given in autoattack
   passive_apollo();
+  passive_kronos();
   MY_SOCKET.emit("tellRival_yourTurn", exportAllP1Cs(false), exportAllP2Cs(true));
   GAME_MODE_MEMORYTARGET = undefined;
   rerenderAllGamecardsAndTokens();

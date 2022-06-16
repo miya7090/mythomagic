@@ -34,15 +34,18 @@ function doUniqueSkill(atkType, attacker, target, targetIsOpponent) { // atkType
 }
 
 function ability_athena(attacker, target) {
+    broadcastMsg("ability", true, "Athena", undefined);
     target.current_defense += 10;
     target.clearStatuses();
 }
 
 function ult_athena(attacker, target) {
+    broadcastMsg("ultimate", true, "Athena", target.cardName);
     target.takeDamage(700);
 }
 
 function ult_apollo(attacker, target) {
+    broadcastMsg("ultimate", true, "Apollo", "allies");
     PLAYER_GAMECARD_OBJS.forEach(pc => {
         pc.clearStatuses();
         pc.giveMana(0.2 * pc.getMaxMana());
@@ -51,23 +54,27 @@ function ult_apollo(attacker, target) {
 }
 
 function ability_achilles(attacker, target) {
+    broadcastMsg("ability", true, "Achilles", target.cardName);
     attacker.clearStatuses();
     let dmg = calcDamage(attacker, target);
     target.takeDamage(1.2 * dmg);
 }
 
 function ult_achilles(attacker, target) {
+    broadcastMsg("ultimate", true, "Achilles", undefined);
     attacker.current_health = 1;
     attacker.current_defense += 40;
 }
 
 function ability_medea(attacker, target) {
+    broadcastMsg("ability", true, "Medea", target.cardName);
     target.current_mana = 0;
     target.inflictStatus("poisoned");
 }
 
 function ult_medea(attacker, target) {
-    attacker.heal()
+    broadcastMsg("ultimate", true, "Medea", target.cardName);
+    attacker.fullHeal();
     target.takeDamage(target.current_health);
     attacker.current_attack += target.current_attack;
     attacker.current_defense += target.current_defense;
@@ -75,10 +82,12 @@ function ult_medea(attacker, target) {
 }
 
 function ult_poseidon(attacker, target) {
+    broadcastMsg("ultimate", true, "Poseidon", target.cardName);
     target.takeDamage(300);
 }
 
 function ult_thanatos(attacker, target) {
+    broadcastMsg("ultimate", true, "Thanatos", "enemies");
     ENEMY_GAMECARD_OBJS.forEach(pc => {
         if (pc.current_health < 100) {
             pc.takeDamage(100);
@@ -87,15 +96,18 @@ function ult_thanatos(attacker, target) {
 }
 
 function ability_hestia(attacker, target) {
+    broadcastMsg("ability", true, "Hestia", target.cardName);
     target.heal(300);
 }
 
 function ult_hestia(attacker, target) {
+    broadcastMsg("ultimate", true, "Hestia", target.cardName);
     target.health_bonus += 200;
     target.heal(300);
 }
 
 function ability_perseus(attacker, target) {
+    broadcastMsg("ability", true, "Perseus", target.cardName);
     var effectiveAttack = attacker.current_attack;
     var effectiveDefense = target.base_defense;
     if (target.statuses["distracted" == 1]) { effectiveDefense -= (0.1 * target.current_defense); }
@@ -113,21 +125,25 @@ function ability_perseus(attacker, target) {
 }
 
 function ult_perseus(attacker, target) {
+    broadcastMsg("ultimate", true, "Perseus", undefined);
     attacker.current_attack += Math.round(0.2 * attacker.current_attack);
     attacker.current_defense += Math.round(0.2 * attacker.current_defense);
     attacker.current_movement += 1;
 }
 
 function ult_hera(attacker, target) {
+    broadcastMsg("ultimate", true, "Hera", target.cardName);
     target.setMaxHealthTo(100);
 }
 
 function ability_heracles(attacker, target) {
+    broadcastMsg("ability", true, "Heracles", target.cardName);
     let dmg = calcDamage(attacker, target);
     target.takeDamage(1.5 * dmg);
 }
 
 function ult_heracles(attacker, target) {
+    broadcastMsg("ultimate", true, "Heracles", "allies");
     PLAYER_GAMECARD_OBJS.forEach(pc => {
         if (pc.current_mana == 0) {
             pc.giveMana(0.5 * pc.getMaxMana());
@@ -137,6 +153,7 @@ function ult_heracles(attacker, target) {
 
 function ult_hermes(attacker, target) {
     const randomPC = PLAYER_GAMECARD_OBJS[Math.floor(Math.random() * PLAYER_GAMECARD_OBJS.length)];
+    broadcastMsg("ultimate", true, "Hermes", randomPC.cardName);
     let mult = 3;
     if (coinFlip()) {
         mult = 0.5;
@@ -155,6 +172,7 @@ function ult_hermes(attacker, target) {
 }
 
 function ability_hermes(attacker, target) { // #TODO add more outputting of what happens in abilities, add aesthetic notifications
+    broadcastMsg("ultimate", true, "Hermes", target.cardName);
     if (attacker.current_attack < target.current_attack && coinFlip()) {
         let ACA = attacker.current_attack;
         attacker.current_attack = target.current_attack;

@@ -31,6 +31,22 @@ function updateTurnText() {
   playerTurn.textContent=getPlayerTurnText();
 }
 
+function broadcastMsg(msgType, p1, arg1, arg2){ // #TODO nice formatting and graphics
+  // broadcast to P2 as well, and flip the p1 arg #TODO
+  console.log(msgType, p1, arg1, arg2);
+
+  let bs = getBaseStats(arg1);
+  if (bs != undefined){
+    if (msgType == "ability"){
+      console.log(bs[11],bs[12]);
+    } else if (msgType == "ultimate" || msgType == "ult"){
+      console.log(bs[13],bs[14]);
+    } else if (msgType == "passive"){
+      console.log(bs[15],bs[16]);
+    }
+  }
+}
+
 // fancy tile highlighting and clearing of highlights
 function highlightSelfAndRadius(highlightType, turnOn, radius, cubeQ, cubeR, cubeS){
   const coordsInRange = getCoordinatesWithinRadius(cubeQ,cubeR,cubeS,radius,true);

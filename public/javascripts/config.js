@@ -57,7 +57,7 @@ const BASE_STAT_DICT = {
     "Thanatos":[2800,4,10,600,100,200,2,undefined,9,undefined,9,
       "*Death Grip","Teleport next to target with less than 100HP and attack, inflicting Stunned",
       "Reaper","All cards with less than 100HP receive 100 true damage",
-      "","Inflicts Terrified on any opponent if they lose over 50% of their HP at once"],
+      "Watchful","Inflicts Terrified on any opponent if they lose over 50% of their HP at once"],
     "Hestia":[500,3,15,1200,250,50,1, undefined,3,4,2,
       "Warming Hearth","All allies in range heal 300 HP",
       "Eternal Flame","Increase max HP of card by 200 and heal 300 HP",

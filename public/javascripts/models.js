@@ -207,6 +207,11 @@ function importAllP2Cs(pcListObj){
         }
       }
     }
+    fullHeal(){
+      if (this.dead != "defeated") {
+        this.current_health = this.getMaxHealth();
+      }
+    }
     takeDamage(fn){
       let flatNum = fn;
       if (this.cardName == "Heracles" && fn > 300) { // passive_heracles
@@ -224,9 +229,10 @@ function importAllP2Cs(pcListObj){
           this.dead = "defeated";
           if (this.p1){ // ally was defeated
             passive_achilles_onAlly();
+            passive_perseus_onAlly();
           } else { // enemy was defeated
             passive_achilles_onEnemy();
-            passive_perseus();
+            passive_perseus_onEnemy();
           }
           markTokenDefeated(this.tag);
           console.log(this.cardName, "has been defeated"); // #TODO change color, remove function of defeated card
