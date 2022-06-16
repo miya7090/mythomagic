@@ -68,7 +68,7 @@ const BASE_STAT_DICT = {
       "*Stasis","Movement speed of enemies in range reduced to 1 and grants additional turn",
       "Infinite Power","Gains 150 ATK and 2 DEF on each of your turns"],
     "Perseus":[1400,2,10,500,100,250,3, undefined,2,undefined,undefined,
-      "Undaunted","Attack all enemies within 2 tiles, using target base stats and only advantageous statuses",
+      "Undaunted","Using base stats and ignoring status effects, attack all enemies within 2 tiles",
       "Swordsmanship","Receive ATK and DEF increase by 20%, MVT increase by 1",
       "Cap of Invisibility","After an enemy is defeated, become Obscured and increase MVT by 2"],
     "Hera":[1400,2,15,800,100,250,2, 4,0,6,0,
@@ -84,6 +84,15 @@ const BASE_STAT_DICT = {
       "Lion Cloak","Double the DEF of all adjacent allies",
       "Determination","Will take at maximum 300 HP of damage per attack"]
   } // #TODO add method to preview these before game start
+
+  const STATUSES_DEF_DICT = {
+    "charmed": "DEF reduced to 1",
+    "distracted": "will not gain MP\nDEF reduced by 25%",
+    "poisoned": "loses [500/DEF] HP each turn",
+    "stunned": "ATK, MVT reduced to 0\nRC reduced to 1",
+    "terrified": "ATK reduced by 50%",
+    "obscured": "location not visible to enemy\nATK reduced by 10%"
+  }
   
   let PLAYER_OWNED_temp = ["Athena","Apollo","Achilles","Medea","Poseidon","Thanatos","Hestia","Kronos","Perseus","Hera","Hermes","Heracles"];
   PLAYER_OWNED_temp.sort();

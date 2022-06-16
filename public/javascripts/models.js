@@ -130,6 +130,42 @@ function importAllP2Cs(pcListObj){
       this.changeLocationTo(pc_q, pc_r);
       this.refreshTag();
     }
+    getCurrentAttack(){
+      let effectiveAttack = this.current_attack;
+      if (this.statuses["terrified"] == 1) {
+        effectiveAttack -= (0.5 * this.current_attack);
+      }
+      if (this.statuses["stunned"] == 1) {
+        effectiveAttack = 0;
+      }
+      if (effectiveAttack < 0) { effectiveAttack = 0; }
+      return Math.round(effectiveAttack);
+    }
+    getCurrentDefense(){
+      let effectiveDefense = this.current_defense;
+      if (this.statuses["distracted"] == 1) {
+        effectiveDefense -= (0.25 * this.current_defense);
+      }
+      if (this.statuses["charmed"] == 1) {
+        effectiveDefense = 1;
+      }
+      if (effectiveDefense < 1) { effectiveDefense = 1; }
+      return Math.round(effectiveDefense);
+    }
+    getCurrentMovement(){
+      let effectiveMovement = this.current_movement;
+      if (this.statuses["stunned"] == 1) {
+        effectiveMovement = 0;
+      }
+      return effectiveMovement;
+    }
+    getCurrentNormAtkRange(){
+      let effectiveCNAR = this.current_normal_attack_range;
+      if (this.statuses["stunned"] == 1) {
+        effectiveCNAR = 1;
+      }
+      return effectiveCNAR;
+    }
     giveBlessing(blessName){
       if (this.blessings[blessName] == false) {
         this.blessings[blessName] = true;

@@ -130,12 +130,12 @@ function mouseClickTile(evt) {
       console.error("there is already a tile at this location, try again");
       resetToActiveMode(); return;
     }
-    if (distanceDifference > GAME_MODE_MEMORYTARGET.current_movement) {
-      console.error("tile of distance", distanceDifference, "cannot be reached with movement", GAME_MODE_MEMORYTARGET.current_movement);
+    if (distanceDifference > GAME_MODE_MEMORYTARGET.getCurrentMovement()) {
+      console.error("tile of distance", distanceDifference, "cannot be reached with movement", GAME_MODE_MEMORYTARGET.getCurrentMovement());
       resetToActiveMode(); return;
     }
     // success
-    highlightSelfAndRadius("rangeHighlight", false, GAME_MODE_MEMORYTARGET.current_movement,
+    highlightSelfAndRadius("rangeHighlight", false, GAME_MODE_MEMORYTARGET.getCurrentMovement(),
     GAME_MODE_MEMORYTARGET.getQ(), GAME_MODE_MEMORYTARGET.getR(), GAME_MODE_MEMORYTARGET.getS());
     moveToken(GAME_MODE_MEMORYTARGET, true, cQ, cR);
     tokenMoveSound(1.0);

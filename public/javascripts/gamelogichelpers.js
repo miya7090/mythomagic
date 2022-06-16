@@ -21,7 +21,7 @@ function getTurn() {
 
 function resetToActiveMode(){
   changeGameModeTo("p1-active");
-  highlightSelfAndRadius("rangeHighlight", false, GAME_MODE_MEMORYTARGET.current_movement,
+  highlightSelfAndRadius("rangeHighlight", false, GAME_MODE_MEMORYTARGET.getCurrentMovement(),
   GAME_MODE_MEMORYTARGET.getQ(), GAME_MODE_MEMORYTARGET.getR(), GAME_MODE_MEMORYTARGET.getS());
   GAME_MODE_MEMORYTARGET = undefined;
 }
@@ -41,7 +41,7 @@ function toSelectAttackMode(){
 function transitionToMoveTokenMode(tokenOnTile){
   changeGameModeTo("p1-moveToken");
   GAME_MODE_MEMORYTARGET = tokenOnTile.pcardLink;
-  highlightSelfAndRadius("rangeHighlight", true, GAME_MODE_MEMORYTARGET.current_movement,
+  highlightSelfAndRadius("rangeHighlight", true, GAME_MODE_MEMORYTARGET.getCurrentMovement(),
     GAME_MODE_MEMORYTARGET.getQ(), GAME_MODE_MEMORYTARGET.getR(), GAME_MODE_MEMORYTARGET.getS());
 }
 
@@ -55,7 +55,7 @@ function giveAllTurnMana() {
 function poisonThePoisoned(){
   PLAYER_GAMECARD_OBJS.forEach(pc => {
     if (pc.statuses["poisoned"] == 1){
-      let poisonDmg = Math.round(500 / pc.current_defense);
+      let poisonDmg = Math.round(500 / pc.getCurrentDefense());
       console.log(pc.cardName,"takes", poisonDmg, "poison damage");
       pc.takeDamage(poisonDmg);
     }
@@ -63,7 +63,7 @@ function poisonThePoisoned(){
 }
 
 function autoattack(pcard){
-  attack(0, pcard, pcard.getQ(), pcard.getR(), pcard.getS(), pcard.current_normal_attack_range);
+  attack(0, pcard, pcard.getQ(), pcard.getR(), pcard.getS(), pcard.getCurrentNormAtkRange());
   GAME_MODE_MEMORYTARGET.giveAttackMana();
   autoattackSound(1.0);
 }
@@ -132,21 +132,8 @@ function attack(atkType, attacker, centerQ, centerR, centerS, aoe) {
 }
 
 function calcDamage(attacker, target){
-  var effectiveAttack = attacker.current_attack;
-  if (attacker.statuses["obscured"] == 1) { effectiveAttack -= (0.1 * attacker.current_attack); }
-  if (attacker.statuses["terrified"] == 1) { effectiveAttack -= (0.5 * attacker.current_attack); }
-  if (attacker.statuses["stunned"] == 1) { effectiveAttack = 0; }
-
-  var effectiveDefense = target.current_defense;
-  if (target.statuses["distracted" == 1]) { effectiveDefense -= (0.1 * target.current_defense); }
-  if (target.statuses["charmed" == 1]) { effectiveDefense = 1; }
-
-  if (effectiveAttack < 0) { effectiveAttack = 0; }
-  if (effectiveDefense < 1) { effectiveDefense = 1; }
-
-  let dmg = effectiveAttack / effectiveDefense; // rounded by the recipient
-  console.log(dmg, "damage :", effectiveAttack, "/", effectiveDefense, ": to", target.cardName);
-
+  let dmg = attacker.getCurrentAttack() / target.getCurrentDefense(); // rounded by the recipient
+  console.log(dmg, "damage :", attacker.getCurrentAttack(), "/", target.getCurrentDefense(), ": to", target.cardName);
   return dmg;
 }
 

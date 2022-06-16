@@ -419,15 +419,13 @@ function get_PC_BroadcastForInfoBox(PCard, isPlayer1) {
     res += "</div>";
     
     res += '<div class="hoverColumn">';
-    res += "<p>ATK: " + PCard.current_attack + " <i>(+" + (PCard.current_attack - PCard.base_attack) + ")</i></p>";
-    let defToShow = PCard.current_defense;
-    if (PCard.statuses["charmed"] == 1){ defToShow = 1; }
-    res += "<p>DEF: " + defToShow + " <i>(+" + (defToShow - PCard.base_defense) + ")</i></p>";
+    res += "<p>ATK: " + PCard.getCurrentAttack() + " <i>(+" + (PCard.getCurrentAttack() - PCard.base_attack) + ")</i></p>";
+    res += "<p>DEF: " + PCard.getCurrentDefense() + " <i>(+" + (PCard.getCurrentDefense() - PCard.base_defense) + ")</i></p>";
     res += "</div>";
 
     res += '<div class="hoverColumn">';
-    res += "<p>RC: " + PCard.current_normal_attack_range + " <i>(+" + (PCard.current_normal_attack_range - PCard.base_normal_attack_range) + ")</i></p>";
-    res += "<p>MVT: " + PCard.current_movement + " <i>(+" + (PCard.current_movement - PCard.base_movement) + ")</i></p>";
+    res += "<p>RC: " + PCard.getCurrentNormAtkRange() + " <i>(+" + (PCard.getCurrentNormAtkRange() - PCard.base_normal_attack_range) + ")</i></p>";
+    res += "<p>MVT: " + PCard.getCurrentMovement() + " <i>(+" + (PCard.getCurrentMovement() - PCard.base_movement) + ")</i></p>";
     res += "<p>MP/turn: " + PCard.current_mana_per_turn + " <i>(+" + (PCard.current_mana_per_turn - PCard.base_mana_per_turn) + ")</i></p>";
     res += "<p>MP/atk: " + PCard.current_mana_per_atk + " <i>(+" + (PCard.current_mana_per_atk - PCard.base_mana_per_atk) + ")</i></p>";
     res += "</div>";

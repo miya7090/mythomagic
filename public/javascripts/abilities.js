@@ -120,15 +120,8 @@ function ult_hestia(attacker, target) {
 
 function ability_perseus(attacker, target) {
     broadcastMsg("ability", true, "Perseus", target.cardName);
-    var effectiveAttack = attacker.current_attack;
-    var effectiveDefense = target.base_defense;
-    if (target.statuses["distracted" == 1]) { effectiveDefense -= (0.1 * target.current_defense); }
-    if (target.statuses["charmed" == 1]) { effectiveDefense = 1; }
-    if (effectiveAttack < 0) { effectiveAttack = 0; }
-    if (effectiveDefense < 1) { effectiveDefense = 1; }
-    let dmg = effectiveAttack / effectiveDefense;
-    
-    let memHB = target.health_bonus;
+    var dmg = attacker.base_attack / target.base_defense; // use base stats
+    let memHB = target.health_bonus; // ignore health bonus
     target.health_bonus = 0;
     target.takeDamage(dmg);
     if (target.dead != "defeated") {
