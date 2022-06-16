@@ -85,17 +85,30 @@ function attack(atkType, attacker, centerQ, centerR, centerS, aoe) {
   coordTagsInRange.forEach(hitTag => {
     let hitTile = HEXTILE_CUBIC_INDEX[hitTag];
     let tokenOnTile = hitTile.querySelector('.token');
-    if (tokenOnTile != undefined && tokenOnTile.classList.contains("player2")) {
-      let dmg = calcDamage(atkType, attacker, tokenOnTile.pcardLink);
-      tokenOnTile.pcardLink.takeDamage(dmg);
-      anim_tileHitByAttack(hitTile); // #TODO add sound
-    } else {
+    let targetIsOpponent = tokenOnTile.classList.contains("player2");
+    if (tokenOnTile != undefined) {
+      // found a valid target
+      if (atkType == 0 && targetIsOpponent == true){
+        let dmg = calcDamage(attacker, tokenOnTile.pcardLink);
+        tokenOnTile.pcardLink.takeDamage(dmg);
+        anim_tileHitByAttack(hitTile); // #TODO add sound
+      } else {
+        let animCode = doUniqueSkill(atkType, attacker, tokenOnTile.pcardLink, targetIsOpponent);
+        if (animCode == 0) { // do animation
+          anim_tileHitByHeal(hitTile);
+        } else if (animCode == 1) {
+          anim_tileHitByAttack(hitTile);
+        } else {
+          console.error("need to implement anim for neutral skill");
+        }
+      }
+    } else { // no hit
       anim_tileInAttackRange(hitTile);
     }
   });
 }
 
-function calcDamage(atkType, attacker, target){ // atkType: 0=autoattack, 1=ability, 2=ultimate #TODO implement diff dmg
+function calcDamage(attacker, target){
   var effectiveAttack = attacker.current_attack;
   if (attacker.statuses["obscured"] == 1) { effectiveAttack -= (0.1 * attacker.current_attack); }
   if (attacker.statuses["terrified"] == 1) { effectiveAttack -= (0.5 * attacker.current_attack); }
@@ -108,7 +121,7 @@ function calcDamage(atkType, attacker, target){ // atkType: 0=autoattack, 1=abil
   if (effectiveAttack < 0) { effectiveAttack = 0; }
   if (effectiveDefense < 1) { effectiveDefense = 1; }
 
-  let dmg = Math.round(effectiveAttack / effectiveDefense);
+  let dmg = effectiveAttack / effectiveDefense; // rounded by the recipient
   console.log(dmg, "damage :", effectiveAttack, "/", effectiveDefense, ": to", target.cardName);
 
   return dmg;

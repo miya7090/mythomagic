@@ -105,7 +105,7 @@ function importAllP2Cs(pcListObj){
       this.mana_bonus = 0;
 
       this.is_figurine = isFigurine;
-      this.statuses = {"charmed":0, "distracted":0, "poisoned":0, "stunned":0, "terrified":0, "obscured":0};
+      clearStatuses();
 
       if (pc_s !== -pc_q -pc_r){
           console.error("warning, requested to make a player card with invalid cubic coordinates: "+pc_q+","+pc_r+","+pc_s);
@@ -113,25 +113,41 @@ function importAllP2Cs(pcListObj){
       this.changeLocationTo(pc_q, pc_r);
       this.refreshTag();
     }
+    getMaxHealth(){
+      return this.base_health + this.health_bonus;
+    }
+    getMaxMana(){
+      return MAX_MANA + this.mana_bonus;
+    }
+    clearStatuses() {
+      this.statuses = {"charmed":0, "distracted":0, "poisoned":0, "stunned":0, "terrified":0, "obscured":0};
+    }
     giveTurnMana(){
+      this.giveMana(this.current_mana_per_turn);
+    }
+    giveAttackMana(){
+      this.giveMana(this.current_mana_per_atk);
+    }
+    giveMana(flatNum){
       if (this.dead != "defeated") {
-        this.current_mana += this.current_mana_per_turn;
-        if (this.current_mana >= MAX_MANA + this.mana_bonus) {
-          this.current_mana = MAX_MANA + this.mana_bonus;
+        this.current_mana += Math.round(flatNum);
+        if (this.current_mana >= this.getMaxMana()) {
+          this.current_mana = this.getMaxMana();
         }
       }
     }
-    giveAttackMana(){
+    heal(flatNum){
       if (this.dead != "defeated") {
-        this.current_mana += this.current_mana_per_atk;
-        if (this.current_mana >= MAX_MANA + this.mana_bonus) {
-          this.current_mana = MAX_MANA + this.mana_bonus;
+        this.current_health += Math.round(flatNum);
+        console.log(this.cardName, "healed", flatNum, "damage");
+        if (this.current_health > this.getMaxHealth()) {
+          this.current_health = this.getMaxHealth();
         }
       }
     }
     takeDamage(flatNum){
       if (this.dead != "defeated") {
-        this.current_health -= flatNum;
+        this.current_health -= Math.round(flatNum);
         console.log(this.cardName, "took", flatNum, "damage");
         if (this.current_health <= 0) {
           this.current_health = 0;

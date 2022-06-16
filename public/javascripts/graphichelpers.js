@@ -83,6 +83,13 @@ function anim_tileHitByAttack(hitTileDiv){ //#TODO also animate the game card
   }, 700 );
 };
 
+function anim_tileHitByHeal(hitTileDiv){ //#TODO also animate the game card
+  let animColor = getComputedStyle(document.documentElement).getPropertyValue('--animHealHit');
+  hitTileDiv.animate({
+    backgroundColor: animColor,
+  }, 700 );
+};
+
 function anim_tileInAttackRange(hitTileDiv){
   let animColor = getComputedStyle(document.documentElement).getPropertyValue('--animAtkInRange');
   hitTileDiv.animate({
@@ -296,15 +303,15 @@ function getGameCardHTML(PCard) {
   var pcResult = PCard.cardName + "\n";
   
   // HP bar
-  var healthPercentage = PCard.current_health / (PCard.base_health + PCard.health_bonus);
+  var healthPercentage = PCard.current_health / PCard.getMaxHealth();
   healthPercentage = Math.round(100 * healthPercentage);
-  var manaPercentage = PCard.current_mana / (MAX_MANA + PCard.mana_bonus);
+  var manaPercentage = PCard.current_mana / PCard.getMaxMana();
   manaPercentage = Math.round(100 * manaPercentage);
   pcResult += '<div class="barPreviewContainer">'
               +'<div class="hpBar" style="width:'+healthPercentage+'%">'
-              +PCard.current_health+'/'+(PCard.base_health + PCard.health_bonus)+'</div>'
+              +PCard.current_health+'/'+PCard.getMaxHealth()+'</div>'
               +'<div class="manaBar" style="width:'+manaPercentage+'%">'
-              +PCard.current_mana+'/'+(MAX_MANA + PCard.mana_bonus)+'</div>'
+              +PCard.current_mana+'/'+PCard.getMaxMana()+'</div>'
               +'</div>';
 
   //this.statuses = {"blinded":0, "charmed":0, "poisoned":0, "stunned":0, "terrified":0};
@@ -363,8 +370,8 @@ function get_PC_BroadcastForInfoBox(PCard, isPlayer1) {
 
     
     res += '<div class="hoverColumn">';
-    res += "<p>" + PCard.current_health + "/" + (PCard.base_health + PCard.health_bonus) + "HP <i>(max +" + PCard.health_bonus + ")</i></p>";
-    res += "<p>" + PCard.current_mana + "/" + (MAX_MANA + PCard.mana_bonus) + "MP <i>(max +" + PCard.mana_bonus + ")</i></p>";
+    res += "<p>" + PCard.current_health + "/" + PCard.getMaxHealth() + "HP <i>(max +" + PCard.health_bonus + ")</i></p>";
+    res += "<p>" + PCard.current_mana + "/" + PCard.getMaxMana() + "MP <i>(max +" + PCard.mana_bonus + ")</i></p>";
     res += "</div>";
     
     res += '<div class="hoverColumn">';
