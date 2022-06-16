@@ -57,19 +57,19 @@ const BASE_STAT_DICT = {
     "Thanatos":[2800,4,10,600,100,200,2,undefined,9,undefined,9,
       "*Death Grip","Teleport next to target with less than 100HP and attack, inflicting Stunned",
       "Reaper","All cards with less than 100HP receive 100 true damage",
-      "*","Inflicts Terrified on any opponent if they lose over 50% of their HP at once"],
+      "","Inflicts Terrified on any opponent if they lose over 50% of their HP at once"],
     "Hestia":[500,3,15,1200,250,50,1, undefined,3,4,2,
       "Warming Hearth","All allies in range heal 300 HP",
       "Eternal Flame","Increase max HP of card by 200 and heal 300 HP",
-      "*Shelter", "All adjacent cards gain +10 defense, +200 max HP"],
+      "Shelter", "All adjacent cards gain +10 defense, +200 max HP"],
     "Kronos":[3000,2,10,800,100,250,1, 4,2,undefined,4,
       "*Scythe","400 dmg to target and grants additional turn",
       "*Stasis","Movement speed of enemies in range reduced to 1 and grants additional turn",
-      "*Infinite Power","Gains 150 ATK and 2 DEF each turn"],
+      "Infinite Power","Gains 150 ATK and 2 DEF each turn"],
     "Perseus":[1400,2,10,500,100,250,2, undefined,2,4,1,
       "Undaunted","Make attack against enemy's base stats, applying only advantageous statuses",
       "Swordsmanship","ATK and DEF increase by 20%, MVT increase by 1",
-      "*Cap of Invisibility","After defeating an enemy, become invisible and increase MVT by 1"],
+      "Cap of Invisibility","After an enemy is defeated, become Obscured and increase MVT by 2"],
     "Hera":[1400,2,15,800,100,250,1, undefined,3,4,1,
       "Protector","Grants 10 DEF, 100HP, 100 mana to hero in range",
       "Wrath","Enemy card max hp reduced to 100HP",
@@ -81,7 +81,7 @@ const BASE_STAT_DICT = {
     "Heracles":[3800,2,15,500,100,250,1, undefined,4,undefined,6,
       "Efficiency","Attack all targets in range with 50% more damage",
       "Resilience","Allies without mana regain 50% mana",
-      "*Determination","Will take at maximum 300 dmg per attack"]
+      "Determination","Will take at maximum 300 dmg per attack"]
   } // #TODO add method to preview these before game start
   
   let PLAYER_OWNED_temp = ["Athena","Apollo","Achilles","Medea","Poseidon","Thanatos","Hestia","Kronos","Perseus","Hera","Hermes","Heracles"];

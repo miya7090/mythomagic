@@ -93,16 +93,25 @@ function blessing_hestia(give, pc) {
     }
 }
 
-function passive_?????(){ // run when ????
-    if (hasAllyCard("???????????")) {
-        
-        
+function passive_kronos(){ // run by player1 at the end of the turn
+    if (hasAllyCard("Kronos")) {
+        let mc = getAllyCard("Kronos");
+        mc.current_attack += 150;
+        mc.current_defense += 2;
+    }
+    if (hasEnemyCard("Kronos")) {
+        let mc = getEnemyCard("Kronos");
+        mc.current_attack += 150;
+        mc.current_defense += 2;
     }
 }
 
-function passive_?????(){ // run when ????
-    if (hasAllyCard("???????????")) {
-        
-        
+function passive_perseus(){
+    let mc = getAllyCard("Perseus");
+    if (hasAllyCard("Perseus")) {
+        mc.inflictStatus["obscured"];
+        mc.current_movement += 2;
     }
 }
+
+// passive_heracles in models.js
