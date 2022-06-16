@@ -65,6 +65,7 @@ function poisonThePoisoned(){
 function autoattack(pcard){
   attack(0, pcard, pcard.getQ(), pcard.getR(), pcard.getS(), pcard.current_normal_attack_range);
   GAME_MODE_MEMORYTARGET.giveAttackMana();
+  autoattackSound(1.0);
 }
 
 function abilityAttack(pcard, q, r, s){
@@ -75,6 +76,7 @@ function abilityAttack(pcard, q, r, s){
     cS = GAME_MODE_MEMORYTARGET.getS();
   }
   GAME_MODE_MEMORYTARGET.current_mana -= ABILITY_MANA_REQ;
+  abilitySound(1.0);
   attack(1, pcard, cQ, cR, cS, GAME_MODE_MEMORYTARGET.ability_aim_aoe); //#TODO change from flat dmg
 }
 
@@ -86,6 +88,7 @@ function ultimateAttack(pcard, q, r, s){
     cS = GAME_MODE_MEMORYTARGET.getS();
   }
   GAME_MODE_MEMORYTARGET.current_mana -= MAX_MANA;
+  ultimateSound(1.0);
   attack(2, pcard, cQ, cR, cS, GAME_MODE_MEMORYTARGET.ult_aim_aoe); //#TODO change from flat dmg
 }
 

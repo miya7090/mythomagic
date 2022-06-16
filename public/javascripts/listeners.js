@@ -9,6 +9,12 @@ const clack6 = GITHUB_PUBLIC_PATH+'sounds/clack6.mp3'
 const boop = GITHUB_PUBLIC_PATH+'sounds/boop.mp3'
 const beep = GITHUB_PUBLIC_PATH+'sounds/beep.mp3'
 const turn = GITHUB_PUBLIC_PATH+'sounds/turn.mp3'
+const whoosh = GITHUB_PUBLIC_PATH+'sounds/whoosh.mp3'
+const hit = GITHUB_PUBLIC_PATH+'sounds/hit.mp3'
+const slash = GITHUB_PUBLIC_PATH+'sounds/slash.mp3'
+const recall = GITHUB_PUBLIC_PATH+'sounds/recall.mp3'
+const ability = GITHUB_PUBLIC_PATH+'sounds/ability.mp3'
+const ultimate = GITHUB_PUBLIC_PATH+'sounds/ultimate.mp3'
 const bgmSource = GITHUB_PUBLIC_PATH+'sounds/50 mulling.mp3';
 
 HIGHLIGHT_TILE_MEMORY_COLOR = getComputedStyle(document.documentElement).getPropertyValue('--highlightedTileMemory');
@@ -132,6 +138,7 @@ function mouseClickTile(evt) {
     highlightSelfAndRadius("rangeHighlight", false, GAME_MODE_MEMORYTARGET.current_movement,
     GAME_MODE_MEMORYTARGET.getQ(), GAME_MODE_MEMORYTARGET.getR(), GAME_MODE_MEMORYTARGET.getS());
     moveToken(GAME_MODE_MEMORYTARGET, true, cQ, cR);
+    tokenMoveSound(1.0);
     passive_hestia();
     toSelectAttackMode();
 
@@ -275,6 +282,42 @@ function clockBoop(volume){
 
 function clockBeep(volume){
   let snd = new Audio(beep);
+  snd.volume = volume;
+  snd.play();
+}
+
+function tokenMoveSound(volume){
+  let snd = new Audio(whoosh);
+  snd.volume = volume;
+  snd.play();
+}
+
+function tokenDeathSound(volume){
+  let snd = new Audio(hit);
+  snd.volume = volume;
+  snd.play();
+}
+
+function autoattackSound(volume){
+  let snd = new Audio(slash);
+  snd.volume = volume;
+  snd.play();
+}
+
+function undoMoveSound(volume){
+  let snd = new Audio(recall);
+  snd.volume = volume;
+  snd.play();
+}
+
+function abilitySound(volume){
+  let snd = new Audio(ability);
+  snd.volume = volume;
+  snd.play();
+}
+
+function ultimateSound(volume){
+  let snd = new Audio(ultimate);
   snd.volume = volume;
   snd.play();
 }
