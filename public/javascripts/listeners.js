@@ -432,10 +432,30 @@ function mouseOverGameCard(evt, referenceCard) {
   const gameInfoBox = document.getElementById("gameInfoBox");
   gameInfoBox.innerHTML = get_PC_BroadcastForInfoBox(referenceCard, evt.target.classList.contains("player1"));
   playSoundRandom([clack3, clack4], rand(0.4,0.6));
+  
+  if (referenceCard.p1){
+    document.getElementById("p1token-" + referenceCard.cardName).setAttribute("gameCardGlow", true);
+  } else {
+    document.getElementById("p2token-" + referenceCard.cardName).setAttribute("gameCardGlow", true);
+  }
+}
+
+function mouseOutOfGameCard(evt, referenceCard) {
+  if (referenceCard.p1){
+    document.getElementById("p1token-" + referenceCard.cardName).setAttribute("gameCardGlow", false);
+  } else {
+    document.getElementById("p2token-" + referenceCard.cardName).setAttribute("gameCardGlow", false);
+  }
 }
 
 function mouseClickGameCard(evt, pcardRef) {
   if (GAME_MODE == "pick-phase") {
+    if (pcardRef.p1){
+      document.getElementById("p1token-" + pcardRef.cardName).setAttribute("gameCardGlow", false);
+    } else {
+      document.getElementById("p2token-" + pcardRef.cardName).setAttribute("gameCardGlow", false);
+    }
+
     document.getElementById("availCard-" + pcardRef.cardName).setAttribute("acChosen",false);
     PLAYER_GAMECARD_OBJS.splice(PLAYER_GAMECARD_OBJS.indexOf(pcardRef), 1); // remove from game cards
     evt.target.remove(); // remove div

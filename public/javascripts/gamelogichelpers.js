@@ -160,12 +160,6 @@ function getBaseStats(cardType) {
 function clearSelection(){
   if (GAME_MODE == "p1-moveToken") {
     resetToActiveMode();
-  } else if (GAME_MODE == "pick-phase") {
-    let lastPcard = PLAYER_GAMECARD_OBJS[PLAYER_GAMECARD_OBJS.length - 1];
-    removeTokenAndShiftOthers(lastPcard);
-    document.getElementById("availCard-" + lastPcard.cardName).setAttribute("acChosen",false);
-    document.getElementById("p1card-" + lastPcard.cardName).remove(); // remove last gamecard's div
-    PLAYER_GAMECARD_OBJS.splice(PLAYER_GAMECARD_OBJS.length - 1, 1); // remove last gamecard's obj
   } else if (GAME_MODE == "p1-abilityAim") {
     relinquishAimingMouseHighlight();
     aimingTargetReachHighlight(false, GAME_MODE_MEMORYTARGET.ability_aim_range);

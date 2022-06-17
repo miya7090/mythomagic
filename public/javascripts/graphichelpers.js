@@ -175,6 +175,7 @@ function createGameCardDiv(pcToRender) {
   onFieldCards.appendChild(ccard);
 
   ccard.addEventListener('mouseenter', function(evt){mouseOverGameCard(evt, pcToRender);});
+  ccard.addEventListener('mouseleave', function(evt){mouseOutOfGameCard(evt, pcToRender);});
   ccard.addEventListener('mouseup', function(evt){mouseClickGameCard(evt, pcToRender);});
 };
 
@@ -193,6 +194,7 @@ function createEnemyGameCardDiv(pcToRender) { //#TODO reduce redundant code ^
   enemyCardReference.appendChild(ccard);
 
   ccard.addEventListener('mouseenter', function(evt){mouseOverGameCard(evt, pcToRender);});
+  ccard.addEventListener('mouseleave', function(evt){mouseOutOfGameCard(evt, pcToRender);});
 };
 
 function createTokenDiv(pcToRender) {

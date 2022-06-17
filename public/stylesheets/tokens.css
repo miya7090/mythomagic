@@ -6,7 +6,7 @@
     top: 4px;
     left: 2px;
     width: 21px;
-    height: 21px;
+    height: 20px;
 }
 
 .token.player1 { filter: invert(72%) sepia(25%) saturate(1427%) hue-rotate(300deg) brightness(97%) contrast(102%); } /* https://codepen.io/sosuke/pen/Pjoqqp used to convert black to target color */
@@ -14,6 +14,8 @@
 .token.player2 { filter: invert(89%) sepia(5%) saturate(6229%) hue-rotate(176deg) brightness(101%) contrast(101%); }
 
 .token[isDefeated=true] { filter: invert(0.0); }
+
+.token[gameCardGlow=true] { filter: invert(1.0); }
 
 .token[isChosen=true] { filter: invert(1.0); }
 
