@@ -16,7 +16,10 @@ var doneTokenPick = {}; // {room: gameCardJsonObjs} where objs array is included
 // lobby code processing
 function rk(regionName){ return regionName + "====="; }
 function nk(rkRegion){ return rkRegion.slice(0, -5); }
-function isLobbyId(roomcode) { return (roomcode.slice(roomcode.length-5) == "====="); }
+function isLobbyId(roomcode) {
+  if (roomcode == undefined) { return false; }
+  return (roomcode.slice(roomcode.length-5) == "=====");
+}
 
 app.use(express.static(__dirname + "/public")); // use "public" directory for static files
 

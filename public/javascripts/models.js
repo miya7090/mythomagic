@@ -278,6 +278,7 @@ function importAllP2Cs(pcListObj){
         if (this.current_health <= 0) { // card is defeated
           this.current_health = 0;
           this.current_mana = 0;
+          this.clearStatuses();
           this.dead = "defeated";
           tokenDeathSound(1.0);
           if (this.p1){ // ally was defeated

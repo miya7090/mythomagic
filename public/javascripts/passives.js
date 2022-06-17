@@ -1,7 +1,17 @@
 // contains functions for some (but not all) passives
 
-function getAllyCard(cardName) { return PLAYER_GAMECARD_OBJS.find(e => e.cardName == cardName); }
-function getEnemyCard(cardName) { return ENEMY_GAMECARD_OBJS.find(e => e.cardName == cardName); }
+// passive_heracles in models.js
+
+function getAllyCard(cardName) {
+    let AC = PLAYER_GAMECARD_OBJS.find(e => e.cardName == cardName);
+    if (AC != undefined && AC.dead != "defeated") { return AC; }
+    else { return undefined; }
+}
+function getEnemyCard(cardName) {
+    let EC = ENEMY_GAMECARD_OBJS.find(e => e.cardName == cardName);
+    if (EC != undefined && EC.dead != "defeated") { return EC; }
+    else { return undefined; }
+}
 function hasAllyCard(cardName) { return getAllyCard(cardName) != undefined; }
 function hasEnemyCard(cardName) { return getEnemyCard(cardName) != undefined; }
 
@@ -72,9 +82,9 @@ function passive_hestia() { // run by player1 at the beginning of the turn
     }
     if (hasEnemyCard("Hestia")) {
         broadcastMsg("passive", false, "Hestia", "nearby allies");
-        let mc = getEnemyCard("Hestia");
+        let yc = getEnemyCard("Hestia");
         ENEMY_GAMECARD_OBJS.forEach(pc => {
-            if (getTileDistance(mc.getQ(),mc.getR(),mc.getS(),pc.getQ(),pc.getR(),pc.getS()) == 1) {
+            if (getTileDistance(yc.getQ(),yc.getR(),yc.getS(),pc.getQ(),pc.getR(),pc.getS()) == 1) {
                 pc.giveBlessing("Hestia");
             } else {
                 pc.removeBlessing("Hestia");
@@ -119,5 +129,3 @@ function passive_perseus_onEnemy(){ // enemy card was defeated
         mc.current_movement += 2;
     }
 }
-
-// passive_heracles in models.js

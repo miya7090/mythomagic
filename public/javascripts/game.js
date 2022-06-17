@@ -104,6 +104,27 @@ document.addEventListener("DOMContentLoaded", () => {
   document.addEventListener('keyup', keyProcessing);
   mainGrid.addEventListener('mouseleave', mouseOutOfGrid);
 
+  // powerbox-hoverbox hover link
+  $('#abilityButton').hover(function() {
+    let p1Attr = $('#abilityTitle').attr("p1");
+    if (p1Attr == "true") { $('#abilityTitle').css('color', '#ffffff'); }
+    else if (p1Attr == "false") { $('#abilityTitle').css('color', '#ffffff'); }
+  }, function() {
+    let p1Attr = $('#abilityTitle').attr("p1");
+    if (p1Attr == "true") { $('#abilityTitle').css('color', 'var(--p1ActionTextColor)'); }
+    else if (p1Attr == "false") { $('#abilityTitle').css('color', 'var(--p2ActionTextColor)'); }
+  });
+
+  $('#ultButton').hover(function() {
+    let p1Attr = $('#ultTitle').attr("p1");
+    if (p1Attr == true) { $('#abilityTitle').css('color', '#ffffff'); }
+    else if (p1Attr == false) { $('#abilityTitle').css('color', '#ffffff'); }
+  }, function() {
+    let p1Attr = $('#ultTitle').attr("p1");
+    if (p1Attr == true) { $('#ultTitle').css('color', 'var(--p1ActionTextColor)'); }
+    else if (p1Attr == false) { $('#ultTitle').css('color', 'var(--p2ActionTextColor)'); }
+  });
+
   // add tiles to game board
   for (let r = -HEX_RADIUS; r <= HEX_RADIUS; r++) {
     const row = document.createElement("div");
