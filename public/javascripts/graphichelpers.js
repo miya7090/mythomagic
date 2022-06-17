@@ -170,6 +170,7 @@ function createGameCardDiv(pcToRender) {
   ccard.innerHTML = getGameCardHTML(pcToRender);
   ccard.classList.add("player1");
   ccard.classList.add("card");
+  ccard.pcardLink = pcToRender;
   ccard.id = "p1card-"+pcToRender.cardName;
   if (pcToRender.dead == "defeated"){
     ccard.classList.add("deadCard");
@@ -187,6 +188,7 @@ function createEnemyGameCardDiv(pcToRender) { //#TODO reduce redundant code ^
   ccard.innerHTML = getGameCardHTML(pcToRender);
   ccard.classList.add("player2");
   ccard.classList.add("card");
+  ccard.pcardLink = pcToRender;
   ccard.id = "p2card-"+pcToRender.cardName;
   if (pcToRender.dead == "defeated"){
     ccard.classList.add("deadCard");

@@ -385,28 +385,35 @@ function mouseClickPowerbutton(evt) {
 }
 
 function mouseClickAvailableCard(evt) {
+    const thisCardName = evt.target.querySelector('.baseCardName').textContent;
     const onFieldCards = document.getElementById("onFieldCards");
     const countPlayersPicks = onFieldCards.childElementCount;
     if (GAME_MODE != "pick-phase") {
       console.error("cannot pick this card - it is not selection phase");
       return;
-    } else if (countPlayersPicks >= 5){
+    }
+
+    var dupeCard = onFieldCards.querySelector('#p1card-'+thisCardName);
+    if (dupeCard != null) { // search if card with that ID already selected to be played
+      let existingPcard = dupeCard.pcardLink;
+      PLAYER_GAMECARD_OBJS.splice(PLAYER_GAMECARD_OBJS.indexOf(existingPcard), 1); // remove from game cards
+      removeTokenAndShiftOthers(existingPcard);
+      dupeCard.remove(); // remove div
+      playSoundRandom([clack2, clack3], 0.7);
+      return;
+    }
+    
+    if (countPlayersPicks >= 5){
       console.error("player has already picked 5 cards"); // #TODO express errors nicely
       return;
     }
 
-    const thisCardName = evt.target.querySelector('.baseCardName').textContent;
-
-    if (onFieldCards.querySelector('#p1card-'+thisCardName) != null) { // search if card with that ID already selected to be played
-        console.error(thisCardName+" card already picked");
-    } else {
-        // define a new player card with a starter position
-        playSoundRandom([clack1, clack2], 0.7);
-        var hasHolo = PLAYER_HOLOFOIL.includes(thisCardName);
-        var newPC = new PlayerCard(thisCardName, hasHolo, -(HEX_RADIUS-1)+countPlayersPicks,HEX_RADIUS,-1-countPlayersPicks, true);
-        PLAYER_GAMECARD_OBJS.push(newPC);
-        rerenderAllGamecardsAndTokens(false);
-    }
+    // define a new player card with a starter position
+    playSoundRandom([clack1, clack2], 0.8);
+    var hasHolo = PLAYER_HOLOFOIL.includes(thisCardName);
+    var newPC = new PlayerCard(thisCardName, hasHolo, -(HEX_RADIUS-1)+countPlayersPicks,HEX_RADIUS,-1-countPlayersPicks, true);
+    PLAYER_GAMECARD_OBJS.push(newPC);
+    rerenderAllGamecardsAndTokens(false);
 }
 
 function mouseOverGameCard(evt, referenceCard) {
