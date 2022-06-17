@@ -80,7 +80,7 @@ function ult_kronos(attacker, target) {
             pc.takeDamage(200);
         }
     });
-    ON_KRONOS_EXTRA_TURN = true;
+    TURNS_ALLOCATED += 1;
 }
 
 function ult_apollo(attacker, target) {

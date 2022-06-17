@@ -300,6 +300,7 @@ function importAllP2Cs(pcListObj){
         this.current_health -= Math.round(flatNum);
         console.log(this.cardName, "took", flatNum, "damage");
         if (this.current_health <= 0) { // card is defeated
+          console.log(this.cardName, "has been defeated", this.tag); // #TODO change color, remove function of defeated card
           this.current_health = 0;
           this.current_mana = 0;
           this.clearStatuses();
@@ -312,8 +313,7 @@ function importAllP2Cs(pcListObj){
             passive_achilles_onEnemy();
             passive_perseus_onEnemy();
           }
-          markTokenDefeated(this.tag);
-          console.log(this.cardName, "has been defeated"); // #TODO change color, remove function of defeated card
+          markTokenDefeated(this.p1, this.cardName);
         }
       }
     }

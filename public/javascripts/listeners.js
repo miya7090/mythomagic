@@ -60,7 +60,7 @@ function updateTokenClock(){
     passive_hera_part2();
     MY_SOCKET.emit("doneWithTokenPick", exportAllP1Cs(false));
   } else {
-    clockBoop(0.9);
+    clockBoop(0.7);
     setTimeout(updateTokenClock, 1000);
   }
 }
@@ -200,18 +200,18 @@ function attackComplete(){
   giveAllTurnMana(); // attack mana is given in autoattack
   passive_apollo();
   passive_kronos();
+  highlightMemoryTarget(false);
+  GAME_MODE_MEMORYTARGET = undefined;
 
   let gameOver = checkGameOver();
   if (gameOver == "ongoing"){
-    if (ON_KRONOS_EXTRA_TURN == true){
-      ON_KRONOS_EXTRA_TURN = false;
-      console.log("taking kronos extra turn");
+    TURNS_ALLOCATED -= 1;
+    if (TURNS_ALLOCATED > 0){
       beginTurn(undefined, undefined, false); // includes a rerender
+      MY_SOCKET.emit("tellRival_ongoingProgress", exportAllP1Cs(false), exportAllP2Cs(true));
     } else {
-      changeGameModeTo('p2-active');
-      MY_SOCKET.emit("tellRival_yourTurn", exportAllP1Cs(false), exportAllP2Cs(true));
-      highlightMemoryTarget(false);
-      GAME_MODE_MEMORYTARGET = undefined;
+      changeGameModeTo('p2-turn1');
+      MY_SOCKET.emit("tellRival_yourTurn", exportAllP1Cs(false), exportAllP2Cs(false));
       rerenderAllGamecardsAndTokens(true);
     }
   } else if (gameOver == "tie") {

@@ -59,14 +59,22 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   MY_SOCKET.on('yourTurn', (yourEnemysCards, yourEnemysVerOfYourCards)=>{
+    TURNS_ALLOCATED = 2;
     beginTurn(yourEnemysCards, yourEnemysVerOfYourCards, true);
   });
 
   MY_SOCKET.on('waitTurnAndPopulate', (yourEnemysCards)=>{
-    changeGameModeTo("p2-active");
+    changeGameModeTo("p2-turn1");
     console.log("opponent cards look like", yourEnemysCards);
     importAllP2Cs(yourEnemysCards);
     atTurnStart(true);
+  });
+
+  MY_SOCKET.on('enemysProgress', (yourEnemysCards, yourEnemysVerOfYourCards)=>{
+    changeGameModeTo("p2-turn2");
+    importAllP2Cs(yourEnemysCards);
+    importAllP1Cs(yourEnemysVerOfYourCards);
+    rerenderAllGamecardsAndTokens(true);
   });
 
   /////////////////////////////

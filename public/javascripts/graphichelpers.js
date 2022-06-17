@@ -14,14 +14,8 @@ function getPlayerTurnText() {
     case "p1-ultimate":     return "Using ultimate...";
     case "p1-ultimateAim":  return "Aiming ultimate...";
 
-    case "p2-active":       return OTHER_NAME+" is selecting a token";
-    case "p2-moveToken":    return OTHER_NAME+" is moving their token...";
-    case "p2-attackSelect": return OTHER_NAME+" is choosing an action";
-    case "p2-autoattack":   return OTHER_NAME+" is autoattacking...";
-    case "p2-ability":      return OTHER_NAME+" is using an ability...";
-    case "p2-abilityAim":   return OTHER_NAME+" is aiming an ability...";
-    case "p2-ultimate":     return OTHER_NAME+" is using their ultimate...";
-    case "p2-ultimateAim":  return OTHER_NAME+" is aiming their ultimate...";
+    case "p2-turn1":       return OTHER_NAME+" is on turn 1/2...";
+    case "p2-turn2":       return OTHER_NAME+" is on turn 2/2...";
   }
   return GAME_MODE;
 }
@@ -162,7 +156,7 @@ function createAvailableCardDiv(pcNameToRender) {
 };
 
 function highlightMemoryTarget(turnOn) {
-  let memToken = document.getElementById("p1token-" + GAME_MODE_MEMORYTARGET.cardName)
+  let memToken = document.getElementById("p1token-" + GAME_MODE_MEMORYTARGET.cardName);
   memToken.setAttribute("isChosen", turnOn);
 }
 
@@ -252,10 +246,12 @@ function createEnemyTokenDiv(pcToRender) {
   HEXTILE_CUBIC_INDEX[pcToRender.tag].parentNode.appendChild(tooltip);
 };
 
-function markTokenDefeated(tag) {
-  let hitTile = HEXTILE_CUBIC_INDEX[tag];
-  let tokenOnTile = hitTile.querySelector('.token');
-  tokenOnTile.setAttribute("isDefeated",true);
+function markTokenDefeated(p1, cName) {
+  if (p1){
+    document.getElementById("p1token-"+cName).setAttribute("isDefeated",true);
+  }else{
+    document.getElementById("p2token-"+cName).setAttribute("isDefeated",true);
+  }
 }
 
 function rerenderAllGamecardsAndTokens(flipEnemy) {

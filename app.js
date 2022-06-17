@@ -136,6 +136,11 @@ io.on("connection", socket => {
     io.to(rivalId).emit("yourTurn", yourEnemysJsons, yourEnemysVerOfYourJsons);
   });
 
+  socket.on("tellRival_ongoingProgress", (yourEnemysJsons, yourEnemysVerOfYourJsons) => {
+    let rivalId = rivalFinder[socket.id];
+    io.to(rivalId).emit("enemysProgress", yourEnemysJsons, yourEnemysVerOfYourJsons);
+  });
+
   socket.on("gameEnded_withTie", (p1Name, p1cardNames, p2Name, p2cardNames) => {
     let rivalId = rivalFinder[socket.id];
     io.to(socket.id).emit("gameTie");
