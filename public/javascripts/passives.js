@@ -18,10 +18,10 @@ function passive_apollo(){ // run by player1 at the end of the turn
     if (hasAllyCard("Apollo")) {
         broadcastMsg("passive", true, "Apollo", "targets");
         PLAYER_GAMECARD_OBJS.forEach(pc => {
-            pc.heal(30);
+            pc.heal(20);
         });
         ENEMY_GAMECARD_OBJS.forEach(pc => {
-            pc.takeDamage(30);
+            pc.takeDamage(20);
         });
     }
 }

@@ -127,8 +127,10 @@
     top: 20px;
     left: 10px;
   
-    font-size: 12px;
-    text-align: center;
+    font-size: 10px;
+    width: 150px;
+    white-space: pre-line;
+    text-align: left;
     padding: 1px 5px;
     border-radius: 6px;
   

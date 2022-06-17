@@ -42,7 +42,7 @@ const BASE_STAT_DICT = {
     "Apollo":[2000,4,10,700,100,250,3, 6,2,undefined,undefined,
       "Volley","Attack with 10% extra damage to enemies in a 2-tile radius, up to 6 tiles away",
       "Inspiration","For all allies, clear all statuses, recover 20% health, and recover 20% mana",
-      "Medicine","+30 HP to all heroes, -30 HP to all enemies after your turn"],
+      "Medicine","+20 HP to all heroes, -20 HP to all enemies after your turn"],
     "Achilles":[2900,2,20,600,100,250,3, undefined,3,undefined,undefined,
       "Berserk","Clear all statuses from self and attack all enemies within 3 tiles with 20% more damage",
       "Invulnerability", "HP set to 1 HP, gain 40 DEF",

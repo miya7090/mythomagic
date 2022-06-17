@@ -352,7 +352,7 @@ function addGameCardStatusesOnDiv(PCard, PCardDiv){
       // add tooltip for icon
       let tooltip = document.createElement("span");
       tooltip.classList.add("statIconTooltip");
-      tooltip.textContent = status;
+      tooltip.textContent = status+"\n"+STATUSES_DEF_DICT[status];
 
       statusIcon.appendChild(tooltip);
       statusIcon.appendChild(statusIconPic);
