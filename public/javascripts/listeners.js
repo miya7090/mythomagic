@@ -206,6 +206,7 @@ function attackComplete(){
     } else {
       changeGameModeTo('p2-active');
       MY_SOCKET.emit("tellRival_yourTurn", exportAllP1Cs(false), exportAllP2Cs(true));
+      highlightMemoryTarget(false);
       GAME_MODE_MEMORYTARGET = undefined;
       rerenderAllGamecardsAndTokens(true);
     }

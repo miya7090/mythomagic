@@ -1,7 +1,7 @@
 :root {
-  --normalTile: rgba(54, 71, 253, 0.5);
-  --highlightedTile: rgba(93, 93, 255, 0.9);
-  --default_highlightedTile: rgba(93, 93, 255, 0.9);
+  --normalTile: rgba(101, 97, 166, 0.5);
+  --highlightedTile: rgba(130, 130, 227, 0.9);
+  --default_highlightedTile: rgba(130, 130, 227, 0.9);
   --rangeHighlightedTile: rgba(127, 89, 157, 0.6);
   --aimingReachHighlightedTile: rgba(54, 117, 108, 0.9);
   --aimingHighlightedTile: rgba(34, 156, 152, 0.9);
@@ -31,8 +31,11 @@
   --p2CardAreaBGColor: rgba(0, 15, 54, 0.3);
   --p1TooltipBGColor: rgba(100, 0, 0,0.7);
   --p2TooltipBGColor: rgba(9, 39, 114, 0.7);
+  
   --p1TokenColor: rgba(86, 1, 1, 0.9);
   --p2TokenColor: rgba(8, 46, 144, 0.9);
+  --p1TokenHoverColor: rgba(60, 0, 0, 0.9);
+  --p2TokenHoverColor: rgba(5, 35, 111, 0.9);
 }
 
 @font-face {

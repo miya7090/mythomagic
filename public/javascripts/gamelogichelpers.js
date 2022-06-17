@@ -23,6 +23,7 @@ function resetToActiveMode(){
   changeGameModeTo("p1-active");
   highlightSelfAndRadius("rangeHighlight", false, GAME_MODE_MEMORYTARGET.getCurrentMovement(),
   GAME_MODE_MEMORYTARGET.getQ(), GAME_MODE_MEMORYTARGET.getR(), GAME_MODE_MEMORYTARGET.getS());
+  highlightMemoryTarget(false);
   GAME_MODE_MEMORYTARGET = undefined;
 }
 
@@ -41,6 +42,7 @@ function toSelectAttackMode(){
 function transitionToMoveTokenMode(tokenOnTile){
   changeGameModeTo("p1-moveToken");
   GAME_MODE_MEMORYTARGET = tokenOnTile.pcardLink;
+  highlightMemoryTarget(true);
   highlightSelfAndRadius("rangeHighlight", true, GAME_MODE_MEMORYTARGET.getCurrentMovement(),
     GAME_MODE_MEMORYTARGET.getQ(), GAME_MODE_MEMORYTARGET.getR(), GAME_MODE_MEMORYTARGET.getS());
 }

@@ -160,6 +160,11 @@ function createAvailableCardDiv(pcNameToRender) {
   acard.addEventListener('mouseup', mouseClickAvailableCard);
 };
 
+function highlightMemoryTarget(turnOn) {
+  let memToken = document.getElementById("p1token-" + GAME_MODE_MEMORYTARGET.cardName)
+  memToken.setAttribute("isChosen", turnOn);
+}
+
 function createGameCardDiv(pcToRender) {
   const ccard = document.createElement("div");
   ccard.innerHTML = getGameCardHTML(pcToRender);
@@ -202,6 +207,9 @@ function createTokenDiv(pcToRender) {
   token.pcardLink = pcToRender;
   token.q = pcToRender.getQ(); // used ONLY for location initialization
   token.setAttribute("isDefeated", pcToRender.dead == "defeated");
+  if (GAME_MODE_MEMORYTARGET != undefined){
+    token.setAttribute("isChosen", pcToRender.cardName == GAME_MODE_MEMORYTARGET.cardName);
+  }
 
   token.addEventListener('mouseup', mouseClickToken);
 
