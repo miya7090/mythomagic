@@ -102,7 +102,7 @@ function ability_achilles(attacker, target) {
 function ult_achilles(attacker, target) {
     broadcastMsg("ultimate", true, "Achilles", undefined);
     attacker.current_health = 1;
-    attacker.current_defense += 40;
+    attacker.current_defense += 50;
 }
 
 function ability_medea(attacker, target) {
