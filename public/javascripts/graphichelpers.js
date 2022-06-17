@@ -166,6 +166,9 @@ function createGameCardDiv(pcToRender) {
   ccard.classList.add("player1");
   ccard.classList.add("card");
   ccard.id = "p1card-"+pcToRender.cardName;
+  if (pcToRender.dead == "defeated"){
+    ccard.classList.add("deadCard");
+  }
   
   addGameCardStatusesOnDiv(pcToRender, ccard);
   onFieldCards.appendChild(ccard);
@@ -176,11 +179,13 @@ function createGameCardDiv(pcToRender) {
 
 function createEnemyGameCardDiv(pcToRender) { //#TODO reduce redundant code ^
   const ccard = document.createElement("div");
-
+  ccard.innerHTML = getGameCardHTML(pcToRender);
   ccard.classList.add("player2");
   ccard.classList.add("card");
   ccard.id = "p2card-"+pcToRender.cardName;
-  ccard.innerHTML = getGameCardHTML(pcToRender);
+  if (pcToRender.dead == "defeated"){
+    ccard.classList.add("deadCard");
+  }
   
   addGameCardStatusesOnDiv(pcToRender, ccard);
   enemyCardReference.appendChild(ccard);

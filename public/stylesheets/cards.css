@@ -46,6 +46,10 @@
     color: rgba(0, 0, 0, 0.7);
 }
 
+.deadCard {
+    background-color: rgba(180, 180, 180, 0.5);
+}
+
 /* BASECARD STYLING */
 
 .baseCardName{
@@ -96,6 +100,8 @@
   
 .hpBar { background-color: #04AA6D; }
 .manaBar { background-color: #5e6bff; }
+
+.deadCard .barPreviewContainer { background-color: rgba(255,255,255,0.2); }
 
 .statIconWrap {
     margin-top: 4px;

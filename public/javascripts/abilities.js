@@ -37,7 +37,7 @@ function doUniqueSkill(atkType, attacker, target, targetIsOpponent) { // atkType
 
 function ability_athena(attacker, target) {
     broadcastMsg("ability", true, "Athena", target.cardName);
-    target.current_defense += 10;
+    target.current_defense += 15;
     target.clearStatuses();
 }
 
@@ -49,7 +49,7 @@ function ability_thanatos(attacker, target) {
     let dmg = calcDamage(attacker, target);
     target.takeDamage(dmg);
     if (target.dead == "defeated") {
-        attacker.current_attack += absorbAtk;
+        attacker.current_attack += Math.round(0.5 * absorbAtk);
         attacker.giveMana(absorbMP);
     }
 }
@@ -170,7 +170,7 @@ function ult_perseus(attacker, target) {
 function ability_hera(attacker, target) {
     broadcastMsg("ability", true, "Hera", target.cardName);
     target.current_defense += 10;
-    target.heal(100);
+    target.heal(200);
     target.giveMana(100);
 }
 
@@ -210,7 +210,7 @@ function ult_hermes(attacker, target) {
 }
 
 function ability_hermes(attacker, target) { // #TODO add more outputting of what happens in abilities, add aesthetic notifications
-    broadcastMsg("ultimate", true, "Hermes", target.cardName);
+    broadcastMsg("ability", true, "Hermes", target.cardName);
     if (attacker.current_attack < target.current_attack && coinFlip()) {
         let ACA = attacker.current_attack;
         attacker.current_attack = target.current_attack;
