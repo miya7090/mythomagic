@@ -263,7 +263,7 @@ function startBgm(){
       this.currentTime = 0;
       this.play();
   }, false);
-  bgm.volume = 0.5;
+  bgm.volume = 0.4;
   bgm.play();
 }
 

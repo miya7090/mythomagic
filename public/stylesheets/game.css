@@ -27,8 +27,8 @@
   --p0FontColor: rgb(255, 255, 255);
   --p1FontColor: rgb(255, 189, 167);
   --p2FontColor: rgb(167, 223, 255);
-  --p1CardAreaBGColor: rgba(72, 0, 0, 0.3);
-  --p2CardAreaBGColor: rgba(0, 24, 85, 0.3);
+  --p1CardAreaBGColor: rgba(37, 0, 0, 0.3);
+  --p2CardAreaBGColor: rgba(0, 15, 54, 0.3);
   --p1TooltipBGColor: rgba(100, 0, 0,0.7);
   --p2TooltipBGColor: rgba(9, 39, 114, 0.7);
   --p1TokenColor: rgba(86, 1, 1, 0.9);
@@ -65,15 +65,15 @@ body {
 /* POWER BOX RULES */
 
 .powerbox {
-  margin-top: 20px;
+  margin-top: 24px;
   margin-left: 5px;
   margin-right: 10px;
-  height: 120px;
+  height: 80px;
   background-color: rgba(71, 67, 124, 0.4);
+  box-shadow: inset 1px 1px 2px 2px rgba(0,0,0,0.3);
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: inset 1px 1px 2px 2px rgba(0,0,0,0.3);
 }
 
 .button {
@@ -131,6 +131,7 @@ body {
 
 #gameInfoBox {
   font-family: Georgia;
+  overflow-y: scroll;
 }
 
 .hoverInfo {
@@ -146,6 +147,7 @@ body {
   font-size: medium;
   color: var(--p0FontColor);
   margin-left: 10px;
+  margin-top: 0px;
   margin-bottom: 2px;
 }
 
