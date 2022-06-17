@@ -189,4 +189,8 @@ router.get('/game',(req,res) => {
   res.render("game", {room: req.query.room, self: req.query.self, other:req.query.other});
 });
 
+router.get('/preview',(req,res) => {
+  res.render("preview");
+});
+
 app.use('/', router);
