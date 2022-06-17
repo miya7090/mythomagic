@@ -2,8 +2,8 @@ const ABILITY_MAP = {
     "Athena":[ability_athena,0], // 0 = ally friendly, 1 = attacks enemy, 2 = all valid, 3 = no target provided
     "Apollo":[ability_apollo,1], "Achilles":[ability_achilles,1],
     "Medea":[ability_medea,1], "Poseidon":undefined,
-    "Thanatos":undefined, "Hestia":[ability_hestia,0],
-    "Kronos":undefined, "Perseus":[ability_perseus,1],
+    "Thanatos":[ability_thanatos,1], "Hestia":[ability_hestia,0],
+    "Kronos":[ability_kronos,1], "Perseus":[ability_perseus,1],
     "Hera":[ability_hera,0], "Hermes":[ability_hermes,2],
     "Heracles":[ability_heracles,1]};
 
@@ -12,8 +12,8 @@ const ULT_MAP = {
     "Apollo":[ult_apollo,3], "Achilles":[ult_achilles,3],
     "Medea":[ult_medea,0], "Poseidon":[ult_poseidon,1],
     "Thanatos":[ult_thanatos,3], "Hestia":[ult_hestia,0],
-    "Kronos":undefined, "Perseus":[ult_perseus,3],
-    "Hera":[ult_hera,1], "Hermes":[ult_hermes,3],
+    "Kronos":[ult_kronos,3], "Perseus":[ult_perseus,3],
+    "Hera":[ult_hera,1], "Hermes":[ult_hermes,0],
     "Heracles":[ult_heracles,3]};
 
 function doUniqueSkill(atkType, attacker, target, targetIsOpponent) { // atkType 1=ability, 2=ultimate
@@ -41,6 +41,19 @@ function ability_athena(attacker, target) {
     target.clearStatuses();
 }
 
+function ability_thanatos(attacker, target) {
+    broadcastMsg("ability", true, "Thanatos", target.cardName);
+    let absorbAtk = target.current_attack;
+    let absorbMP = target.current_mana;
+
+    let dmg = calcDamage(attacker, target);
+    target.takeDamage(dmg);
+    if (target.dead == "defeated") {
+        attacker.current_attack += absorbAtk;
+        attacker.giveMana(absorbMP);
+    }
+}
+
 function ult_athena(attacker, target) {
     broadcastMsg("ultimate", true, "Athena", target.cardName);
     target.takeDamage(700);
@@ -50,6 +63,24 @@ function ability_apollo(attacker, target) {
     broadcastMsg("ability", true, "Apollo", target.cardName);
     let dmg = calcDamage(attacker, target);
     target.takeDamage(1.1 * dmg);
+}
+
+function ability_kronos(attacker, target) {
+    broadcastMsg("ability", true, "Kronos", target.cardName);
+    let dmg = calcDamage(attacker, target);
+    target.takeDamage(dmg);
+    target.inflictStatus("stunned");
+}
+
+function ult_kronos(attacker, target) {
+    //Deals 200 true damage to all Stunned enemies, and grants additional turn
+    broadcastMsg("ultimate", true, "Kronos", "enemies");
+    ENEMY_GAMECARD_OBJS.forEach(pc => {
+        if (pc.statuses["stunned"] == 1) {
+            pc.takeDamage(200);
+        }
+    });
+    ON_KRONOS_EXTRA_TURN = true;
 }
 
 function ult_apollo(attacker, target) {
@@ -160,23 +191,22 @@ function ult_heracles(attacker, target) {
 }
 
 function ult_hermes(attacker, target) {
-    const randomPC = PLAYER_GAMECARD_OBJS[Math.floor(Math.random() * PLAYER_GAMECARD_OBJS.length)];
-    broadcastMsg("ultimate", true, "Hermes", randomPC.cardName);
+    broadcastMsg("ultimate", true, "Hermes", target.cardName);
     let mult = 3;
     if (coinFlip()) {
         mult = 0.5;
     }
-    randomPC.current_attack = Math.round(mult * randomPC.current_attack);
-    randomPC.current_normal_attack_range = Math.round(mult * randomPC.current_normal_attack_range);
-    if (randomPC.current_normal_attack_range < 1) {randomPC.current_normal_attack_range = 1; }
-    randomPC.current_defense = Math.round(mult * randomPC.current_defense);
-    if (randomPC.current_defense < 1) {randomPC.current_defense = 1; }
-    randomPC.current_mana_per_turn = Math.round(mult * randomPC.current_mana_per_turn);
-    randomPC.current_mana_per_atk = Math.round(mult * randomPC.current_mana_per_atk);
-    randomPC.current_movement = Math.round(mult * randomPC.current_movement);
-    if (randomPC.current_movement < 1) {randomPC.current_movement = 1; }
-    randomPC.setMaxHealthTo(mult * randomPC.getMaxHealth());
-    randomPC.setMaxManaTo(mult * randomPC.getMaxMana());
+    target.current_attack = Math.round(mult * target.current_attack);
+    target.current_normal_attack_range = Math.round(mult * target.current_normal_attack_range);
+    if (target.current_normal_attack_range < 1) {target.current_normal_attack_range = 1; }
+    target.current_defense = Math.round(mult * target.current_defense);
+    if (target.current_defense < 1) {target.current_defense = 1; }
+    target.current_mana_per_turn = Math.round(mult * target.current_mana_per_turn);
+    target.current_mana_per_atk = Math.round(mult * target.current_mana_per_atk);
+    target.current_movement = Math.round(mult * target.current_movement);
+    if (target.current_movement < 1) {target.current_movement = 1; }
+    target.setMaxHealthTo(mult * target.getMaxHealth());
+    target.setMaxManaTo(mult * target.getMaxMana());
 }
 
 function ability_hermes(attacker, target) { // #TODO add more outputting of what happens in abilities, add aesthetic notifications

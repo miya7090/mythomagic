@@ -64,6 +64,25 @@ function updateTokenClock(){
   }
 }
 
+function beginTurn(yourEnemysCards, yourEnemysVerOfYourCards){
+  changeGameModeTo("p1-active");
+  soundNextTurn(1.0);
+  console.log("it's my turn!");
+  console.log("opponent cards look like", yourEnemysCards);
+
+  if (yourEnemysCards != undefined){
+    importAllP2Cs(yourEnemysCards);
+    if (yourEnemysVerOfYourCards != undefined){
+      importAllP1Cs(yourEnemysVerOfYourCards);
+    }
+  }
+  passive_hestia();
+  passive_hermes();
+  poisonThePoisoned();
+
+  rerenderAllGamecardsAndTokens();
+}
+
 function mouseOverTile(evt) {
     hoverMouseHighlight(false);
     CURRENT_MOUSE_Q = evt.target.cube_q;
@@ -176,10 +195,16 @@ function attackComplete(){
 
   let gameOver = checkGameOver();
   if (gameOver == "ongoing"){
-    changeGameModeTo('p2-active');
-    MY_SOCKET.emit("tellRival_yourTurn", exportAllP1Cs(false), exportAllP2Cs(true));
-    GAME_MODE_MEMORYTARGET = undefined;
-    rerenderAllGamecardsAndTokens();
+    if (ON_KRONOS_EXTRA_TURN == true){
+      ON_KRONOS_EXTRA_TURN = false;
+      console.log("taking kronos extra turn");
+      beginTurn(); // includes a rerender
+    } else {
+      changeGameModeTo('p2-active');
+      MY_SOCKET.emit("tellRival_yourTurn", exportAllP1Cs(false), exportAllP2Cs(true));
+      GAME_MODE_MEMORYTARGET = undefined;
+      rerenderAllGamecardsAndTokens();
+    }
   } else if (gameOver == "tie") {
     MY_SOCKET.emit("gameEnded_withTie", SELF_NAME, getPCNames(PLAYER_GAMECARD_OBJS), OTHER_NAME, getPCNames(ENEMY_GAMECARD_OBJS));
   } else if (gameOver == "p1win") {

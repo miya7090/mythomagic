@@ -59,19 +59,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   MY_SOCKET.on('yourTurn', (yourEnemysCards, yourEnemysVerOfYourCards)=>{
-    changeGameModeTo("p1-active");
-    soundNextTurn(1.0);
-    console.log("it's my turn!");
-    console.log("opponent cards look like", yourEnemysCards);
-
-    importAllP2Cs(yourEnemysCards);
-    if (yourEnemysVerOfYourCards != undefined){
-      importAllP1Cs(yourEnemysVerOfYourCards);
-    }
-    passive_hestia();
-    poisonThePoisoned();
-
-    rerenderAllGamecardsAndTokens();
+    beginTurn(yourEnemysCards, yourEnemysVerOfYourCards);
   });
 
   MY_SOCKET.on('waitTurnAndPopulate', (yourEnemysCards)=>{

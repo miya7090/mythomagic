@@ -62,6 +62,16 @@ function poisonThePoisoned(){
   });
 }
 
+function countCardsMatching(gamecardObjs, cList){
+  var listCount = 0;
+  gamecardObjs.forEach(pc => {
+    if (cList.includes(pc.cardName)){
+      listCount += 1;
+    }
+  });
+  return listCount;
+}
+
 function autoattack(pcard){
   attack(0, pcard, pcard.getQ(), pcard.getR(), pcard.getS(), pcard.getCurrentNormAtkRange());
   GAME_MODE_MEMORYTARGET.giveAttackMana();

@@ -119,7 +119,7 @@ function importAllP2Cs(pcListObj){
       this.health_bonus = 0;
       this.mana_bonus = 0;
 
-      this.blessings = {"Hestia": false};
+      this.blessings = {"Hestia": false, "Hermes": false};
 
       this.is_figurine = isFigurine;
       this.clearStatuses();
@@ -172,6 +172,9 @@ function importAllP2Cs(pcListObj){
         if (blessName == "Hestia"){
           console.log("adding hestia blessing to",this);
           blessing_hestia(true, this);
+        } else if (blessName == "Hermes"){
+          console.log("adding hermes blessing to",this);
+          blessing_hermes(true, this);
         } else {
           console.error("blessing code missing for",blessName);
         }
@@ -183,13 +186,26 @@ function importAllP2Cs(pcListObj){
         if (blessName == "Hestia"){
           console.log("removing hestia blessing for",this);
           blessing_hestia(false, this);
+        } else if (blessName == "Hermes"){
+          console.log("removing hermes blessing for",this);
+          blessing_hermes(false, this);
         } else {
           console.error("blessing code missing for",blessName);
         }
       }
     }
     getMaxHealth(){
-      return this.base_health + this.health_bonus;
+      let maxH = this.base_health + this.health_bonus;
+
+      let hera_bonus = 0;
+      if (this.p1 && hasAllyCard("Hera")) { // passive_hera
+        hera_bonus = 100 * countCardsMatching(PLAYER_GAMECARD_OBJS, OLYMPIAN_LIST);
+      }
+      if (!this.p1 && hasEnemyCard("Hera")) {
+        hera_bonus = 100 * countCardsMatching(ENEMY_GAMECARD_OBJS, OLYMPIAN_LIST);
+      }
+      
+      return maxH + hera_bonus;
     }
     setMaxHealthTo(fn){
       let flatNum = Math.round(fn);
@@ -228,13 +244,19 @@ function importAllP2Cs(pcListObj){
       }
     }
     inflictStatus(iStat){
-      this.statuses[iStat] = 1;
+      if (this.dead != "defeated"){
+        if (this.p1){ passive_medea_onAlly(this); } else { passive_medea_onEnemy(this); }
+        this.statuses[iStat] = 1;
+      }
     }
     clearStatus(iStat){
       this.statuses[iStat] = 0;
     }
     clearStatuses() {
       this.statuses = {"charmed":0, "distracted":0, "poisoned":0, "stunned":0, "terrified":0, "obscured":0};
+    }
+    statusesAreClear() {
+      return Object.values(this.statuses).every(v => v == 0);
     }
     giveTurnMana(){
       this.giveMana(this.current_mana_per_turn);

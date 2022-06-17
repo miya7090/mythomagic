@@ -32,6 +32,9 @@ PICK_PHASE_STARTED_AT = undefined;
 GAME_MODE = "startup"; // startup, pick-phase; [p1-, p2-]active, moveToken, attackSelect, autoattack, ability, abilityAim, ultimate, ultimateAim
 GAME_MODE_MEMORYTARGET = undefined; // used if moving tokens, etc
 
+ON_KRONOS_EXTRA_TURN = false;
+const OLYMPIAN_LIST = ["Zeus", "Hera", "Poseidon", "Demeter", "Athena", "Apollo", "Artemis", "Ares", "Aphrodite", "Hephaestus", "Hermes", "Dionysus", "Hestia"];
+
 const BASE_STAT_DICT = {
     // name, base atk, normal atk range, defense, hp, mana per turn, mana per attack, mvt speed
     // ability aimed range/aoe, ult aimed range/aoe
@@ -50,22 +53,22 @@ const BASE_STAT_DICT = {
     "Medea":[1400,2,10,500,100,250,2, 3,0,1,0,
       "Sorcery", "Drain all mana from enemy within 3 tiles and inflict Poisoned",
       "Cold Blood", "Deal fatal blow to an adjacent ally, absorb their current ATK, DEF, MVT, and regain full HP",
-      "*Vengeance", "50% chance of counterspell that casts the same damage/effect on enemy"], 
-    "Poseidon":[4000,2,10,700,100,250,2, undefined,9,undefined,5,
+      "Circulation", "No ally can obtain more than one status at a time"], 
+    "Poseidon":[4000,2,10,700,100,250,2, undefined,9,undefined,5, // removed for now
       "*Whirlpool","Pull all enemies 3 tiles towards self, 200 true damage to each",
       "Hurricane","Deal 300 true damage to all targets within 5 tiles",
       "*Aquatic Healing","Gain 100HP per turn while in water"],
     "Thanatos":[2800,2,10,600,100,200,3,undefined,9,undefined,undefined,
-      "*Death Grip","Teleport next to target with less than 100 HP and attack, inflicting Stunned",
+      "Soul Collection","Attacks enemy, and if enemy is defeated, absorb its ATK and MP",
       "Reaper","All cards with less than 100 HP receive 100 true damage",
       "Watchful","Inflicts Terrified on any opponent if they lose over 50% of their HP at once"],
     "Hestia":[500,2,15,1200,100,250,1, undefined,2,undefined,2,
       "Warming Hearth","Heal all allies within 2 tiles by 300 HP",
       "Eternal Flame","Increase max HP of allies within 2 tiles by 200 HP and heal them 300 HP",
       "Shelter", "All adjacent allies gain 10 DEF and have their max HP increased by 200"],
-    "Kronos":[3000,2,10,800,100,250,2, 4,2,undefined,4,
-      "*Scythe","400 dmg to targets and grants additional turn",
-      "*Stasis","Movement speed of enemies in range reduced to 1 and grants additional turn",
+    "Kronos":[3000,2,10,800,100,250,2, 4,2,undefined,undefined,
+      "Scythe","Attack targets in a 2-tile radius up to 4 units away, inflicting Stunned",
+      "Stasis","Deals 200 true damage to all Stunned enemies, and grants additional turn",
       "Infinite Power","Gains 150 ATK and 2 DEF on each of your turns"],
     "Perseus":[1400,2,10,500,100,250,3, undefined,2,undefined,undefined,
       "Undaunted","Using base stats and ignoring status effects, attack all enemies within 2 tiles",
@@ -74,16 +77,17 @@ const BASE_STAT_DICT = {
     "Hera":[1400,2,15,800,100,250,2, 4,0,6,0,
       "Protector","Grants 10 DEF, 100 HP, 100 MP to ally within 4 tiles",
       "Wrath","Max HP of enemy within 6 tiles reduced to 100",
-      "*Grudge","Gain 300 ATK per inactive turn, bonus resets after attack"],
-    "Hermes":[1200,2,10,600,100,250,4, 1,0,undefined,undefined,
+      "Queen of Olympus","All allies gain 100 max HP for each Olympian god in the deck"],
+    "Hermes":[1200,2,10,600,100,250,4, 1,0,1,0,
       "Trade Offer","Swap stats with adjacent target's better stats, with 50% chance success for each",
-      "Lucky","A random ally has their stats either halved or tripled",
-      "*Messenger","Can teleport between any two offgrid tiles"],
+      "Lucky","Adjacent ally has their stats either halved or tripled",
+      "Messenger","All adjacent allies have their MVT increased by 2"],
     "Heracles":[3800,2,15,500,100,250,3, undefined,3,undefined,1,
       "Efficiency","Attack all targets within 3 tiles with 50% more damage",
       "Lion Cloak","Double the DEF of all adjacent allies",
       "Determination","Will take at maximum 300 HP of damage per attack"]
   } // #TODO add method to preview these before game start
+
 
   const STATUSES_DEF_DICT = {
     "charmed": "DEF reduced to 1",
@@ -94,7 +98,7 @@ const BASE_STAT_DICT = {
     "obscured": "location not visible to enemy\nATK reduced by 10%"
   }
   
-  let PLAYER_OWNED_temp = ["Athena","Apollo","Achilles","Medea","Poseidon","Thanatos","Hestia","Kronos","Perseus","Hera","Hermes","Heracles"];
+  let PLAYER_OWNED_temp = ["Athena","Apollo","Achilles","Medea","Thanatos","Hestia","Kronos","Perseus","Hera","Hermes","Heracles","Hades"];
   PLAYER_OWNED_temp.sort();
   const PLAYER_OWNED = PLAYER_OWNED_temp;
   const PLAYER_HOLOFOIL = ["Athena","Apollo","Hephaestus","Nyx"]; // #TODO remove
