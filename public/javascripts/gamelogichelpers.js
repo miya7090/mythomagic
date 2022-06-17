@@ -224,6 +224,7 @@ function filterOnlyCoordinatesOnBoard(qrsList){
         moveToken(pcardOfOtherToken, false, -1, 0);
       }
     });
+    rerenderAllGamecardsAndTokens(false); // #TODO above code redundant
   };
 
   function moveToken(tokenPcard, absolute, diffQ, diffR) {

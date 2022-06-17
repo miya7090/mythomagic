@@ -138,7 +138,7 @@ function blessing_hermes(give, pc) {
     if (give) {
         pc.current_movement += 2;
     } else {
-        pc.current_movement += 2;
+        pc.current_movement -= 2;
     }
 }
 

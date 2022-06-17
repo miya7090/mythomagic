@@ -242,7 +242,7 @@ function markTokenDefeated(tag) {
   tokenOnTile.setAttribute("isDefeated",true);
 }
 
-function rerenderAllGamecardsAndTokens() {
+function rerenderAllGamecardsAndTokens(flipEnemy) {
   // clear game info hover box
   gameInfoBox.innerHTML = "";
 
@@ -275,7 +275,7 @@ function rerenderAllGamecardsAndTokens() {
   while(enemyTokenTooltips.length > 0){ enemyTokenTooltips[0].remove(); }
   
   ENEMY_GAMECARD_OBJS.forEach(newGCard => { // enemyCardReference
-    newGCard.flipAcrossBoard();
+    if (flipEnemy) { newGCard.flipAcrossBoard(); }
     createEnemyGameCardDiv(newGCard);
     createEnemyTokenDiv(newGCard);
   });
@@ -414,8 +414,8 @@ function get_PC_BroadcastForInfoBox(PCard, isPlayer1) {
 
     
     res += '<div class="hoverColumn">';
-    res += "<p>" + PCard.current_health + "/" + PCard.getMaxHealth() + "HP <i>(max +" + PCard.health_bonus + ")</i></p>";
-    res += "<p>" + PCard.current_mana + "/" + PCard.getMaxMana() + "MP <i>(max +" + PCard.mana_bonus + ")</i></p>";
+    res += "<p>" + PCard.current_health + "/" + PCard.getMaxHealth() + "HP <i>(max +" + (PCard.getMaxHealth() - PCard.base_health) + ")</i></p>";
+    res += "<p>" + PCard.current_mana + "/" + PCard.getMaxMana() + "MP <i>(max +" + (PCard.getMaxMana() - MAX_MANA) + ")</i></p>";
     res += "</div>";
     
     res += '<div class="hoverColumn">';

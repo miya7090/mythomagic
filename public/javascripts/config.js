@@ -44,7 +44,7 @@ const BASE_STAT_DICT = {
       "Well-Prepared","Player cards start game with 200 MP"], 
     "Apollo":[2000,4,10,700,100,250,3, 6,2,undefined,undefined,
       "Volley","Attack with 10% extra damage to enemies in a 2-tile radius, up to 6 tiles away",
-      "Inspiration","For all allies, clear all statuses, recover 20% health, and recover 20% mana",
+      "Inspiration","For all allies, clear all statuses, recover 20% max health, and recover 20% max mana",
       "Medicine","+20 HP to all heroes, -20 HP to all enemies after your turn"],
     "Achilles":[2900,2,20,600,100,250,3, undefined,3,undefined,undefined,
       "Berserk","Clear all statuses from self and attack all enemies within 3 tiles with 20% more damage",
@@ -77,7 +77,7 @@ const BASE_STAT_DICT = {
     "Hera":[1400,2,15,800,100,250,2, 4,0,6,0,
       "Protector","Grants 10 DEF, 100 HP, 100 MP to ally within 4 tiles",
       "Wrath","Max HP of enemy within 6 tiles reduced to 100",
-      "Queen of Olympus","All allies gain 100 max HP for each Olympian god in the deck"],
+      "Queen of Olympus","All allies permanently gain 100 max HP for each Olympian in the deck"],
     "Hermes":[1200,2,10,600,100,250,4, 1,0,1,0,
       "Trade Offer","Swap stats with adjacent target's better stats, with 50% chance success for each",
       "Lucky","Adjacent ally has their stats either halved or tripled",
@@ -98,7 +98,7 @@ const BASE_STAT_DICT = {
     "obscured": "location not visible to enemy\nATK reduced by 10%"
   }
   
-  let PLAYER_OWNED_temp = ["Athena","Apollo","Achilles","Medea","Thanatos","Hestia","Kronos","Perseus","Hera","Hermes","Heracles","Hades"];
+  let PLAYER_OWNED_temp = ["Athena","Apollo","Achilles","Medea","Thanatos","Hestia","Kronos","Perseus","Hera","Hermes","Heracles"];
   PLAYER_OWNED_temp.sort();
   const PLAYER_OWNED = PLAYER_OWNED_temp;
   const PLAYER_HOLOFOIL = ["Athena","Apollo","Hephaestus","Nyx"]; // #TODO remove

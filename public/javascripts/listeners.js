@@ -64,7 +64,7 @@ function updateTokenClock(){
   }
 }
 
-function beginTurn(yourEnemysCards, yourEnemysVerOfYourCards){
+function beginTurn(yourEnemysCards, yourEnemysVerOfYourCards, flipEnemy){
   changeGameModeTo("p1-active");
   soundNextTurn(1.0);
   console.log("it's my turn!");
@@ -76,11 +76,15 @@ function beginTurn(yourEnemysCards, yourEnemysVerOfYourCards){
       importAllP1Cs(yourEnemysVerOfYourCards);
     }
   }
+  atTurnStart(flipEnemy); // if true, flip enemy
+}
+
+function atTurnStart(flipEnemy){
   passive_hestia();
   passive_hermes();
   poisonThePoisoned();
 
-  rerenderAllGamecardsAndTokens();
+  rerenderAllGamecardsAndTokens(flipEnemy);
 }
 
 function mouseOverTile(evt) {
@@ -198,12 +202,12 @@ function attackComplete(){
     if (ON_KRONOS_EXTRA_TURN == true){
       ON_KRONOS_EXTRA_TURN = false;
       console.log("taking kronos extra turn");
-      beginTurn(); // includes a rerender
+      beginTurn(undefined, undefined, false); // includes a rerender
     } else {
       changeGameModeTo('p2-active');
       MY_SOCKET.emit("tellRival_yourTurn", exportAllP1Cs(false), exportAllP2Cs(true));
       GAME_MODE_MEMORYTARGET = undefined;
-      rerenderAllGamecardsAndTokens();
+      rerenderAllGamecardsAndTokens(true);
     }
   } else if (gameOver == "tie") {
     MY_SOCKET.emit("gameEnded_withTie", SELF_NAME, getPCNames(PLAYER_GAMECARD_OBJS), OTHER_NAME, getPCNames(ENEMY_GAMECARD_OBJS));
@@ -390,9 +394,8 @@ function mouseClickAvailableCard(evt) {
         playSoundRandom([clack1, clack2], 0.7);
         var hasHolo = PLAYER_HOLOFOIL.includes(thisCardName);
         var newPC = new PlayerCard(thisCardName, hasHolo, -(HEX_RADIUS-1)+countPlayersPicks,HEX_RADIUS,-1-countPlayersPicks, true);
-        createGameCardDiv(newPC);
-        createTokenDiv(newPC);
         PLAYER_GAMECARD_OBJS.push(newPC);
+        rerenderAllGamecardsAndTokens(false);
     }
 }
 

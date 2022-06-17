@@ -204,15 +204,15 @@ function importAllP2Cs(pcListObj){
       if (!this.p1 && hasEnemyCard("Hera")) {
         hera_bonus = 100 * countCardsMatching(ENEMY_GAMECARD_OBJS, OLYMPIAN_LIST);
       }
-      
+
       return maxH + hera_bonus;
     }
     setMaxHealthTo(fn){
       let flatNum = Math.round(fn);
       if (this.dead != "defeated") {
         this.health_bonus = -(this.base_health - flatNum);
-        if (this.current_health > flatNum){
-          this.current_health = flatNum;
+        if (this.current_health > this.getMaxHealth()){
+          this.current_health = this.getMaxHealth();
         }
         if (this.current_health < 0){
           this.current_health = 0;
@@ -237,7 +237,7 @@ function importAllP2Cs(pcListObj){
     setMaxManaTo(fn){
       let flatNum = Math.round(fn);
       if (this.dead != "defeated") {
-        this.mana_bonus = -(this.base_mana - flatNum);
+        this.mana_bonus = -(MAX_MANA - flatNum);
         if (this.current_mana > flatNum){
           this.current_mana = flatNum;
         }
@@ -289,6 +289,7 @@ function importAllP2Cs(pcListObj){
     takeDamage(fn){
       let flatNum = fn;
       if (this.cardName == "Heracles" && fn > 300) { // passive_heracles
+        broadcastMsg("passive", this.p1, "Heracles", undefined);
         flatNum = 300;
       }
       if (this.dead != "defeated") {
