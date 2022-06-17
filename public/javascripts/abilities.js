@@ -56,7 +56,7 @@ function ability_thanatos(attacker, target) {
 
 function ult_athena(attacker, target) {
     broadcastMsg("ultimate", true, "Athena", target.cardName);
-    target.takeDamage(700);
+    target.takeDamage(400);
 }
 
 function ability_apollo(attacker, target) {

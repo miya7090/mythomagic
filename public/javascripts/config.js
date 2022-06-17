@@ -27,7 +27,7 @@ ABILITY_MANA_REQ = 200;
 MAX_MANA = 1000;
 HEXTILE_CUBIC_INDEX = {}; // keys: "q,r,s", maps to divs that are hextiles
 
-PICK_PHASE_TIMER = 30000; // 30 sec in ms
+PICK_PHASE_TIMER = 45000; // 45 sec in ms
 PICK_PHASE_STARTED_AT = undefined;
 GAME_MODE = "startup"; // startup, pick-phase; [p1-, p2-]active, moveToken, attackSelect, autoattack, ability, abilityAim, ultimate, ultimateAim
 GAME_MODE_MEMORYTARGET = undefined; // used if moving tokens, etc
@@ -40,7 +40,7 @@ const BASE_STAT_DICT = {
     // ability aimed range/aoe, ult aimed range/aoe
     "Athena":[3000,2,15,700,100,100,3, 3,0,8,0,
       "Aegis","Ally within 3 units gains 15 DEF and has their statuses cleared",
-      "Deliberate Strike","Deal 700 true damage to one target within 8 units",
+      "Deliberate Strike","Deal 400 true damage to one target within 8 units",
       "Well-Prepared","Player cards start game with 200 MP"], 
     "Apollo":[2000,4,10,700,100,250,3, 6,2,undefined,undefined,
       "Volley","Attack with 10% extra damage to enemies in a 2-tile radius, up to 6 tiles away",
@@ -66,10 +66,10 @@ const BASE_STAT_DICT = {
       "Warming Hearth","Heal all allies within 2 tiles by 300 HP",
       "Eternal Flame","Increase max HP of allies within 2 tiles by 200 HP and heal them 300 HP",
       "Shelter", "All adjacent allies gain 10 DEF and have their max HP increased by 200"],
-    "Kronos":[3000,2,10,800,100,250,2, 4,2,undefined,undefined,
-      "Scythe","Attack targets in a 2-tile radius up to 4 units away, inflicting Stunned",
+    "Kronos":[3000,2,10,800,100,250,1, 3,1,undefined,undefined,
+      "Scythe","Attack targets in a 1-tile radius up to 3 units away, inflicting Stunned",
       "Stasis","Deals 200 true damage to all Stunned enemies, and grants additional turn",
-      "Infinite Power","Gains 150 ATK and 2 DEF on each of your turns"],
+      "Infinite Power","Gains 100 ATK and 2 DEF on each of your turns"],
     "Perseus":[1600,2,10,500,100,250,3, undefined,2,undefined,undefined,
       "Undaunted","Using base stats and ignoring status effects, attack all enemies within 2 tiles",
       "Swordsmanship","Receive ATK and DEF increase by 20%, MVT increase by 1",
@@ -80,7 +80,7 @@ const BASE_STAT_DICT = {
       "Queen of Olympus","All allies permanently gain 100 max HP for each Olympian in the deck"],
     "Hermes":[1200,2,10,600,100,250,4, 1,0,1,0,
       "Trade Offer","Swap stats with adjacent target's better stats, with 50% chance success for each",
-      "Lucky","Adjacent ally has their stats either halved or tripled",
+      "Lucky","Adjacent ally has a 50-50 chance of their stats being either halved or tripled",
       "Messenger","All adjacent allies have their MVT increased by 2"],
     "Heracles":[3200,2,15,500,100,250,3, undefined,3,undefined,1,
       "Efficiency","Attack all targets within 3 tiles with 50% more damage",

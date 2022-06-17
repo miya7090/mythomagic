@@ -57,6 +57,7 @@ function updateTokenClock(){
     clock.textContent = "";
     changeGameModeTo("startup");
     passive_athena();
+    passive_hera_part2();
     MY_SOCKET.emit("doneWithTokenPick", exportAllP1Cs(false));
   } else {
     clockBoop(0.9);
@@ -113,6 +114,9 @@ function mouseOutOfGrid(evt) {
     CURRENT_MOUSE_Q = undefined;
     CURRENT_MOUSE_R = undefined;
     CURRENT_MOUSE_S = undefined;
+    if (GAME_MODE_MEMORYTARGET != undefined){
+      gameInfoBox.innerHTML = get_PC_BroadcastForInfoBox(GAME_MODE_MEMORYTARGET, true);
+    }
 }
 
 function mouseClickTile(evt) {
@@ -369,8 +373,12 @@ function soundNextTurn(volume){
 
 function mouseOverAvailableCard(evt, referenceCard) {
   const gameInfoBox = document.getElementById("gameInfoBox");
-  gameInfoBox.innerHTML = get_BC_BroadcastForInfoBox(referenceCard);
-
+  var gCard = onFieldCards.querySelector('#p1card-'+referenceCard.cardName);
+  if (gCard != undefined){
+    gameInfoBox.innerHTML = get_PC_BroadcastForInfoBox(gCard.pcardLink, true);
+  } else {
+    gameInfoBox.innerHTML = get_BC_BroadcastForInfoBox(referenceCard);
+  }
   playSoundRandom([clack3, clack4, clack5], rand(0.4,0.6));
 }
 
@@ -396,6 +404,7 @@ function mouseClickAvailableCard(evt) {
     var dupeCard = onFieldCards.querySelector('#p1card-'+thisCardName);
     if (dupeCard != null) { // search if card with that ID already selected to be played
       let existingPcard = dupeCard.pcardLink;
+      evt.target.setAttribute("acChosen",false);
       PLAYER_GAMECARD_OBJS.splice(PLAYER_GAMECARD_OBJS.indexOf(existingPcard), 1); // remove from game cards
       removeTokenAndShiftOthers(existingPcard);
       dupeCard.remove(); // remove div
@@ -410,10 +419,13 @@ function mouseClickAvailableCard(evt) {
 
     // define a new player card with a starter position
     playSoundRandom([clack1, clack2], 0.8);
+    evt.target.setAttribute("acChosen",true);
     var hasHolo = PLAYER_HOLOFOIL.includes(thisCardName);
     var newPC = new PlayerCard(thisCardName, hasHolo, -(HEX_RADIUS-1)+countPlayersPicks,HEX_RADIUS,-1-countPlayersPicks, true);
     PLAYER_GAMECARD_OBJS.push(newPC);
     rerenderAllGamecardsAndTokens(false);
+    const gameInfoBox = document.getElementById("gameInfoBox");
+    gameInfoBox.innerHTML = get_PC_BroadcastForInfoBox(newPC, true);
 }
 
 function mouseOverGameCard(evt, referenceCard) {
@@ -424,6 +436,7 @@ function mouseOverGameCard(evt, referenceCard) {
 
 function mouseClickGameCard(evt, pcardRef) {
   if (GAME_MODE == "pick-phase") {
+    document.getElementById("availCard-" + pcardRef.cardName).setAttribute("acChosen",false);
     PLAYER_GAMECARD_OBJS.splice(PLAYER_GAMECARD_OBJS.indexOf(pcardRef), 1); // remove from game cards
     evt.target.remove(); // remove div
     removeTokenAndShiftOthers(pcardRef);

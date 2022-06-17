@@ -153,6 +153,7 @@ function createAvailableCardDiv(pcNameToRender) {
   const acard = document.createElement("div");
   putBaseCardHTML(pcNameToRender, acard);
   acard.classList.add("card");
+  acard.id = "availCard-" + pcNameToRender;
   myAvailableCards.appendChild(acard);
 
   const referenceCard = new Card(pcNameToRender); // show stats on hover
@@ -400,9 +401,9 @@ function get_BC_BroadcastForInfoBox(BCard) {
     res += "</div>";
   res += "</div>";
   
-  res += '<p><span id="abilityTitle">'+BCard.ability_title+'</span>: '+BCard.ability_text+'</p>';
-  res += '<p><span id="ultTitle">'+BCard.ult_title+'</span>: '+BCard.ult_text+'</p>';
-  res += '<p><span id="passiveTitle">'+BCard.passive_title+'</span>: '+BCard.passive_text+'</p>';
+  res += '<p><span id="abilityTitle" title="ability">'+BCard.ability_title+'</span>: '+BCard.ability_text+'</p>';
+  res += '<p><span id="ultTitle" title="ultimate">'+BCard.ult_title+'</span>: '+BCard.ult_text+'</p>';
+  res += '<p><span id="passiveTitle" title="passive">'+BCard.passive_title+'</span>: '+BCard.passive_text+'</p>';
 
   return res;
 }
@@ -447,9 +448,9 @@ function get_PC_BroadcastForInfoBox(PCard, isPlayer1) {
 
   res += "</div>";
 
-  res += '<p><span id="abilityTitle" p1='+isPlayer1+'>'+PCard.ability_title+'</span>: '+PCard.ability_text+'</p>';
-  res += '<p><span id="ultTitle" p1='+isPlayer1+'>'+PCard.ult_title+'</span>: '+PCard.ult_text+'</p>';
-  res += '<p><span id="passiveTitle" p1='+isPlayer1+'>'+PCard.passive_title+'</span>: '+PCard.passive_text+'</p>';
+  res += '<p><span id="abilityTitle" p1='+isPlayer1+' title="ability">'+PCard.ability_title+'</span>: '+PCard.ability_text+'</p>';
+  res += '<p><span id="ultTitle" p1='+isPlayer1+' title="ultimate">'+PCard.ult_title+'</span>: '+PCard.ult_text+'</p>';
+  res += '<p><span id="passiveTitle" p1='+isPlayer1+' title="passive">'+PCard.passive_title+'</span>: '+PCard.passive_text+'</p>';
   
   return res;
 }

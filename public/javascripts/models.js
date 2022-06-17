@@ -196,6 +196,7 @@ function importAllP2Cs(pcListObj){
     }
     getMaxHealth(){
       let maxH = this.base_health + this.health_bonus;
+      if (GAME_MODE == "pick-phase"){ return maxH; }
 
       let hera_bonus = 0;
       if (this.p1 && hasAllyCard("Hera")) { // passive_hera

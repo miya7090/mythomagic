@@ -90,6 +90,7 @@ io.on("connection", socket => {
       rivalFinder[roommateFinder[roomCode][0]] = roommateFinder[roomCode][1];
       rivalFinder[roommateFinder[roomCode][1]] = roommateFinder[roomCode][0];
 
+      console.log(roommateFinder[roomCode], "entering tokenPickPhase");
       io.to(roommateFinder[roomCode][0]).emit("tokenPickPhase", roommateFinder[roomCode][1]);
       io.to(roommateFinder[roomCode][1]).emit("tokenPickPhase", roommateFinder[roomCode][0]);
     } else {

@@ -1,7 +1,7 @@
 // contains functions for some (but not all) passives
 
 // passive_heracles in models.js
-// passive_hera in models.js
+// passive_hera part 1 in models.js, part 2 in listeners.js
 
 function getAllyCard(cardName) {
     let AC = PLAYER_GAMECARD_OBJS.find(e => e.cardName == cardName);
@@ -21,6 +21,15 @@ function passive_athena(){ // run by both players at the beginning of the game
         broadcastMsg("passive", true, "Athena", "allies");
         PLAYER_GAMECARD_OBJS.forEach(pc => {
             pc.giveMana(200);
+        });
+    }
+}
+
+function passive_hera_part2() { // run by both players at the beginning of the game
+    if (hasAllyCard("Hera")) {
+        broadcastMsg("passive", true, "Hera", "allies");
+        PLAYER_GAMECARD_OBJS.forEach(pc => {
+            pc.heal(100 * countCardsMatching(PLAYER_GAMECARD_OBJS, OLYMPIAN_LIST));
         });
     }
 }
@@ -156,7 +165,7 @@ function passive_kronos(){ // run by player1 at the end of the turn
     if (hasAllyCard("Kronos")) {
         broadcastMsg("passive", true, "Kronos", undefined);
         let mc = getAllyCard("Kronos");
-        mc.current_attack += 150;
+        mc.current_attack += 100;
         mc.current_defense += 2;
     }
 }
