@@ -236,6 +236,7 @@ function autoButtonClick(){
   document.getElementById("autoButton").disabled = true;
   document.getElementById("abilityButton").disabled = true;
   document.getElementById("ultButton").disabled = true;
+  highlightSelfAndRadius("autoattackPreview", false, GAME_MODE_MEMORYTARGET.current_normal_attack_range, GAME_MODE_MEMORYTARGET.getQ(), GAME_MODE_MEMORYTARGET.getR(), GAME_MODE_MEMORYTARGET.getS());
   if (GAME_MODE == "p1-attackSelect"){
     changeGameModeTo('p1-autoattack');
     autoattack(GAME_MODE_MEMORYTARGET);
@@ -285,6 +286,14 @@ function mouseHoverTile(evt) {
 
 function mouseClickToken(evt) {
   evt.target.parentNode.click();
+}
+
+function mouseEnterAuto(evt){
+  highlightSelfAndRadius("autoattackPreview", true, GAME_MODE_MEMORYTARGET.current_normal_attack_range, GAME_MODE_MEMORYTARGET.getQ(), GAME_MODE_MEMORYTARGET.getR(), GAME_MODE_MEMORYTARGET.getS());
+}
+
+function mouseExitAuto(evt) {
+  highlightSelfAndRadius("autoattackPreview", false, GAME_MODE_MEMORYTARGET.current_normal_attack_range, GAME_MODE_MEMORYTARGET.getQ(), GAME_MODE_MEMORYTARGET.getR(), GAME_MODE_MEMORYTARGET.getS());
 }
 
 function startBgm(){

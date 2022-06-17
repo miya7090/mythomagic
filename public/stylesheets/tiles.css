@@ -54,6 +54,7 @@
 
 .gameSquare[rangeHighlight=true] { background-color: var(--rangeHighlightedTile); }
 .gameSquare[aimingReachHighlight=true] { background-color: var(--aimingReachHighlightedTile); }
+.gameSquare[autoattackPreview=true] { background-color: var(--autoattackHighlightedTile); }
 .gameSquare[hoverHighlight=true] { background-color: var(--highlightedTile); }
 
 .gameSquare[hasP1Token = true][hoverHighlight=true] {

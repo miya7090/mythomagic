@@ -79,12 +79,16 @@ document.addEventListener("DOMContentLoaded", () => {
   const previewRadius = document.getElementById("previewRadius");
   const playerTurn = document.getElementById("playerTurn");
   const myAvailableCards = document.getElementById("myAvailableCards");
+  const autoButton = document.getElementById("autoButton");
 
   previewRadius.textContent="Preview radius: "+MOUSE_HOVER_RADIUS;
   playerTurn.textContent=getPlayerTurnText();
 
   document.addEventListener('keyup', keyProcessing);
   mainGrid.addEventListener('mouseleave', mouseOutOfGrid);
+
+  autoButton.addEventListener("mouseenter", mouseEnterAuto);
+  autoButton.addEventListener("mouseleave", mouseExitAuto);
 
   // powerbox-hoverbox hover link
   $('#abilityButton').hover(function() {

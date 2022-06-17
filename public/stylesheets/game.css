@@ -5,6 +5,7 @@
   --rangeHighlightedTile: rgba(127, 89, 157, 0.6);
   --aimingReachHighlightedTile: rgba(54, 117, 108, 0.9);
   --aimingHighlightedTile: rgba(34, 156, 152, 0.9);
+  --autoattackHighlightedTile: rgba(103, 103, 142, 0.6);
 
   --offgridTile: rgba(0, 0, 0, 0.4);
   --highlightedOffgrid: rgba(0, 0, 0, 0.9);
