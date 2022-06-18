@@ -123,12 +123,24 @@ body {
   font-size: 11px;
 }
 
-#mythomagicTitle{
+#mythomagicTitle {
   position:absolute;
-  bottom:0;
+  bottom:18px;
   right:8px;
   margin:0px;
   font-size: 40px;
+}
+
+#creditText {
+  position:absolute;
+  bottom:3px;
+  right:8px;
+  margin:0px;
+  font-size: 12px;
+}
+
+#creditText a {
+  color: rgb(154, 135, 194);
 }
 
 /* INFO BOX RULES */

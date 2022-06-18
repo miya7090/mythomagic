@@ -62,7 +62,7 @@ const BASE_STAT_DICT = {
       "Soul Collection","Attacks adjacent target, and if enemy is defeated, absorb their MP and 50% of their ATK",
       "Reaper","All cards with less than 100 HP receive 100 true damage",
       "Watchful","Inflicts Terrified on any opponent if they lose over 50% of their HP at once"],
-    "Hestia":[500,2,15,1200,60,0,1, undefined,2,undefined,2,
+    "Hestia":[500,2,15,1000,60,0,1, undefined,2,undefined,2,
       "Warming Hearth","Heal all allies within 2 tiles by 300 HP",
       "Eternal Flame","Increase max HP of allies within 2 tiles by 200 HP and heal them 300 HP",
       "Shelter", "All adjacent allies gain 10 DEF and have their max HP increased by 200"],

@@ -1,0 +1,19 @@
+.helpSlide {
+    border: 2px white dashed;
+    margin: 20px;
+}
+
+.helpSlide h3 {
+    margin: 10px;
+    padding: 5px;
+    background-color: rgb(233, 233, 233);
+}
+
+.helpSlide p {
+    margin: 10px;
+    margin-left: 20px;
+}
+
+li {
+    line-height: 22px;
+}

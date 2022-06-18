@@ -27,20 +27,22 @@ h2 {
     color: blueviolet;
 }
 
-#creds {
+#credsFixed {
     position: fixed;
     width: 50%;
     bottom: 0px;
     background-color: rgb(237, 237, 237);
     font-size: small;
+    line-height: 17px;
 }
 
-#credsUnfixed {
+#credits {
     margin-top: 10px;
     width: 50%;
     bottom: 0px;
     background-color: rgb(237, 237, 237);
     font-size: small;
+    line-height: 17px;
 }
 
 a{
