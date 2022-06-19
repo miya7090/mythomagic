@@ -76,6 +76,10 @@ document.addEventListener("DOMContentLoaded", () => {
     importAllP1Cs(yourEnemysVerOfYourCards);
     rerenderAllGamecardsAndTokens(true);
   });
+  
+  MY_SOCKET.on('giveMessage', (msgType, p1, arg1, arg2)=>{
+    processBroadcast(msgType, p1, arg1, arg2);
+  });
 
   /////////////////////////////
 

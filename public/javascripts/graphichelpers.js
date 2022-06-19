@@ -25,21 +25,81 @@ function updateTurnText() {
   playerTurn.textContent=getPlayerTurnText();
 }
 
-function broadcastMsg(msgType, p1, arg1, arg2){ // #TODO nice formatting and graphics
-  // broadcast to P2 as well, and flip the p1 arg #TODO
+function broadcastMsg(msgType, p1, arg1, arg2){
   console.log(msgType, p1, arg1, arg2);
+  MY_SOCKET.emit("tellRival_message", msgType, !p1, arg1, arg2);
 
-  let bs = getBaseStats(arg1);
-  if (bs != undefined){
-    if (msgType == "ability"){
-      console.log(bs[11],bs[12]);
-    } else if (msgType == "ultimate" || msgType == "ult"){
-      console.log(bs[13],bs[14]);
-    } else if (msgType == "passive"){
-      console.log(bs[15],bs[16]);
-    }
+  processBroadcast(msgType, p1, arg1, arg2);
+}
+
+function processBroadcast(msgType, p1, arg1, arg2){
+  var bIcon = GITHUB_PUBLIC_PATH + "images/portraits/"+arg1.toLowerCase()+".png";
+  var bText = formatBroadcast(msgType, p1, arg1, arg2);
+
+  if (!BROADCASTING){
+    BROADCASTING = true;
+    startBroadcast(p1, bIcon, bText);
+  } else {
+    BROADCAST_QUEUE.push([p1, bIcon, bText]);
   }
 }
+
+function startBroadcast(p1, bIcon, bText){
+  document.getElementById("notifBox").setAttribute('p1', p1);
+  document.getElementById("notifIcon").src = bIcon;
+  document.getElementById("notifIconBacking").src = bIcon;
+  document.getElementById("notifText").innerHTML = bText;
+
+  $("#notifBox").fadeIn(100, function(){
+    setTimeout( function(){ 
+      let fadeOutLength = 800;
+      if (BROADCAST_QUEUE.length > 0){ fadeOutLength = 100; }
+      $("#notifBox").fadeOut(fadeOutLength, function(){
+        console.log("queue", BROADCAST_QUEUE);
+        if (BROADCAST_QUEUE.length > 0){
+          var bq = BROADCAST_QUEUE.shift();
+          startBroadcast(bq[0], bq[1], bq[2]);
+        } else {
+          BROADCASTING = false;
+        }
+      });
+    }, 1500 );
+  });
+}
+
+function formatBroadcast(msgType, p1, arg1, arg2) { // helper function for broadcast
+  // arg1 is name of attacker, arg2 is name of target(s)
+
+  var ansText = "";
+
+  if (msgType == "autoattack") {
+    ansText += "<span>" + arg1 + "</span> autoattacks " + arg2;
+
+  } else if (msgType == "ability"){
+    ansText += "<span>" + arg1 + "</span> uses ability <span>" + getBaseStats(arg1)[11] + "</span>";
+    if (arg2 != undefined) {
+      ansText += " on " + arg2;
+    }
+
+  } else if (msgType == "ultimate" || msgType == "ult"){
+    ansText += "<span>" + arg1 + "</span> uses ultimate <span>" + getBaseStats(arg1)[13] + "</span>";
+    if (arg2 != undefined) {
+      ansText += " on " + arg2;
+    }
+
+  } else if (msgType == "passive"){
+    ansText += "<span>" + arg1 + "</span>  uses passive <span>" + getBaseStats(arg1)[15] + "</span>";
+    if (arg2 != undefined) {
+      ansText += " on " + arg2;
+    }
+
+  } else {
+    console.error("issue with broadcast", msgType);
+    return "CAN'T FORMAT BROADCAST " + msgType;
+  }
+  
+  return ansText;
+} 
 
 // fancy tile highlighting and clearing of highlights
 function highlightSelfAndRadius(highlightType, turnOn, radius, cubeQ, cubeR, cubeS){

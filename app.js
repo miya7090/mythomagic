@@ -140,6 +140,11 @@ io.on("connection", socket => {
     let rivalId = rivalFinder[socket.id];
     io.to(rivalId).emit("enemysProgress", yourEnemysJsons, yourEnemysVerOfYourJsons);
   });
+  
+  socket.on("tellRival_message", (msgType, p1, arg1, arg2) => {
+    let rivalId = rivalFinder[socket.id];
+    io.to(rivalId).emit("giveMessage", msgType, p1, arg1, arg2);
+  });
 
   socket.on("gameEnded_withTie", (p1Name, p1cardNames, p2Name, p2cardNames) => {
     let rivalId = rivalFinder[socket.id];

@@ -93,9 +93,9 @@ function passive_thanatos_onEnemy(target){ // run when enemy loses >50% of HP at
     }
 }
 
-function passive_hestia() { // run by player1 at the beginning of the turn
+function passive_hestia(notif) { // run by player1 at the beginning of the turn
     if (hasAllyCard("Hestia")) {
-        broadcastMsg("passive", true, "Hestia", "nearby allies");
+        if (notif) { broadcastMsg("passive", true, "Hestia"); }
         let mc = getAllyCard("Hestia");
         PLAYER_GAMECARD_OBJS.forEach(pc => {
             if (getTileDistance(mc.getQ(),mc.getR(),mc.getS(),pc.getQ(),pc.getR(),pc.getS()) == 1) {
@@ -106,7 +106,7 @@ function passive_hestia() { // run by player1 at the beginning of the turn
         });
     }
     if (hasEnemyCard("Hestia")) {
-        broadcastMsg("passive", false, "Hestia", "nearby allies");
+        if (notif) { broadcastMsg("passive", false, "Hestia"); }
         let yc = getEnemyCard("Hestia");
         ENEMY_GAMECARD_OBJS.forEach(pc => {
             if (getTileDistance(yc.getQ(),yc.getR(),yc.getS(),pc.getQ(),pc.getR(),pc.getS()) == 1) {
@@ -120,7 +120,7 @@ function passive_hestia() { // run by player1 at the beginning of the turn
 
 function passive_hermes() { // run by player1 at the beginning of the turn // #TODO combine blessing format with hestia's
     if (hasAllyCard("Hermes")) {
-        broadcastMsg("passive", true, "Hermes", "nearby allies");
+        broadcastMsg("passive", true, "Hermes");
         let mc = getAllyCard("Hermes");
         PLAYER_GAMECARD_OBJS.forEach(pc => {
             if (getTileDistance(mc.getQ(),mc.getR(),mc.getS(),pc.getQ(),pc.getR(),pc.getS()) == 1) {
@@ -131,7 +131,7 @@ function passive_hermes() { // run by player1 at the beginning of the turn // #T
         });
     }
     if (hasEnemyCard("Hermes")) {
-        broadcastMsg("passive", false, "Hermes", "nearby allies");
+        broadcastMsg("passive", false, "Hermes");
         let yc = getEnemyCard("Hermes");
         ENEMY_GAMECARD_OBJS.forEach(pc => {
             if (getTileDistance(yc.getQ(),yc.getR(),yc.getS(),pc.getQ(),pc.getR(),pc.getS()) == 1) {

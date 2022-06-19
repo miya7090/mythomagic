@@ -1,0 +1,53 @@
+#notifBox {
+    position: fixed;
+    top: 20px;
+    right: 0px;
+    width: 330px;
+    height: 60px;
+    background-color: rgba(0, 0, 0, 0.5);
+    box-shadow: 0 0 5px 2px rgba(255, 255, 255, 0.3);
+
+    display: none;
+}
+
+#notifBox[p1=true] span {
+    color: var(--p1PassiveTextColor);
+}
+
+#notifBox[p1=false] span {
+    color: var(--p2PassiveTextColor);
+}
+
+#notifBox[p1=true] #notifIconBacking {
+    opacity: 0.8;
+    filter: invert(13%) sepia(100%) saturate(7473%) hue-rotate(359deg) brightness(101%) contrast(104%) blur(10px);
+}
+
+#notifBox[p1=false] #notifIconBacking {
+    opacity: 0.8;
+    filter: invert(26%) sepia(99%) saturate(4297%) hue-rotate(209deg) brightness(108%) contrast(102%) blur(10px);
+}
+
+#notifIcon {
+    filter: invert(1.0);
+    position: relative;
+    top: 0px;
+    right: 70px;
+    width: 60px;
+    height: 60px;
+}
+
+#notifIconBacking {
+    position: relative;
+    top: 0px;
+    right: 130px;
+    width: 60px;
+    height: 60px;
+}
+
+#notifText {
+    position: absolute;
+    top: 5px;
+    left: 11px;
+    font-size: 14px;
+}

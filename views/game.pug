@@ -9,6 +9,7 @@ head
   link(rel='stylesheet' href='../stylesheets/tiles.css')
   link(rel='stylesheet' href='../stylesheets/tokens.css')
   link(rel='stylesheet' href='../stylesheets/cards.css')
+  link(rel='stylesheet' href='../stylesheets/notifbox.css')
   script(src='//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js')
   script(src='/socket.io/socket.io.js' charset='utf8')
   script(src='../javascripts/config.js' charset='utf8')
@@ -21,6 +22,11 @@ head
   script(src='../javascripts/abilities.js' charset='utf8')
   script(src='../javascripts/passives.js' charset='utf8')
   link(rel="icon" href="https://raw.githubusercontent.com/miya7090/mythomagic/main/public/images/favicon/favicon.ico" type="image/x-icon")
+
+#notifBox
+  img#notifIcon
+  img#notifIconBacking
+  p#notifText error
 .wrapper
   .player
     .leftcolumn
@@ -40,7 +46,7 @@ head
       #gameInfoBox.hoverInfo
       #gameOptions.optionBox
   #myAvailableCards.cards
-  div.lowerPageText
+  .lowerPageText
     p#previewRadius Loading...
     p#playerTurn Loading...
     p#previewRadiusInstructions version 1.0.0&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;z/x ... -/+ preview radius&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;c ... clear selection

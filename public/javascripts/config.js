@@ -5,6 +5,9 @@ OPPONENT_SOCKET_ID = undefined;
 SELF_NAME = undefined;
 OTHER_NAME = undefined;
 
+BROADCASTING = false;
+BROADCAST_QUEUE = [];
+
 GITHUB_PUBLIC_PATH = "https://raw.githubusercontent.com/miya7090/mythomagic/main/public/";
 
 BASE_DAMAGE_DIFF_SCALE_TO_HP = 20
@@ -65,7 +68,7 @@ const BASE_STAT_DICT = {
     "Hestia":[500,2,15,1000,60,0,1, undefined,2,undefined,2,
       "Warming Hearth","Heal all allies within 2 tiles by 300 HP",
       "Eternal Flame","Increase max HP of allies within 2 tiles by 200 HP and heal them 300 HP",
-      "Shelter", "All adjacent allies gain 10 DEF and have their max HP increased by 200"],
+      "Shelter", "While adjacent to Hestia, allies' DEF is increased by 10, and max HP increased by 200"],
     "Kronos":[3000,2,10,800,50,0,1, 3,1,undefined,undefined,
       "Scythe","Attack targets in a 1-tile radius up to 3 units away, inflicting Stunned",
       "Stasis","Deals 200 true damage to all Stunned enemies, and grants additional turn",

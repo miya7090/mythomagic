@@ -81,7 +81,7 @@ function beginTurn(yourEnemysCards, yourEnemysVerOfYourCards, flipEnemy){
 }
 
 function atTurnStart(flipEnemy){
-  passive_hestia();
+  passive_hestia(true);
   passive_hermes();
   poisonThePoisoned();
 
@@ -166,7 +166,7 @@ function mouseClickTile(evt) {
     GAME_MODE_MEMORYTARGET.getQ(), GAME_MODE_MEMORYTARGET.getR(), GAME_MODE_MEMORYTARGET.getS());
     moveToken(GAME_MODE_MEMORYTARGET, true, cQ, cR);
     tokenMoveSound(1.0);
-    passive_hestia();
+    passive_hestia(false);
     toSelectAttackMode();
 
   } else if (GAME_MODE == "p1-abilityAim") {  ///// (3) p1-abilityAim

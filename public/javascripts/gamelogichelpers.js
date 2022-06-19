@@ -123,6 +123,7 @@ function attack(atkType, attacker, centerQ, centerR, centerS, aoe) {
         if (atkType == 0){
           if (targetIsOpponent == true) {
             let dmg = calcDamage(attacker, tokenOnTile.pcardLink); // autoattack
+            broadcastMsg("autoattack", true, attacker.cardName, tokenOnTile.pcardLink.cardName);
             tokenOnTile.pcardLink.takeDamage(dmg);
             anim_tileHitByAttack(hitTile); // #TODO add sound
           }

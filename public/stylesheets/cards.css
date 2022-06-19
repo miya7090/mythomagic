@@ -7,10 +7,17 @@
     height: 120px;
     background-color: rgba(146, 146, 146, 0.4);
     border-radius: 5px;
+    box-shadow: 0 0 8px 5px rgba(146, 146, 146, 0.15);
 }
 
-#onFieldCards { background-color: var(--p1CardAreaBGColor); }
-#enemyCardReference { background-color: var(--p2CardAreaBGColor); }
+#onFieldCards {
+    background-color: var(--p1CardAreaBGColor);
+    box-shadow: 0 0 8px 4px rgba(0, 0, 0, 0.3);
+}
+#enemyCardReference {
+    background-color: var(--p2CardAreaBGColor);
+    box-shadow: 0 0 8px 4px rgba(0, 0, 0, 0.25);
+}
 
 /* BASECARD AREA: EXTRA RULES */
 
