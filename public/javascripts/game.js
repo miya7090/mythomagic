@@ -67,7 +67,7 @@ document.addEventListener("DOMContentLoaded", () => {
     changeGameModeTo("p2-turn1");
     console.log("opponent cards look like", yourEnemysCards);
     importAllP2Cs(yourEnemysCards);
-    atTurnStart(true);
+    atTurnStart(true, true);
   });
 
   MY_SOCKET.on('enemysProgress', (yourEnemysCards, yourEnemysVerOfYourCards)=>{

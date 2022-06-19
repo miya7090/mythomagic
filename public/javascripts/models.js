@@ -84,6 +84,27 @@ function importPC(pcJson, p1){
   ans.current_mana_per_turn = pcJson["cmpt"]; ans.current_mana_per_atk = pcJson["cmpa"];
   ans.current_movement = pcJson["m"]; ans.dead = pcJson["d"]; ans.health_bonus = pcJson["hb"];
   ans.mana_bonus = pcJson["mb"]; ans.statuses = pcJson["s"]; ans.blessings = pcJson["b"];
+
+  if (ans.current_health > ans.getMaxHealth()){
+    console.error("warning: PC imported had health issue", ans);
+    ans.current_health = ans.getMaxHealth();
+  }
+
+  if (ans.current_health < 0){
+    console.error("warning: PC imported had health issue", ans);
+    ans.current_health = 0;
+  }
+
+  if (ans.current_mana > ans.getMaxMana()){
+    console.error("warning: PC imported had mana issue", ans);
+    ans.current_mana = ans.getMaxMana();
+  }
+
+  if (ans.current_mana < 0){
+    console.error("warning: PC imported had mana issue", ans);
+    ans.current_mana = 0;
+  }
+
   return ans;
 }
 
@@ -245,7 +266,7 @@ function importAllP2Cs(pcListObj){
       }
     }
     inflictStatus(iStat){
-      if (this.dead != "defeated"){
+      if (this.dead != "defeated" && this.statuses[iStat] != 1){
         if (this.p1){ passive_medea_onAlly(this); } else { passive_medea_onEnemy(this); }
         this.statuses[iStat] = 1;
       }
@@ -300,7 +321,7 @@ function importAllP2Cs(pcListObj){
         this.current_health -= Math.round(flatNum);
         console.log(this.cardName, "took", flatNum, "damage");
         if (this.current_health <= 0) { // card is defeated
-          console.log(this.cardName, "has been defeated", this.tag); // #TODO change color, remove function of defeated card
+          broadcastMsg("defeat", this.p1, this.cardName, undefined);
           this.current_health = 0;
           this.current_mana = 0;
           this.clearStatuses();

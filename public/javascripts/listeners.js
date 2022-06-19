@@ -77,13 +77,14 @@ function beginTurn(yourEnemysCards, yourEnemysVerOfYourCards, flipEnemy){
       importAllP1Cs(yourEnemysVerOfYourCards);
     }
   }
-  atTurnStart(flipEnemy); // if true, flip enemy
+
+  atTurnStart(flipEnemy, false); // if true, flip enemy
 }
 
-function atTurnStart(flipEnemy){
-  passive_hestia(true);
-  passive_hermes();
+function atTurnStart(flipEnemy, suppressNotif){
   poisonThePoisoned();
+  passive_hestia(true, suppressNotif);
+  passive_hermes(suppressNotif);
 
   rerenderAllGamecardsAndTokens(flipEnemy);
 }
@@ -105,7 +106,9 @@ function mouseOverTile(evt) {
       tokenOnTile = evt.target.querySelector('.token');
     }
     if (tokenOnTile != undefined) {
-      gameInfoBox.innerHTML = get_PC_BroadcastForInfoBox(tokenOnTile.pcardLink, tokenOnTile.classList.contains("player1"));
+      if (!(tokenOnTile.pcardLink.p1 == false && tokenOnTile.pcardLink.statuses["obscured"] == 1)) { // if not an obscured enemy
+        gameInfoBox.innerHTML = get_PC_BroadcastForInfoBox(tokenOnTile.pcardLink, tokenOnTile.classList.contains("player1"));
+      }
     }
 }
 

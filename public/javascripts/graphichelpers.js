@@ -26,13 +26,14 @@ function updateTurnText() {
 }
 
 function broadcastMsg(msgType, p1, arg1, arg2){
-  console.log(msgType, p1, arg1, arg2);
   MY_SOCKET.emit("tellRival_message", msgType, !p1, arg1, arg2);
 
   processBroadcast(msgType, p1, arg1, arg2);
 }
 
 function processBroadcast(msgType, p1, arg1, arg2){
+  console.log(msgType, p1, arg1, arg2);
+  
   var bIcon = GITHUB_PUBLIC_PATH + "images/portraits/"+arg1.toLowerCase()+".png";
   var bText = formatBroadcast(msgType, p1, arg1, arg2);
 
@@ -50,12 +51,16 @@ function startBroadcast(p1, bIcon, bText){
   document.getElementById("notifIconBacking").src = bIcon;
   document.getElementById("notifText").innerHTML = bText;
 
-  $("#notifBox").fadeIn(100, function(){
+  let fadeInLength = 100;
+  let messageLength = 1700;
+  let fadeOutLength = 800;
+  if (BROADCAST_QUEUE.length > 0){ fadeInLength = 100; }
+
+  $("#notifBox").fadeIn(fadeInLength, function(){
+    if (BROADCAST_QUEUE.length > 0){ messageLength = 1600; }
     setTimeout( function(){ 
-      let fadeOutLength = 800;
-      if (BROADCAST_QUEUE.length > 0){ fadeOutLength = 100; }
+      if (BROADCAST_QUEUE.length > 0){ fadeOutLength = 50; }
       $("#notifBox").fadeOut(fadeOutLength, function(){
-        console.log("queue", BROADCAST_QUEUE);
         if (BROADCAST_QUEUE.length > 0){
           var bq = BROADCAST_QUEUE.shift();
           startBroadcast(bq[0], bq[1], bq[2]);
@@ -63,7 +68,7 @@ function startBroadcast(p1, bIcon, bText){
           BROADCASTING = false;
         }
       });
-    }, 1500 );
+    }, messageLength );
   });
 }
 
@@ -92,6 +97,9 @@ function formatBroadcast(msgType, p1, arg1, arg2) { // helper function for broad
     if (arg2 != undefined) {
       ansText += " on " + arg2;
     }
+
+  } else if (msgType == "defeat"){
+    ansText += "<span>" + arg1 + "</span>  has been defeated";
 
   } else {
     console.error("issue with broadcast", msgType);
@@ -271,10 +279,12 @@ function createTokenDiv(pcToRender) {
   }
 
   token.addEventListener('mouseup', mouseClickToken);
+  token.setAttribute("thisObscured", pcToRender.statuses["obscured"]);
 
   // place token on board
   HEXTILE_CUBIC_INDEX[pcToRender.tag].appendChild(token);
   HEXTILE_CUBIC_INDEX[pcToRender.tag].setAttribute("hasP1Token", true);
+  HEXTILE_CUBIC_INDEX[pcToRender.tag].setAttribute("tokenObscured", pcToRender.statuses["obscured"]);
 
   // add tooltip with hero name to tile
   const tooltip = document.createElement("div");
@@ -282,6 +292,7 @@ function createTokenDiv(pcToRender) {
   tooltip.classList.add("tokenNameTooltip");
   tooltip.id ="p1tooltip-" + pcToRender.cardName;
   tooltip.textContent = pcToRender.cardName;
+  tooltip.setAttribute("tooltipObscured", pcToRender.statuses["obscured"]);
   HEXTILE_CUBIC_INDEX[pcToRender.tag].parentNode.appendChild(tooltip);
 };
 
@@ -294,10 +305,12 @@ function createEnemyTokenDiv(pcToRender) {
   token.pcardLink = pcToRender;
   token.q = pcToRender.getQ(); // used for location initialization
   token.setAttribute("isDefeated", pcToRender.dead == "defeated");
+  token.setAttribute("thisObscured", pcToRender.statuses["obscured"]);
 
   // place token on board
   HEXTILE_CUBIC_INDEX[pcToRender.tag].appendChild(token);
   HEXTILE_CUBIC_INDEX[pcToRender.tag].setAttribute("hasP2Token", true);
+  HEXTILE_CUBIC_INDEX[pcToRender.tag].setAttribute("tokenObscured", pcToRender.statuses["obscured"]);
 
   // add tooltip with hero name to tile
   const tooltip = document.createElement("div");
@@ -305,6 +318,7 @@ function createEnemyTokenDiv(pcToRender) {
   tooltip.classList.add("tokenNameTooltip");
   tooltip.id ="p2tooltip-" + pcToRender.cardName;
   tooltip.textContent = pcToRender.cardName;
+  tooltip.setAttribute("tooltipObscured", pcToRender.statuses["obscured"]);
   HEXTILE_CUBIC_INDEX[pcToRender.tag].parentNode.appendChild(tooltip);
 };
 
@@ -443,8 +457,8 @@ function get_BC_BroadcastForInfoBox(BCard) {
   res += '<h3 id="hoverInfoTitle">' + BCard.cardName + "</h3>";
 
   res += '<div class="hoverColumn">';
-    res += "<p>ATK: " + BCard.base_attack + "</p>";
     res += "<p>HP: " + BCard.base_health + "</p>";
+    res += "<p>ATK: " + BCard.base_attack + "</p>";
     res += "<p>DEF: " + BCard.base_defense + "</p>";
     res += "</div>";
 

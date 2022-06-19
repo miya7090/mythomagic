@@ -7,6 +7,7 @@
     left: 2px;
     width: 21px;
     height: 20px;
+    opacity: 100%;
 }
 
 .token.player1 { filter: invert(72%) sepia(25%) saturate(1427%) hue-rotate(300deg) brightness(97%) contrast(102%); } /* https://codepen.io/sosuke/pen/Pjoqqp used to convert black to target color */
@@ -18,6 +19,8 @@
 .token[gameCardGlow=true] { filter: invert(1.0); }
 
 .token[isChosen=true] { filter: invert(1.0); }
+
+.token.player2[thisObscured = "1"] { opacity: 0%; }
 
 /* TOKEN TOOLTIP RULES */
 
@@ -49,4 +52,8 @@
   
 .tileWrap:hover .tokenNameTooltip {
     visibility: visible;
+}
+
+.tileWrap:hover .tokenNameTooltip.player2[tooltipObscured = "1"] {
+    visibility: hidden;
 }

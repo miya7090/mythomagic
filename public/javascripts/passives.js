@@ -93,53 +93,61 @@ function passive_thanatos_onEnemy(target){ // run when enemy loses >50% of HP at
     }
 }
 
-function passive_hestia(notif) { // run by player1 at the beginning of the turn
+function passive_hestia(notif, suppressNotif) { // run by player1 at the beginning of the turn
     if (hasAllyCard("Hestia")) {
-        if (notif) { broadcastMsg("passive", true, "Hestia"); }
         let mc = getAllyCard("Hestia");
+        let numberBlessed = 0;
         PLAYER_GAMECARD_OBJS.forEach(pc => {
             if (getTileDistance(mc.getQ(),mc.getR(),mc.getS(),pc.getQ(),pc.getR(),pc.getS()) == 1) {
                 pc.giveBlessing("Hestia");
+                numberBlessed += 1;
             } else {
                 pc.removeBlessing("Hestia");
             }
         });
+        if (notif && numberBlessed > 0) { broadcastMsg("passive", true, "Hestia"); }
     }
     if (hasEnemyCard("Hestia")) {
-        if (notif) { broadcastMsg("passive", false, "Hestia"); }
         let yc = getEnemyCard("Hestia");
+        let numberBlessed = 0;
         ENEMY_GAMECARD_OBJS.forEach(pc => {
             if (getTileDistance(yc.getQ(),yc.getR(),yc.getS(),pc.getQ(),pc.getR(),pc.getS()) == 1) {
                 pc.giveBlessing("Hestia");
+                numberBlessed += 1;
             } else {
                 pc.removeBlessing("Hestia");
             }
         });
+        if (!suppressNotif && notif && numberBlessed > 0) { broadcastMsg("passive", false, "Hestia"); }
     }
 }
 
-function passive_hermes() { // run by player1 at the beginning of the turn // #TODO combine blessing format with hestia's
+function passive_hermes(suppressNotif) { // run by player1 at the beginning of the turn // #TODO combine blessing format with hestia's
     if (hasAllyCard("Hermes")) {
-        broadcastMsg("passive", true, "Hermes");
         let mc = getAllyCard("Hermes");
+        let numberBlessed = 0;
         PLAYER_GAMECARD_OBJS.forEach(pc => {
             if (getTileDistance(mc.getQ(),mc.getR(),mc.getS(),pc.getQ(),pc.getR(),pc.getS()) == 1) {
                 pc.giveBlessing("Hermes");
+                numberBlessed += 1;
             } else {
                 pc.removeBlessing("Hermes");
             }
         });
+        if (!suppressNotif && numberBlessed > 0) { broadcastMsg("passive", true, "Hermes"); }
     }
     if (hasEnemyCard("Hermes")) {
-        broadcastMsg("passive", false, "Hermes");
         let yc = getEnemyCard("Hermes");
+        let numberBlessed = 0;
         ENEMY_GAMECARD_OBJS.forEach(pc => {
             if (getTileDistance(yc.getQ(),yc.getR(),yc.getS(),pc.getQ(),pc.getR(),pc.getS()) == 1) {
                 pc.giveBlessing("Hermes");
+                numberBlessed += 1;
             } else {
                 pc.removeBlessing("Hermes");
             }
         });
+        if (!suppressNotif && numberBlessed > 0) { broadcastMsg("passive", false, "Hermes"); } // #TODO debug dupe
     }
 }
 
@@ -174,8 +182,8 @@ function passive_perseus_onAlly(){ // ally card was defeated
     let mc = getEnemyCard("Perseus");
     if (getEnemyCard("Perseus")) {
         broadcastMsg("passive", false, "Perseus", undefined);
-        mc.inflictStatus["obscured"];
-        mc.current_movement += 2;
+        mc.inflictStatus("obscured");
+        mc.current_movement += 1;
     }
 }
 
@@ -183,7 +191,7 @@ function passive_perseus_onEnemy(){ // enemy card was defeated
     let mc = getAllyCard("Perseus");
     if (hasAllyCard("Perseus")) {
         broadcastMsg("passive", true, "Perseus", undefined);
-        mc.inflictStatus["obscured"];
+        mc.inflictStatus("obscured");
         mc.current_movement += 2;
     }
 }

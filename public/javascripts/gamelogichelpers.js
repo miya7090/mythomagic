@@ -121,7 +121,7 @@ function attack(atkType, attacker, centerQ, centerR, centerS, aoe) {
         console.log("intersected target", tokenOnTile.pcardLink.cardName);
         let targetIsOpponent = tokenOnTile.classList.contains("player2");
         if (atkType == 0){
-          if (targetIsOpponent == true) {
+          if (targetIsOpponent == true && tokenOnTile.pcardLink.dead != "defeated") {
             let dmg = calcDamage(attacker, tokenOnTile.pcardLink); // autoattack
             broadcastMsg("autoattack", true, attacker.cardName, tokenOnTile.pcardLink.cardName);
             tokenOnTile.pcardLink.takeDamage(dmg);
