@@ -5,7 +5,7 @@
   --rangeHighlightedTile: rgba(127, 89, 157, 0.6);
   --aimingReachHighlightedTile: rgba(54, 117, 108, 0.9);
   --aimingHighlightedTile: rgba(34, 156, 152, 0.9);
-  --autoattackHighlightedTile: rgba(103, 103, 142, 0.6);
+  --autoattackHighlightedTile: rgba(255, 148, 148, 0.6);
 
   --offgridTile: rgba(0, 0, 0, 0.4);
   --highlightedOffgrid: rgba(0, 0, 0, 0.9);
@@ -14,9 +14,9 @@
   --aimingReachHighlightedOffgrid: rgba(15, 38, 42, 0.8);
   --aimingHighlightedOffgrid: rgba(15, 76, 75, 0.9);
 
-  --animAtkHit: rgba(0, 240, 240, 1.0);
-  --animHealHit: rgb(0, 240, 44);
-  --animAtkInRange: rgba(16, 204, 225, 0.9);
+  --animAtkHit: rgb(145, 0, 0);
+  --animHealHit: rgb(0, 164, 30);
+  --animAtkInRange: rgba(146, 52, 35, 0.9);
 
   --p0ActionTextColor: rgb(183, 183, 183);
   --p0PassiveTextColor: rgb(143, 143, 143);

@@ -60,7 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   MY_SOCKET.on('yourTurn', (yourEnemysCards, yourEnemysVerOfYourCards)=>{
     TURNS_ALLOCATED = 2;
-    beginTurn(yourEnemysCards, yourEnemysVerOfYourCards, true);
+    beginTurn(yourEnemysCards, yourEnemysVerOfYourCards);
   });
 
   MY_SOCKET.on('waitTurnAndPopulate', (yourEnemysCards)=>{
@@ -74,7 +74,7 @@ document.addEventListener("DOMContentLoaded", () => {
     changeGameModeTo("p2-turn2");
     importAllP2Cs(yourEnemysCards);
     importAllP1Cs(yourEnemysVerOfYourCards);
-    rerenderAllGamecardsAndTokens(true);
+    rerenderAllGamecardsAndTokens();
   });
   
   MY_SOCKET.on('giveMessage', (msgType, p1, arg1, arg2)=>{

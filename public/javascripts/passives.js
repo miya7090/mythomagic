@@ -105,7 +105,7 @@ function passive_hestia(notif, suppressNotif) { // run by player1 at the beginni
                 pc.removeBlessing("Hestia");
             }
         });
-        if (notif && numberBlessed > 0) { broadcastMsg("passive", true, "Hestia"); }
+        if (!suppressNotif && notif && numberBlessed > 0) { broadcastMsg("passive", true, "Hestia"); }
     }
     if (hasEnemyCard("Hestia")) {
         let yc = getEnemyCard("Hestia");

@@ -54,12 +54,12 @@ function startBroadcast(p1, bIcon, bText){
   let fadeInLength = 100;
   let messageLength = 1700;
   let fadeOutLength = 800;
-  if (BROADCAST_QUEUE.length > 0){ fadeInLength = 100; }
+  if (BROADCAST_QUEUE.length > 0){ fadeInLength = 10; }
 
   $("#notifBox").fadeIn(fadeInLength, function(){
     if (BROADCAST_QUEUE.length > 0){ messageLength = 1600; }
     setTimeout( function(){ 
-      if (BROADCAST_QUEUE.length > 0){ fadeOutLength = 50; }
+      if (BROADCAST_QUEUE.length > 0){ fadeOutLength = 1; }
       $("#notifBox").fadeOut(fadeOutLength, function(){
         if (BROADCAST_QUEUE.length > 0){
           var bq = BROADCAST_QUEUE.shift();
@@ -279,12 +279,12 @@ function createTokenDiv(pcToRender) {
   }
 
   token.addEventListener('mouseup', mouseClickToken);
-  token.setAttribute("thisObscured", pcToRender.statuses["obscured"]);
+  token.setAttribute("thisObscured", pcToRender.statuses["obscured"] > 0);
 
   // place token on board
   HEXTILE_CUBIC_INDEX[pcToRender.tag].appendChild(token);
   HEXTILE_CUBIC_INDEX[pcToRender.tag].setAttribute("hasP1Token", true);
-  HEXTILE_CUBIC_INDEX[pcToRender.tag].setAttribute("tokenObscured", pcToRender.statuses["obscured"]);
+  HEXTILE_CUBIC_INDEX[pcToRender.tag].setAttribute("tokenObscured", pcToRender.statuses["obscured"] > 0);
 
   // add tooltip with hero name to tile
   const tooltip = document.createElement("div");
@@ -292,7 +292,7 @@ function createTokenDiv(pcToRender) {
   tooltip.classList.add("tokenNameTooltip");
   tooltip.id ="p1tooltip-" + pcToRender.cardName;
   tooltip.textContent = pcToRender.cardName;
-  tooltip.setAttribute("tooltipObscured", pcToRender.statuses["obscured"]);
+  tooltip.setAttribute("tooltipObscured", pcToRender.statuses["obscured"] > 0);
   HEXTILE_CUBIC_INDEX[pcToRender.tag].parentNode.appendChild(tooltip);
 };
 
@@ -305,12 +305,12 @@ function createEnemyTokenDiv(pcToRender) {
   token.pcardLink = pcToRender;
   token.q = pcToRender.getQ(); // used for location initialization
   token.setAttribute("isDefeated", pcToRender.dead == "defeated");
-  token.setAttribute("thisObscured", pcToRender.statuses["obscured"]);
+  token.setAttribute("thisObscured", pcToRender.statuses["obscured"] > 0);
 
   // place token on board
   HEXTILE_CUBIC_INDEX[pcToRender.tag].appendChild(token);
   HEXTILE_CUBIC_INDEX[pcToRender.tag].setAttribute("hasP2Token", true);
-  HEXTILE_CUBIC_INDEX[pcToRender.tag].setAttribute("tokenObscured", pcToRender.statuses["obscured"]);
+  HEXTILE_CUBIC_INDEX[pcToRender.tag].setAttribute("tokenObscured", pcToRender.statuses["obscured"] > 0);
 
   // add tooltip with hero name to tile
   const tooltip = document.createElement("div");
@@ -318,7 +318,7 @@ function createEnemyTokenDiv(pcToRender) {
   tooltip.classList.add("tokenNameTooltip");
   tooltip.id ="p2tooltip-" + pcToRender.cardName;
   tooltip.textContent = pcToRender.cardName;
-  tooltip.setAttribute("tooltipObscured", pcToRender.statuses["obscured"]);
+  tooltip.setAttribute("tooltipObscured", pcToRender.statuses["obscured"] > 0);
   HEXTILE_CUBIC_INDEX[pcToRender.tag].parentNode.appendChild(tooltip);
 };
 
@@ -330,7 +330,7 @@ function markTokenDefeated(p1, cName) {
   }
 }
 
-function rerenderAllGamecardsAndTokens(flipEnemy) {
+function rerenderAllGamecardsAndTokens(flipPlayer, flipEnemy) {
   // clear game info hover box
   gameInfoBox.innerHTML = "";
 
@@ -345,7 +345,8 @@ function rerenderAllGamecardsAndTokens(flipEnemy) {
     myTokens[0].remove();
   }
   while(myTokenTooltips.length > 0){ myTokenTooltips[0].remove(); }
-  PLAYER_GAMECARD_OBJS.forEach(newGCard => { // enemyCardReference
+  PLAYER_GAMECARD_OBJS.forEach(newGCard => {
+    if (flipPlayer) { newGCard.flipAcrossBoard(); }
     createGameCardDiv(newGCard);
     createTokenDiv(newGCard);
   });
@@ -423,6 +424,17 @@ function getGameCardHTML(PCard) {
   return pcResult;
 }
 
+function getStatusText(statName, statCount){
+  if (getTurn() == "p2") {
+    return statName + "\n"+STATUSES_DEF_DICT[statName];
+  }
+  if (statCount == 1){
+    return statName +" - 1 turn remaining\n"+STATUSES_DEF_DICT[statName];
+  } else {
+    return statName +" - "+statCount+" turns remaining\n"+STATUSES_DEF_DICT[statName];
+  }
+}
+
 function addGameCardStatusesOnDiv(PCard, PCardDiv){
   let statusIconWrap = document.createElement("div");
   statusIconWrap.classList.add("statIconWrap");
@@ -440,7 +452,7 @@ function addGameCardStatusesOnDiv(PCard, PCardDiv){
       // add tooltip for icon
       let tooltip = document.createElement("span");
       tooltip.classList.add("statIconTooltip");
-      tooltip.textContent = status+"\n"+STATUSES_DEF_DICT[status];
+      tooltip.textContent = getStatusText(status, PCard.statuses[status]);
 
       statusIcon.appendChild(tooltip);
       statusIcon.appendChild(statusIconPic);

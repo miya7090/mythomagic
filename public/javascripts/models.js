@@ -53,26 +53,18 @@ function getPCNames(pcArray){
   }
 }
 
-function exportAllP1Cs(withflip){
+function exportAllP1Cs(){
   let ans = [];
   PLAYER_GAMECARD_OBJS.forEach(pc => {
-    let pcB = pc;
-    if (withflip == true){
-      pcB.flipAcrossBoard();
-    }
-    ans.push(exportPC(pcB));
+    ans.push(exportPC(pc));
   });
   return ans;
 }
 
-function exportAllP2Cs(withflip){
+function exportAllP2Cs(){
   let ans = [];
   ENEMY_GAMECARD_OBJS.forEach(pc => {
-    let pcB = pc;
-    if (withflip == true){
-      pcB.flipAcrossBoard();
-    }
-    ans.push(exportPC(pcB));
+    ans.push(exportPC(pc));
   });
   return ans;
 }
@@ -109,17 +101,21 @@ function importPC(pcJson, p1){
 }
 
 function importAllP1Cs(pcListObj){
-  let ans = [];
   PLAYER_GAMECARD_OBJS = [];
-  Object.keys(pcListObj).forEach(key => { PLAYER_GAMECARD_OBJS.push(importPC(pcListObj[key],true)); });
-  return ans;
+  Object.keys(pcListObj).forEach(key => {
+    let newPC = importPC(pcListObj[key],true);
+    newPC.flipAcrossBoard();
+    PLAYER_GAMECARD_OBJS.push(newPC);
+  });
 }
 
 function importAllP2Cs(pcListObj){
-  let ans = [];
   ENEMY_GAMECARD_OBJS = [];
-  Object.keys(pcListObj).forEach(key => { ENEMY_GAMECARD_OBJS.push(importPC(pcListObj[key],false)); });
-  return ans;
+  Object.keys(pcListObj).forEach(key => {
+    let newEC = importPC(pcListObj[key],false);
+    newEC.flipAcrossBoard();
+    ENEMY_GAMECARD_OBJS.push(newEC);
+  });
 }
 
   class PlayerCard extends Card {
@@ -153,10 +149,10 @@ function importAllP2Cs(pcListObj){
     }
     getCurrentAttack(){
       let effectiveAttack = this.current_attack;
-      if (this.statuses["terrified"] == 1) {
+      if (this.statuses["terrified"] != 0) {
         effectiveAttack -= (0.5 * this.current_attack);
       }
-      if (this.statuses["stunned"] == 1) {
+      if (this.statuses["stunned"] != 0) {
         effectiveAttack = 0;
       }
       if (effectiveAttack < 0) { effectiveAttack = 0; }
@@ -164,10 +160,10 @@ function importAllP2Cs(pcListObj){
     }
     getCurrentDefense(){
       let effectiveDefense = this.current_defense;
-      if (this.statuses["distracted"] == 1) {
+      if (this.statuses["distracted"] != 0) {
         effectiveDefense -= (0.25 * this.current_defense);
       }
-      if (this.statuses["charmed"] == 1) {
+      if (this.statuses["charmed"] != 0) {
         effectiveDefense = 1;
       }
       if (effectiveDefense < 1) { effectiveDefense = 1; }
@@ -175,14 +171,14 @@ function importAllP2Cs(pcListObj){
     }
     getCurrentMovement(){
       let effectiveMovement = this.current_movement;
-      if (this.statuses["stunned"] == 1) {
+      if (this.statuses["stunned"] != 0) {
         effectiveMovement = 0;
       }
       return effectiveMovement;
     }
     getCurrentNormAtkRange(){
       let effectiveCNAR = this.current_normal_attack_range;
-      if (this.statuses["stunned"] == 1) {
+      if (this.statuses["stunned"] != 0) {
         effectiveCNAR = 1;
       }
       return effectiveCNAR;
@@ -266,10 +262,17 @@ function importAllP2Cs(pcListObj){
       }
     }
     inflictStatus(iStat){
-      if (this.dead != "defeated" && this.statuses[iStat] != 1){
+      if (this.dead != "defeated" && this.statuses[iStat] == 0){
         if (this.p1){ passive_medea_onAlly(this); } else { passive_medea_onEnemy(this); }
-        this.statuses[iStat] = 1;
+        this.statuses[iStat] += 5;
       }
+    }
+    decreaseStatusCooldowns(){
+      Object.keys(this.statuses).forEach(iStat => {
+        if (this.statuses[iStat] > 0) {
+          this.statuses[iStat] -= 1;
+        }
+      });
     }
     clearStatus(iStat){
       this.statuses[iStat] = 0;

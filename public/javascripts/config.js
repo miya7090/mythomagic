@@ -56,7 +56,7 @@ const BASE_STAT_DICT = {
     "Medea":[1200,2,10,500,40,0,2, 3,0,1,0,
       "Sorcery", "Drain all mana from enemy within 3 tiles and inflict Poisoned",
       "Cold Blood", "Deal fatal blow to an adjacent ally, absorb their current ATK, DEF, MVT, and regain full HP",
-      "Circulation", "No ally can obtain more than one status at a time"], 
+      "Circulation", "No ally can obtain more than one status effect at a time, and repeated effects will not stack"], 
     "Poseidon":[4000,2,10,700,50,0,2, undefined,9,undefined,5, // removed for now
       "*Whirlpool","Pull all enemies 3 tiles towards self, 200 true damage to each",
       "Hurricane","Deal 300 true damage to all targets within 5 tiles",

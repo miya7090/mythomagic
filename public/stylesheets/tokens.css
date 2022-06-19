@@ -20,7 +20,7 @@
 
 .token[isChosen=true] { filter: invert(1.0); }
 
-.token.player2[thisObscured = "1"] { opacity: 0%; }
+.token.player2[thisObscured = true] { opacity: 0%; }
 
 /* TOKEN TOOLTIP RULES */
 
@@ -54,6 +54,6 @@
     visibility: visible;
 }
 
-.tileWrap:hover .tokenNameTooltip.player2[tooltipObscured = "1"] {
+.tileWrap:hover .tokenNameTooltip.player2[tooltipObscured = true] {
     visibility: hidden;
 }

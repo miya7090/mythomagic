@@ -11,7 +11,7 @@ function getTurn() {
   } else if (GAME_MODE == "pick-phase") {
     return "pick";
   } else {
-    let code = GAME_MODE.substring(0,3);
+    let code = GAME_MODE.substring(0,2);
     if (code != "p1" && code != "p2") {
       console.error("can't determine which player's turn it is", GAME_MODE, code);
     }
@@ -56,11 +56,28 @@ function giveAllTurnMana() {
 
 function poisonThePoisoned(){
   PLAYER_GAMECARD_OBJS.forEach(pc => {
-    if (pc.statuses["poisoned"] == 1){
+    if (pc.statuses["poisoned"] > 0){
       let poisonDmg = Math.round(500 / pc.getCurrentDefense());
       console.log(pc.cardName,"takes", poisonDmg, "poison damage");
       pc.takeDamage(poisonDmg);
     }
+  });
+  ENEMY_GAMECARD_OBJS.forEach(pc => {
+    if (pc.statuses["poisoned"] > 0){
+      let poisonDmg = Math.round(500 / pc.getCurrentDefense());
+      console.log(pc.cardName,"takes", poisonDmg, "poison damage");
+      pc.takeDamage(poisonDmg);
+    }
+  });
+}
+
+
+function forAll_decreaseStatusCooldowns(){
+  PLAYER_GAMECARD_OBJS.forEach(pc => {
+    pc.decreaseStatusCooldowns();
+  });
+  ENEMY_GAMECARD_OBJS.forEach(pc => {
+    pc.decreaseStatusCooldowns();
   });
 }
 
@@ -222,7 +239,7 @@ function filterOnlyCoordinatesOnBoard(qrsList){
         moveToken(pcardOfOtherToken, false, -1, 0);
       }
     });
-    rerenderAllGamecardsAndTokens(false); // #TODO above code redundant
+    rerenderAllGamecardsAndTokens(); // #TODO above code redundant
   };
 
   function moveToken(tokenPcard, absolute, diffQ, diffR) {

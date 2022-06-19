@@ -65,7 +65,7 @@ function updateTokenClock(){
   }
 }
 
-function beginTurn(yourEnemysCards, yourEnemysVerOfYourCards, flipEnemy){
+function beginTurn(yourEnemysCards, yourEnemysVerOfYourCards){
   changeGameModeTo("p1-active");
   soundNextTurn(1.0);
   console.log("it's my turn!");
@@ -78,15 +78,17 @@ function beginTurn(yourEnemysCards, yourEnemysVerOfYourCards, flipEnemy){
     }
   }
 
-  atTurnStart(flipEnemy, false); // if true, flip enemy
+  atTurnStart(false); // if true, flip enemy
 }
 
-function atTurnStart(flipEnemy, suppressNotif){
+function atTurnStart(suppressNotif){
   poisonThePoisoned();
   passive_hestia(true, suppressNotif);
   passive_hermes(suppressNotif);
+  console.log("AT TURN START");
+  forAll_decreaseStatusCooldowns();
 
-  rerenderAllGamecardsAndTokens(flipEnemy);
+  rerenderAllGamecardsAndTokens();
 }
 
 function mouseOverTile(evt) {
@@ -210,12 +212,12 @@ function attackComplete(){
   if (gameOver == "ongoing"){
     TURNS_ALLOCATED -= 1;
     if (TURNS_ALLOCATED > 0){
-      beginTurn(undefined, undefined, false); // includes a rerender
-      MY_SOCKET.emit("tellRival_ongoingProgress", exportAllP1Cs(false), exportAllP2Cs(true));
+      beginTurn(undefined, undefined); // includes a rerender
+      MY_SOCKET.emit("tellRival_ongoingProgress", exportAllP1Cs(), exportAllP2Cs());
     } else {
       changeGameModeTo('p2-turn1');
-      MY_SOCKET.emit("tellRival_yourTurn", exportAllP1Cs(false), exportAllP2Cs(false));
-      rerenderAllGamecardsAndTokens(true);
+      rerenderAllGamecardsAndTokens();
+      MY_SOCKET.emit("tellRival_yourTurn", exportAllP1Cs(), exportAllP2Cs());
     }
   } else if (gameOver == "tie") {
     MY_SOCKET.emit("gameEnded_withTie", SELF_NAME, getPCNames(PLAYER_GAMECARD_OBJS), OTHER_NAME, getPCNames(ENEMY_GAMECARD_OBJS));
@@ -426,7 +428,7 @@ function mouseClickAvailableCard(evt) {
     var hasHolo = PLAYER_HOLOFOIL.includes(thisCardName);
     var newPC = new PlayerCard(thisCardName, hasHolo, -(HEX_RADIUS-1)+countPlayersPicks,HEX_RADIUS,-1-countPlayersPicks, true);
     PLAYER_GAMECARD_OBJS.push(newPC);
-    rerenderAllGamecardsAndTokens(false);
+    rerenderAllGamecardsAndTokens();
     const gameInfoBox = document.getElementById("gameInfoBox");
     gameInfoBox.innerHTML = get_PC_BroadcastForInfoBox(newPC, true);
 }

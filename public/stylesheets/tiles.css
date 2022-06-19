@@ -51,7 +51,7 @@
 .gameSquare[hasP2Token = true] {
 	background-color: var(--p2TokenColor);
 }
-.gameSquare[tokenObscured = "1"] {
+.gameSquare[tokenObscured = true] {
 	background-color: var(--normalTile);
 }
 
@@ -60,10 +60,10 @@
 .gameSquare[autoattackPreview=true] { background-color: var(--autoattackHighlightedTile); }
 .gameSquare[hoverHighlight=true] { background-color: var(--highlightedTile); }
 
-.gameSquare[hasP1Token = true][hoverHighlight=true]:not([tokenObscured = "1"]) {
+.gameSquare[hasP1Token = true][hoverHighlight=true]:not([tokenObscured = true]) {
 	background-color: var(--p1TokenHoverColor);
 }
-.gameSquare[hasP2Token = true][hoverHighlight=true]:not([tokenObscured = "1"]) {
+.gameSquare[hasP2Token = true][hoverHighlight=true]:not([tokenObscured = true]) {
 	background-color: var(--p2TokenHoverColor);
 }
 
