@@ -5,7 +5,8 @@ const ABILITY_MAP = {
     "Thanatos":[ability_thanatos,1], "Hestia":[ability_hestia,0],
     "Kronos":[ability_kronos,1], "Perseus":[ability_perseus,1],
     "Hera":[ability_hera,0], "Hermes":[ability_hermes,2],
-    "Heracles":[ability_heracles,1]};
+    "Heracles":[ability_heracles,1], "Hades":[ability_hades,2],
+    "Hecate":[ability_hecate,1], "Icarus":[ability_icarus,3]};
 
 const ULT_MAP = {
     "Athena":[ult_athena,1],
@@ -14,7 +15,8 @@ const ULT_MAP = {
     "Thanatos":[ult_thanatos,3], "Hestia":[ult_hestia,0],
     "Kronos":[ult_kronos,3], "Perseus":[ult_perseus,3],
     "Hera":[ult_hera,1], "Hermes":[ult_hermes,0],
-    "Heracles":[ult_heracles,3]};
+    "Heracles":[ult_heracles,3], "Hades":[ult_hades,3],
+    "Hecate":[ult_hecate,3], "Icarus":[ult_icarus,3]};
 
 function doUniqueSkill(atkType, attacker, target, targetIsOpponent) { // atkType 1=ability, 2=ultimate
     let map = ABILITY_MAP;
@@ -32,6 +34,53 @@ function doUniqueSkill(atkType, attacker, target, targetIsOpponent) { // atkType
         }
     } else {
         console.error("action not defined yet");
+    }
+}
+
+function ult_icarus(attacker, target) {
+    broadcastMsg("ultimate", true, "Icarus", undefined);
+    attacker.current_movement += 3;
+    attacker.takeDamage(attacker.current_health / 2);
+}
+
+function ability_icarus(attacker, target) {
+    broadcastMsg("ability", true, "Icarus", undefined);
+    attacker.current_movement += 1;
+    attacker.changeMaxHealthBy(-50);
+}
+
+function ult_hecate(attacker, target) {
+    broadcastMsg("ultimate", true, "Hecate", undefined);
+    PLAYER_GAMECARD_OBJS.forEach(pc => {
+        pc.inflictStatus("obscured");
+    });
+}
+
+function ability_hecate(attacker, target) {
+    broadcastMsg("ability", true, "Hecate", target.cardName);
+    target.takeDamage(200);
+}
+
+function ult_hades(attacker, target) {
+    broadcastMsg("ultimate", true, "Hades", undefined);
+    PLAYER_GAMECARD_OBJS.forEach(pc => {
+        if (pc.dead == "defeated"){
+            pc.current_attack += 300;
+            autoattack(pc);
+        }
+    });
+    ENEMY_GAMECARD_OBJS.forEach(pc => {
+        if (pc.dead == "defeated"){
+            pc.current_attack += 300;
+            autoattack(pc);
+        }
+    });
+}
+
+function ability_hades(attacker, target) {
+    broadcastMsg("ability", true, "Hades", target.cardName);
+    if (target.dead == "defeated"){
+        autoattack(target); // the target autoattacks
     }
 }
 

@@ -2,6 +2,8 @@
 
 // passive_heracles in models.js
 // passive_hera part 1 in models.js, part 2 in listeners.js
+// passive_hades in models.js
+// passive_icarus in models.js
 
 function getAllyCard(cardName) {
     let AC = PLAYER_GAMECARD_OBJS.find(e => e.cardName == cardName);
@@ -15,6 +17,16 @@ function getEnemyCard(cardName) {
 }
 function hasAllyCard(cardName) { return getAllyCard(cardName) != undefined; }
 function hasEnemyCard(cardName) { return getEnemyCard(cardName) != undefined; }
+
+function passive_hecate(p1){ // #TODO add notification
+    if (p1 && hasAllyCard("Hecate")){
+        return 20;
+    }
+    if (!p1 && hasEnemyCard("Hecate")){
+        return 20;
+    }
+    return 0;
+}
 
 function passive_athena(){ // run by both players at the beginning of the game
     if (hasAllyCard("Athena")) {

@@ -88,7 +88,19 @@ const BASE_STAT_DICT = {
     "Heracles":[3200,2,15,500,50,0,3, undefined,3,undefined,1,
       "Efficiency","Attack all targets within 3 tiles with 50% more damage",
       "Lion Cloak","Double the DEF of all adjacent allies",
-      "Determination","Will take at maximum 300 HP of damage per attack"]
+      "Determination","Will take at maximum 300 HP of damage per attack"],
+    "Hades":[4000,2,10,800,50,0,2, 4,0,undefined,undefined,
+      "Conductor","Cause a defeated target within 4 tiles to autoattack enemies",
+      "Overlord","Defeated targets gain 300 ATK and autoattack enemies",
+      "Cerberus","Prevents any enemy from being revived"],
+    "Hecate":[3200,2,10,700,50,0,2, 2,0,undefined,undefined,
+      "Dark Flame","Deal 200 true damage to target within 2 tiles",
+      "Mist","Cause all allies to become Obscured",
+      "Magician","Allies accumulate an extra 20 MP per turn"],
+    "Icarus":[400,2,10,700,50,0,1, undefined,undefined,undefined,undefined,
+      "Accelerate","Gain 1 MVT and decrease max HP by 50",
+      "Breakneck","Gain 3 MVT and halve current health",
+      "Blistering Speed","Gain 300 ATK and lose 2 DEF for each point of MVT"]
   } // #TODO add method to preview these before game start
 
 
@@ -101,7 +113,7 @@ const BASE_STAT_DICT = {
     "obscured": "location not visible to enemy\nATK reduced by 10%"
   }
   
-  let PLAYER_OWNED_temp = ["Athena","Apollo","Achilles","Medea","Thanatos","Hestia","Kronos","Perseus","Hera","Hermes","Heracles"];
+  let PLAYER_OWNED_temp = ["Athena","Apollo","Achilles","Medea","Thanatos","Hestia","Kronos","Perseus","Hera","Hermes","Heracles","Hades","Hecate","Icarus"];
   PLAYER_OWNED_temp.sort();
   const PLAYER_OWNED = PLAYER_OWNED_temp;
   const PLAYER_HOLOFOIL = ["Athena","Apollo","Hephaestus","Nyx"]; // #TODO remove

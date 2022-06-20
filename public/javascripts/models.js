@@ -147,8 +147,23 @@ function importAllP2Cs(pcListObj){
       this.changeLocationTo(pc_q, pc_r);
       this.refreshTag();
     }
+    reviveToHP(hpAmt){
+      if (this.p1 && hasEnemyCard("Hades")){ // passive_hades
+        broadcastMsg("passive", false, "Hades", undefined);
+      } else if (!this.p1 && hasAllyCard("Hades")){
+        broadcastMsg("passive", true, "Hades", undefined);
+      } else {
+        this.dead = "active";
+        this.heal(hpAmt);
+      }
+    }
     getCurrentAttack(){
       let effectiveAttack = this.current_attack;
+
+      if (this.cardName == "Icarus") { // passive_icarus
+        effectiveAttack += 300 * this.current_movement;
+      }
+
       if (this.statuses["terrified"] != 0) {
         effectiveAttack -= (0.5 * this.current_attack);
       }
@@ -160,6 +175,11 @@ function importAllP2Cs(pcListObj){
     }
     getCurrentDefense(){
       let effectiveDefense = this.current_defense;
+
+      if (this.cardName == "Icarus") { // passive_icarus
+        effectiveDefense -= 2 * this.current_movement;
+      }
+
       if (this.statuses["distracted"] != 0) {
         effectiveDefense -= (0.25 * this.current_defense);
       }
@@ -284,7 +304,7 @@ function importAllP2Cs(pcListObj){
       return Object.values(this.statuses).every(v => v == 0);
     }
     giveTurnMana(){
-      this.giveMana(this.current_mana_per_turn);
+      this.giveMana(this.current_mana_per_turn + passive_hecate(this.p1));
     }
     giveAttackMana(){
       this.giveMana(this.current_mana_per_atk);

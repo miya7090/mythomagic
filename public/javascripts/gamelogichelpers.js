@@ -93,7 +93,7 @@ function countCardsMatching(gamecardObjs, cList){
 
 function autoattack(pcard){
   attack(0, pcard, pcard.getQ(), pcard.getR(), pcard.getS(), pcard.getCurrentNormAtkRange());
-  GAME_MODE_MEMORYTARGET.giveAttackMana();
+  pcard.giveAttackMana();
   autoattackSound(1.0);
 }
 
@@ -138,13 +138,13 @@ function attack(atkType, attacker, centerQ, centerR, centerS, aoe) {
         console.log("intersected target", tokenOnTile.pcardLink.cardName);
         let targetIsOpponent = tokenOnTile.classList.contains("player2");
         if (atkType == 0){
-          if (targetIsOpponent == true && tokenOnTile.pcardLink.dead != "defeated") {
+          if (targetIsOpponent == true && tokenOnTile.pcardLink.dead != "defeated") { // cannot autoattack an already-defeated card
             let dmg = calcDamage(attacker, tokenOnTile.pcardLink); // autoattack
             broadcastMsg("autoattack", true, attacker.cardName, tokenOnTile.pcardLink.cardName);
             tokenOnTile.pcardLink.takeDamage(dmg);
             anim_tileHitByAttack(hitTile); // #TODO add sound
           }
-        } else { // #TODO avoid attacking defeated cards?
+        } else { // #TODO avoid attacking defeated cards if not a certain card e.g. hades
           let animCode = doUniqueSkill(atkType, attacker, tokenOnTile.pcardLink, targetIsOpponent);
           if (animCode == 0) { // do animation
             anim_tileHitByHeal(hitTile);
