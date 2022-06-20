@@ -121,6 +121,13 @@ function ultimateAttack(pcard, q, r, s){
   attack(2, pcard, cQ, cR, cS, GAME_MODE_MEMORYTARGET.ult_aim_aoe); //#TODO change from flat dmg
 }
 
+function canWorkWithDead(cardName){
+  if (cardName == "Hades"){
+    return true;
+  }
+  return false;
+}
+
 function attack(atkType, attacker, centerQ, centerR, centerS, aoe) {
   if (aoe == undefined && atkType != 0){ // needs no target
     console.log("doing action without aoe",atkType, attacker, centerQ, centerR, centerS, aoe);
@@ -145,13 +152,17 @@ function attack(atkType, attacker, centerQ, centerR, centerS, aoe) {
             anim_tileHitByAttack(hitTile); // #TODO add sound
           }
         } else { // #TODO avoid attacking defeated cards if not a certain card e.g. hades
-          let animCode = doUniqueSkill(atkType, attacker, tokenOnTile.pcardLink, targetIsOpponent);
-          if (animCode == 0) { // do animation
-            anim_tileHitByHeal(hitTile);
-          } else if (animCode == 1) {
-            anim_tileHitByAttack(hitTile);
+          if (tokenOnTile.pcardLink.dead != "defeated" || canWorkWithDead(attacker.cardName)){
+            let animCode = doUniqueSkill(atkType, attacker, tokenOnTile.pcardLink, targetIsOpponent);
+            if (animCode == 0) { // do animation
+              anim_tileHitByHeal(hitTile);
+            } else if (animCode == 1) {
+              anim_tileHitByAttack(hitTile);
+            } else {
+              console.error("need to implement anim for neutral skill");
+            }
           } else {
-            console.error("need to implement anim for neutral skill");
+            console.log("hero already defeated");
           }
         }
       } else { // no hit

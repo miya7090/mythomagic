@@ -77,8 +77,8 @@ const BASE_STAT_DICT = {
       "Undaunted","Using only base stats and ignoring status effects, attack all enemies within 2 tiles",
       "Swordsmanship","Receive ATK and DEF increase by 20%, MVT increase by 1",
       "Cap of Invisibility","After an enemy is defeated, become Obscured and increase MVT by 1"],
-    "Hera":[1400,2,15,800,50,0,2, 4,0,6,0,
-      "Protector","Grants 10 DEF, 200 HP, 100 MP to ally within 4 tiles",
+    "Hera":[1400,2,15,800,50,0,2, 3,0,6,0,
+      "Protector","Grants 10 DEF, 200 HP, 100 MP to ally within 3 tiles",
       "Wrath","Max HP of enemy within 6 tiles reduced to 100",
       "Queen of Olympus","All allies permanently gain 100 max HP for each Olympian added to the deck"],
     "Hermes":[1200,2,10,600,50,0,4, 1,0,1,0,
@@ -100,7 +100,7 @@ const BASE_STAT_DICT = {
     "Icarus":[400,2,10,700,50,0,1, undefined,undefined,undefined,undefined,
       "Accelerate","Gain 1 MVT and decrease max HP by 50",
       "Breakneck","Gain 3 MVT and halve current health",
-      "Blistering Speed","Gain 300 ATK and lose 2 DEF for each point of MVT"]
+      "Blistering Speed","Gain 350 ATK and lose 2 DEF for each point of MVT"]
   } // #TODO add method to preview these before game start
 
 
