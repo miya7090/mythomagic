@@ -1,5 +1,26 @@
 // @miya7090
 
+function processLobbyCode(lobbyCode){
+  if (lobbyCode == "corinth"){
+    TIMED_GAME = false;
+    PICK_PHASE_TIMER = 60000;
+  } else if (lobbyCode == "athens"){
+    TIMED_GAME = true;
+    PICK_PHASE_TIMER = 45000;
+    TURN_TIMER = 25000;
+  } else if (lobbyCode == "olympia"){
+    TIMED_GAME = true;
+    PICK_PHASE_TIMER = 20000;
+    TURN_TIMER = 15000;
+  } else if (lobbyCode == "sparta"){
+    TIMED_GAME = true;
+    PICK_PHASE_TIMER = 10000;
+    TURN_TIMER = 10000;
+  } else {
+    console.error("lobby code not recognized");
+  }
+}
+
 function changeGameModeTo(newMode) {
   GAME_MODE = newMode;
   updateTurnText();

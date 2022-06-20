@@ -5,7 +5,7 @@ const io = require("socket.io")(server); // create instance of socketio
 const PORT = process.env.PORT || 3000;
 
 // lobby tracker, regions only, {region: {socketid: nickname}}
-var regionUsers = {"olympia=====": {}, "corinth=====": {}, "athens=====": {}};
+var regionUsers = {"olympia=====": {}, "corinth=====": {}, "athens=====": {}, "sparta=====": {}};
 // room tracker, both regions and games, {socketid: room}
 var roomBook = {};
 // player tracker, games only
@@ -69,12 +69,13 @@ io.on("connection", socket => {
   });
   
   socket.on("roomRequest", (room, inviterNickname, inviterId, recipientNickname)=>{
+    let lobbyCode = nk(roomBook[socket.id]);
     kickOutFromLastRoom(socket.id);
     kickOutFromLastRoom(inviterId);
     // #TODO emit only one update for removing 2 lobbiers
     //io.to(rk(region)).emit("lobbyLeft2", inviterNickname, recipientNickname, region, regionUsers[rk(region)]);
-    io.to(inviterId).emit("redirectToGame", inviterNickname, recipientNickname, room);
-    io.to(socket.id).emit("redirectToGame", recipientNickname, inviterNickname, room);
+    io.to(inviterId).emit("redirectToGame", inviterNickname, recipientNickname, room, lobbyCode);
+    io.to(socket.id).emit("redirectToGame", recipientNickname, inviterNickname, room, lobbyCode);
   });
 
   socket.on("denyChallengeRequest", (ownNickname, enemyId)=>{

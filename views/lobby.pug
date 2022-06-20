@@ -20,15 +20,15 @@ br
     br
     br
     input#cp1(type='checkbox' name='cp1' checked='' disabled='')
-    label(for='cp1') use default card pack <a href="/preview" target="_blank">(preview)</a>
+    label(for='cp1') use default card pack <a href="/preview" target="_blank">(preview available cards)</a>
     br
     br
     div#regionselect
-      label(for='region') region&nbsp;
       select#region(name='region')
-        option(value='olympia') olympia
-        option(value='corinth') corinth
-        option(value='athens') athens
+        option(value='corinth') corinth (60-)
+        option(value='athens') athens (45-25)
+        option(value='olympia') olympia (20-15)
+        option(value='sparta') sparta (10-10)
       input#lobbyJoinButton(type='button' value='join lobby')
       input#lobbyLeaveButton(type='button' value='leave lobby' hidden)
       p#queueNotes &nbsp;

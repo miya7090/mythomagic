@@ -482,6 +482,10 @@ function get_BC_BroadcastForInfoBox(BCard) {
 
   res += '<div class="hoverColumn">';
     res += "<p>HP: " + BCard.base_health + "</p>";
+    res += "<p>MP/turn: " + BCard.base_mana_per_turn + "</p>";
+    res += "</div>";
+
+    res += '<div class="hoverColumn">';
     res += "<p>ATK: " + BCard.base_attack + "</p>";
     res += "<p>DEF: " + BCard.base_defense + "</p>";
     res += "</div>";
@@ -489,11 +493,6 @@ function get_BC_BroadcastForInfoBox(BCard) {
     res += '<div class="hoverColumn">';
     res += "<p>RC: " + BCard.base_normal_attack_range + "</p>";
     res += "<p>MVT: " + BCard.base_movement + "</p>";
-    res += "</div>";
-
-    res += '<div class="hoverColumn">';
-    res += "<p>MP/turn: " + BCard.base_mana_per_turn + "</p>";
-    res += "<p>MP/atk: " + BCard.base_mana_per_atk + "</p>";
     res += "</div>";
   res += "</div>";
   
@@ -528,6 +527,7 @@ function get_PC_BroadcastForInfoBox(PCard, isPlayer1) {
     res += '<div class="hoverColumn">';
     res += "<p>" + PCard.current_health + "/" + PCard.getMaxHealth() + "HP <i>(max +" + (PCard.getMaxHealth() - PCard.base_health) + ")</i></p>";
     res += "<p>" + PCard.current_mana + "/" + PCard.getMaxMana() + "MP <i>(max +" + (PCard.getMaxMana() - MAX_MANA) + ")</i></p>";
+    res += "<p>MP/turn: " + PCard.current_mana_per_turn + " <i>(+" + (PCard.current_mana_per_turn - PCard.base_mana_per_turn) + ")</i></p>";
     res += "</div>";
     
     res += '<div class="hoverColumn">';
@@ -538,8 +538,6 @@ function get_PC_BroadcastForInfoBox(PCard, isPlayer1) {
     res += '<div class="hoverColumn">';
     res += "<p>RC: " + PCard.getCurrentNormAtkRange() + " <i>(+" + (PCard.getCurrentNormAtkRange() - PCard.base_normal_attack_range) + ")</i></p>";
     res += "<p>MVT: " + PCard.getCurrentMovement() + " <i>(+" + (PCard.getCurrentMovement() - PCard.base_movement) + ")</i></p>";
-    res += "<p>MP/turn: " + PCard.current_mana_per_turn + " <i>(+" + (PCard.current_mana_per_turn - PCard.base_mana_per_turn) + ")</i></p>";
-    res += "<p>MP/atk: " + PCard.current_mana_per_atk + " <i>(+" + (PCard.current_mana_per_atk - PCard.base_mana_per_atk) + ")</i></p>";
     res += "</div>";
 
   res += "</div>";

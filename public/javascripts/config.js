@@ -30,8 +30,12 @@ ABILITY_MANA_REQ = 200;
 MAX_MANA = 1000;
 HEXTILE_CUBIC_INDEX = {}; // keys: "q,r,s", maps to divs that are hextiles
 
-PICK_PHASE_TIMER = 45000; // 45 sec in ms
+TIMED_GAME = undefined;
+PICK_PHASE_TIMER = undefined;
 PICK_PHASE_STARTED_AT = undefined;
+TURN_TIMER = undefined;
+TURN_STARTED_AT = undefined;
+
 GAME_MODE = "startup"; // startup, pick-phase; [p1-]active, moveToken, attackSelect, autoattack, ability, abilityAim, ultimate, ultimateAim; [p2-]turn1, turn2
 GAME_MODE_MEMORYTARGET = undefined; // used if moving tokens, etc
 
@@ -52,7 +56,7 @@ const BASE_STAT_DICT = {
     "Achilles":[2900,2,20,600,50,0,3, undefined,3,undefined,undefined,
       "Berserk","Clear all statuses from self and attack all enemies within 3 tiles with 20% more damage",
       "Invulnerability", "HP set to 1 HP, gain 50 DEF",
-      "Clarity","Clear all statuses, gain 1000 ATK when ally defeated"],
+      "Clarity","Clear all statuses, gain 1000 ATK when an ally is defeated"],
     "Medea":[1200,2,10,500,40,0,2, 3,0,1,0,
       "Sorcery", "Drain all mana from enemy within 3 tiles and inflict Poisoned",
       "Cold Blood", "Deal fatal blow to an adjacent ally, absorb their current ATK, DEF, MVT, and regain full HP",
@@ -100,7 +104,7 @@ const BASE_STAT_DICT = {
     "Icarus":[400,2,10,700,50,0,1, undefined,undefined,undefined,undefined,
       "Accelerate","Gain 1 MVT and decrease max HP by 50",
       "Breakneck","Gain 3 MVT and halve current health",
-      "Blistering Speed","Gain 350 ATK and lose 2 DEF for each point of MVT"]
+      "Blistering Speed","Gain 400 ATK and lose 2 DEF for each point of MVT"]
   } // #TODO add method to preview these before game start
 
 

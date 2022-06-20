@@ -20,6 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const roomCode = urlParams.get('room');
   SELF_NAME = urlParams.get('self');
   OTHER_NAME = urlParams.get('other');
+  processLobbyCode(urlParams.get('lobby'));
 
   /* socket stuff */
   MY_SOCKET.on('connect', ()=>{

@@ -161,7 +161,7 @@ function importAllP2Cs(pcListObj){
       let effectiveAttack = this.current_attack;
 
       if (this.cardName == "Icarus") { // passive_icarus
-        effectiveAttack += 350 * this.current_movement;
+        effectiveAttack += 400 * this.current_movement;
       }
 
       if (this.statuses["terrified"] != 0) {

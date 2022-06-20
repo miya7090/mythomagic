@@ -6,9 +6,6 @@ const clack4 = GITHUB_PUBLIC_PATH+'sounds/clack4.mp3'
 const clack5 = GITHUB_PUBLIC_PATH+'sounds/clack5.mp3'
 
 document.addEventListener("DOMContentLoaded", () => {
-    /* ui bgm set up */
-    setTimeout(startBgm, 2000); // start music 2 secs in
-
     const gameInfoBox = document.getElementById("gameInfoBox");
 
     // display player's available cards
@@ -20,16 +17,6 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // listener semi-copies that don't actually do anything game-wise
-
-function startBgm(){
-    var bgm = new Audio(bgmSource); 
-    bgm.addEventListener('ended', function() {
-        this.currentTime = 0;
-        this.play();
-    }, false);
-    bgm.volume = 0.4;
-    bgm.play();
-}
 
 function mouseClickAvailableCard(evt){
     return;

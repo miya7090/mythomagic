@@ -51,7 +51,7 @@ function keyProcessing(event) {
 function updateTokenClock(){
   let clock = document.getElementById("playerTurn"); // #TODO make this & similar jquery
   let secLeft = (PICK_PHASE_TIMER - (Date.now() - PICK_PHASE_STARTED_AT))/1000;
-  clock.textContent = "pick your cards\n("+Math.round(secLeft)+" seconds left)";
+  clock.textContent = "pick your cards ("+Math.round(secLeft)+" seconds left)";
   if (secLeft <= 0) {
     clockBeep(1.0);
     clock.textContent = "";
@@ -60,15 +60,40 @@ function updateTokenClock(){
     passive_hera_part2();
     MY_SOCKET.emit("doneWithTokenPick", exportAllP1Cs(false));
   } else {
-    clockBoop(0.7);
+    if (secLeft < 5){ clockBoop(0.7); } else { clockBoop(0.6); }
     setTimeout(updateTokenClock, 1000);
+  }
+}
+
+function updateTurnClock(){
+  if (TURN_STARTED_AT == undefined) { return; }
+  let clock = document.getElementById("playerTurn");
+  let secLeft = (TURN_TIMER - (Date.now() - TURN_STARTED_AT))/1000;
+  
+  const clockSplit = clock.textContent.split('(');
+  if (clockSplit.length > 1){
+    clock.textContent = clockSplit[0] + "("+Math.round(secLeft)+" seconds left)";
+  } else {
+    clock.textContent = clock.textContent + " ("+Math.round(secLeft)+" seconds left)";
+  }
+
+  if (secLeft <= 0) {
+    clockBeep(1.0);
+    attackComplete();
+  } else {
+    if (secLeft < 5){ clockBoop(0.7); }
+    setTimeout(updateTurnClock, 1000);
   }
 }
 
 function beginTurn(yourEnemysCards, yourEnemysVerOfYourCards){
   changeGameModeTo("p1-active");
   soundNextTurn(1.0);
-  console.log("it's my turn!");
+  console.log("it's my turn! ========");
+  if (TIMED_GAME) {
+    TURN_STARTED_AT = Date.now();
+    setTimeout(updateTurnClock, 1000);
+  }
   console.log("opponent cards look like", yourEnemysCards);
 
   if (yourEnemysCards != undefined){
@@ -202,10 +227,11 @@ function mouseClickTile(evt) {
 }
 
 function attackComplete(){
+  TURN_STARTED_AT = undefined;
   giveAllTurnMana(); // attack mana is given in autoattack
   passive_apollo();
   passive_kronos();
-  highlightMemoryTarget(false);
+  if (GAME_MODE_MEMORYTARGET != undefined){ highlightMemoryTarget(false); }
   GAME_MODE_MEMORYTARGET = undefined;
 
   let gameOver = checkGameOver();

@@ -61,8 +61,8 @@ document.addEventListener("DOMContentLoaded", () => {
     populateRegionList(regionUsers);
   });
 
-  socket.on("redirectToGame", (selfNickname, opponentNickname, roomCode)=>{
-    window.location.href = "/game?room="+roomCode+"&self="+selfNickname+"&other="+opponentNickname;
+  socket.on("redirectToGame", (selfNickname, opponentNickname, roomCode, lobbyCode)=>{
+    window.location.href = "/game?room="+roomCode+"&lobby="+lobbyCode+"&self="+selfNickname+"&other="+opponentNickname;
   })
 
   socket.on("gameInvite", (enemyNickname, enemyId)=>{
