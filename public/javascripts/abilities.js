@@ -6,7 +6,9 @@ const ABILITY_MAP = {
     "Kronos":[ability_kronos,1], "Perseus":[ability_perseus,1],
     "Hera":[ability_hera,0], "Hermes":[ability_hermes,2],
     "Heracles":[ability_heracles,1], "Hades":[ability_hades,2],
-    "Hecate":[ability_hecate,1], "Icarus":[ability_icarus,3]};
+    "Hecate":[ability_hecate,1], "Icarus":[ability_icarus,3],
+    "Orpheus":[ability_orpheus,1], "Echo":[ability_echo,3],
+    "Themis":[ability_themis,2]};
 
 const ULT_MAP = {
     "Athena":[ult_athena,1],
@@ -16,7 +18,9 @@ const ULT_MAP = {
     "Kronos":[ult_kronos,3], "Perseus":[ult_perseus,3],
     "Hera":[ult_hera,1], "Hermes":[ult_hermes,0],
     "Heracles":[ult_heracles,3], "Hades":[ult_hades,3],
-    "Hecate":[ult_hecate,3], "Icarus":[ult_icarus,3]};
+    "Hecate":[ult_hecate,3], "Icarus":[ult_icarus,3],
+    "Orpheus":[ult_orpheus,3], "Echo":[ult_echo,1],
+    "Themis":[ult_themis,3]};
 
 function doUniqueSkill(atkType, attacker, target, targetIsOpponent) { // atkType 1=ability, 2=ultimate
     let map = ABILITY_MAP;
@@ -35,6 +39,46 @@ function doUniqueSkill(atkType, attacker, target, targetIsOpponent) { // atkType
     } else {
         console.error("action not defined yet");
     }
+}
+
+function ult_themis(attacker, target) {
+    broadcastMsg("ultimate", true, "Themis", undefined);
+    PLAYER_GAMECARD_OBJS.forEach(pc => {
+        pc.revertToBaseStats();
+    });
+    ENEMY_GAMECARD_OBJS.forEach(pc => {
+        pc.revertToBaseStats();
+    });
+}
+
+function ability_themis(attacker, target) {
+    broadcastMsg("ability", true, "Themis", target.cardName);
+    target.revertToBaseStats();
+}
+
+function ult_echo(attacker, target) {
+    broadcastMsg("ultimate", true, "Echo", target.cardName);
+    PLAYER_GAMECARD_OBJS.splice(PLAYER_GAMECARD_OBJS.indexOf(attacker), 1);
+    let newEcho = structuredClone(target);
+    newEcho.p1 = true;
+    PLAYER_GAMECARD_OBJS.push(newEcho); // attackComplete will have a rerender
+}
+
+function ability_echo(attacker, target) {
+    broadcastMsg("ability", true, "Echo", undefined);
+    attacker.inflictStatus("obscured");
+}
+
+function ult_orpheus(attacker, target) {
+    broadcastMsg("ultimate", true, "Orpheus", undefined);
+    ENEMY_GAMECARD_OBJS.forEach(pc => {
+        pc.inflictStatus("distracted");
+    });
+}
+
+function ability_orpheus(attacker, target) {
+    broadcastMsg("ability", true, "Orpheus", target.cardName);
+    target.inflictStatus("charmed");
 }
 
 function ult_icarus(attacker, target) {

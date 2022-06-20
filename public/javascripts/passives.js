@@ -1,9 +1,10 @@
 // contains functions for some (but not all) passives
 
+// passive_echo in models.js
 // passive_heracles in models.js
-// passive_hera part 1 in models.js, part 2 in listeners.js
 // passive_hades in models.js
 // passive_icarus in models.js
+// passive_themis in models.js
 
 function getAllyCard(cardName) {
     let AC = PLAYER_GAMECARD_OBJS.find(e => e.cardName == cardName);
@@ -17,6 +18,24 @@ function getEnemyCard(cardName) {
 }
 function hasAllyCard(cardName) { return getAllyCard(cardName) != undefined; }
 function hasEnemyCard(cardName) { return getEnemyCard(cardName) != undefined; }
+
+function passive_orpheus(p1, targetName){
+    let mc = getAllyCard("Orpheus");
+    if (p1 && mc != undefined){
+        if (mc.current_health == mc.getMaxHealth() && mc.current_mana == mc.getMaxMana()){
+            broadcastMsg("passive", true, "Orpheus", targetName);
+            return true;
+        }
+    }
+    let ec = getEnemyCard("Orpheus");
+    if (!p1 && ec != undefined){
+        if (ec.current_health == ec.getMaxHealth() && ec.current_mana == ec.getMaxMana()){
+            broadcastMsg("passive", false, "Orpheus", targetName);
+            return true;
+        }
+    }
+    return false;
+}
 
 function passive_hecate(p1){ // #TODO add notification
     if (p1 && hasAllyCard("Hecate")){

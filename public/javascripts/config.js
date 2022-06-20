@@ -40,6 +40,7 @@ GAME_MODE = "startup"; // startup, pick-phase; [p1-]active, moveToken, attackSel
 GAME_MODE_MEMORYTARGET = undefined; // used if moving tokens, etc
 
 TURNS_ALLOCATED = 0;
+
 const OLYMPIAN_LIST = ["Zeus", "Hera", "Poseidon", "Demeter", "Athena", "Apollo", "Artemis", "Ares", "Aphrodite", "Hephaestus", "Hermes", "Dionysus", "Hestia"];
 
 const BASE_STAT_DICT = {
@@ -84,7 +85,7 @@ const BASE_STAT_DICT = {
     "Hera":[1400,2,15,800,50,0,2, 3,0,6,0,
       "Protector","Grants 10 DEF, 200 HP, 100 MP to ally within 3 tiles",
       "Wrath","Max HP of enemy within 6 tiles reduced to 100",
-      "Queen of Olympus","All allies gain 100 max HP for each Olympian added to the deck"],
+      "Queen of Olympus","All allies gain 1 DEF for each Olympian added to the deck"],
     "Hermes":[1200,2,10,600,50,0,4, 1,0,1,0,
       "Trade Offer","Swap stats with adjacent target's better stats, with 50% chance success for each",
       "Lucky","Adjacent ally has a 50-50 chance of their stats being either halved or tripled",
@@ -101,12 +102,23 @@ const BASE_STAT_DICT = {
       "Dark Flame","Deal 200 true damage to target within 2 tiles",
       "Mist","Cause all allies to become Obscured",
       "Magician","Allies accumulate an extra 20 MP per turn"],
-    "Icarus":[400,2,10,700,50,0,1, undefined,undefined,undefined,undefined,
+    "Icarus":[400,2,10,700,70,0,1, undefined,undefined,undefined,undefined,
       "Accelerate","Gain 1 MVT and decrease max HP by 50",
       "Breakneck","Gain 3 MVT and halve current health",
-      "Blistering Speed","Gain 400 ATK and lose 2 DEF for each point of MVT"]
-  } // #TODO add method to preview these before game start
-
+      "Blistering Speed","Gain 400 ATK and lose 2 DEF for each point of MVT"],
+    "Orpheus":[400,2,10,600,50,0,2, undefined,2,undefined,undefined,
+      "Serenade","Inflicts Charmed on all enemies within 2 tiles",
+      "Passacaglia","Inflict Distracted on all enemies",
+      "Requiem","Allies defeated while Orpheus has full HP and full MP are revived to full health"],
+    "Echo":[400,2,15,700,50,0,2, undefined,undefined,1,0,
+      "Whisper","Become Obscured",
+      "Replica","Imitate an adjacent enemy card, if not already in deck",
+      "Reflection","Autoattacks after receiving damage"],
+    "Themis":[1400,2,15,800,30,0,2, undefined,undefined,1,0,
+      "Verdict","Revert target to their base stats and clear status effects",
+      "Fair-Minded","Revert all heroes to their base stats and clear all status effects",
+      "Objection","No enemy can accumulate over 5000 ATK or 30 DEF"]
+  }
 
   const STATUSES_DEF_DICT = {
     "charmed": "DEF reduced to 1",

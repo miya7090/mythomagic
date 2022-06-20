@@ -57,7 +57,6 @@ function updateTokenClock(){
     clock.textContent = "";
     changeGameModeTo("startup");
     passive_athena();
-    passive_hera_part2();
     MY_SOCKET.emit("doneWithTokenPick", exportAllP1Cs(false));
   } else {
     if (secLeft < 5){ clockBoop(0.7); } else { clockBoop(0.6); }

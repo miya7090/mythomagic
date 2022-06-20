@@ -136,7 +136,7 @@ function importAllP2Cs(pcListObj){
       this.health_bonus = 0;
       this.mana_bonus = 0;
 
-      this.blessings = {"Hestia": false, "Hermes": false};
+      this.clearBlessings();
 
       this.is_figurine = isFigurine;
       this.clearStatuses();
@@ -171,6 +171,13 @@ function importAllP2Cs(pcListObj){
         effectiveAttack = 0;
       }
       if (effectiveAttack < 0) { effectiveAttack = 0; }
+
+      if ((this.p1 && hasEnemyCard("Themis")) || (!this.p1 && hasAllyCard("Themis"))) { // passive_themis
+        if (effectiveAttack > 5000){
+          effectiveAttack = 5000;
+        }
+      }
+
       return Math.round(effectiveAttack);
     }
     getCurrentDefense(){
@@ -180,6 +187,13 @@ function importAllP2Cs(pcListObj){
         effectiveDefense -= 2 * this.current_movement;
       }
 
+      if (this.p1 && hasAllyCard("Hera")) { // passive_hera
+        effectiveDefense += countCardsMatching(PLAYER_GAMECARD_OBJS, OLYMPIAN_LIST);
+      }
+      if (!this.p1 && hasEnemyCard("Hera")) {
+        effectiveDefense += countCardsMatching(ENEMY_GAMECARD_OBJS, OLYMPIAN_LIST);
+      }
+
       if (this.statuses["distracted"] != 0) {
         effectiveDefense -= (0.25 * this.current_defense);
       }
@@ -187,6 +201,13 @@ function importAllP2Cs(pcListObj){
         effectiveDefense = 1;
       }
       if (effectiveDefense < 1) { effectiveDefense = 1; }
+
+      if ((this.p1 && hasEnemyCard("Themis")) || (!this.p1 && hasAllyCard("Themis"))) { // passive_themis
+        if (effectiveDefense > 30){
+          effectiveDefense = 30;
+        }
+      }
+
       return Math.round(effectiveDefense);
     }
     getCurrentMovement(){
@@ -202,6 +223,9 @@ function importAllP2Cs(pcListObj){
         effectiveCNAR = 1;
       }
       return effectiveCNAR;
+    }
+    clearBlessings(){
+      this.blessings = {"Hestia": false, "Hermes": false}; 
     }
     giveBlessing(blessName){
       if (this.blessings[blessName] == false) {
@@ -233,17 +257,7 @@ function importAllP2Cs(pcListObj){
     }
     getMaxHealth(){
       let maxH = this.base_health + this.health_bonus;
-      if (GAME_MODE == "pick-phase"){ return maxH; }
-
-      let hera_bonus = 0;
-      if (this.p1 && hasAllyCard("Hera")) { // passive_hera
-        hera_bonus = 100 * countCardsMatching(PLAYER_GAMECARD_OBJS, OLYMPIAN_LIST);
-      }
-      if (!this.p1 && hasEnemyCard("Hera")) {
-        hera_bonus = 100 * countCardsMatching(ENEMY_GAMECARD_OBJS, OLYMPIAN_LIST);
-      }
-
-      return maxH + hera_bonus;
+      return maxH;
     }
     setMaxHealthTo(fn){
       let flatNum = Math.round(fn);
@@ -332,34 +346,61 @@ function importAllP2Cs(pcListObj){
       }
     }
     takeDamage(fn){
-      let flatNum = fn;
+      let flatNum = Math.round(fn);
       if (this.cardName == "Heracles" && fn > 300) { // passive_heracles
         broadcastMsg("passive", this.p1, "Heracles", undefined);
         flatNum = 300;
+      }
+      if (this.cardName == "Echo") { // passive_echo
+        broadcastMsg("passive", this.p1, "Echo", undefined);
+        if (flatNum > 0 && this.getCurrentAttack() > 0) { // prevent infinite loops with 0-ATK Echoes
+          autoattack(this);
+        }
       }
       if (this.dead != "defeated") {
         if (flatNum / this.current_health > 0.5) { // lost >50% HP in this attack
           if (this.p1){ passive_thanatos_onAlly(this); } else { passive_thanatos_onEnemy(this); }
         }
-        this.current_health -= Math.round(flatNum);
+        this.current_health -= flatNum;
         console.log(this.cardName, "took", flatNum, "damage");
         if (this.current_health <= 0) { // card is defeated
-          broadcastMsg("defeat", this.p1, this.cardName, undefined);
-          this.current_health = 0;
-          this.current_mana = 0;
-          this.clearStatuses();
-          this.dead = "defeated";
-          tokenDeathSound(1.0);
-          if (this.p1){ // ally was defeated
-            passive_achilles_onAlly();
-            passive_perseus_onAlly();
-          } else { // enemy was defeated
-            passive_achilles_onEnemy();
-            passive_perseus_onEnemy();
+
+          if (passive_orpheus(this.p1, this.cardName)){
+            this.fullHeal();
+            this.current_mana = 0;
+            this.clearStatuses();
+          } else {
+            broadcastMsg("defeat", this.p1, this.cardName, undefined);
+            this.current_health = 0;
+            this.current_mana = 0;
+            this.clearStatuses();
+            this.dead = "defeated";
+            tokenDeathSound(1.0);
+            if (this.p1){ // ally was defeated
+              passive_achilles_onAlly();
+              passive_perseus_onAlly();
+            } else { // enemy was defeated
+              passive_achilles_onEnemy();
+              passive_perseus_onEnemy();
+            }
+            markTokenDefeated(this.p1, this.cardName);
           }
-          markTokenDefeated(this.p1, this.cardName);
         }
       }
+    }
+    revertToBaseStats(){
+      this.clearBlessings();
+      this.clearStatuses();
+      this.setMaxHealthTo(this.base_health);
+      this.setMaxManaTo(MAX_MANA);
+    
+      this.current_attack = this.base_attack;
+      this.current_normal_attack_range = this.base_normal_attack_range;
+      this.current_defense = this.base_defense;
+      this.current_health = this.base_health;
+      this.current_mana_per_turn = this.base_mana_per_turn;
+      this.current_mana_per_atk = this.base_mana_per_atk;
+      this.current_movement = this.base_movement;
     }
     refreshTag(){
       this.tag = this.#q+","+this.#r+","+this.#s;
