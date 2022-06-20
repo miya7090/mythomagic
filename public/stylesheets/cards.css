@@ -13,10 +13,21 @@
 #onFieldCards {
     background-color: var(--p1CardAreaBGColor);
     box-shadow: 0 0 8px 4px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    overflow: overlay;
 }
+
 #enemyCardReference {
     background-color: var(--p2CardAreaBGColor);
     box-shadow: 0 0 8px 4px rgba(0, 0, 0, 0.25);
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    overflow: overlay;
 }
 
 /* BASECARD AREA: EXTRA RULES */
@@ -77,6 +88,14 @@
   
 .smallFont{
     margin-top: 6px;
+    font-size:12px;
+}
+
+.smallestFontGC{
+    font-size:10px;
+}
+  
+.smallFontGC{
     font-size:12px;
 }
 

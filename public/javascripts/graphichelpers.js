@@ -238,6 +238,12 @@ function createGameCardDiv(pcToRender) {
   if (pcToRender.dead == "defeated"){
     ccard.classList.add("deadCard");
   }
+
+  if (pcToRender.cardName.length > 9) {
+    ccard.classList.add("smallestFontGC");
+  } else if (pcToRender.cardName.length > 7) {
+    ccard.classList.add("smallFontGC");
+  }
   
   addGameCardStatusesOnDiv(pcToRender, ccard);
   onFieldCards.appendChild(ccard);
@@ -256,6 +262,12 @@ function createEnemyGameCardDiv(pcToRender) { //#TODO reduce redundant code ^
   ccard.id = "p2card-"+pcToRender.cardName;
   if (pcToRender.dead == "defeated"){
     ccard.classList.add("deadCard");
+  }
+
+  if (pcToRender.cardName.length > 9) {
+    ccard.classList.add("smallestFontGC");
+  } else if (pcToRender.cardName.length > 7) {
+    ccard.classList.add("smallFontGC");
   }
   
   addGameCardStatusesOnDiv(pcToRender, ccard);
