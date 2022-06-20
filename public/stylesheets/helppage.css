@@ -1,6 +1,11 @@
+h2 {
+    text-align: center;
+}
+
 .helpSlide {
     border: 2px white dashed;
-    margin: 20px;
+    margin: 10px;
+    margin-right: 30px;
 }
 
 .helpSlide h3 {
@@ -11,6 +16,8 @@
 
 .helpSlide p {
     margin: 10px;
+    margin-top: 5px;
+    margin-bottom: 0px;
     margin-left: 20px;
 }
 
