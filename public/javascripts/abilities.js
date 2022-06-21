@@ -58,9 +58,12 @@ function ability_themis(attacker, target) {
 
 function ult_echo(attacker, target) {
     broadcastMsg("ultimate", true, "Echo", target.cardName);
+    let lastQ = attacker.getQ();
+    let lastR = attacker.getR();
     PLAYER_GAMECARD_OBJS.splice(PLAYER_GAMECARD_OBJS.indexOf(attacker), 1);
-    let newEcho = structuredClone(target);
+    let newEcho = importPC(exportPC(target), true);
     newEcho.p1 = true;
+    newEcho.changeLocationTo(lastQ, lastR);
     PLAYER_GAMECARD_OBJS.push(newEcho); // attackComplete will have a rerender
 }
 

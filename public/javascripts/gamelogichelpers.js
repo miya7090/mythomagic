@@ -7,11 +7,11 @@ function processLobbyCode(lobbyCode){
   } else if (lobbyCode == "athens"){
     TIMED_GAME = true;
     PICK_PHASE_TIMER = 45000;
-    TURN_TIMER = 25000;
+    TURN_TIMER = 30000;
   } else if (lobbyCode == "olympia"){
     TIMED_GAME = true;
-    PICK_PHASE_TIMER = 20000;
-    TURN_TIMER = 15000;
+    PICK_PHASE_TIMER = 30000;
+    TURN_TIMER = 20000;
   } else if (lobbyCode == "sparta"){
     TIMED_GAME = true;
     PICK_PHASE_TIMER = 10000;
@@ -170,6 +170,7 @@ function attack(atkType, attacker, centerQ, centerR, centerS, aoe) {
             let dmg = calcDamage(attacker, tokenOnTile.pcardLink); // autoattack
             broadcastMsg("autoattack", true, attacker.cardName, tokenOnTile.pcardLink.cardName);
             tokenOnTile.pcardLink.takeDamage(dmg);
+            passive_echo(attacker, tokenOnTile.pcardLink, dmg);
             anim_tileHitByAttack(hitTile); // #TODO add sound
           }
         } else { // #TODO avoid attacking defeated cards if not a certain card e.g. hades

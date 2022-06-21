@@ -351,12 +351,6 @@ function importAllP2Cs(pcListObj){
         broadcastMsg("passive", this.p1, "Heracles", undefined);
         flatNum = 300;
       }
-      if (this.cardName == "Echo") { // passive_echo
-        broadcastMsg("passive", this.p1, "Echo", undefined);
-        if (flatNum > 0 && this.getCurrentAttack() > 0) { // prevent infinite loops with 0-ATK Echoes
-          autoattack(this);
-        }
-      }
       if (this.dead != "defeated") {
         if (flatNum / this.current_health > 0.5) { // lost >50% HP in this attack
           if (this.p1){ passive_thanatos_onAlly(this); } else { passive_thanatos_onEnemy(this); }

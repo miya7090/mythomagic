@@ -157,9 +157,11 @@ function mouseClickTile(evt) {
   var thisTile = evt.target;
   var tokenOnTile = evt.target.querySelector('.token');
 
-  if (tokenOnTile != undefined && (tokenOnTile.pcardLink.dead == "defeated" && !canWorkWithDead(GAME_MODE_MEMORYTARGET.cardName))){
-    console.log("this hero has already been defeated");
-    return;
+  if (tokenOnTile != undefined && GAME_MODE_MEMORYTARGET != undefined){
+    if (tokenOnTile.pcardLink.dead == "defeated" && !canWorkWithDead(GAME_MODE_MEMORYTARGET.cardName)) {
+      console.log("this hero has already been defeated");
+      return;
+    }
   }
 
   playSoundRandom([clack2, clack3], 0.9);

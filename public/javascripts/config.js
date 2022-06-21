@@ -49,7 +49,7 @@ const BASE_STAT_DICT = {
     "Athena":[3000,2,15,700,50,0,3, 3,0,6,0,
       "Aegis","Ally within 3 units gains 15 DEF and has their statuses cleared",
       "Deliberate Strike","Deal 400 true damage to one target within 6 units",
-      "Well-Prepared","Player cards start game with 200 MP"], 
+      "Well-Prepared","Allies start game with 200 MP"], 
     "Apollo":[2000,4,10,700,60,0,3, 5,2,undefined,undefined,
       "Volley","Attack with 10% extra damage to enemies in a 2-tile radius, up to 5 tiles away",
       "Inspiration","For all allies, clear all statuses, recover 20% max HP, and recover 20% max MP",
@@ -68,7 +68,7 @@ const BASE_STAT_DICT = {
       "*Aquatic Healing","Gain 100 HP per turn while in water"],
     "Thanatos":[1800,2,10,600,60,0,3, 1,0,undefined,undefined,
       "Soul Collection","Attacks adjacent target, and if enemy is defeated, absorb their MP and 50% of their ATK",
-      "Reaper","All cards with less than 100 HP receive 100 true damage",
+      "Reaper","All enemies with less than 100 HP receive 100 true damage",
       "Watchful","Inflicts Terrified on any opponent if they lose over 50% of their HP at once"],
     "Hestia":[500,2,15,1000,60,0,1, undefined,2,undefined,2,
       "Warming Hearth","Heal all allies within 2 tiles by 300 HP",
@@ -101,7 +101,7 @@ const BASE_STAT_DICT = {
     "Hecate":[3200,2,10,700,50,0,2, 2,0,undefined,undefined,
       "Dark Flame","Deal 200 true damage to target within 2 tiles",
       "Mist","Cause all allies to become Obscured",
-      "Magician","Allies accumulate an extra 20 MP per turn"],
+      "Magician","Allies accumulate an extra 30 MP per turn"],
     "Icarus":[400,2,10,700,70,0,1, undefined,undefined,undefined,undefined,
       "Accelerate","Gain 1 MVT and decrease max HP by 50",
       "Breakneck","Gain 3 MVT and halve current health",
@@ -112,8 +112,8 @@ const BASE_STAT_DICT = {
       "Requiem","Allies defeated while Orpheus has full HP and full MP are revived to full health"],
     "Echo":[400,2,15,700,50,0,2, undefined,undefined,1,0,
       "Whisper","Become Obscured",
-      "Replica","Imitate an adjacent enemy card, if not already in deck",
-      "Reflection","Autoattacks after receiving damage"],
+      "Replica","Imitate an adjacent enemy, if not already in deck",
+      "Reflection","Enemies that autoattack Echo receive the same amount of damage"],
     "Themis":[1400,2,15,800,30,0,2, undefined,undefined,1,0,
       "Verdict","Revert target to their base stats and clear status effects",
       "Fair-Minded","Revert all heroes to their base stats and clear all status effects",
@@ -129,7 +129,7 @@ const BASE_STAT_DICT = {
     "obscured": "location not visible to enemy\nATK reduced by 10%"
   }
   
-  let PLAYER_OWNED_temp = ["Athena","Apollo","Achilles","Medea","Thanatos","Hestia","Kronos","Perseus","Hera","Hermes","Heracles","Hades","Hecate","Icarus"];
+  let PLAYER_OWNED_temp = ["Athena","Apollo","Achilles","Medea","Thanatos","Hestia","Kronos","Perseus","Hera","Hermes","Heracles","Hades","Hecate","Icarus","Orpheus","Echo","Themis"];
   PLAYER_OWNED_temp.sort();
   const PLAYER_OWNED = PLAYER_OWNED_temp;
   const PLAYER_HOLOFOIL = ["Athena","Apollo","Hephaestus","Nyx"]; // #TODO remove

@@ -1,6 +1,5 @@
 // contains functions for some (but not all) passives
 
-// passive_echo in models.js
 // passive_heracles in models.js
 // passive_hades in models.js
 // passive_icarus in models.js
@@ -18,6 +17,15 @@ function getEnemyCard(cardName) {
 }
 function hasAllyCard(cardName) { return getAllyCard(cardName) != undefined; }
 function hasEnemyCard(cardName) { return getEnemyCard(cardName) != undefined; }
+
+function passive_echo(attacker, target, dmg){
+    if (target.cardName == "Echo"){
+        if (dmg > 0){
+            broadcastMsg("passive", true, "Echo", attacker.cardName);
+            attacker.takeDamage(dmg);
+        }
+    }
+}
 
 function passive_orpheus(p1, targetName){
     let mc = getAllyCard("Orpheus");
@@ -39,10 +47,10 @@ function passive_orpheus(p1, targetName){
 
 function passive_hecate(p1){ // #TODO add notification
     if (p1 && hasAllyCard("Hecate")){
-        return 20;
+        return 30;
     }
     if (!p1 && hasEnemyCard("Hecate")){
-        return 20;
+        return 30;
     }
     return 0;
 }
