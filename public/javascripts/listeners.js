@@ -55,13 +55,17 @@ function updateTokenClock(){
   if (secLeft <= 0) {
     clockBeep(1.0);
     clock.textContent = "";
-    changeGameModeTo("startup");
-    passive_athena();
-    MY_SOCKET.emit("doneWithTokenPick", exportAllP1Cs(false));
+    tokenClockDone();
   } else {
     if (secLeft < 5){ clockBoop(0.7); } else { clockBoop(0.6); }
     setTimeout(updateTokenClock, 1000);
   }
+}
+
+function tokenClockDone(){
+  changeGameModeTo("startup");
+  passive_athena();
+  MY_SOCKET.emit("doneWithTokenPick", exportAllP1Cs(false));
 }
 
 function updateTurnClock(){
@@ -89,7 +93,7 @@ function beginTurn(yourEnemysCards, yourEnemysVerOfYourCards){
   changeGameModeTo("p1-active");
   soundNextTurn(1.0);
   console.log("it's my turn! ========");
-  if (TIMED_GAME) {
+  if (TIMED_TURNS) {
     TURN_STARTED_AT = Date.now();
     setTimeout(updateTurnClock, 1000);
   }

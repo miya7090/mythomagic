@@ -1,24 +1,41 @@
 // @miya7090
 
 function processLobbyCode(lobbyCode){
-  if (lobbyCode == "corinth"){
-    TIMED_GAME = false;
+  if (lobbyCode == "olympia"){
+    PICK_PHASE_RANDOM = true;
+    TIMED_TURNS = false;
+  } else if (lobbyCode == "corinth"){
+    PICK_PHASE_RANDOM = false;
     PICK_PHASE_TIMER = 60000;
+    TIMED_TURNS = false;
   } else if (lobbyCode == "athens"){
-    TIMED_GAME = true;
+    PICK_PHASE_RANDOM = false;
     PICK_PHASE_TIMER = 45000;
+    TIMED_TURNS = true;
     TURN_TIMER = 30000;
-  } else if (lobbyCode == "olympia"){
-    TIMED_GAME = true;
-    PICK_PHASE_TIMER = 30000;
-    TURN_TIMER = 20000;
   } else if (lobbyCode == "sparta"){
-    TIMED_GAME = true;
-    PICK_PHASE_TIMER = 10000;
-    TURN_TIMER = 10000;
+    PICK_PHASE_RANDOM = false;
+    PICK_PHASE_TIMER = 20000;
+    TIMED_TURNS = true;
+    TURN_TIMER = 20000;
   } else {
     console.error("lobby code not recognized");
   }
+}
+
+function pickPCardsRandomly(){
+  let shuffledPCOwned = PLAYER_OWNED_temp.sort(function(){ return 0.5 - Math.random(); });
+  let selectedPCOwned = shuffledPCOwned.slice(0,5);
+
+  for (let i = 0; i < 5; i++) {
+    let selectedPCName = selectedPCOwned[i];
+    let availCard = document.getElementById("availCard-" + selectedPCName);
+    availCard.setAttribute("acChosen",true);
+    var newPC = new PlayerCard(selectedPCName, false, -(HEX_RADIUS-1)+i,HEX_RADIUS,-1-i, true);
+    PLAYER_GAMECARD_OBJS.push(newPC);
+  }
+  
+  rerenderAllGamecardsAndTokens();
 }
 
 function changeGameModeTo(newMode) {

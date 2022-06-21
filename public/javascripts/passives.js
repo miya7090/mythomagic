@@ -190,6 +190,17 @@ function passive_hermes(suppressNotif) { // run by player1 at the beginning of t
     }
 }
 
+function clearBestowedBlessingsFrom(cardName, p1){
+    let objList = PLAYER_GAMECARD_OBJS;
+    if (!p1) { objList = ENEMY_GAMECARD_OBJS; }
+
+    if (cardName == "Hestia" || cardName == "Hermes"){
+        objList.forEach(pc => {
+            pc.removeBlessing(cardName);
+        });
+    }
+}
+
 function blessing_hermes(give, pc) {
     if (give) {
         pc.current_movement += 2;

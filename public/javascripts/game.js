@@ -29,9 +29,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
   MY_SOCKET.on('tokenPickPhase', (otherId)=>{ // #TODO make opponent plans visible live (ghost coloring?)
     OPPONENT_SOCKET_ID = otherId;
-    changeGameModeTo("pick-phase");
-    PICK_PHASE_STARTED_AT = Date.now();
-    setTimeout(updateTokenClock, 1000); // update token clock every second
+
+    if (PICK_PHASE_RANDOM) {
+      pickPCardsRandomly();
+      tokenClockDone();
+    } else {
+      changeGameModeTo("pick-phase");
+      PICK_PHASE_STARTED_AT = Date.now();
+      setTimeout(updateTokenClock, 1000); // update token clock every second
+    }
   });
 
   MY_SOCKET.on('winThroughForfeit', (reason)=>{

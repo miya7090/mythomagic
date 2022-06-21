@@ -30,9 +30,11 @@ ABILITY_MANA_REQ = 200;
 MAX_MANA = 1000;
 HEXTILE_CUBIC_INDEX = {}; // keys: "q,r,s", maps to divs that are hextiles
 
-TIMED_GAME = undefined;
+PICK_PHASE_RANDOM = undefined;
 PICK_PHASE_TIMER = undefined;
 PICK_PHASE_STARTED_AT = undefined;
+
+TIMED_TURNS = undefined;
 TURN_TIMER = undefined;
 TURN_STARTED_AT = undefined;
 
