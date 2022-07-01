@@ -455,11 +455,9 @@ function mouseClickAvailableCard(evt) {
 
     // define a new player card with a starter position
     playSoundRandom([clack1, clack2], 0.8);
-    evt.target.setAttribute("acChosen",true);
-    var hasHolo = PLAYER_HOLOFOIL.includes(thisCardName);
-    var newPC = new PlayerCard(thisCardName, hasHolo, -(HEX_RADIUS-1)+countPlayersPicks,HEX_RADIUS,-1-countPlayersPicks, true);
-    PLAYER_GAMECARD_OBJS.push(newPC);
+    let newPC = selectAvailCard(thisCardName, -(HEX_RADIUS-1)+countPlayersPicks, HEX_RADIUS);
     rerenderAllGamecardsAndTokens();
+
     const gameInfoBox = document.getElementById("gameInfoBox");
     gameInfoBox.innerHTML = get_PC_BroadcastForInfoBox(newPC, true);
 }

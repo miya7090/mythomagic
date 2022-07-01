@@ -31,3 +31,11 @@ function rand(low, high){
 function coinFlip(){
   return (Math.floor(Math.random() * 2) == 0);
 }
+
+function pickRandomEntries(arr, n) {
+  return randArray(arr).slice(0,n);
+}
+
+function randArray(arr) {
+  return arr.sort(function(){ return 0.5 - Math.random(); });
+}

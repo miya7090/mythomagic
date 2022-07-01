@@ -24,18 +24,25 @@ function processLobbyCode(lobbyCode){
 }
 
 function pickPCardsRandomly(){
-  let shuffledPCOwned = PLAYER_OWNED_temp.sort(function(){ return 0.5 - Math.random(); });
-  let selectedPCOwned = shuffledPCOwned.slice(0,5);
+  let fighterTags = pickRandomEntries(PLAYER_OWNED_FIGHTERS, 1);
+  let healerTags = pickRandomEntries(PLAYER_OWNED_HEALERS, 1);
 
-  for (let i = 0; i < 5; i++) {
-    let selectedPCName = selectedPCOwned[i];
-    let availCard = document.getElementById("availCard-" + selectedPCName);
-    availCard.setAttribute("acChosen",true);
-    var newPC = new PlayerCard(selectedPCName, false, -(HEX_RADIUS-1)+i,HEX_RADIUS,-1-i, true);
-    PLAYER_GAMECARD_OBJS.push(newPC);
-  }
+  let PLAYER_OWNED_PICKABLE = PLAYER_OWNED.filter(key => (key !== fighterTags[0] && key !== healerTags[0]));
+  let anyTags = pickRandomEntries(PLAYER_OWNED_PICKABLE, 3);
+
+  let pickedTags = randArray(fighterTags.concat(healerTags).concat(anyTags));
+
+  for (let i = 0; i < 5; i++) { selectAvailCard(pickedTags[i], -(HEX_RADIUS-1)+i, HEX_RADIUS,-1-i); }
   
   rerenderAllGamecardsAndTokens();
+}
+
+function selectAvailCard(cardName, cardQ, cardR) {
+  let availCardDiv = document.getElementById("availCard-" + cardName);
+  availCardDiv.setAttribute("acChosen", true);
+  var newPC = new PlayerCard(cardName, false, cardQ, cardR, -cardQ-cardR, true);
+  PLAYER_GAMECARD_OBJS.push(newPC);
+  return newPC;
 }
 
 function changeGameModeTo(newMode) {
