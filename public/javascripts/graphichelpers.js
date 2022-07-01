@@ -477,8 +477,15 @@ function addGameCardStatusesOnDiv(PCard, PCardDiv){
 
 function get_BC_BroadcastForInfoBox(BCard) {
   var res = "";
-  res += '<div class="hoverColWrap">';
-  res += '<h3 id="hoverInfoTitle">' + BCard.cardName + "</h3>";
+  res += '<div class="hoverTitleColumn">';
+    res += '<h3 id="hoverInfoTitle">' + BCard.cardName + "</h3>";
+    res += "</div>";
+
+  res += '<div class="hoverTitleColumn">';
+    res += '<h3 id="hoverInfoClass" class="hc-'+ BCard.hero_class + '">' + BCard.hero_class + "</h3>";
+    res += "</div>";
+
+    res += '<div class="hoverColWrap">';
 
   res += '<div class="hoverColumn">';
     res += "<p>HP: " + BCard.base_health + "</p>";
@@ -510,23 +517,33 @@ function capitalize(string) {
 function get_PC_BroadcastForInfoBox(PCard, isPlayer1) {
   var res = "";
   
-  res += '<div class="hoverColWrap">';
-    res += '<p id="hoverInfoTitle" p1='+isPlayer1+'><b style="font-size: medium;">' + PCard.cardName + "</b> - " + PCard.dead;
-    var statusTxt = ", statuses: ";
-    for (var sKey in PCard.statuses){
-        if (PCard.statuses[sKey] == 1){
-            statusTxt += sKey + " ";
-        }
+  res += '<div class="hoverTitleColumn">';
+    res += '<p id="hoverInfoTitle" p1='+isPlayer1+'><b style="font-size: medium;">' + PCard.cardName + "</b>";
+    if (PCard.dead == "defeated") {
+      res += " - " + PCard.dead;
+    } else {
+      var statusTxt = ", statuses: ";
+      for (var sKey in PCard.statuses){
+          if (PCard.statuses[sKey] == 1){
+              statusTxt += sKey + " ";
+          }
+      }
+      if (statusTxt === ", statuses: ") {
+          statusTxt += "none";
+      }
+      res += statusTxt;
     }
-    if (statusTxt === ", statuses: ") {
-        statusTxt += "none";
-    }
-    res += statusTxt + "</p>";
+    res += "</p></div>";
 
-    
+  res += '<div class="hoverTitleColumn">';
+    res += '<h3 id="hoverInfoClass" class="hc-'+ PCard.hero_class + '">' + PCard.hero_class + "</h3>";
+    res += "</div>";
+  
+  res += '<div class="hoverColWrap">';
+
     res += '<div class="hoverColumn">';
-    res += "<p>" + PCard.current_health + "/" + PCard.getMaxHealth() + "HP <i>(max +" + (PCard.getMaxHealth() - PCard.base_health) + ")</i></p>";
-    res += "<p>" + PCard.current_mana + "/" + PCard.getMaxMana() + "MP <i>(max +" + (PCard.getMaxMana() - MAX_MANA) + ")</i></p>";
+    res += "<p>" + PCard.current_health + "/" + PCard.getMaxHealth() + "HP <i>(+" + (PCard.getMaxHealth() - PCard.base_health) + ")</i></p>";
+    res += "<p>" + PCard.current_mana + "/" + PCard.getMaxMana() + "MP <i>(+" + (PCard.getMaxMana() - MAX_MANA) + ")</i></p>";
     res += "<p>MP/turn: " + PCard.current_mana_per_turn + " <i>(+" + (PCard.current_mana_per_turn - PCard.base_mana_per_turn) + ")</i></p>";
     res += "</div>";
     

@@ -26,6 +26,8 @@
       this.ult_text = base_stats[14];
       this.passive_title = base_stats[15];
       this.passive_text = base_stats[16];
+
+      this.hero_class = base_stats[17];
     }
   }
 
@@ -377,6 +379,7 @@ function importAllP2Cs(pcListObj){
               passive_achilles_onEnemy();
               passive_perseus_onEnemy();
             }
+            clearBestowedBlessingsFrom(this.cardName, this.p1);
             markTokenDefeated(this.p1, this.cardName);
           }
         }

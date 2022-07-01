@@ -37,6 +37,14 @@
   --p2TokenColor: rgba(8, 46, 144, 0.9);
   --p1TokenHoverColor: rgba(60, 0, 0, 0.9);
   --p2TokenHoverColor: rgba(5, 35, 111, 0.9);
+
+  --MELEE: rgb(214, 115, 115);
+  --RANGED: rgb(228, 159, 56);
+  --TANK: rgb(191, 194, 99);
+  --HEALER: rgb(117, 189, 113);
+  --SUPPORTER: rgb(94, 169, 231);
+  --CASTER: rgb(120, 125, 245);
+  --SPECIAL: rgb(142, 89, 168);
 }
 
 @font-face {
@@ -165,7 +173,30 @@ body {
   margin-left: 10px;
   margin-top: 0px;
   margin-bottom: 2px;
+  text-align: left;
 }
+
+#hoverInfoClass {
+  font-family: "regularFont";
+  font-size: medium;
+  color: var(--p0FontColor);
+  margin-right: 10px;
+  margin-top: 0px;
+  margin-bottom: 2px;
+  text-align: right;
+}
+
+.fixHoverWidth {
+  width: 700px;
+}
+
+#hoverInfoClass.hc-Melee { color: var(--MELEE); }
+#hoverInfoClass.hc-Ranged { color: var(--RANGED); }
+#hoverInfoClass.hc-Tank { color: var(--TANK); }
+#hoverInfoClass.hc-Healer { color: var(--HEALER); }
+#hoverInfoClass.hc-Supporter { color: var(--SUPPORTER); }
+#hoverInfoClass.hc-Caster { color: var(--CASTER); }
+#hoverInfoClass.hc-Special { color: var(--SPECIAL); }
 
 #hoverInfoTitle[p1=true] {
   color: var(--p1FontColor);
@@ -189,6 +220,11 @@ body {
 
 .hoverColWrap {
   height:100px;
+}
+
+.hoverTitleColumn {
+  float: left;
+  width: 50%;
 }
 
 .hoverColumn {
