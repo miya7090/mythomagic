@@ -190,14 +190,6 @@ body {
   width: 700px;
 }
 
-#hoverInfoClass.hc-Melee { color: var(--MELEE); }
-#hoverInfoClass.hc-Ranged { color: var(--RANGED); }
-#hoverInfoClass.hc-Tank { color: var(--TANK); }
-#hoverInfoClass.hc-Healer { color: var(--HEALER); }
-#hoverInfoClass.hc-Supporter { color: var(--SUPPORTER); }
-#hoverInfoClass.hc-Caster { color: var(--CASTER); }
-#hoverInfoClass.hc-Special { color: var(--SPECIAL); }
-
 #hoverInfoTitle[p1=true] {
   color: var(--p1FontColor);
 }
@@ -241,3 +233,19 @@ body {
 .hoverColumn p {
   margin-left: 10px;
 }
+
+.hc-Melee { color: var(--MELEE); }
+.hc-Ranged { color: var(--RANGED); }
+.hc-Tank { color: var(--TANK); }
+.hc-Healer { color: var(--HEALER); }
+.hc-Supporter { color: var(--SUPPORTER); }
+.hc-Caster { color: var(--CASTER); }
+.hc-Special { color: var(--SPECIAL); }
+
+#hoverInfoClass.hc-Melee { color: var(--MELEE); } /* to override specificity */
+#hoverInfoClass.hc-Ranged { color: var(--RANGED); }
+#hoverInfoClass.hc-Tank { color: var(--TANK); }
+#hoverInfoClass.hc-Healer { color: var(--HEALER); }
+#hoverInfoClass.hc-Supporter { color: var(--SUPPORTER); }
+#hoverInfoClass.hc-Caster { color: var(--CASTER); }
+#hoverInfoClass.hc-Special { color: var(--SPECIAL); }

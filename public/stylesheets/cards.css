@@ -4,7 +4,7 @@
     margin-bottom: 20px;
     margin-left: 20px;
     margin-right: 20px;
-    height: 120px;
+    height: 125px;
     background-color: rgba(146, 146, 146, 0.4);
     border-radius: 5px;
     box-shadow: 0 0 8px 5px rgba(146, 146, 146, 0.15);
@@ -38,6 +38,31 @@
     overflow-x: auto;
     overflow-y: hidden;
     overflow: overlay;
+}
+
+.classCardWrapper {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 5px;
+    margin: 20px;
+    
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.classCard {
+    width: 350px;
+}
+
+.classCard .cards { /* preview page */
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    overflow: overlay;
+}
+
+.classCardTitle {
+    margin-left: 20px;
 }
 
 ::-webkit-scrollbar { height: 8px; width: 8px; }

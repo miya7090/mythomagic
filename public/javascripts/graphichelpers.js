@@ -211,12 +211,16 @@ function createTileDiv(rowDiv, q, r) {
   square.addEventListener('mouseup', mouseClickTile);
 };
 
-function createAvailableCardDiv(pcNameToRender) {
+function createAvailableCardDiv(pcNameToRender, availCardGroupDiv) {
   const acard = document.createElement("div");
   putBaseCardHTML(pcNameToRender, acard);
   acard.classList.add("card");
   acard.id = "availCard-" + pcNameToRender;
-  myAvailableCards.appendChild(acard);
+  if (availCardGroupDiv == undefined) {
+    myAvailableCards.appendChild(acard);
+  } else {
+    availCardGroupDiv.appendChild(acard);
+  }
 
   const referenceCard = new Card(pcNameToRender); // show stats on hover
   acard.addEventListener('mouseenter', function(evt){mouseOverAvailableCard(evt, referenceCard);});

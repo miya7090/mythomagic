@@ -13,6 +13,14 @@ document.addEventListener("DOMContentLoaded", () => {
         createAvailableCardDiv(availCard);
     });
 
+    PLAYER_OWNED_MELEE.forEach((availCard) => { createAvailableCardDiv(availCard, document.getElementById("meleeGroup")); });
+    PLAYER_OWNED_RANGED.forEach((availCard) => { createAvailableCardDiv(availCard, document.getElementById("rangedGroup")); });
+    PLAYER_OWNED_TANKS.forEach((availCard) => { createAvailableCardDiv(availCard, document.getElementById("tankGroup")); });
+    PLAYER_OWNED_HEALERS.forEach((availCard) => { createAvailableCardDiv(availCard, document.getElementById("healerGroup")); });
+    PLAYER_OWNED_SUPPORTERS.forEach((availCard) => { createAvailableCardDiv(availCard, document.getElementById("supporterGroup")); });
+    PLAYER_OWNED_CASTERS.forEach((availCard) => { createAvailableCardDiv(availCard, document.getElementById("casterGroup")); });
+    PLAYER_OWNED_SPECIAL.forEach((availCard) => { createAvailableCardDiv(availCard, document.getElementById("specialGroup")); });
+
     gameInfoBox.innerHTML = get_BC_BroadcastForInfoBox(new Card("Achilles")); // focus on achilles first
 });
 

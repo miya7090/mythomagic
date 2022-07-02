@@ -138,7 +138,15 @@ const BASE_STAT_DICT = {
   PLAYER_OWNED_temp.sort();
   const PLAYER_OWNED = PLAYER_OWNED_temp;
   const PLAYER_OWNED_FIGHTERS = PLAYER_OWNED.filter(key => (BASE_STAT_DICT[key][17] == "Melee" || BASE_STAT_DICT[key][17] == "Ranged"));
+
+  const PLAYER_OWNED_MELEE = PLAYER_OWNED.filter(key => BASE_STAT_DICT[key][17] == "Melee");
+  const PLAYER_OWNED_RANGED = PLAYER_OWNED.filter(key => BASE_STAT_DICT[key][17] == "Ranged");
+  const PLAYER_OWNED_TANKS = PLAYER_OWNED.filter(key => BASE_STAT_DICT[key][17] == "Tank");
   const PLAYER_OWNED_HEALERS = PLAYER_OWNED.filter(key => BASE_STAT_DICT[key][17] == "Healer");
+  const PLAYER_OWNED_SUPPORTERS = PLAYER_OWNED.filter(key => BASE_STAT_DICT[key][17] == "Supporter");
+  const PLAYER_OWNED_CASTERS = PLAYER_OWNED.filter(key => BASE_STAT_DICT[key][17] == "Caster");
+  const PLAYER_OWNED_SPECIAL = PLAYER_OWNED.filter(key => BASE_STAT_DICT[key][17] == "Special");
+  
   const PLAYER_HOLOFOIL = ["Athena","Apollo","Hephaestus","Nyx"]; // #TODO remove
   PLAYER_GAMECARD_OBJS = [];
   ENEMY_GAMECARD_OBJS = [];
