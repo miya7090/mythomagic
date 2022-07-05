@@ -205,7 +205,7 @@ function attack(atkType, attacker, centerQ, centerR, centerS, aoe) {
             } else if (animCode == 1) {
               anim_tileHitByAttack(hitTile);
             } else {
-              console.error("need to implement anim for neutral skill");
+              console.error("need to implement anim for neutral skill"); // #TODO
             }
           } else {
             console.log("hero already defeated");

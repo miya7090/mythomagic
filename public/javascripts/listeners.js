@@ -180,20 +180,23 @@ function mouseClickTile(evt) {
 
   if (GAME_MODE == "p1-active") { ///// (1) p1-active
     if (tokenOnTile == null) {
-      console.error("there is no token to move on this tile"); return;
+      processBroadcast("alert", true, "there is no token to move on this tile"); return;
     } else if (tokenOnTile.classList.contains("player1") == false) {
-      console.error("this is not your token"); return;
+      processBroadcast("alert", true, "this is "+OTHER_NAME+"'s token"); return;
+    } else if (tokenOnTile.pcardLink.dead == "defeated") {
+      processBroadcast("alert", true, "this hero has already been defeated"); return;
     } else { // success
       transitionToMoveTokenMode(tokenOnTile);
     }
 
   } else if (GAME_MODE == "p1-moveToken") {  ///// (2) p1-moveToken
     if (tokenOnTile != null && tokenOnTile.pcardLink != GAME_MODE_MEMORYTARGET) {
-      console.error("there is already a tile at this location, try again");
+      processBroadcast("alert", true, "there is already a hero at this location");
       resetToActiveMode(); return;
     }
     if (distanceDifference > GAME_MODE_MEMORYTARGET.getCurrentMovement()) {
-      console.error("tile of distance", distanceDifference, "cannot be reached with movement", GAME_MODE_MEMORYTARGET.getCurrentMovement());
+      let errorMsg = "MVT of " + GAME_MODE_MEMORYTARGET.getCurrentMovement() + " is not sufficient";
+      processBroadcast("alert", true, errorMsg);
       resetToActiveMode(); return;
     }
     // success
@@ -206,7 +209,8 @@ function mouseClickTile(evt) {
 
   } else if (GAME_MODE == "p1-abilityAim") {  ///// (3) p1-abilityAim
     if (distanceDifference > GAME_MODE_MEMORYTARGET.ability_aim_range) {
-      console.error("tile of distance", distanceDifference, "cannot be reached with ability range", GAME_MODE_MEMORYTARGET.ability_aim_range);
+      let errorMsg = "ability range of " + GAME_MODE_MEMORYTARGET.ability_aim_range + " is not sufficient";
+      processBroadcast("alert", true, errorMsg);
       relinquishAimingMouseHighlight()
       aimingTargetReachHighlight(false, GAME_MODE_MEMORYTARGET.ability_aim_range);
       toSelectAttackMode(); return;
@@ -218,7 +222,8 @@ function mouseClickTile(evt) {
     attackComplete();
   } else if (GAME_MODE == "p1-ultimateAim") {  ///// (3) p1-ultimateAim
     if (distanceDifference > GAME_MODE_MEMORYTARGET.ult_aim_range) {
-      console.error("tile of distance", distanceDifference, "cannot be reached with ultimate range", GAME_MODE_MEMORYTARGET.ult_aim_range);
+      let errorMsg = "ultimate range of " + GAME_MODE_MEMORYTARGET.ult_aim_range + " is not sufficient";
+      processBroadcast("alert", true, errorMsg);
       relinquishAimingMouseHighlight();
       aimingTargetReachHighlight(false, GAME_MODE_MEMORYTARGET.ult_aim_range);
       toSelectAttackMode(); return;
@@ -433,8 +438,7 @@ function mouseClickAvailableCard(evt) {
     const onFieldCards = document.getElementById("onFieldCards");
     const countPlayersPicks = onFieldCards.childElementCount;
     if (GAME_MODE != "pick-phase") {
-      console.error("cannot pick this card - it is not selection phase");
-      return;
+      processBroadcast("alert", true, "cannot pick this card - it is not selection phase"); return;
     }
 
     var dupeCard = onFieldCards.querySelector('#p1card-'+thisCardName);
@@ -449,7 +453,7 @@ function mouseClickAvailableCard(evt) {
     }
     
     if (countPlayersPicks >= 5){
-      console.error("player has already picked 5 cards"); // #TODO express errors nicely
+      processBroadcast("alert", true, "you can pick at most 5 cards"); return;
       return;
     }
 
