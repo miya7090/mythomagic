@@ -40,12 +40,12 @@ function processBroadcast(msgType, p1, arg1, arg2){
   if (msgType == "alert") {
     bIcon = GITHUB_PUBLIC_PATH + "images/alert.png";
     bText = arg1;
+    console.log("okay", bIcon, bText, p1);
   } else {
     bIcon = GITHUB_PUBLIC_PATH + "images/portraits/"+arg1.toLowerCase()+".png";
     bText = formatBroadcast(msgType, p1, arg1, arg2);
   }
   
-
   if (!BROADCASTING){
     BROADCASTING = true;
     startBroadcast(p1, bIcon, bText);

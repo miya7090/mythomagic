@@ -28,9 +28,9 @@ function doUniqueSkill(atkType, attacker, target, targetIsOpponent) { // atkType
 
     if (map[attacker.cardName] != undefined){
         if (targetIsOpponent && map[attacker.cardName][1] == 0) {
-            processBroadcast("alert", true, "invalid target: target must be an ally");
+            console.error("invalid target: target must be an ally");
         } else if (!targetIsOpponent && map[attacker.cardName][1] == 1) {
-            processBroadcast("alert", true, "invalid target: target must be an opponent");
+            console.error("invalid target: target must be an opponent");
         } else {
             let skillFunc = map[attacker.cardName][0]; // do action
             skillFunc(attacker, target);
