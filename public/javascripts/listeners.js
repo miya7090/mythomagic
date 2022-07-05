@@ -484,6 +484,10 @@ function mouseOutOfGameCard(evt, referenceCard) {
   } else {
     document.getElementById("p2token-" + referenceCard.cardName).setAttribute("gameCardGlow", false);
   }
+
+  if (GAME_MODE_MEMORYTARGET != undefined){
+    gameInfoBox.innerHTML = get_PC_BroadcastForInfoBox(GAME_MODE_MEMORYTARGET, true);
+  }
 }
 
 function mouseClickGameCard(evt, pcardRef) {

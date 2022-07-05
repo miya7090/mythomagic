@@ -119,8 +119,8 @@ const BASE_STAT_DICT = {
       "Whisper","Become Obscured",
       "Replica","Imitate an adjacent enemy, if not already in deck",
       "Reflection","Enemies that autoattack Echo receive the same amount of damage", "Special"],
-    "Themis":[1400,2,15,800,30,0,2, undefined,undefined,1,0,
-      "Verdict","Revert target to their base stats and clear status effects",
+    "Themis":[1400,2,15,800,30,0,2, 3,0,undefined,undefined,
+      "Verdict","Revert target within 3 units to their base stats and clear status effects",
       "Fair-Minded","Revert all heroes to their base stats and clear all status effects",
       "Objection","No enemy can accumulate over 5000 ATK or 30 DEF", "Caster"]
   }
