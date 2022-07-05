@@ -44,7 +44,7 @@
   --HEALER: rgb(117, 189, 113);
   --SUPPORTER: rgb(94, 169, 231);
   --CASTER: rgb(120, 125, 245);
-  --SPECIAL: rgb(142, 89, 168);
+  --SPECIAL: rgb(156, 103, 182);
 }
 
 @font-face {
@@ -109,8 +109,8 @@ body {
 /* FOOTER RULES */
 
 .lowerPageText{
-  margin-top: 15px;
-  position:relative;
+  position: fixed;
+  bottom: 8px;
 }
 
 .lowerPageText p{
@@ -132,7 +132,7 @@ body {
 }
 
 #mythomagicTitle {
-  position:absolute;
+  position: fixed;
   bottom:18px;
   right:8px;
   margin:0px;
@@ -140,10 +140,9 @@ body {
 }
 
 #creditText {
-  position:absolute;
-  bottom:3px;
+  position: fixed;
+  bottom:8px;
   right:8px;
-  margin:0px;
   font-size: 12px;
 }
 

@@ -502,8 +502,8 @@ function get_BC_BroadcastForInfoBox(BCard) {
     res += "</div>";
 
     res += '<div class="hoverColumn">';
-    res += "<p>RC: " + BCard.base_normal_attack_range + "</p>";
     res += "<p>MVT: " + BCard.base_movement + "</p>";
+    res += "<p>RC: " + BCard.base_normal_attack_range + "</p>";
     res += "</div>";
   res += "</div>";
   

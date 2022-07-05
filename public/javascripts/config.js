@@ -53,7 +53,7 @@ const BASE_STAT_DICT = {
 
     "Athena":[3000,2,15,700,50,0,3, 3,0,6,0,
       "Aegis","Ally within 3 units gains 15 DEF and has their statuses cleared",
-      "Deliberate Strike","Deal 400 true damage to one target within 6 units",
+      "Deliberate Strike","Deal 600 true damage to one target within 6 units",
       "Well-Prepared","Allies start game with 200 MP", "Supporter"], 
     "Apollo":[2000,4,10,700,60,0,3, 5,2,undefined,undefined,
       "Volley","Attack with 10% extra damage to enemies in a 2-tile radius, up to 5 tiles away",

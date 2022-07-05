@@ -68,6 +68,7 @@ document.addEventListener("DOMContentLoaded", () => {
   socket.on("gameInvite", (enemyNickname, enemyId)=>{
     console.log("**");
     const myNickname = document.getElementById("nickname").value;
+    regionNotesText.textContent = "loading, please wait...";
     if (confirm("accept challenge from "+enemyNickname+"?")){
       const genRoomCode = Math.random().toString(36).slice(2);
       socket.emit("roomRequest", genRoomCode, enemyNickname, enemyId, myNickname);
