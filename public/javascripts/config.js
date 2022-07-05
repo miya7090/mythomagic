@@ -49,7 +49,7 @@ const BASE_STAT_DICT = {
     // name, base atk, normal atk range, defense, hp, mana per turn, mana per attack, mvt speed
     // ability aimed range/aoe, ult aimed range/aoe
 
-    // available classes: Melee, Ranged, Tank, Healer, Supporter, Caster, Special
+    // available classes: Melee, Ranged, Protector, Healer, Supporter, Caster, Special
 
     "Athena":[3000,2,15,700,50,0,3, 3,0,6,0,
       "Aegis","Ally within 3 units gains 15 DEF and has their statuses cleared",
@@ -78,7 +78,7 @@ const BASE_STAT_DICT = {
     "Hestia":[500,2,15,1000,60,0,1, undefined,2,undefined,2,
       "Warming Hearth","Heal all allies within 2 tiles by 300 HP",
       "Eternal Flame","Increase max HP of allies within 2 tiles by 200 HP and heal them 300 HP",
-      "Shelter", "While adjacent to Hestia, allies' DEF is increased by 10, and max HP increased by 200", "Tank"],
+      "Shelter", "While adjacent to Hestia, allies' DEF is increased by 10, and max HP increased by 200", "Protector"],
     "Kronos":[3000,2,10,800,50,0,1, 3,1,undefined,undefined,
       "Scythe","Attack targets in a 1-tile radius up to 3 units away, inflicting Stunned",
       "Stasis","Deals 200 true damage to all Stunned enemies, and grants additional turn",
@@ -88,14 +88,14 @@ const BASE_STAT_DICT = {
       "Swordsmanship","Receive ATK and DEF increase by 20%, MVT increase by 1",
       "Cap of Invisibility","After an enemy is defeated, become Obscured and increase MVT by 1", "Melee"],
     "Hera":[1400,2,15,800,50,0,2, 3,0,6,0,
-      "Protector","Grants 10 DEF, 200 HP, 100 MP to ally within 3 tiles",
+      "Blessing","Grants 10 DEF, 200 HP, 100 MP to ally within 3 tiles",
       "Wrath","Max HP of enemy within 6 tiles reduced to 100",
-      "Queen of Olympus","All allies gain 1 DEF for each Olympian added to the deck", "Tank"],
+      "Queen of Olympus","All allies gain 1 DEF for each Olympian added to the deck", "Protector"],
     "Hermes":[1200,2,10,600,50,0,4, 1,0,1,0,
       "Trade Offer","Swap stats with adjacent target's better stats, with 50% chance success for each",
       "Lucky","Adjacent ally has a 50-50 chance of their stats being either halved or tripled",
       "Messenger","All adjacent allies have their MVT increased by 2", "Supporter"],
-    "Heracles":[3200,2,15,500,50,0,3, undefined,3,undefined,1,
+    "Heracles":[3000,2,15,500,50,0,3, undefined,3,undefined,1,
       "Efficiency","Attack all targets within 3 tiles with 50% more damage",
       "Lion Cloak","Double the DEF of all adjacent allies",
       "Determination","Will take at maximum 300 HP of damage per attack", "Melee"],
@@ -141,7 +141,7 @@ const BASE_STAT_DICT = {
 
   const PLAYER_OWNED_MELEE = PLAYER_OWNED.filter(key => BASE_STAT_DICT[key][17] == "Melee");
   const PLAYER_OWNED_RANGED = PLAYER_OWNED.filter(key => BASE_STAT_DICT[key][17] == "Ranged");
-  const PLAYER_OWNED_TANKS = PLAYER_OWNED.filter(key => BASE_STAT_DICT[key][17] == "Tank");
+  const PLAYER_OWNED_PROTECTORS = PLAYER_OWNED.filter(key => BASE_STAT_DICT[key][17] == "Protector");
   const PLAYER_OWNED_HEALERS = PLAYER_OWNED.filter(key => BASE_STAT_DICT[key][17] == "Healer");
   const PLAYER_OWNED_SUPPORTERS = PLAYER_OWNED.filter(key => BASE_STAT_DICT[key][17] == "Supporter");
   const PLAYER_OWNED_CASTERS = PLAYER_OWNED.filter(key => BASE_STAT_DICT[key][17] == "Caster");

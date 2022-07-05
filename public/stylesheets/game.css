@@ -40,7 +40,7 @@
 
   --MELEE: rgb(214, 115, 115);
   --RANGED: rgb(228, 159, 56);
-  --TANK: rgb(191, 194, 99);
+  --PROTECTOR: rgb(191, 194, 99);
   --HEALER: rgb(117, 189, 113);
   --SUPPORTER: rgb(94, 169, 231);
   --CASTER: rgb(120, 125, 245);
@@ -235,7 +235,7 @@ body {
 
 .hc-Melee { color: var(--MELEE); }
 .hc-Ranged { color: var(--RANGED); }
-.hc-Tank { color: var(--TANK); }
+.hc-Protector { color: var(--PROTECTOR); }
 .hc-Healer { color: var(--HEALER); }
 .hc-Supporter { color: var(--SUPPORTER); }
 .hc-Caster { color: var(--CASTER); }
@@ -243,7 +243,7 @@ body {
 
 #hoverInfoClass.hc-Melee { color: var(--MELEE); } /* to override specificity */
 #hoverInfoClass.hc-Ranged { color: var(--RANGED); }
-#hoverInfoClass.hc-Tank { color: var(--TANK); }
+#hoverInfoClass.hc-Protector { color: var(--PROTECTOR); }
 #hoverInfoClass.hc-Healer { color: var(--HEALER); }
 #hoverInfoClass.hc-Supporter { color: var(--SUPPORTER); }
 #hoverInfoClass.hc-Caster { color: var(--CASTER); }
