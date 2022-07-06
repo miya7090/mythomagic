@@ -8,7 +8,7 @@ const ABILITY_MAP = {
     "Heracles":[ability_heracles,1], "Hades":[ability_hades,2],
     "Hecate":[ability_hecate,1], "Icarus":[ability_icarus,3],
     "Orpheus":[ability_orpheus,3], "Echo":[ability_echo,3],
-    "Themis":[ability_themis,2]};
+    "Themis":[ability_themis,2], "Artemis":[ability_artemis,1]};
 
 const ULT_MAP = {
     "Athena":[ult_athena,1],
@@ -20,7 +20,7 @@ const ULT_MAP = {
     "Heracles":[ult_heracles,3], "Hades":[ult_hades,3],
     "Hecate":[ult_hecate,3], "Icarus":[ult_icarus,3],
     "Orpheus":[ult_orpheus,3], "Echo":[ult_echo,1],
-    "Themis":[ult_themis,3]};
+    "Themis":[ult_themis,3], "Artemis":[ult_artemis,1]};
 
 function doUniqueSkill(atkType, attacker, target, targetIsOpponent) { // atkType 1=ability, 2=ultimate
     let map = ABILITY_MAP;
@@ -54,6 +54,20 @@ function ult_themis(attacker, target) {
 function ability_themis(attacker, target) {
     broadcastMsg("ability", true, "Themis", target.cardName);
     target.revertToBaseStats();
+}
+
+function ult_artemis(attacker, target) {
+    broadcastMsg("ultimate", true, "Artemis", target.cardName);
+    target.inflictStatus("stunned");
+}
+
+function ability_artemis(attacker, target) {
+    broadcastMsg("ability", true, "Artemis", target.cardName);
+    if (target.current_health / target.getMaxHealth() > 0.5){
+        target.takeDamage(300);
+    } else {
+        target.takeDamage(100);
+    }
 }
 
 function ult_echo(attacker, target) {
