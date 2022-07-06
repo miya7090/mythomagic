@@ -45,20 +45,19 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   MY_SOCKET.on('opponentDisconnectWarning', ()=>{
-    console.log("1");
-    if (GAME_MODE == "pick-phase") {
-      console.log("2");
-      alert(OTHER_NAME+" has disconnected");
-      window.location.href = "/";
-      MY_SOCKET.emit("commandDisconnectGame");
-    } else {
-      console.log("3");
-      if (confirm(OTHER_NAME+" has disconnected... would you like to wait for " + OTHER_NAME + " to return?")){
-        setTimeout(mySocketPromptDisconnected, WAIT_FOR_RECONNECT);
-        AM_WAITING_FOR_OPPONENT_RECONNECT = true;
-      } else {
+    if (!AM_WAITING_FOR_OPPONENT_RECONNECT){
+      if (GAME_MODE == "pick-phase") {
+        alert(OTHER_NAME+" has disconnected");
         window.location.href = "/";
         MY_SOCKET.emit("commandDisconnectGame");
+      } else {
+        if (confirm(OTHER_NAME+" has disconnected... would you like to wait for " + OTHER_NAME + " to return?")){
+          setTimeout(mySocketPromptDisconnected, WAIT_FOR_RECONNECT);
+          AM_WAITING_FOR_OPPONENT_RECONNECT = true;
+        } else {
+          window.location.href = "/";
+          MY_SOCKET.emit("commandDisconnectGame");
+        }
       }
     }
   });

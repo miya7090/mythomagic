@@ -342,13 +342,37 @@ function mouseExitAuto(evt) {
 }
 
 function startBgm(){
-  var bgm = new Audio(bgmSource); 
-  bgm.addEventListener('ended', function() {
-      this.currentTime = 0;
-      this.play();
-  }, false);
-  bgm.volume = 0.4;
-  bgm.play();
+  if (BGM_MUTE){
+    if (BGM_AUDIO_LINK != undefined) {
+      BGM_AUDIO_LINK.pause();
+      BGM_AUDIO_LINK.currentTime = 0;
+    } else {
+      console.log("no bgm to pause");
+    }
+  } else {
+    if (BGM_AUDIO_LINK == undefined) { // define a looping audio if it doesn't yet exist
+      BGM_AUDIO_LINK = new Audio(bgmSource); 
+      BGM_AUDIO_LINK.addEventListener('ended', function() {
+          this.currentTime = 0;
+          this.play();
+      }, false);
+    }
+    
+    BGM_AUDIO_LINK.volume = 0.4;
+    BGM_AUDIO_LINK.play();
+  }
+}
+
+function muteBGM(){
+  console.log("setting bgm mute to", !BGM_MUTE);
+  BGM_MUTE = !BGM_MUTE;
+  startBgm();
+
+  if (BGM_MUTE) {
+    document.getElementById("muteButton").innerText = "unmute";
+  } else {
+    document.getElementById("muteButton").innerText = "mute";
+  }
 }
 
 function playSoundRandom(choices, volume){

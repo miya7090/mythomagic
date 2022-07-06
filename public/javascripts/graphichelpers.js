@@ -555,19 +555,37 @@ function get_PC_BroadcastForInfoBox(PCard, isPlayer1) {
   res += '<div class="hoverColWrap">';
 
     res += '<div class="hoverColumn">';
-    res += "<p>" + PCard.current_health + "/" + PCard.getMaxHealth() + "HP <i>(+" + (PCard.getMaxHealth() - PCard.base_health) + ")</i></p>";
-    res += "<p>" + PCard.current_mana + "/" + PCard.getMaxMana() + "MP <i>(+" + (PCard.getMaxMana() - MAX_MANA) + ")</i></p>";
-    res += "<p>MP/turn: " + PCard.current_mana_per_turn + " <i>(+" + (PCard.current_mana_per_turn - PCard.base_mana_per_turn) + ")</i></p>";
+    res += "<p>" + PCard.current_health + "/" + PCard.getMaxHealth() + "HP <i>("; 
+    if (PCard.getMaxHealth() - PCard.base_health >=0 ) { res += "+"; }
+    res += (PCard.getMaxHealth() - PCard.base_health) + ")</i></p>";
+
+    res += "<p>" + PCard.current_mana + "/" + PCard.getMaxMana() + "MP <i>(";
+    if (PCard.getMaxMana() - MAX_MANA >=0 ) { res += "+"; }
+    res += (PCard.getMaxMana() - MAX_MANA) + ")</i></p>";
+
+    res += "<p>MP/turn: " + PCard.current_mana_per_turn + " <i>(";
+    if (PCard.current_mana_per_turn - PCard.base_mana_per_turn >=0 ) { res += "+"; }
+    res += (PCard.current_mana_per_turn - PCard.base_mana_per_turn) + ")</i></p>";
     res += "</div>";
     
     res += '<div class="hoverColumn">';
-    res += "<p>ATK: " + PCard.getCurrentAttack() + " <i>(+" + (PCard.getCurrentAttack() - PCard.base_attack) + ")</i></p>";
-    res += "<p>DEF: " + PCard.getCurrentDefense() + " <i>(+" + (PCard.getCurrentDefense() - PCard.base_defense) + ")</i></p>";
+    res += "<p>ATK: " + PCard.getCurrentAttack() + " <i>(";
+    if (PCard.getCurrentAttack() - PCard.base_attack >=0 ) { res += "+"; }
+    res += (PCard.getCurrentAttack() - PCard.base_attack) + ")</i></p>";
+
+    res += "<p>DEF: " + PCard.getCurrentDefense() + " <i>(";
+    if (PCard.getCurrentDefense() - PCard.base_defense >=0 ) { res += "+"; }
+    res += (PCard.getCurrentDefense() - PCard.base_defense) + ")</i></p>";
     res += "</div>";
 
     res += '<div class="hoverColumn">';
-    res += "<p>RC: " + PCard.getCurrentNormAtkRange() + " <i>(+" + (PCard.getCurrentNormAtkRange() - PCard.base_normal_attack_range) + ")</i></p>";
-    res += "<p>MVT: " + PCard.getCurrentMovement() + " <i>(+" + (PCard.getCurrentMovement() - PCard.base_movement) + ")</i></p>";
+    res += "<p>RC: " + PCard.getCurrentNormAtkRange() + " <i>(";
+    if (PCard.getCurrentNormAtkRange() - PCard.base_normal_attack_range >=0 ) { res += "+"; }
+    res += (PCard.getCurrentNormAtkRange() - PCard.base_normal_attack_range) + ")</i></p>";
+
+    res += "<p>MVT: " + PCard.getCurrentMovement() + " <i>(";
+    if (PCard.getCurrentMovement() - PCard.base_movement >=0 ) { res += "+"; }
+    res += (PCard.getCurrentMovement() - PCard.base_movement) + ")</i></p>";
     res += "</div>";
 
   res += "</div>";

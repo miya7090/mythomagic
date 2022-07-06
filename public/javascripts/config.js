@@ -30,6 +30,9 @@ ABILITY_MANA_REQ = 200;
 MAX_MANA = 1000;
 HEXTILE_CUBIC_INDEX = {}; // keys: "q,r,s", maps to divs that are hextiles
 
+BGM_MUTE = false;
+BGM_AUDIO_LINK = undefined;
+
 PICK_PHASE_RANDOM = undefined;
 PICK_PHASE_TIMER = undefined;
 PICK_PHASE_STARTED_AT = undefined;
@@ -102,11 +105,11 @@ const BASE_STAT_DICT = {
       "Efficiency","Attack all targets within 3 tiles with 50% more damage",
       "Lion Cloak","Double the DEF of all adjacent allies",
       "Determination","Will take at maximum 300 HP of damage per attack", "Melee"],
-    "Hades":[3600,2,10,800,50,0,2, 2,0,undefined,undefined,
+    "Hades":[3200,2,10,800,50,0,2, 2,0,undefined,undefined,
       "Conductor","Cause a defeated target within 2 tiles to autoattack enemies",
       "Overlord","All defeated heroes gain 300 ATK and autoattack enemies",
       "Cerberus","Prevents any enemy from being revived", "Special"],
-    "Hecate":[3200,2,10,700,50,0,2, 2,0,undefined,undefined,
+    "Hecate":[1800,2,10,700,50,0,2, 2,0,undefined,undefined,
       "Dark Flame","Deal 200 true damage to target within 2 tiles",
       "Mist","Cause all allies to become Obscured",
       "Magician","Allies accumulate an extra 30 MP per turn", "Supporter"],
