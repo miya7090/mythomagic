@@ -7,7 +7,7 @@ const ABILITY_MAP = {
     "Hera":[ability_hera,0], "Hermes":[ability_hermes,2],
     "Heracles":[ability_heracles,1], "Hades":[ability_hades,2],
     "Hecate":[ability_hecate,1], "Icarus":[ability_icarus,3],
-    "Orpheus":[ability_orpheus,1], "Echo":[ability_echo,3],
+    "Orpheus":[ability_orpheus,3], "Echo":[ability_echo,3],
     "Themis":[ability_themis,2]};
 
 const ULT_MAP = {
@@ -80,8 +80,17 @@ function ult_orpheus(attacker, target) {
 }
 
 function ability_orpheus(attacker, target) {
-    broadcastMsg("ability", true, "Orpheus", target.cardName);
-    target.inflictStatus("charmed");
+    let lowestHealth = undefined;
+    let pcWithLowestHealth = undefined;
+    PLAYER_GAMECARD_OBJS.forEach(pc => {
+        if (lowestHealth == undefined || pc.current_health < lowestHealth) {
+            lowestHealth = pc.current_health;
+            pcWithLowestHealth = pc;
+        }
+    });
+
+    broadcastMsg("ability", true, "Orpheus", pcWithLowestHealth.cardName);
+    pcWithLowestHealth.heal(200);
 }
 
 function ult_icarus(attacker, target) {
