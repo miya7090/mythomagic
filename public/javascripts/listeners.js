@@ -438,7 +438,7 @@ function mouseClickAvailableCard(evt) {
     const onFieldCards = document.getElementById("onFieldCards");
     const countPlayersPicks = onFieldCards.childElementCount;
     if (GAME_MODE != "pick-phase") {
-      console.error("pick phase already over"); return;
+      console.error("not pick phase"); return;
     }
 
     var dupeCard = onFieldCards.querySelector('#p1card-'+thisCardName);

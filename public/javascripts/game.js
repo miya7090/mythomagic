@@ -27,6 +27,10 @@ document.addEventListener("DOMContentLoaded", () => {
     MY_SOCKET.emit("registerPlayer", roomCode);
   });
 
+  MY_SOCKET.on('cannotJoinGame', ()=>{
+    window.location.href = "/error.html";
+  });
+
   MY_SOCKET.on('tokenPickPhase', (otherId)=>{ // #TODO make opponent plans visible live (ghost coloring?)
     OPPONENT_SOCKET_ID = otherId;
 
@@ -40,9 +44,42 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  MY_SOCKET.on('winThroughForfeit', (reason)=>{
-    alert(OTHER_NAME+" has forfeited the game ("+reason+")");
-    window.location.href = "/";
+  MY_SOCKET.on('opponentDisconnectWarning', ()=>{
+    console.log("1");
+    if (GAME_MODE == "pick-phase") {
+      console.log("2");
+      alert(OTHER_NAME+" has disconnected");
+      window.location.href = "/";
+      MY_SOCKET.emit("commandDisconnectGame");
+    } else {
+      console.log("3");
+      if (confirm(OTHER_NAME+" has disconnected... would you like to wait for " + OTHER_NAME + " to return?")){
+        setTimeout(mySocketPromptDisconnected, WAIT_FOR_RECONNECT);
+        AM_WAITING_FOR_OPPONENT_RECONNECT = true;
+      } else {
+        window.location.href = "/";
+        MY_SOCKET.emit("commandDisconnectGame");
+      }
+    }
+  });
+
+  function mySocketPromptDisconnected() {
+    if (AM_WAITING_FOR_OPPONENT_RECONNECT){
+      if (confirm(OTHER_NAME+" has not yet reconnected... keep waiting?")){
+        setTimeout(mySocketPromptDisconnected, WAIT_FOR_RECONNECT);
+      } else {
+        window.location.href = "/";
+        MY_SOCKET.emit("commandDisconnectGame");
+      }
+    }
+  }
+
+  MY_SOCKET.on('rivalRejoined', (yourEnemysCards, yourEnemysVerOfYourCards)=>{ // 
+    alert(OTHER_NAME + " has reconnected");
+    AM_WAITING_FOR_OPPONENT_RECONNECT = false;
+    TURNS_ALLOCATED = 1;
+    beginTurn(yourEnemysCards, yourEnemysVerOfYourCards);
+    MY_SOCKET.emit("tellRival_ongoingProgress", exportAllP1Cs(), exportAllP2Cs());
   });
 
   MY_SOCKET.on('forfeit', (reason)=>{

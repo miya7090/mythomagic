@@ -38,6 +38,9 @@ TIMED_TURNS = undefined;
 TURN_TIMER = undefined;
 TURN_STARTED_AT = undefined;
 
+AM_WAITING_FOR_OPPONENT_RECONNECT = false;
+WAIT_FOR_RECONNECT = 10000; // wait 10 sec each time after opponent disconnects
+
 GAME_MODE = "startup"; // startup, pick-phase; [p1-]active, moveToken, attackSelect, autoattack, ability, abilityAim, ultimate, ultimateAim; [p2-]turn1, turn2
 GAME_MODE_MEMORYTARGET = undefined; // used if moving tokens, etc
 

@@ -4,14 +4,17 @@ const server = require("http").Server(app); // create server
 const io = require("socket.io")(server); // create instance of socketio
 const PORT = process.env.PORT || 3000;
 
-// lobby tracker, regions only, {region: {socketid: nickname}}
-var regionUsers = {"olympia=====": {}, "corinth=====": {}, "athens=====": {}, "sparta=====": {}};
-// room tracker, both regions and games, {socketid: room}
+// room tracker, BOTH REGIONS AND GAMES {socketid: room}
 var roomBook = {};
-// player tracker, games only
-var roommateFinder = {}; // {room: [socketid, socketid]}
+
+// lobby tracker, REGIONS ONLY {region: {socketid: nickname}}
+var regionUsers = {"olympia=====": {}, "corinth=====": {}, "athens=====": {}, "sparta=====": {}};
+
+// player tracker, GAMES ONLY
 var rivalFinder = {}; // {socketid: socketid}
+var roommateFinder = {}; // {room: [socketid, socketid]}
 var doneTokenPick = {}; // {room: gameCardJsonObjs} where objs array is included if 1 person finished token pick
+var gameHasBegun = {}; // {room: bool} where true if token pick is done
 
 // lobby code processing
 function rk(regionName){ return regionName + "====="; }
@@ -23,37 +26,88 @@ function isLobbyId(roomcode) {
 
 app.use(express.static(__dirname + "/public")); // use "public" directory for static files
 
-function kickOutFromLastRoom(socketId) {
-  if (socketId in roomBook) { // remove from its room
-    let thisRoomCode = roomBook[socketId];
+function kickOutSocketOpponentFromLastRoom(socketId) {
+  if (!(socketId in rivalFinder)){
+    console.error("can't find socket opponent to kick out", socketId);
+  } else {
+    kickOutSocketFromLastRoom(rivalFinder[socketId]);
+  }
+}
+
+function kickOutSocketFromLastRoom(socketId) { // returns the room code that was kicked out of
+  if (!(socketId in roomBook)) {
+    console.log("socket not found in room book", socketId); // normal behavior for the main (non-lobby non-game) page
+  } else {
+    let thisRoomCode = roomBook[socketId]; // remove from roomBook
     delete roomBook[socketId];
-    if (isLobbyId(thisRoomCode)) { // if it's in a lobby room, remove from lobby and notify
+
+    if (isLobbyId(thisRoomCode)) { // if it's in a lobby room
       let nickname = regionUsers[thisRoomCode][socketId];
       delete regionUsers[thisRoomCode][socketId];
       io.to(thisRoomCode).emit("lobbyLeft", socketId, nickname, nk(thisRoomCode), regionUsers[thisRoomCode]);
-    } else {
-      delete roommateFinder[thisRoomCode];
-      delete doneTokenPick[thisRoomCode];
+
+    } else { // if it's in a game room
+      delete rivalFinder[socketId];
+      roommateFinder[thisRoomCode].splice(roommateFinder[thisRoomCode].indexOf(socketId), 1);
     }
+
+    return thisRoomCode;
   }
-  if (socketId in rivalFinder){
-    delete rivalFinder[socketId];
+}
+
+function removeGameRoom(roomCode) {
+  if (isLobbyId(roomCode)) {
+    console.error("can't remove room: socket is in lobby not game room", socketId);
+  } else {
+    delete roommateFinder[roomCode];
+    delete doneTokenPick[roomCode];
+    delete gameHasBegun[roomCode];
   }
+}
+
+function demolishRoomOf(socketId){
+  kickOutSocketOpponentFromLastRoom(socketId);
+  let roomCode = kickOutSocketFromLastRoom(socketId);
+  removeGameRoom(roomCode);
 }
 
 io.on("connection", socket => {
   /* ~~~~~ managing sockets of any type ~~~~~ */
   socket.on("disconnect", () => {
-    if (socket.id in rivalFinder) {
-      kickOutFromLastRoom(rivalFinder[socket.id]);
-      io.to(rivalFinder[socket.id]).emit("winThroughForfeit", "opponent disconnected");
+    console.log("A",socket.id);
+    if (socket.id in roomBook) { // in game
+      let thisRoomCode = roomBook[socket.id];
+      console.log("B",socket.id);
+      if (isLobbyId(roomBook[socket.id])) {
+        console.log("C",socket.id);
+        kickOutSocketFromLastRoom(socket.id); // in lobby
+      } else {
+        console.log("D",socket.id);
+        if (roommateFinder[thisRoomCode].length > 0) {
+          console.log("E",socket.id, rivalFinder[socket.id]);
+          io.to(rivalFinder[socket.id]).emit("opponentDisconnectWarning"); // warn the opponent
+        }
+
+        kickOutSocketFromLastRoom(socket.id); // in game room
+        if (roommateFinder[thisRoomCode].length == 0){
+          console.log("F",socket.id);
+          removeGameRoom(thisRoomCode); // game room empty
+        }       
+        
+      }
+      console.log("G",socket.id);
+    } else {
+      console.log("socket left without being assigned to a room", socket.id); // normal behavior for the main (non-lobby non-game) page
     }
-    kickOutFromLastRoom(socket.id);
+  });
+
+  socket.on("commandDisconnectGame", () => {
+    demolishRoomOf(socket.id);
   });
 
   /* ~~~~~ lobby socket operations ~~~~~ */
   socket.on("lobbyJoin", (nickname, region) => {
-    kickOutFromLastRoom(socket.id);
+    kickOutSocketFromLastRoom(socket.id);
     socket.join(rk(region));
     regionUsers[rk(region)][socket.id] = nickname;
     roomBook[socket.id] = rk(region);
@@ -61,7 +115,7 @@ io.on("connection", socket => {
   });
 
   socket.on("lobbyLeave", () => {
-    kickOutFromLastRoom(socket.id);
+    kickOutSocketFromLastRoom(socket.id);
   });
 
   socket.on("gameInvite", (inviterNickname, recipientId)=>{
@@ -70,8 +124,8 @@ io.on("connection", socket => {
   
   socket.on("roomRequest", (room, inviterNickname, inviterId, recipientNickname)=>{
     let lobbyCode = nk(roomBook[socket.id]);
-    kickOutFromLastRoom(socket.id);
-    kickOutFromLastRoom(inviterId);
+    kickOutSocketFromLastRoom(socket.id);
+    kickOutSocketFromLastRoom(inviterId);
     // #TODO emit only one update for removing 2 lobbiers
     //io.to(rk(region)).emit("lobbyLeft2", inviterNickname, recipientNickname, region, regionUsers[rk(region)]);
     io.to(inviterId).emit("redirectToGame", inviterNickname, recipientNickname, room, lobbyCode);
@@ -84,18 +138,36 @@ io.on("connection", socket => {
 
   /* ~~~~~ player socket operations ~~~~~ */
   socket.on("registerPlayer", (roomCode) => {
-    socket.join(roomCode);
-    roomBook[socket.id] = roomCode;
-    if (roomCode in roommateFinder){
-      roommateFinder[roomCode].push(socket.id);
-      rivalFinder[roommateFinder[roomCode][0]] = roommateFinder[roomCode][1];
-      rivalFinder[roommateFinder[roomCode][1]] = roommateFinder[roomCode][0];
+    if (gameHasBegun[roomCode] == true) { // rejoining a disconnected game
+      if (roommateFinder[roomCode].length >= 2) { // players already playing
+        io.to(socket.id).emit("cannotJoinGame");
+      } else if (roommateFinder[roomCode].length == 0) { // both players have left
+        io.to(socket.id).emit("cannotJoinGame");
+        demolishRoomOf(socket.id);
+      } else { // success
+        socket.join(roomCode);
+        roomBook[socket.id] = roomCode;
 
-      console.log(roommateFinder[roomCode], "entering tokenPickPhase");
-      io.to(roommateFinder[roomCode][0]).emit("tokenPickPhase", roommateFinder[roomCode][1]);
-      io.to(roommateFinder[roomCode][1]).emit("tokenPickPhase", roommateFinder[roomCode][0]);
-    } else {
-      roommateFinder[roomCode] = [socket.id];
+        roommateFinder[roomCode].push(socket.id);
+        rivalFinder[roommateFinder[roomCode][0]] = roommateFinder[roomCode][1];
+        rivalFinder[roommateFinder[roomCode][1]] = roommateFinder[roomCode][0];
+
+        io.to(roommateFinder[roomCode][0]).emit("rivalRejoined");
+      }
+    } else { // joining a new game
+      socket.join(roomCode);
+      roomBook[socket.id] = roomCode;
+      if (roomCode in roommateFinder){
+        roommateFinder[roomCode].push(socket.id);
+        rivalFinder[roommateFinder[roomCode][0]] = roommateFinder[roomCode][1];
+        rivalFinder[roommateFinder[roomCode][1]] = roommateFinder[roomCode][0];
+
+        console.log(roommateFinder[roomCode], "entering tokenPickPhase");
+        io.to(roommateFinder[roomCode][0]).emit("tokenPickPhase", roommateFinder[roomCode][1]);
+        io.to(roommateFinder[roomCode][1]).emit("tokenPickPhase", roommateFinder[roomCode][0]);
+      } else {
+        roommateFinder[roomCode] = [socket.id];
+      }
     }
   });
 
@@ -106,19 +178,17 @@ io.on("connection", socket => {
       // check that both have chosen >= 1 token
       if (gameCardJsonObjs.length == 0 && doneTokenPick[roomCode] && 0){
         io.to(roomCode).emit("forfeit", "did not pick any cards");
-        kickOutFromLastRoom(socket.id);
-        kickOutFromLastRoom(rivalId);
+        demolishRoomOf(socket.id);
       } else if (gameCardJsonObjs.length == 0){
         io.to(socket.id).emit("forfeit", "did not pick any cards");
         io.to(rivalId).emit("winThroughForfeit", "opponent did not pick any cards");
-        kickOutFromLastRoom(socket.id);
-        kickOutFromLastRoom(rivalId);
+        demolishRoomOf(socket.id);
       } else if (doneTokenPick[roomCode].length == 0){
         io.to(socket.id).emit("winThroughForfeit", "opponent did not pick any cards");
         io.to(rivalId).emit("forfeit", "did not pick any cards");
-        kickOutFromLastRoom(socket.id);
-        kickOutFromLastRoom(rivalId);
-      } else { // token pics were completed
+        demolishRoomOf(socket.id);
+      } else { // token picks were completed
+        gameHasBegun[roomCode] = true;
         if (socket.id > rivalId){ // this socket goes first
           io.to(socket.id).emit("yourTurn", doneTokenPick[roomCode], undefined); // syntax: 'yourTurn', (yourEnemysCards, yourEnemysVerOfYourCards)
           io.to(rivalId).emit("waitTurnAndPopulate", gameCardJsonObjs);
@@ -151,8 +221,7 @@ io.on("connection", socket => {
     let rivalId = rivalFinder[socket.id];
     io.to(socket.id).emit("gameTie");
     io.to(rivalId).emit("gameTie");
-    kickOutFromLastRoom(socket.id);
-    kickOutFromLastRoom(rivalId);
+    demolishRoomOf(socket.id);
     console.log("tie", p1Name, p1cardNames, p2Name, p2cardNames);
   });
 
@@ -160,8 +229,7 @@ io.on("connection", socket => {
     let rivalId = rivalFinder[socket.id];
     io.to(socket.id).emit("gameWin");
     io.to(rivalId).emit("gameLoss");
-    kickOutFromLastRoom(socket.id);
-    kickOutFromLastRoom(rivalId);
+    demolishRoomOf(socket.id);
     console.log("win", p1Name, p1cardNames, p2Name, p2cardNames);
   });
 
@@ -169,8 +237,7 @@ io.on("connection", socket => {
     let rivalId = rivalFinder[socket.id];
     io.to(socket.id).emit("gameLoss");
     io.to(rivalId).emit("gameWin");
-    kickOutFromLastRoom(socket.id);
-    kickOutFromLastRoom(rivalId);
+    demolishRoomOf(socket.id);
     console.log("loss", p1Name, p1cardNames, p2Name, p2cardNames);
   });
 });
