@@ -6,8 +6,7 @@ const PORT = process.env.PORT || 3000;
 
 // db connection for leaderboard tracking
 const mongoose = require('mongoose');
-var login = require('../mythomagic/login');
-var mongoDB = login.mongoDB;
+var mongoDB = MONGODB_URI;
 var MONGO_CONNECTED = false;
 console.log("connecting to mongodb...");
 mongoose.connect(mongoDB, {useNewUrlParser: true, useUnifiedTopology: true});
