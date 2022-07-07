@@ -6,13 +6,14 @@ const MY_SOCKET = io(); // create new instance
 
 document.addEventListener("DOMContentLoaded", () => {
   /* ui bgm set up */
+  initializeSoundObjects();
   setTimeout(startBgm, 2000); // start music 2 secs in
 
   // clack the powerbox buttons
   var powerButtons = document.getElementsByClassName("button");
   for(let i=0; i < powerButtons.length; i++){
     powerButtons[i].addEventListener('mouseenter', mouseOverPowerbutton);
-    powerButtons[i].addEventListener('mouseup', mouseClickPowerbutton);
+    //powerButtons[i].addEventListener('mouseup', mouseClickPowerbutton);
   }
   
   /* get url parameters */

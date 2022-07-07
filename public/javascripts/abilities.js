@@ -106,7 +106,7 @@ function ult_atalanta(attacker, target) {
 function ability_atalanta(attacker, target) {
     broadcastMsg("ability", true, "Atalanta", target.cardName);
     let dmg = calcDamage(attacker, target);
-    if (target.getC == target.getMaxHealth()){
+    if (target.current_health == target.getMaxHealth()){
         dmg += 200;
     }
     target.takeDamage(dmg);

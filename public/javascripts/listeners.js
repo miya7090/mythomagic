@@ -1,21 +1,30 @@
 // @miya7090
 
-const clack1 = GITHUB_PUBLIC_PATH+'sounds/clack1.mp3'
-const clack2 = GITHUB_PUBLIC_PATH+'sounds/clack2.mp3'
-const clack3 = GITHUB_PUBLIC_PATH+'sounds/clack3.mp3'
-const clack4 = GITHUB_PUBLIC_PATH+'sounds/clack4.mp3'
-const clack5 = GITHUB_PUBLIC_PATH+'sounds/clack5.mp3'
-const clack6 = GITHUB_PUBLIC_PATH+'sounds/clack6.mp3'
-const boop = GITHUB_PUBLIC_PATH+'sounds/boop.mp3'
-const beep = GITHUB_PUBLIC_PATH+'sounds/beep.mp3'
-const turn = GITHUB_PUBLIC_PATH+'sounds/turn.mp3'
-const whoosh = GITHUB_PUBLIC_PATH+'sounds/whoosh.mp3'
-const hit = GITHUB_PUBLIC_PATH+'sounds/hit.mp3'
-const slash = GITHUB_PUBLIC_PATH+'sounds/slash.mp3'
-const recall = GITHUB_PUBLIC_PATH+'sounds/recall.mp3'
-const ability = GITHUB_PUBLIC_PATH+'sounds/ability.mp3'
-const ultimate = GITHUB_PUBLIC_PATH+'sounds/ultimate.mp3'
-const bgmSource = GITHUB_PUBLIC_PATH+'sounds/50 mulling.mp3';
+
+
+function initializeSoundObjects(){
+  SOUND_OBJECTS = {};
+  for (var soundKey of Object.keys(SOUND_MAP)) {
+    SOUND_OBJECTS[soundKey] = [];
+    SOUND_MAP[soundKey].forEach((soundValue) => {
+      let soundPath = GITHUB_PUBLIC_PATH+'sounds/'+soundValue+'.mp3';
+      let soundObj = new Audio(soundPath);
+      SOUND_OBJECTS[soundKey].push(soundObj);
+    });  
+  }
+}
+
+function playSound(soundKey, volume){
+  if (soundKey in SOUND_OBJECTS) {
+    let choices = SOUND_OBJECTS[soundKey];
+    let chosenSound = choices[Math.floor(Math.random() * choices.length)];
+    chosenSound.volume = volume;
+    chosenSound.currentTime = 0;
+    chosenSound.play();
+  } else {
+    console.error("audio not found for", soundKey);
+  }
+}
 
 HIGHLIGHT_TILE_MEMORY_COLOR = getComputedStyle(document.documentElement).getPropertyValue('--highlightedTileMemory');
 HIGHLIGHT_TILE_ATTACK_COLOR = getComputedStyle(document.documentElement).getPropertyValue('--highlightedTileAttack');
@@ -24,14 +33,16 @@ HIGHLIGHT_TILE_ATTACK_COLOR = getComputedStyle(document.documentElement).getProp
 function keyProcessing(event) {
   // Z/X
   if ((event.keyCode === 90 || event.keyCode === 88) && GAME_MODE != "p1-moveToken") { // mouse hover radius stuff
-    // first clear hover highlights
+     // first clear hover highlights
     if (CURRENT_MOUSE_Q !== undefined) {
       hoverMouseHighlight(false);
     }
     if (event.keyCode === 90 && MOUSE_HOVER_RADIUS > 0) { // z, reduce radius
+      playSound("radiusChange", 0.8);
       MOUSE_HOVER_RADIUS -= 1;
       previewRadius.textContent="Preview radius: "+MOUSE_HOVER_RADIUS;
     } else if (event.keyCode === 88 && MOUSE_HOVER_RADIUS < 12) { // x, increase radius
+      playSound("radiusChange", 0.8);
       MOUSE_HOVER_RADIUS += 1;
       previewRadius.textContent="Preview radius: "+MOUSE_HOVER_RADIUS;
     }
@@ -53,11 +64,11 @@ function updateTokenClock(){
   let secLeft = (PICK_PHASE_TIMER - (Date.now() - PICK_PHASE_STARTED_AT))/1000;
   clock.textContent = "pick your cards ("+Math.round(secLeft)+" seconds left)";
   if (secLeft <= 0) {
-    clockBeep(1.0);
+    //clockBeep(1.0);
     clock.textContent = "";
     tokenClockDone();
   } else {
-    if (secLeft < 5){ clockBoop(0.7); } else { clockBoop(0.6); }
+    if (secLeft < 5){ playSound("pickPhaseTick", 0.7); } else { playSound("pickPhaseTick", 0.5); }
     setTimeout(updateTokenClock, 1000);
   }
 }
@@ -81,17 +92,17 @@ function updateTurnClock(){
   }
 
   if (secLeft <= 0) {
-    clockBeep(1.0);
+    //clockBeep(1.0);
     attackComplete();
   } else {
-    if (secLeft < 5){ clockBoop(0.7); }
+    if (secLeft < 5){ playSound("playerPhaseTick", 0.7); }
     setTimeout(updateTurnClock, 1000);
   }
 }
 
 function beginTurn(yourEnemysCards, yourEnemysVerOfYourCards){
   changeGameModeTo("p1-active");
-  soundNextTurn(1.0);
+  playSound("yourTurnNow", 1.0);
   console.log("it's my turn! ========");
   if (TIMED_TURNS) {
     TURN_STARTED_AT = Date.now();
@@ -125,7 +136,7 @@ function mouseOverTile(evt) {
     CURRENT_MOUSE_R = evt.target.cube_r;
     CURRENT_MOUSE_S = evt.target.cube_s;
     hoverMouseHighlight(true);
-    playSoundRandom([clack4, clack5, clack6], rand(0.3,0.5));
+    playSound("tileHovers", rand(0.1,0.2));
 
     // update info box
     const gameInfoBox = document.getElementById("gameInfoBox");
@@ -168,7 +179,6 @@ function mouseClickTile(evt) {
     }
   }
 
-  playSoundRandom([clack2, clack3], 0.9);
   var cQ = thisTile.cube_q;
   var cR = thisTile.cube_r;
   var cS = thisTile.cube_s;
@@ -186,6 +196,7 @@ function mouseClickTile(evt) {
     } else if (tokenOnTile.pcardLink.dead == "defeated") {
       processBroadcast("alert", true, "this hero has already been defeated"); return;
     } else { // success
+      playSound("tokenPickedUp", rand(0.5,0.7));
       transitionToMoveTokenMode(tokenOnTile);
     }
 
@@ -203,7 +214,7 @@ function mouseClickTile(evt) {
     highlightSelfAndRadius("rangeHighlight", false, GAME_MODE_MEMORYTARGET.getCurrentMovement(),
     GAME_MODE_MEMORYTARGET.getQ(), GAME_MODE_MEMORYTARGET.getR(), GAME_MODE_MEMORYTARGET.getS());
     moveToken(GAME_MODE_MEMORYTARGET, true, cQ, cR);
-    tokenMoveSound(1.0);
+    playSound("tokenPutDown",1.0);
     passive_hestia(false);
     toSelectAttackMode();
 
@@ -267,6 +278,7 @@ function attackComplete(){
 }
 
 function passButtonClick(){
+  playSound("passClicked", 0.7);
   document.getElementById("passButton").disabled = true;
   document.getElementById("autoButton").disabled = true;
   document.getElementById("abilityButton").disabled = true;
@@ -277,6 +289,7 @@ function passButtonClick(){
 }
 
 function autoButtonClick(){
+  playSound("autoattackClicked", 0.7);
   document.getElementById("passButton").disabled = true;
   document.getElementById("autoButton").disabled = true;
   document.getElementById("abilityButton").disabled = true;
@@ -290,6 +303,7 @@ function autoButtonClick(){
 }
 
 function abilityButtonClick(){
+  playSound("abilityClicked", 0.7);
   document.getElementById("passButton").disabled = true;
   document.getElementById("autoButton").disabled = true;
   document.getElementById("abilityButton").disabled = true;
@@ -308,6 +322,7 @@ function abilityButtonClick(){
 }
 
 function ultButtonClick(){
+  playSound("ultimateClicked", 0.7);
   document.getElementById("passButton").disabled = true;
   document.getElementById("autoButton").disabled = true;
   document.getElementById("abilityButton").disabled = true;
@@ -343,23 +358,12 @@ function mouseExitAuto(evt) {
 
 function startBgm(){
   if (BGM_MUTE){
-    if (BGM_AUDIO_LINK != undefined) {
-      BGM_AUDIO_LINK.pause();
-      BGM_AUDIO_LINK.currentTime = 0;
-    } else {
-      console.log("no bgm to pause");
-    }
+      SOUND_OBJECTS["bgm"][0].pause();
+      SOUND_OBJECTS["bgm"][0].currentTime = 0;
   } else {
-    if (BGM_AUDIO_LINK == undefined) { // define a looping audio if it doesn't yet exist
-      BGM_AUDIO_LINK = new Audio(bgmSource); 
-      BGM_AUDIO_LINK.addEventListener('ended', function() {
-          this.currentTime = 0;
-          this.play();
-      }, false);
-    }
-    
-    BGM_AUDIO_LINK.volume = 0.4;
-    BGM_AUDIO_LINK.play();
+    console.log(SOUND_OBJECTS["bgm"], SOUND_OBJECTS);
+    SOUND_OBJECTS["bgm"][0].volume = 0.1;
+    SOUND_OBJECTS["bgm"][0].play();
   }
 }
 
@@ -375,67 +379,6 @@ function muteBGM(){
   }
 }
 
-function playSoundRandom(choices, volume){
-  let chosenSound = choices[Math.floor(Math.random() * choices.length)];
-  let snd = new Audio(chosenSound);
-  snd.volume = volume;
-  snd.play();
-}
-
-function clockBoop(volume){
-  let snd = new Audio(boop);
-  snd.volume = volume;
-  snd.play();
-}
-
-function clockBeep(volume){
-  let snd = new Audio(beep);
-  snd.volume = volume;
-  snd.play();
-}
-
-function tokenMoveSound(volume){
-  let snd = new Audio(whoosh);
-  snd.volume = volume;
-  snd.play();
-}
-
-function tokenDeathSound(volume){
-  let snd = new Audio(hit);
-  snd.volume = volume;
-  snd.play();
-}
-
-function autoattackSound(volume){
-  let snd = new Audio(slash);
-  snd.volume = volume;
-  snd.play();
-}
-
-function undoMoveSound(volume){
-  let snd = new Audio(recall);
-  snd.volume = volume;
-  snd.play();
-}
-
-function abilitySound(volume){
-  let snd = new Audio(ability);
-  snd.volume = volume;
-  snd.play();
-}
-
-function ultimateSound(volume){
-  let snd = new Audio(ultimate);
-  snd.volume = volume;
-  snd.play();
-}
-
-function soundNextTurn(volume){
-  let snd = new Audio(turn);
-  snd.volume = volume;
-  snd.play();
-}
-
 function mouseOverAvailableCard(evt, referenceCard) {
   const gameInfoBox = document.getElementById("gameInfoBox");
   var gCard = onFieldCards.querySelector('#p1card-'+referenceCard.cardName);
@@ -444,17 +387,12 @@ function mouseOverAvailableCard(evt, referenceCard) {
   } else {
     gameInfoBox.innerHTML = get_BC_BroadcastForInfoBox(referenceCard);
   }
-  playSoundRandom([clack3, clack4, clack5], rand(0.4,0.6));
+  playSound("availableCardHovers", rand(0.4,0.6));
 }
 
 function mouseOverPowerbutton(evt) {
-  return; // no sound
-}
-
-function mouseClickPowerbutton(evt) {
-  if (evt.target.disabled == false) {
-    playSoundRandom([clack1, clack2], 0.7);
-  }
+  // #TODO only if button active
+  return;
 }
 
 function mouseClickAvailableCard(evt) {
@@ -472,7 +410,7 @@ function mouseClickAvailableCard(evt) {
       PLAYER_GAMECARD_OBJS.splice(PLAYER_GAMECARD_OBJS.indexOf(existingPcard), 1); // remove from game cards
       removeTokenAndShiftOthers(existingPcard);
       dupeCard.remove(); // remove div
-      playSoundRandom([clack2, clack3], 0.7);
+      playSound("undo", 1.0);
       return;
     }
     
@@ -482,7 +420,7 @@ function mouseClickAvailableCard(evt) {
     }
 
     // define a new player card with a starter position
-    playSoundRandom([clack1, clack2], 0.8);
+    playSound("availableCardSelect", 0.7);
     let newPC = selectAvailCard(thisCardName, -(HEX_RADIUS-1)+countPlayersPicks, HEX_RADIUS);
     rerenderAllGamecardsAndTokens();
 
@@ -493,7 +431,7 @@ function mouseClickAvailableCard(evt) {
 function mouseOverGameCard(evt, referenceCard) {
   const gameInfoBox = document.getElementById("gameInfoBox");
   gameInfoBox.innerHTML = get_PC_BroadcastForInfoBox(referenceCard, evt.target.classList.contains("player1"));
-  playSoundRandom([clack3, clack4], rand(0.4,0.6));
+  playSound("playerCardHovers", rand(0.4,0.6));
   
   if (referenceCard.p1){
     document.getElementById("p1token-" + referenceCard.cardName).setAttribute("gameCardGlow", true);
@@ -526,6 +464,6 @@ function mouseClickGameCard(evt, pcardRef) {
     PLAYER_GAMECARD_OBJS.splice(PLAYER_GAMECARD_OBJS.indexOf(pcardRef), 1); // remove from game cards
     evt.target.remove(); // remove div
     removeTokenAndShiftOthers(pcardRef);
-    playSoundRandom([clack2, clack3], 0.7);
+    playSound("undo", 1.0);
   }
 }

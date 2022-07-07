@@ -379,7 +379,7 @@ function importAllP2Cs(pcListObj){
             this.current_mana = 0;
             this.clearStatuses();
             this.dead = "defeated";
-            tokenDeathSound(1.0);
+            playSound("heroDeath", 1.0);
             if (this.p1){ // ally was defeated
               passive_achilles_onAlly();
               passive_perseus_onAlly();

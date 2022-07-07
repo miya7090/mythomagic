@@ -139,7 +139,6 @@ function countCardsMatching(gamecardObjs, cList){
 function autoattack(pcard){
   attack(0, pcard, pcard.getQ(), pcard.getR(), pcard.getS(), pcard.getCurrentNormAtkRange());
   pcard.giveAttackMana();
-  autoattackSound(1.0);
 }
 
 function abilityAttack(pcard, q, r, s){
@@ -150,7 +149,6 @@ function abilityAttack(pcard, q, r, s){
     cS = GAME_MODE_MEMORYTARGET.getS();
   }
   GAME_MODE_MEMORYTARGET.current_mana -= ABILITY_MANA_REQ;
-  abilitySound(1.0);
   attack(1, pcard, cQ, cR, cS, GAME_MODE_MEMORYTARGET.ability_aim_aoe); //#TODO change from flat dmg
 }
 
@@ -162,7 +160,6 @@ function ultimateAttack(pcard, q, r, s){
     cS = GAME_MODE_MEMORYTARGET.getS();
   }
   GAME_MODE_MEMORYTARGET.current_mana -= MAX_MANA;
-  ultimateSound(1.0);
   attack(2, pcard, cQ, cR, cS, GAME_MODE_MEMORYTARGET.ult_aim_aoe); //#TODO change from flat dmg
 }
 
@@ -237,14 +234,17 @@ function getBaseStats(cardType) {
 function clearSelection(){
   if (GAME_MODE == "p1-moveToken") {
     resetToActiveMode();
+    playSound("undo", 1.0);
   } else if (GAME_MODE == "p1-abilityAim") {
     relinquishAimingMouseHighlight();
     aimingTargetReachHighlight(false, GAME_MODE_MEMORYTARGET.ability_aim_range);
     toSelectAttackMode();
+    playSound("undo", 1.0);
   } else if (GAME_MODE == "p1-ultimateAim") {
     relinquishAimingMouseHighlight();
     aimingTargetReachHighlight(false, GAME_MODE_MEMORYTARGET.ult_aim_range);
     toSelectAttackMode();
+    playSound("undo", 1.0);
   } else {
     console.error("nothing to cancel with C");
   }

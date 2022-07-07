@@ -10,15 +10,9 @@ BROADCAST_QUEUE = [];
 
 GITHUB_PUBLIC_PATH = "https://raw.githubusercontent.com/miya7090/mythomagic/main/public/";
 
-BASE_DAMAGE_DIFF_SCALE_TO_HP = 20
-MVMT_SPD_SCALE_TO_SAVE_THROW = 20
-DEFENCE_SCALE_TO_SAVE_THROW = 20
 RANDOM_DAMAGE_OFFSET = 20
 STATUS_DEFAULT_LENGTH = 3
 MAX_STATUS_STACKS = 7
-FIGURINE_ATTACK_MULTIPLIER = 1.2
-FIGURINE_INFLICT_STATUS_FLAT_BOOST = 5
-FIGURINE_SAVING_THROW_FLAT_BOOST = 5
 HEX_SIDELENGTH = 13;
 HEX_RADIUS = (HEX_SIDELENGTH-1)/2;
 CUBE_DIR_VECS = [[1,0,-1],[1,-1,0],[0,-1,1],[-1,0,1],[-1,1,0],[0,1,-1]];
@@ -31,7 +25,28 @@ MAX_MANA = 1000;
 HEXTILE_CUBIC_INDEX = {}; // keys: "q,r,s", maps to divs that are hextiles
 
 BGM_MUTE = false;
-BGM_AUDIO_LINK = undefined;
+const SOUND_MAP = {
+  "bgm":                ["50 mulling"],
+  "radiusChange":       ["new_tap"],
+  "tileHovers":         ["clack5", "clack6"],
+  "playerCardHovers":   ["clack3", "clack4"],
+  "playerCardSelect":   ["clack2", "clack3"],
+  "availableCardHovers":["clack3", "clack4"],
+  "availableCardSelect":["clack1", "clack2"],
+  "pickPhaseTick":      ["new_tick"],
+  "playerPhaseTick":    ["new_ticksubtle"],
+  "passClicked":        ["new_pass"],
+  "autoattackClicked":  ["tile_hit"],
+  "abilityClicked":     ["tile_hit"],
+  "ultimateClicked":    ["tile_rattle"],
+  "heroDeath":          ["tile_break"],
+  "yourTurnNow":        ["new_chime"],
+  "tokenPickedUp":      ["tile_clack1"],
+  "tokenPutDown":       ["tile_drag1","tile_drag2"],
+  "undo":               ["new_switch"]
+}
+
+SOUND_OBJECTS = undefined;
 
 PICK_PHASE_RANDOM = undefined;
 PICK_PHASE_TIMER = undefined;
