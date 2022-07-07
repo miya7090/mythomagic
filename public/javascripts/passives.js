@@ -54,6 +54,14 @@ function passive_atalanta(attacker, target){
     return 0;
 }
 
+function passive_hephaestus(attacker, target){
+    if (attacker.cardName == "Hephaestus" && coinFlip()){
+        broadcastMsg("passive", true, "Hephaestus", attacker.cardName);
+        return 100;
+    }
+    return 0;
+}
+
 function passive_orpheus(p1, targetName){
     let mc = getAllyCard("Orpheus");
     if (p1 && mc != undefined){

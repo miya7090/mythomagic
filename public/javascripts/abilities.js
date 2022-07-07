@@ -10,7 +10,7 @@ const ABILITY_MAP = {
     "Orpheus":[ability_orpheus,3], "Echo":[ability_echo,3],
     "Themis":[ability_themis,2], "Artemis":[ability_artemis,1],
     "Atalanta":[ability_atalanta,1], "Gaea":[ability_gaea,0],
-    "Jason":[ability_jason,3]};
+    "Jason":[ability_jason,3], "Hephaestus":[ability_hephaestus,2]};
 
 const ULT_MAP = {
     "Athena":[ult_athena,1],
@@ -24,7 +24,7 @@ const ULT_MAP = {
     "Orpheus":[ult_orpheus,3], "Echo":[ult_echo,1],
     "Themis":[ult_themis,3], "Artemis":[ult_artemis,1],
     "Atalanta":[ult_atalanta,2], "Gaea":[ult_gaea,3],
-    "Jason":[ult_jason,3]};
+    "Jason":[ult_jason,3], "Hephaestus":[ult_hephaestus,1]};
 
 function doUniqueSkill(atkType, attacker, target, targetIsOpponent) { // atkType 1=ability, 2=ultimate
     let map = ABILITY_MAP;
@@ -42,6 +42,21 @@ function doUniqueSkill(atkType, attacker, target, targetIsOpponent) { // atkType
         }
     } else {
         console.error("action not defined yet");
+    }
+}
+
+function ult_hephaestus(attacker, target) {
+    broadcastMsg("ultimate", true, "Hephaestus", undefined);
+    let dmg = calcDamage(attacker, target);
+    target.takeDamage(1.5 * dmg);
+}
+
+function ability_hephaestus(attacker, target) {
+    broadcastMsg("ability", true, "Hephaestus", target.cardName);
+    if (target.p1) {
+        target.inflictStatus("obscured");
+    } else {
+        target.inflictStatus("stunned");
     }
 }
 

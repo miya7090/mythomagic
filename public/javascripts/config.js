@@ -145,7 +145,11 @@ const BASE_STAT_DICT = {
     "Themis":[1400,2,15,800,30,0,2, 3,0,undefined,undefined,
       "Verdict","Revert target within 3 units to their base stats and clear status effects",
       "Fair-Minded","Revert all heroes to their base stats and clear all status effects",
-      "Objection","No enemy can accumulate over 5000 ATK or 30 DEF", "Caster"]
+      "Objection","No enemy can accumulate over 5000 ATK or 30 DEF", "Caster"],
+    "Hephaestus":[2600,2,15,800,50,0,1, 5,1,4,2,
+      "Grenade","Obscure allies and stun enemies in a 1-tile radius up to 5 units away",
+      "Eruption","Attack with 50% extra damage in a 2-tile radius up to 4 units away",
+      "Blacksmith","Allies' autoattacks have a 50% chance of dealing an extra 100 true damage", "Ranged"]
   }
 
   const STATUSES_DEF_DICT = {
@@ -157,7 +161,7 @@ const BASE_STAT_DICT = {
     "obscured": "location not visible to enemy\nATK reduced by 10%"
   }
   
-  let PLAYER_OWNED_temp = ["Athena","Apollo","Gaea","Atalanta","Jason","Artemis","Achilles","Medea","Thanatos","Hestia","Kronos","Perseus","Hera","Hermes","Heracles","Hades","Hecate","Icarus","Orpheus","Echo","Themis"];
+  let PLAYER_OWNED_temp = ["Athena","Apollo","Gaea","Atalanta","Jason","Hephaestus","Artemis","Achilles","Medea","Thanatos","Hestia","Kronos","Perseus","Hera","Hermes","Heracles","Hades","Hecate","Icarus","Orpheus","Echo","Themis"];
   PLAYER_OWNED_temp.sort();
   const PLAYER_OWNED = PLAYER_OWNED_temp;
   const PLAYER_OWNED_FIGHTERS = PLAYER_OWNED.filter(key => (BASE_STAT_DICT[key][17] == "Melee" || BASE_STAT_DICT[key][17] == "Ranged"));
