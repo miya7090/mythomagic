@@ -42,7 +42,12 @@ function exportPC(pcard){
 }
 
 function getPCNames(pcArray){
-  if (pcArray.length == 1){
+  var ans = [];
+  pcArray.forEach((pc)=>{
+    ans.push(pc.cardName);
+  });
+  return ans;
+  /*if (pcArray.length == 1){
     return pcArray[0].cardName;
   } else if (pcArray.length == 2){
     return pcArray[0].cardName + " and " + pcArray[1].cardName;
@@ -52,7 +57,7 @@ function getPCNames(pcArray){
       ans += pcArray[i].cardName + ", "
     }
     ans += "and " + pcArray[pcArray.length - 1].cardName;
-  }
+  }*/
 }
 
 function exportAllP1Cs(){

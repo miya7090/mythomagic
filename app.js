@@ -51,7 +51,7 @@ function kickOutSocketOpponentFromLastRoom(socketId) {
 
 function kickOutSocketFromLastRoom(socketId) { // returns the room code that was kicked out of
   if (!(socketId in roomBook)) {
-    console.log("socket not found in room book", socketId); // normal behavior for the main (non-lobby non-game) page
+    // console.log("socket not found in room book", socketId); // normal behavior for the main (non-lobby non-game) page
   } else {
     let thisRoomCode = roomBook[socketId]; // remove from roomBook
     delete roomBook[socketId];
@@ -105,7 +105,7 @@ io.on("connection", socket => {
         
       }
     } else {
-      console.log("socket left without being assigned to a room", socket.id); // normal behavior for the main (non-lobby non-game) page
+      //console.log("socket left without being assigned to a room", socket.id); // normal behavior for the main (non-lobby non-game) page
     }
   });
 
