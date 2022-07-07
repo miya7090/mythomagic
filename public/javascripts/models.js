@@ -166,6 +166,13 @@ function importAllP2Cs(pcListObj){
         effectiveAttack += 400 * this.current_movement;
       }
 
+      if (this.p1 && hasAllyCard("Jason")) { // passive_jason
+        effectiveAttack += 100 * countCardsMatching(PLAYER_GAMECARD_OBJS, ARGONAUT_LIST);
+      }
+      if (!this.p1 && hasEnemyCard("Jason")) {
+        effectiveAttack += 100 * countCardsMatching(ENEMY_GAMECARD_OBJS, ARGONAUT_LIST);
+      }
+
       if (this.statuses["terrified"] != 0) {
         effectiveAttack -= (0.5 * this.current_attack);
       }
@@ -359,6 +366,7 @@ function importAllP2Cs(pcListObj){
         }
         this.current_health -= flatNum;
         console.log(this.cardName, "took", flatNum, "damage");
+        passive_gaea(this);
         if (this.current_health <= 0) { // card is defeated
 
           if (passive_orpheus(this.p1, this.cardName)){

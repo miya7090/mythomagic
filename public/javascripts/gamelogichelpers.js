@@ -192,6 +192,7 @@ function attack(atkType, attacker, centerQ, centerR, centerS, aoe) {
         if (atkType == 0){
           if (targetIsOpponent == true && tokenOnTile.pcardLink.dead != "defeated") { // cannot autoattack an already-defeated card
             let dmg = calcDamage(attacker, tokenOnTile.pcardLink); // autoattack
+            dmg += passive_atalanta(attacker, tokenOnTile.pcardLink);
             broadcastMsg("autoattack", true, attacker.cardName, tokenOnTile.pcardLink.cardName);
             tokenOnTile.pcardLink.takeDamage(dmg);
             passive_echo(attacker, tokenOnTile.pcardLink, dmg);

@@ -74,28 +74,21 @@ function demolishRoomOf(socketId){
 io.on("connection", socket => {
   /* ~~~~~ managing sockets of any type ~~~~~ */
   socket.on("disconnect", () => {
-    console.log("A",socket.id);
     if (socket.id in roomBook) { // in game
       let thisRoomCode = roomBook[socket.id];
-      console.log("B",socket.id);
       if (isLobbyId(roomBook[socket.id])) {
-        console.log("C",socket.id);
         kickOutSocketFromLastRoom(socket.id); // in lobby
       } else {
-        console.log("D",socket.id);
         if (roommateFinder[thisRoomCode].length > 0) {
-          console.log("E",socket.id, rivalFinder[socket.id]);
           io.to(rivalFinder[socket.id]).emit("opponentDisconnectWarning"); // warn the opponent
         }
 
         kickOutSocketFromLastRoom(socket.id); // in game room
         if (roommateFinder[thisRoomCode].length == 0){
-          console.log("F",socket.id);
           removeGameRoom(thisRoomCode); // game room empty
         }       
         
       }
-      console.log("G",socket.id);
     } else {
       console.log("socket left without being assigned to a room", socket.id); // normal behavior for the main (non-lobby non-game) page
     }

@@ -2,6 +2,8 @@
 
 // passive_heracles in models.js
 // passive_hades in models.js
+// passive_hera in models.js
+// passive_jason in models.js
 // passive_icarus in models.js
 // passive_themis in models.js
 // passive_artemis in abilities.js
@@ -26,6 +28,30 @@ function passive_echo(attacker, target, dmg){
             attacker.takeDamage(dmg);
         }
     }
+}
+
+function passive_gaea(target) {
+    if (target.cardName == "Gaea") {
+        if (target.p1) {
+            broadcastMsg("passive", true, "Gaea", undefined);
+            PLAYER_GAMECARD_OBJS.forEach(pc => {
+                pc.heal(100);
+            });
+        } else {
+            broadcastMsg("passive", false, "Gaea", undefined);
+            ENEMY_GAMECARD_OBJS.forEach(pc => {
+                pc.heal(100);
+            });
+        }
+    }
+}
+
+function passive_atalanta(attacker, target){
+    if (attacker.cardName == "Atalanta" && (target.current_movement < attacker.current_movement)){
+        broadcastMsg("passive", true, "Atalanta", attacker.cardName);
+        return 100;
+    }
+    return 0;
 }
 
 function passive_orpheus(p1, targetName){
@@ -65,20 +91,11 @@ function passive_athena(){ // run by both players at the beginning of the game
     }
 }
 
-function passive_hera_part2() { // run by both players at the beginning of the game
-    if (hasAllyCard("Hera")) {
-        broadcastMsg("passive", true, "Hera", "allies");
-        PLAYER_GAMECARD_OBJS.forEach(pc => {
-            pc.heal(100 * countCardsMatching(PLAYER_GAMECARD_OBJS, OLYMPIAN_LIST));
-        });
-    }
-}
-
 function passive_apollo(){ // run by player1 at the end of the turn
     if (hasAllyCard("Apollo")) {
         broadcastMsg("passive", true, "Apollo", "targets");
         PLAYER_GAMECARD_OBJS.forEach(pc => {
-            pc.heal(10);
+            pc.heal(20);
         });
         ENEMY_GAMECARD_OBJS.forEach(pc => {
             pc.takeDamage(10);

@@ -50,6 +50,7 @@ GAME_MODE_MEMORYTARGET = undefined; // used if moving tokens, etc
 TURNS_ALLOCATED = 0;
 
 const OLYMPIAN_LIST = ["Zeus", "Hera", "Poseidon", "Demeter", "Athena", "Apollo", "Artemis", "Ares", "Aphrodite", "Hephaestus", "Hermes", "Dionysus", "Hestia"];
+const ARGONAUT_LIST = ["Jason", "Atalanta", "Argus", "Heracles", "Orpheus", "Peleus", "Theseus"];
 
 const BASE_STAT_DICT = {
     // name, base atk, normal atk range, defense, hp, mana per turn, mana per attack, mvt speed
@@ -64,20 +65,32 @@ const BASE_STAT_DICT = {
     "Apollo":[2000,4,10,700,60,0,2, 5,2,undefined,undefined,
       "Volley","Attack with 10% extra damage to enemies in a 2-tile radius, up to 5 tiles away",
       "Inspiration","For all allies, clear all statuses, recover 20% max HP, and recover 20% max MP",
-      "Medicine","+10 HP to all heroes, -10 HP to all enemies after each of your turns", "Healer"],
+      "Medicine","+20 HP to all heroes, -10 HP to all enemies after each of your turns", "Healer"],
     "Artemis":[2800,4,10,700,60,0,3, 8,0,5,2,
       "Skillful Shot","Deal 100 true damage to an enemy up to 8 tiles away",
       "Hunting Trap","Inflict Stunned on all enemies in a 2-tile radius, up to 5 tiles away",
       "Ambush","Skillful Shot does 3x damage when targeting an enemy with over 50% HP", "Ranged"],
+    "Atalanta":[2900,2,10,700,80,0,3, undefined,1,undefined,1,
+      "First Blood","Attack all adjacent enemies, dealing an extra 200 true damage to enemies with full HP",
+      "Grapple","Inflict Stunned on an adjacent enemy and deal 300 true damage",
+      "Dismissal","Autoattacks deal an extra 100 true damage to enemies with lesser MVT", "Melee"],
     "Achilles":[2900,2,20,500,50,0,3, undefined,3,undefined,undefined,
       "Berserk","Clear all statuses from self and attack all enemies within 3 tiles with 20% more damage",
       "Invulnerability", "HP set to 1 HP, gain 50 DEF",
       "Clarity","Clear all statuses, gain 1000 ATK when an ally is defeated", "Melee"],
+    "Gaea":[1200,2,15,1000,50,0,1, 2,0,undefined,undefined,
+      "Rejuvenation","Heal 200 HP and give 100 MP to ally within 2 tiles",
+      "Revitalization", "Heal 200 HP to all allies",
+      "Resurgence","Heal 100 HP to allies after taking damage", "Healer"],
+    "Jason":[1800,2,10,800,70,0,2, undefined,undefined,undefined,undefined,
+      "Teamwork","Increase the DEF of the ally with the lowest DEF by 2",
+      "Captainship", "Increase DEF of all allies by 1, decrease DEF of all enemies by 3",
+      "Argonautica","All allies gain 100 ATK for each Argonaut added to the deck", "Protector"],
     "Medea":[1200,2,10,500,40,0,2, 3,0,1,0,
       "Sorcery", "Drain all mana from an enemy within 3 tiles and inflict Poisoned",
       "Cold Blood", "Deal fatal blow to an adjacent ally, absorb their current ATK, DEF, MVT, and regain full HP",
       "Circulation", "No ally can obtain more than one status effect at a time, and repeated effects will not stack", "Special"], 
-    "Poseidon":[4000,2,10,700,50,0,2, undefined,9,undefined,5, // removed for now
+    "Poseidon":[3500,2,10,700,50,0,2, undefined,9,undefined,5, // removed for now
       "*Whirlpool","Pull all enemies 3 tiles towards self, 200 true damage to each",
       "Hurricane","Deal 300 true damage to all targets within 5 tiles",
       "*Aquatic Healing","Gain 100 HP per turn while in water", "Ranged"],
@@ -109,7 +122,7 @@ const BASE_STAT_DICT = {
       "Efficiency","Attack all targets within 3 tiles with 50% more damage",
       "Lion Cloak","Double the DEF of all adjacent allies",
       "Determination","Will take at maximum 300 HP of damage per attack", "Melee"],
-    "Hades":[3200,2,10,800,50,0,2, 2,0,undefined,undefined,
+    "Hades":[3100,2,10,800,50,0,2, 2,0,undefined,undefined,
       "Conductor","Cause a defeated target within 2 tiles to autoattack enemies",
       "Overlord","All defeated heroes gain 300 ATK and autoattack enemies",
       "Cerberus","Prevents any enemy from being revived", "Special"],
@@ -144,7 +157,7 @@ const BASE_STAT_DICT = {
     "obscured": "location not visible to enemy\nATK reduced by 10%"
   }
   
-  let PLAYER_OWNED_temp = ["Athena","Apollo","Artemis","Achilles","Medea","Thanatos","Hestia","Kronos","Perseus","Hera","Hermes","Heracles","Hades","Hecate","Icarus","Orpheus","Echo","Themis"];
+  let PLAYER_OWNED_temp = ["Athena","Apollo","Gaea","Atalanta","Jason","Artemis","Achilles","Medea","Thanatos","Hestia","Kronos","Perseus","Hera","Hermes","Heracles","Hades","Hecate","Icarus","Orpheus","Echo","Themis"];
   PLAYER_OWNED_temp.sort();
   const PLAYER_OWNED = PLAYER_OWNED_temp;
   const PLAYER_OWNED_FIGHTERS = PLAYER_OWNED.filter(key => (BASE_STAT_DICT[key][17] == "Melee" || BASE_STAT_DICT[key][17] == "Ranged"));

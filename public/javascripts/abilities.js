@@ -8,7 +8,9 @@ const ABILITY_MAP = {
     "Heracles":[ability_heracles,1], "Hades":[ability_hades,2],
     "Hecate":[ability_hecate,1], "Icarus":[ability_icarus,3],
     "Orpheus":[ability_orpheus,3], "Echo":[ability_echo,3],
-    "Themis":[ability_themis,2], "Artemis":[ability_artemis,1]};
+    "Themis":[ability_themis,2], "Artemis":[ability_artemis,1],
+    "Atalanta":[ability_atalanta,1], "Gaea":[ability_gaea,0],
+    "Jason":[ability_jason,3]};
 
 const ULT_MAP = {
     "Athena":[ult_athena,1],
@@ -20,7 +22,9 @@ const ULT_MAP = {
     "Heracles":[ult_heracles,3], "Hades":[ult_hades,3],
     "Hecate":[ult_hecate,3], "Icarus":[ult_icarus,3],
     "Orpheus":[ult_orpheus,3], "Echo":[ult_echo,1],
-    "Themis":[ult_themis,3], "Artemis":[ult_artemis,1]};
+    "Themis":[ult_themis,3], "Artemis":[ult_artemis,1],
+    "Atalanta":[ult_atalanta,2], "Gaea":[ult_gaea,3],
+    "Jason":[ult_jason,3]};
 
 function doUniqueSkill(atkType, attacker, target, targetIsOpponent) { // atkType 1=ability, 2=ultimate
     let map = ABILITY_MAP;
@@ -39,6 +43,58 @@ function doUniqueSkill(atkType, attacker, target, targetIsOpponent) { // atkType
     } else {
         console.error("action not defined yet");
     }
+}
+
+function ult_jason(attacker, target) {
+    broadcastMsg("ultimate", true, "Jason", undefined);
+    PLAYER_GAMECARD_OBJS.forEach(pc => {
+        pc.current_defense += 1;
+    });
+    ENEMY_GAMECARD_OBJS.forEach(pc => {
+        pc.current_defense -= 3;
+    });
+}
+
+function ability_jason(attacker, target) {
+    let lowestDef = undefined;
+    let pcWithLowestDef = undefined;
+    PLAYER_GAMECARD_OBJS.forEach(pc => {
+        if (lowestDef == undefined || pc.getCurrentDefense() < lowestDef) {
+            lowestDef = pc.getCurrentDefense();
+            pcWithLowestDef = pc;
+        }
+    });
+
+    broadcastMsg("ability", true, "Jason", pcWithLowestDef.cardName);
+    pcWithLowestDef.current_defense += 2;
+}
+
+function ult_gaea(attacker, target) {
+    broadcastMsg("ultimate", true, "Gaea", undefined);
+    PLAYER_GAMECARD_OBJS.forEach(pc => {
+        pc.heal(200);
+    });
+}
+
+function ability_gaea(attacker, target) {
+    broadcastMsg("ability", true, "Gaea", target.cardName);
+    target.heal(200);
+    target.giveMana(100);
+}
+
+function ult_atalanta(attacker, target) {
+    broadcastMsg("ultimate", true, "Atalanta", target.cardName);
+    target.inflictStatus("stunned");
+    target.takeDamage(300);
+}
+
+function ability_atalanta(attacker, target) {
+    broadcastMsg("ability", true, "Atalanta", target.cardName);
+    let dmg = calcDamage(attacker, target);
+    if (target.getC == target.getMaxHealth()){
+        dmg += 200;
+    }
+    target.takeDamage(dmg);
 }
 
 function ult_themis(attacker, target) {
@@ -61,7 +117,7 @@ function ult_artemis(attacker, target) {
     target.inflictStatus("stunned");
 }
 
-function ability_artemis(attacker, target) {
+function ability_artemis(attacker, target) { // passive_artemis
     broadcastMsg("ability", true, "Artemis", target.cardName);
     if (target.current_health / target.getMaxHealth() > 0.5){
         target.takeDamage(300);
