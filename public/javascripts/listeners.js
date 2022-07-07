@@ -267,11 +267,11 @@ function attackComplete(){
       MY_SOCKET.emit("tellRival_yourTurn", exportAllP1Cs(), exportAllP2Cs());
     }
   } else if (gameOver == "tie") {
-    MY_SOCKET.emit("gameEnded_withTie", SELF_NAME, getPCNames(PLAYER_GAMECARD_OBJS), OTHER_NAME, getPCNames(ENEMY_GAMECARD_OBJS));
+    MY_SOCKET.emit("gameEnded_withTie", REGION_NAME, SELF_NAME, getPCNames(PLAYER_GAMECARD_OBJS), OTHER_NAME, getPCNames(ENEMY_GAMECARD_OBJS));
   } else if (gameOver == "p1win") {
-    MY_SOCKET.emit("gameEnded_withMyWin", SELF_NAME, getPCNames(PLAYER_GAMECARD_OBJS), OTHER_NAME, getPCNames(ENEMY_GAMECARD_OBJS));
+    MY_SOCKET.emit("gameEnded_withMyWin", REGION_NAME, SELF_NAME, getPCNames(PLAYER_GAMECARD_OBJS), OTHER_NAME, getPCNames(ENEMY_GAMECARD_OBJS));
   } else if (gameOver == "p2win") {
-    MY_SOCKET.emit("gameEnded_withEnemyWin", SELF_NAME, getPCNames(PLAYER_GAMECARD_OBJS), OTHER_NAME, getPCNames(ENEMY_GAMECARD_OBJS));
+    MY_SOCKET.emit("gameEnded_withEnemyWin", REGION_NAME, SELF_NAME, getPCNames(PLAYER_GAMECARD_OBJS), OTHER_NAME, getPCNames(ENEMY_GAMECARD_OBJS));
   } else {
     console.error("gameOver issue", gameOver);
   }  

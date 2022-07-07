@@ -4,10 +4,25 @@ const server = require("http").Server(app); // create server
 const io = require("socket.io")(server); // create instance of socketio
 const PORT = process.env.PORT || 3000;
 
+// db connection for leaderboard tracking
+const mongoose = require('mongoose');
+var login = require('../mythomagic/login');
+var mongoDB = login.mongoDB;
+var MONGO_CONNECTED = false;
+console.log("connecting to mongodb...");
+mongoose.connect(mongoDB, {useNewUrlParser: true, useUnifiedTopology: true});
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+db.once('open', function callback () {
+  MONGO_CONNECTED = true;
+  console.log("mongodb connected");
+});
+
 // room tracker, BOTH REGIONS AND GAMES {socketid: room}
 var roomBook = {};
 
 // lobby tracker, REGIONS ONLY {region: {socketid: nickname}}
+var ALL_REGION_NAMES = ["olympia", "corinth", "athens", "sparta"];
 var regionUsers = {"olympia=====": {}, "corinth=====": {}, "athens=====": {}, "sparta=====": {}};
 
 // player tracker, GAMES ONLY
@@ -210,7 +225,9 @@ io.on("connection", socket => {
     io.to(rivalId).emit("giveMessage", msgType, p1, arg1, arg2);
   });
 
-  socket.on("gameEnded_withTie", (p1Name, p1cardNames, p2Name, p2cardNames) => {
+  socket.on("gameEnded_withTie", (regionName, p1Name, p1cardNames, p2Name, p2cardNames) => {
+    addWinsToRegionHeroboard(regionName, p1cardNames);
+    addWinsToRegionHeroboard(regionName, p2cardNames);
     let rivalId = rivalFinder[socket.id];
     io.to(socket.id).emit("gameTie");
     io.to(rivalId).emit("gameTie");
@@ -218,7 +235,9 @@ io.on("connection", socket => {
     console.log("tie", p1Name, p1cardNames, p2Name, p2cardNames);
   });
 
-  socket.on("gameEnded_withMyWin", (p1Name, p1cardNames, p2Name, p2cardNames) => {
+  socket.on("gameEnded_withMyWin", (regionName, p1Name, p1cardNames, p2Name, p2cardNames) => {
+    addWinsToRegionHeroboard(regionName, p1cardNames);
+    addLossesToRegionHeroboard(regionName, p2cardNames);
     let rivalId = rivalFinder[socket.id];
     io.to(socket.id).emit("gameWin");
     io.to(rivalId).emit("gameLoss");
@@ -226,14 +245,39 @@ io.on("connection", socket => {
     console.log("win", p1Name, p1cardNames, p2Name, p2cardNames);
   });
 
-  socket.on("gameEnded_withEnemyWin", (p1Name, p1cardNames, p2Name, p2cardNames) => {
+  socket.on("gameEnded_withEnemyWin", (regionName, p1Name, p1cardNames, p2Name, p2cardNames) => {
+    addWinsToRegionHeroboard(regionName, p2cardNames);
+    addLossesToRegionHeroboard(regionName, p1cardNames);
     let rivalId = rivalFinder[socket.id];
     io.to(socket.id).emit("gameLoss");
     io.to(rivalId).emit("gameWin");
     demolishRoomOf(socket.id);
     console.log("loss", p1Name, p1cardNames, p2Name, p2cardNames);
   });
+
+  socket.on("requestAllHeroboards", () => {
+    console.log("sending",socket.id,"new heroboards");
+    if (!MONGO_CONNECTED) {
+      io.to(socket.id).emit("heroboardUpdate", undefined);
+    } else {
+      ALL_REGION_NAMES.forEach((regionName) => {
+        db.collection('heroboard').find({region:regionName}).sort({heroWins:-1}).limit(5).toArray().then((res) => io.to(socket.id).emit("heroboardUpdate", regionName, res));
+      });
+    }
+  });
 });
+
+function addWinsToRegionHeroboard(regionName, cardNames) {
+  cardNames.forEach((cardName) => {
+    db.collection('heroboard').updateOne({region:regionName, heroName:cardName}, {$inc:{heroWins:1}});
+  });
+}
+
+function addLossesToRegionHeroboard(regionName, cardNames) {
+  cardNames.forEach((cardName) => {
+    db.collection('heroboard').updateOne({region:regionName, heroName:cardName}, {$inc:{heroLosses:1}});
+  });
+}
 
 server.listen(PORT);
 console.log("listening on", PORT);

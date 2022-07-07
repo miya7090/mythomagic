@@ -1,6 +1,7 @@
 // @miya7090
 
 function processLobbyCode(lobbyCode){
+  REGION_NAME = lobbyCode;
   if (lobbyCode == "olympia"){
     PICK_PHASE_RANDOM = true;
     TIMED_TURNS = false;

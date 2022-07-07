@@ -40,6 +40,37 @@ p {
     line-height: 17px;
 }
 
+#leaderboard table {
+    border-collapse: collapse;
+}
+  
+#leaderboard td, th {
+    border: 1px solid #959595;
+    text-align: left;
+    padding: 5px;
+}
+
+#leaderboard td:hover {
+    background-color: #ffffd5;
+}
+
+#leaderboard .highlightTopTR {
+    background-color: #fff2a8;
+}
+
+#leaderboard .highlightTopTR :hover {
+    background-color: #ffec82;
+}
+
+#leaderboard .highlightTR {
+    background-color: #d2d2d2;
+    color: #767676;
+}
+
+#leaderboard .highlightTR :hover {
+    background-color: #d8d1b9;
+}
+
 #credits {
     margin-top: 10px;
     width: 50%;

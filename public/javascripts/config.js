@@ -2,6 +2,7 @@
 
 MY_SOCKET = undefined;
 OPPONENT_SOCKET_ID = undefined;
+REGION_NAME = undefined;
 SELF_NAME = undefined;
 OTHER_NAME = undefined;
 
@@ -103,11 +104,7 @@ const BASE_STAT_DICT = {
     "Medea":[1200,2,10,500,40,0,2, 3,0,1,0,
       "Sorcery", "Drain all mana from an enemy within 3 tiles and inflict Poisoned",
       "Cold Blood", "Deal fatal blow to an adjacent ally, absorb their current ATK, DEF, MVT, and regain full HP",
-      "Circulation", "No ally can obtain more than one status effect at a time, and repeated effects will not stack", "Special"], 
-    "Poseidon":[3500,2,10,700,50,0,2, undefined,9,undefined,5, // removed for now
-      "*Whirlpool","Pull all enemies 3 tiles towards self, 200 true damage to each",
-      "Hurricane","Deal 300 true damage to all targets within 5 tiles",
-      "*Aquatic Healing","Gain 100 HP per turn while in water", "Ranged"],
+      "Circulation", "No ally can obtain more than one status effect at a time, and repeated effects will not stack", "Special"],
     "Thanatos":[1800,2,10,600,60,0,3, 1,0,undefined,undefined,
       "Soul Collection","Attacks adjacent target, and if enemy is defeated, absorb their MP and 50% of their ATK",
       "Reaper","All enemies with less than 100 HP receive 100 true damage",
@@ -185,7 +182,7 @@ const BASE_STAT_DICT = {
     "Special": "uniquely influences the outcome of the game"
   }
   
-  let PLAYER_OWNED_temp = ["Athena","Apollo","Gaea","Atalanta","Jason","Hephaestus","Artemis","Achilles","Medea","Thanatos","Hestia","Kronos","Perseus","Hera","Hermes","Heracles","Hades","Hecate","Icarus","Orpheus","Echo","Themis"];
+  let PLAYER_OWNED_temp = Object.keys(BASE_STAT_DICT);
   PLAYER_OWNED_temp.sort();
   const PLAYER_OWNED = PLAYER_OWNED_temp;
   const PLAYER_OWNED_FIGHTERS = PLAYER_OWNED.filter(key => (BASE_STAT_DICT[key][17] == "Melee" || BASE_STAT_DICT[key][17] == "Ranged"));

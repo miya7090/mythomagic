@@ -14,13 +14,13 @@ br
 #playersInRegion
 #gameStart
   form#gameform(method='POST' action='/game')
-    label(for='nickname') nickname 
+    label(for='nickname') enter nickname: 
     input#nickname(type='text' name='nickname' maxlength='10' onkeydown=" if(event.keyCode==13){ $('#lobbyJoinButton').focus(); event.preventDefault(); }")
-    a(href="../help.html" target="_blank") how to play
+    a(href="../help.html" target="_blank") (how to play?)
     br
     br
     input#cp1(type='checkbox' name='cp1' checked='' disabled='')
-    label(for='cp1') use default card pack <a href="/preview" target="_blank">(preview available cards)</a>
+    label(for='cp1') &nbsp;default card pack <a href="/preview" target="_blank">(preview available cards)</a>
     br
     br
     div#regionselect
@@ -29,7 +29,7 @@ br
         option(value='corinth') corinth (60-)
         option(value='athens') athens (45-30)
         option(value='sparta') sparta (20-20)
-      input#lobbyJoinButton(type='button' value='join lobby')
+      input#lobbyJoinButton(type='button' value='join waiting lobby')
       input#lobbyLeaveButton(type='button' value='leave lobby' hidden)
       p#queueNotes &nbsp;
   div#regiondisplay
@@ -37,6 +37,53 @@ br
     div#lobbiersinregion
   br
   br
+br
+br
+hr
+#leaderboard
+  h3 leaderboard
+  table#leaderboardTable
+    tr
+      th
+      th Olympia
+      th Corinth
+      th Athens
+      th Sparta
+    tr.highlightTopTR
+      td 1
+      td
+      td
+      td
+      td
+    tr
+      td 2
+      td
+      td
+      td
+      td
+    tr
+      td 3
+      td
+      td
+      td
+      td
+    tr.highlightTR
+      td 4
+      td
+      td
+      td
+      td
+    tr.highlightTR
+      td 5
+      td
+      td
+      td
+      td
+br
+br
+br
+br
+br
 p#credsFixed
   | made by 
   a(href='https://github.com/miya7090/' target='_blank') miya7090

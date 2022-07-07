@@ -9,6 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   socket.on('connect', ()=>{
     console.log("new lobby socket connected", socket);
+    socket.emit("requestAllHeroboards");
   });
 
   socket.on('disconnect', ()=>{
@@ -40,6 +41,15 @@ document.addEventListener("DOMContentLoaded", () => {
     regionNotesText.textContent = "";
     nicknameDiv.disabled = false;
     lLeaveButton.hidden = true;
+  });
+  
+  socket.on("heroboardUpdate", (region, res)=>{
+    if (region == undefined) {
+      console.error("error retrieving leaderboards from mongodb");
+    } else {
+      console.log("received heroboard update for", region);
+      updateLobbyBoard(region, res);
+    }
   });
 
   socket.on("lobbyJoined", (nickname, region, regionUsers)=>{
@@ -121,4 +131,21 @@ function populateRegionList(regionUsers){
     }
     lobbiersInRegion.appendChild(rUser);
   }); 
+}
+
+function updateLobbyBoard(regionName, res) {
+  var thisCol;
+  switch (regionName) {
+    case "olympia": thisCol = 1; break;
+    case "corinth": thisCol = 2; break;
+    case "athens": thisCol = 3; break;
+    case "sparta": thisCol = 4; break;
+  }
+  let lobbyBoard = document.getElementById("leaderboardTable");
+  for (let i = 0; i < 5; i++) {
+    let tableText = res[i].heroName + " (" + res[i].heroWins;
+    if (res[i].heroWins == 1) { tableText += " win)"; }
+    else { tableText += " wins)"; }
+    lobbyBoard.getElementsByTagName('tr')[i+1].getElementsByTagName('td')[thisCol].innerText = tableText;
+  }
 }
