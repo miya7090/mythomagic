@@ -495,7 +495,7 @@ function get_BC_BroadcastForInfoBox(BCard) {
     res += "</div>";
 
   res += '<div class="hoverTitleColumn">';
-    res += '<h3 id="hoverInfoClass" class="hc-'+ BCard.hero_class + '">' + BCard.hero_class + "</h3>";
+    res += '<h3 id="hoverInfoClass" class="hc-'+ BCard.hero_class + '" title="' + HERO_CLASS_DESCRIPTIONS[BCard.hero_class] + '">' + BCard.hero_class + "</h3>";
     res += "</div>";
 
     res += '<div class="hoverColWrap">';
@@ -549,7 +549,7 @@ function get_PC_BroadcastForInfoBox(PCard, isPlayer1) {
     res += "</p></div>";
 
   res += '<div class="hoverTitleColumn">';
-    res += '<h3 id="hoverInfoClass" class="hc-'+ PCard.hero_class + '">' + PCard.hero_class + "</h3>";
+    res += '<h3 id="hoverInfoClass" class="hc-'+ PCard.hero_class + '" title="' + HERO_CLASS_DESCRIPTIONS[PCard.hero_class] + '">' + PCard.hero_class + "</h3>";
     res += "</div>";
   
   res += '<div class="hoverColWrap">';

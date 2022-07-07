@@ -37,7 +37,7 @@ function exportPC(pcard){
     "cd": pcard.current_defense, "ch": pcard.current_health, "cm": pcard.current_mana,
     "cmpt": pcard.current_mana_per_turn, "cmpa": pcard.current_mana_per_atk,
     "m": pcard.current_movement, "d": pcard.dead, "hb": pcard.health_bonus, "mb": pcard.mana_bonus,
-    "if": pcard.is_figurine, "s": pcard.statuses, "b": pcard.blessings, "qq": pcard.getQ(), "rr": pcard.getR(), "ss": pcard.getS() // #TODO compress this?
+    "s": pcard.statuses, "b": pcard.blessings, "qq": pcard.getQ(), "rr": pcard.getR(), "ss": pcard.getS() // #TODO compress this?
   };
 }
 
@@ -72,7 +72,7 @@ function exportAllP2Cs(){
 }
 
 function importPC(pcJson, p1){
-  let ans = new PlayerCard(pcJson["n"], pcJson["if"], pcJson["qq"], pcJson["rr"], pcJson["ss"], p1);
+  let ans = new PlayerCard(pcJson["n"], pcJson["qq"], pcJson["rr"], pcJson["ss"], p1);
   ans.current_attack = pcJson["ca"]; ans.current_normal_attack_range = pcJson["cnar"];
   ans.current_defense = pcJson["cd"]; ans.current_health = pcJson["ch"]; ans.current_mana = pcJson["cm"];
   ans.current_mana_per_turn = pcJson["cmpt"]; ans.current_mana_per_atk = pcJson["cmpa"];
@@ -122,7 +122,7 @@ function importAllP2Cs(pcListObj){
 
   class PlayerCard extends Card {
     #q; #r; #s; // private variables for position for better debugging
-    constructor(cardName, isFigurine, pc_q, pc_r, pc_s, p1) {
+    constructor(cardName, pc_q, pc_r, pc_s, p1) {
       super(cardName);
       this.p1 = p1;
       this.current_attack = this.base_attack;
@@ -139,8 +139,6 @@ function importAllP2Cs(pcListObj){
       this.mana_bonus = 0;
 
       this.clearBlessings();
-
-      this.is_figurine = isFigurine;
       this.clearStatuses();
 
       if (pc_s !== -pc_q -pc_r){
@@ -307,7 +305,7 @@ function importAllP2Cs(pcListObj){
     inflictStatus(iStat){
       if (this.dead != "defeated" && this.statuses[iStat] == 0){
         if (this.p1){ passive_medea_onAlly(this); } else { passive_medea_onEnemy(this); }
-        this.statuses[iStat] += 5;
+        this.statuses[iStat] += STATUS_DEFAULT_LENGTH;
       }
     }
     decreaseStatusCooldowns(){

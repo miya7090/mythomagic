@@ -40,7 +40,7 @@ function pickPCardsRandomly(){
 function selectAvailCard(cardName, cardQ, cardR) {
   let availCardDiv = document.getElementById("availCard-" + cardName);
   availCardDiv.setAttribute("acChosen", true);
-  var newPC = new PlayerCard(cardName, false, cardQ, cardR, -cardQ-cardR, true);
+  var newPC = new PlayerCard(cardName, cardQ, cardR, -cardQ-cardR, true);
   PLAYER_GAMECARD_OBJS.push(newPC);
   return newPC;
 }

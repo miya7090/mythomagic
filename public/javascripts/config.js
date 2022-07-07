@@ -10,9 +10,6 @@ BROADCAST_QUEUE = [];
 
 GITHUB_PUBLIC_PATH = "https://raw.githubusercontent.com/miya7090/mythomagic/main/public/";
 
-RANDOM_DAMAGE_OFFSET = 20
-STATUS_DEFAULT_LENGTH = 3
-MAX_STATUS_STACKS = 7
 HEX_SIDELENGTH = 13;
 HEX_RADIUS = (HEX_SIDELENGTH-1)/2;
 CUBE_DIR_VECS = [[1,0,-1],[1,-1,0],[0,-1,1],[-1,0,1],[-1,1,0],[0,1,-1]];
@@ -20,9 +17,11 @@ MOUSE_HOVER_RADIUS = 0;
 CURRENT_MOUSE_Q = undefined;
 CURRENT_MOUSE_R = undefined;
 CURRENT_MOUSE_S = undefined;
+HEXTILE_CUBIC_INDEX = {}; // keys: "q,r,s", maps to divs that are hextiles
+
 ABILITY_MANA_REQ = 200;
 MAX_MANA = 1000;
-HEXTILE_CUBIC_INDEX = {}; // keys: "q,r,s", maps to divs that are hextiles
+STATUS_DEFAULT_LENGTH = 4+1;
 
 BGM_MUTE = false;
 const SOUND_MAP = {
@@ -175,6 +174,16 @@ const BASE_STAT_DICT = {
     "terrified": "ATK reduced by 50%",
     "obscured": "location not visible to enemy\nATK reduced by 10%"
   }
+
+  const HERO_CLASS_DESCRIPTIONS = {
+    "Melee": "excels at close combat using aggressive strategies",
+    "Ranged": "deals damage to enemies from a distance",
+    "Protector": "enhances survivability, good for defensive strategies",
+    "Healer": "restores the health of allies",
+    "Supporter": "boosts ally stats and bestows various blessings",
+    "Caster": "worsens enemy stats and inflicts impairments",
+    "Special": "uniquely influences the outcome of the game"
+  }
   
   let PLAYER_OWNED_temp = ["Athena","Apollo","Gaea","Atalanta","Jason","Hephaestus","Artemis","Achilles","Medea","Thanatos","Hestia","Kronos","Perseus","Hera","Hermes","Heracles","Hades","Hecate","Icarus","Orpheus","Echo","Themis"];
   PLAYER_OWNED_temp.sort();
@@ -189,6 +198,5 @@ const BASE_STAT_DICT = {
   const PLAYER_OWNED_CASTERS = PLAYER_OWNED.filter(key => BASE_STAT_DICT[key][17] == "Caster");
   const PLAYER_OWNED_SPECIAL = PLAYER_OWNED.filter(key => BASE_STAT_DICT[key][17] == "Special");
   
-  const PLAYER_HOLOFOIL = ["Athena","Apollo","Hephaestus","Nyx"]; // #TODO remove
   PLAYER_GAMECARD_OBJS = [];
   ENEMY_GAMECARD_OBJS = [];
