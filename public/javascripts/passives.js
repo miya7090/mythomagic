@@ -57,7 +57,7 @@ function passive_gaea(target) {
 
 function passive_atalanta(attacker, target){
     if (attacker.cardName == "Atalanta" && (target.current_movement < attacker.current_movement)){
-        broadcastMsg("passive", true, "Atalanta", attacker.cardName);
+        broadcastMsg("passive", true, "Atalanta", target.cardName);
         return 100;
     }
     return 0;

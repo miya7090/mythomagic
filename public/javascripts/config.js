@@ -88,7 +88,7 @@ const BASE_STAT_DICT = {
       "Skillful Shot","Deal 100 true damage to an enemy up to 5 tiles away",
       "Hunting Trap","Inflict Stunned on all enemies in a 2-tile radius, up to 5 tiles away",
       "Ambush","Skillful Shot does 3x damage when targeting an enemy with over 75% HP", "Ranged"],
-    "Atalanta":[2900,2,10,700,80,0,3, undefined,1,undefined,1,
+    "Atalanta":[2800,2,10,700,60,0,3, undefined,1,undefined,1,
       "First Blood","Attack all adjacent enemies, dealing an extra 150 true damage to enemies with full HP",
       "Grapple","Inflict Stunned on an adjacent enemy and deal 300 true damage",
       "Dismissal","Autoattacks deal an extra 100 true damage to enemies with lesser MVT", "Melee"],
