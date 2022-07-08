@@ -217,6 +217,15 @@ function mouseClickTile(evt) {
       processBroadcast("alert", true, errorMsg);
       resetToActiveMode(); return;
     }
+    if (thisTile.classList.contains("offgrid")) {
+      if (GAME_MODE_MEMORYTARGET.cardName == "Nyx") { // passive_nyx
+        broadcastMsg("passive", true, "Nyx", undefined);
+      } else {
+        let errorMsg = GAME_MODE_MEMORYTARGET.cardName + " cannot use off-grid tiles";
+        processBroadcast("alert", true, errorMsg);
+        resetToActiveMode(); return;
+      }
+    }
     // success
     highlightSelfAndRadius("rangeHighlight", false, GAME_MODE_MEMORYTARGET.getCurrentMovement(),
     GAME_MODE_MEMORYTARGET.getQ(), GAME_MODE_MEMORYTARGET.getR(), GAME_MODE_MEMORYTARGET.getS());

@@ -226,7 +226,7 @@ function importAllP2Cs(pcListObj){
       return effectiveCNAR;
     }
     clearBlessings(){
-      this.blessings = {"Hestia": false, "Hermes": false}; 
+      this.blessings = {"Hestia": false, "Hermes": false, "Nyx": false}; 
     }
     giveBlessing(blessName){
       if (this.blessings[blessName] == false) {
@@ -237,11 +237,14 @@ function importAllP2Cs(pcListObj){
         } else if (blessName == "Hermes"){
           console.log("adding hermes blessing to",this);
           blessing_hermes(true, this);
+        } else if (blessName == "Nyx"){
+          console.log("have added nyx blessing to",this);
         } else {
           console.error("blessing code missing for",blessName);
         }
       }
     }
+
     removeBlessing(blessName){
       if (this.blessings[blessName] == true) {
         this.blessings[blessName] = false;
@@ -407,6 +410,14 @@ function importAllP2Cs(pcListObj){
       this.current_mana_per_turn = this.base_mana_per_turn;
       this.current_mana_per_atk = this.base_mana_per_atk;
       this.current_movement = this.base_movement;
+    }
+    addToCMPT(flatNum){
+      if (this.dead != "defeated") {
+        this.current_mana_per_turn += Math.round(flatNum);
+        if (this.current_mana_per_turn < 0) {
+          this.current_mana_per_turn = 0;
+        }
+      }
     }
     refreshTag(){
       this.tag = this.#q+","+this.#r+","+this.#s;

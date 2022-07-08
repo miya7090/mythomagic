@@ -158,7 +158,7 @@ const BASE_STAT_DICT = {
       "Reflection","Enemies that autoattack Echo receive the same amount of damage", "Special"],
     "Themis":[1400,2,15,800,30,0,2, 3,0,undefined,undefined,
       "Verdict","Revert target within 3 units to their base stats and clear status effects",
-      "Fair-Minded","Revert all heroes to their base stats and clear all status effects",
+      "Fair-Minded","Revert all enemies to their base stats and clear all status effects",
       "Objection","No enemy can accumulate over 5000 ATK or 30 DEF", "Caster"],
     "Hephaestus":[2600,2,15,800,50,0,2, 5,1,4,2,
       "Grenade","Obscure allies and stun enemies in a 1-tile radius up to 5 units away",
@@ -171,7 +171,11 @@ const BASE_STAT_DICT = {
     "Aphrodite":[1400,2,15,600,60,0,2, 3,0,5,0,
       "Letter","Gift 200 MP to ally up to 3 tiles away",
       "Poem","Gift 400 MP to ally up to 5 tiles away, and clear their status effects",
-      "Scenario","For each pair of allies with a romantic relationship, accumulate an extra 20 MP per turn", "Supporter"]
+      "Scenario","For each pair of allies with a romantic relationship, accumulate an extra 20 MP per turn", "Supporter"],
+    "Nyx":[1600,2,10,600,60,0,2, 3,0,1,0,
+      "Twilight","Reduce MP turn accumulation by 20 for an enemy up to 3 tiles away",
+      "Oblivion","Permanently disable the ultimate of an adjacent enemy",
+      "Night Walk","Able to move on off-grid tiles", "Caster"]
   }
 
   const STATUSES_DEF_DICT = {

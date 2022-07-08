@@ -11,7 +11,8 @@ const ABILITY_MAP = {
     "Themis":[ability_themis,2], "Artemis":[ability_artemis,1],
     "Atalanta":[ability_atalanta,1], "Gaea":[ability_gaea,0],
     "Jason":[ability_jason,3], "Hephaestus":[ability_hephaestus,2],
-    "Eros":[ability_eros,1], "Aphrodite":[ability_aphrodite,0]};
+    "Eros":[ability_eros,1], "Aphrodite":[ability_aphrodite,0],
+    "Nyx":[ability_nyx,1]};
 
 const ULT_MAP = {
     "Athena":[ult_athena,1],
@@ -26,7 +27,8 @@ const ULT_MAP = {
     "Themis":[ult_themis,3], "Artemis":[ult_artemis,1],
     "Atalanta":[ult_atalanta,2], "Gaea":[ult_gaea,3],
     "Jason":[ult_jason,3], "Hephaestus":[ult_hephaestus,1],
-    "Eros":[ult_eros,3], "Aphrodite":[ult_aphrodite,0]};
+    "Eros":[ult_eros,3], "Aphrodite":[ult_aphrodite,0],
+    "Nyx":[ult_nyx,1]};
 
 function doUniqueSkill(atkType, attacker, target, targetIsOpponent) { // atkType 1=ability, 2=ultimate
     let map = ABILITY_MAP;
@@ -45,6 +47,16 @@ function doUniqueSkill(atkType, attacker, target, targetIsOpponent) { // atkType
     } else {
         console.error("action not defined yet");
     }
+}
+
+function ult_nyx(attacker, target) {
+    broadcastMsg("ultimate", true, "Nyx", target.cardName);
+    target.giveBlessing("Nyx");
+}
+
+function ability_nyx(attacker, target) {
+    broadcastMsg("ability", true, "Nyx", target.cardName);
+    target.addToCMPT(-20);
 }
 
 function ult_eros(attacker, target) {
@@ -142,9 +154,6 @@ function ability_atalanta(attacker, target) {
 
 function ult_themis(attacker, target) {
     broadcastMsg("ultimate", true, "Themis", undefined);
-    PLAYER_GAMECARD_OBJS.forEach(pc => {
-        pc.revertToBaseStats();
-    });
     ENEMY_GAMECARD_OBJS.forEach(pc => {
         pc.revertToBaseStats();
     });

@@ -169,7 +169,6 @@ io.on("connection", socket => {
         rivalFinder[roommateFinder[roomCode][0]] = roommateFinder[roomCode][1];
         rivalFinder[roommateFinder[roomCode][1]] = roommateFinder[roomCode][0];
 
-        console.log(roommateFinder[roomCode], "entering tokenPickPhase");
         io.to(roommateFinder[roomCode][0]).emit("tokenPickPhase", roommateFinder[roomCode][1]);
         io.to(roommateFinder[roomCode][1]).emit("tokenPickPhase", roommateFinder[roomCode][0]);
       } else {
@@ -258,8 +257,6 @@ io.on("connection", socket => {
     if (!MONGO_CONNECTED) {
       io.to(socket.id).emit("heroboardUpdate", undefined);
     } else {
-      console.log("sending",socket.id,"new heroboards");
-
       db.collection('heroboard').aggregate([{$group: { _id: "$heroName", total: { $sum: "$heroWins" }}}]).sort({total:-1}).limit(5).toArray().then((res) => {
         io.to(socket.id).emit("heroboardUpdate", "TOTAL", res);
       });
@@ -300,7 +297,6 @@ router.get("/", (req, res) => {
 });
 
 router.get('/game',(req,res) => {
-  console.log("P",req.query);
   //res.render("game", { socketid: req.body.socketid, nickname: req.body.nickname, gamecode: req.body.gamecode }); // for POST (not redirect)
   res.render("game", {room: req.query.room, self: req.query.self, other:req.query.other});
 });

@@ -8,6 +8,7 @@
 // passive_icarus in models.js
 // passive_themis in models.js
 // passive_artemis in abilities.js
+// passive_nyx in listeners.js
 
 function getAllyCard(cardName) {
     let AC = PLAYER_GAMECARD_OBJS.find(e => e.cardName == cardName);
