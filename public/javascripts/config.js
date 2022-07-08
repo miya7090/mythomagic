@@ -67,24 +67,27 @@ TURNS_ALLOCATED = 0;
 const OLYMPIAN_LIST = ["Zeus", "Hera", "Poseidon", "Demeter", "Athena", "Apollo", "Artemis", "Ares", "Aphrodite", "Hephaestus", "Hermes", "Dionysus", "Hestia"];
 const ARGONAUT_LIST = ["Jason", "Atalanta", "Argus", "Heracles", "Orpheus", "Peleus", "Theseus"];
 
+// alphabetically first goes first
+const PAIRING_LIST = [["Jason","Medea"], ["Hera","Zeus"], ["Hades","Persephone"], ["Echo","Narcissus"], ["Aphrodite","Hephaestus"], ["Andromeda","Perseus"], ["Ariadne","Theseus"], ["Eros","Psyche"], ["Aphrodite","Ares"], ["Kronos","Rhea"], ["Ariadne","Dionysus"], ["Gaea","Ouranos"], ["Amphitrite","Poseidon"], ["Adonis","Aphrodite"]];
+
 const BASE_STAT_DICT = {
     // name, base atk, normal atk range, defense, hp, mana per turn, mana per attack, mvt speed
     // ability aimed range/aoe, ult aimed range/aoe
 
     // available classes: Melee, Ranged, Protector, Healer, Supporter, Caster, Special
 
-    "Athena":[3000,2,15,700,50,0,3, 3,0,6,0,
+    "Athena":[2800,2,15,700,50,0,3, 3,0,6,0,
       "Aegis","Ally within 3 units gains 15 DEF and has their statuses cleared",
       "Deliberate Strike","Deal 600 true damage to one target within 6 units",
       "Well-Prepared","Allies start game with 200 MP", "Supporter"], 
-    "Apollo":[2000,4,10,700,60,0,2, 5,2,undefined,undefined,
+    "Apollo":[2000,3,10,700,60,0,2, 5,2,undefined,undefined,
       "Volley","Attack with 10% extra damage to enemies in a 2-tile radius, up to 5 tiles away",
       "Inspiration","For all allies, clear all statuses, recover 20% max HP, and recover 20% max MP",
       "Medicine","+20 HP to all heroes, -10 HP to all enemies after each of your turns", "Healer"],
-    "Artemis":[2800,4,10,700,60,0,3, 8,0,5,2,
-      "Skillful Shot","Deal 100 true damage to an enemy up to 8 tiles away",
+    "Artemis":[2800,3,10,700,60,0,3, 5,0,5,2,
+      "Skillful Shot","Deal 100 true damage to an enemy up to 5 tiles away",
       "Hunting Trap","Inflict Stunned on all enemies in a 2-tile radius, up to 5 tiles away",
-      "Ambush","Skillful Shot does 3x damage when targeting an enemy with over 50% HP", "Ranged"],
+      "Ambush","Skillful Shot does 3x damage when targeting an enemy with over 75% HP", "Ranged"],
     "Atalanta":[2900,2,10,700,80,0,3, undefined,1,undefined,1,
       "First Blood","Attack all adjacent enemies, dealing an extra 150 true damage to enemies with full HP",
       "Grapple","Inflict Stunned on an adjacent enemy and deal 300 true damage",
@@ -93,7 +96,7 @@ const BASE_STAT_DICT = {
       "Berserk","Clear all statuses from self and attack all enemies within 3 tiles with 20% more damage",
       "Invulnerability", "HP set to 1 HP, gain 50 DEF",
       "Clarity","Clear all statuses, gain 1000 ATK when an ally is defeated", "Melee"],
-    "Gaea":[1200,2,15,1000,50,0,1, 2,0,undefined,undefined,
+    "Gaea":[1200,1,15,1000,50,0,1, 2,0,undefined,undefined,
       "Rejuvenation","Heal 100 HP and give 100 MP to ally within 2 tiles",
       "Revitalization", "Heal 200 HP to all allies",
       "Resurgence","Heal 50 HP to allies after taking damage", "Healer"],
@@ -103,7 +106,7 @@ const BASE_STAT_DICT = {
       "Argonautica","All allies gain 100 ATK for each Argonaut added to the deck", "Protector"],
     "Medea":[1200,2,10,500,40,0,2, 3,0,1,0,
       "Sorcery", "Drain all mana from an enemy within 3 tiles and inflict Poisoned",
-      "Cold Blood", "Deal fatal blow to an adjacent ally, absorb their current ATK, DEF, MVT, and regain full HP",
+      "Cold Blood", "Deal fatal blow to an adjacent ally, absorb their current ATK and MVT, and regain full HP",
       "Circulation", "No ally can obtain more than one status effect at a time, and repeated effects will not stack", "Special"],
     "Thanatos":[1800,2,10,600,60,0,3, 1,0,undefined,undefined,
       "Soul Collection","Attacks adjacent target, and if enemy is defeated, absorb their MP and 50% of their ATK",
@@ -113,8 +116,8 @@ const BASE_STAT_DICT = {
       "Warming Hearth","Heal all allies within 2 tiles by 300 HP",
       "Eternal Flame","Increase max HP of allies within 2 tiles by 200 HP and heal them 300 HP",
       "Shelter", "While adjacent to Hestia, allies' DEF is increased by 10, and max HP increased by 200", "Protector"],
-    "Kronos":[2800,2,10,800,50,0,1, 3,1,undefined,undefined,
-      "Scythe","Attack targets in a 1-tile radius up to 3 units away, inflicting Stunned",
+    "Kronos":[2200,2,10,800,50,0,1, 2,1,undefined,undefined,
+      "Scythe","Attack targets in a 1-tile radius up to 2 units away, inflicting Stunned",
       "Stasis","Deals 200 true damage to all Stunned enemies, and grants additional turn",
       "Infinite Power","Gains 50 ATK and 1 DEF on each of your turns", "Caster"],
     "Perseus":[1800,2,10,500,60,0,3, undefined,2,undefined,undefined,
@@ -133,7 +136,7 @@ const BASE_STAT_DICT = {
       "Efficiency","Attack all targets within 3 tiles with 50% more damage",
       "Lion Cloak","Double the DEF of all adjacent allies",
       "Determination","Will take at maximum 300 HP of damage per attack", "Melee"],
-    "Hades":[3100,2,10,800,50,0,2, 2,0,undefined,undefined,
+    "Hades":[3100,1,10,800,50,0,2, 2,0,undefined,undefined,
       "Conductor","Cause a defeated target within 2 tiles to autoattack enemies",
       "Overlord","All defeated heroes gain 300 ATK and autoattack enemies",
       "Cerberus","Prevents any enemy from being revived", "Special"],
@@ -160,11 +163,19 @@ const BASE_STAT_DICT = {
     "Hephaestus":[2600,2,15,800,50,0,2, 5,1,4,2,
       "Grenade","Obscure allies and stun enemies in a 1-tile radius up to 5 units away",
       "Eruption","Attack with 50% extra damage in a 2-tile radius up to 4 units away",
-      "Blacksmith","Allies' autoattacks have a 50% chance of dealing an extra 100 true damage", "Ranged"]
+      "Blacksmith","Allies' autoattacks have a 50% chance of dealing an extra 100 true damage", "Ranged"],
+    "Eros":[2200,3,10,800,50,0,2, 4,0,undefined,undefined,
+      "Love Shot","Inflict Charmed on enemy up to 4 tiles away",
+      "Crush","Deal 200 true damage to all Charmed enemies and drain their MP",
+      "Heart Attack","Enemies that autoattack Eros become Charmed", "Caster"],
+    "Aphrodite":[1400,2,15,600,60,0,2, 3,0,5,0,
+      "Letter","Gift 200 MP to ally up to 3 tiles away",
+      "Poem","Gift 400 MP to ally up to 5 tiles away, and clear their status effects",
+      "Scenario","For each pair of allies with a romantic relationship, accumulate an extra 20 MP per turn", "Supporter"]
   }
 
   const STATUSES_DEF_DICT = {
-    "charmed": "DEF reduced to 1",
+    "charmed": "DEF reduced by 50%",
     "distracted": "will not gain MP\nDEF reduced by 25%",
     "poisoned": "loses [500/DEF] HP each turn",
     "stunned": "ATK, MVT reduced to 0\nRC reduced to 1",

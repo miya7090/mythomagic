@@ -10,7 +10,8 @@ const ABILITY_MAP = {
     "Orpheus":[ability_orpheus,3], "Echo":[ability_echo,3],
     "Themis":[ability_themis,2], "Artemis":[ability_artemis,1],
     "Atalanta":[ability_atalanta,1], "Gaea":[ability_gaea,0],
-    "Jason":[ability_jason,3], "Hephaestus":[ability_hephaestus,2]};
+    "Jason":[ability_jason,3], "Hephaestus":[ability_hephaestus,2],
+    "Eros":[ability_eros,1], "Aphrodite":[ability_aphrodite,0]};
 
 const ULT_MAP = {
     "Athena":[ult_athena,1],
@@ -24,7 +25,8 @@ const ULT_MAP = {
     "Orpheus":[ult_orpheus,3], "Echo":[ult_echo,1],
     "Themis":[ult_themis,3], "Artemis":[ult_artemis,1],
     "Atalanta":[ult_atalanta,2], "Gaea":[ult_gaea,3],
-    "Jason":[ult_jason,3], "Hephaestus":[ult_hephaestus,1]};
+    "Jason":[ult_jason,3], "Hephaestus":[ult_hephaestus,1],
+    "Eros":[ult_eros,3], "Aphrodite":[ult_aphrodite,0]};
 
 function doUniqueSkill(atkType, attacker, target, targetIsOpponent) { // atkType 1=ability, 2=ultimate
     let map = ABILITY_MAP;
@@ -43,6 +45,32 @@ function doUniqueSkill(atkType, attacker, target, targetIsOpponent) { // atkType
     } else {
         console.error("action not defined yet");
     }
+}
+
+function ult_eros(attacker, target) {
+    broadcastMsg("ultimate", true, "Eros", undefined);
+    ENEMY_GAMECARD_OBJS.forEach(pc => {
+        if (pc.statuses["charmed"] == 1) {
+            pc.current_mana = 0;
+            pc.takeDamage(200);
+        }
+    });
+}
+
+function ability_eros(attacker, target) {
+    broadcastMsg("ability", true, "Eros", target.cardName);
+    target.inflictStatus("charmed");
+}
+
+function ult_aphrodite(attacker, target) {
+    broadcastMsg("ultimate", true, "Aphrodite", target.cardName);
+    target.clearStatuses();
+    target.giveMana(400);
+}
+
+function ability_aphrodite(attacker, target) {
+    broadcastMsg("ability", true, "Aphrodite", target.cardName);
+    target.giveMana(200);
 }
 
 function ult_hephaestus(attacker, target) {
@@ -134,7 +162,7 @@ function ult_artemis(attacker, target) {
 
 function ability_artemis(attacker, target) { // passive_artemis
     broadcastMsg("ability", true, "Artemis", target.cardName);
-    if (target.current_health / target.getMaxHealth() > 0.5){
+    if (target.current_health / target.getMaxHealth() > 0.75){
         target.takeDamage(300);
     } else {
         target.takeDamage(100);
@@ -307,7 +335,6 @@ function ult_medea(attacker, target) {
         attacker.fullHeal();
         target.takeDamage(target.current_health);
         attacker.current_attack += target.current_attack;
-        attacker.current_defense += target.current_defense;
         attacker.current_movement += target.current_movement;
     } else {
         console.error("medea cannot apply ult to self");

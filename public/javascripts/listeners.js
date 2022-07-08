@@ -15,7 +15,7 @@ function initializeSoundObjects(){
 }
 
 function playSound(soundKey, volume){
-  if (soundKey in SOUND_OBJECTS) {
+  if (Object.keys(SOUND_OBJECTS).includes(soundKey)) {
     let choices = SOUND_OBJECTS[soundKey];
     let chosenSound = choices[Math.floor(Math.random() * choices.length)];
     chosenSound.volume = volume;
@@ -445,10 +445,6 @@ function mouseOutOfGameCard(evt, referenceCard) {
     document.getElementById("p1token-" + referenceCard.cardName).setAttribute("gameCardGlow", false);
   } else {
     document.getElementById("p2token-" + referenceCard.cardName).setAttribute("gameCardGlow", false);
-  }
-
-  if (GAME_MODE_MEMORYTARGET != undefined){
-    gameInfoBox.innerHTML = get_PC_BroadcastForInfoBox(GAME_MODE_MEMORYTARGET, true);
   }
 }
 

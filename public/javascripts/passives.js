@@ -3,6 +3,7 @@
 // passive_heracles in models.js
 // passive_hades in models.js
 // passive_hera in models.js
+// passive_aphrodite in models.js
 // passive_jason in models.js
 // passive_icarus in models.js
 // passive_themis in models.js
@@ -21,10 +22,17 @@ function getEnemyCard(cardName) {
 function hasAllyCard(cardName) { return getAllyCard(cardName) != undefined; }
 function hasEnemyCard(cardName) { return getEnemyCard(cardName) != undefined; }
 
+function passive_eros(attacker, target){
+    if (target.cardName == "Eros"){
+        broadcastMsg("passive", target.p1, "Eros", attacker.cardName);
+        attacker.inflictStatus("charmed");
+    }
+}
+
 function passive_echo(attacker, target, dmg){
     if (target.cardName == "Echo"){
         if (dmg > 0){
-            broadcastMsg("passive", true, "Echo", attacker.cardName);
+            broadcastMsg("passive", target.p1, "Echo", attacker.cardName);
             attacker.takeDamage(dmg);
         }
     }

@@ -47,17 +47,6 @@ function getPCNames(pcArray){
     ans.push(pc.cardName);
   });
   return ans;
-  /*if (pcArray.length == 1){
-    return pcArray[0].cardName;
-  } else if (pcArray.length == 2){
-    return pcArray[0].cardName + " and " + pcArray[1].cardName;
-  } else {
-    var ans = "";
-    for(let i = 0; i < pcArray.length - 1; i++){
-      ans += pcArray[i].cardName + ", "
-    }
-    ans += "and " + pcArray[pcArray.length - 1].cardName;
-  }*/
 }
 
 function exportAllP1Cs(){
@@ -210,7 +199,7 @@ function importAllP2Cs(pcListObj){
         effectiveDefense -= (0.25 * this.current_defense);
       }
       if (this.statuses["charmed"] != 0) {
-        effectiveDefense = 1;
+        effectiveDefense -= (0.5 * this.current_defense);
       }
       if (effectiveDefense < 1) { effectiveDefense = 1; }
 
@@ -330,7 +319,16 @@ function importAllP2Cs(pcListObj){
       return Object.values(this.statuses).every(v => v == 0);
     }
     giveTurnMana(){
-      this.giveMana(this.current_mana_per_turn + passive_hecate(this.p1));
+      let manaToGive = this.current_mana_per_turn + passive_hecate(this.p1);
+
+      if (this.p1 && this.cardName == "Aphrodite") { // passive_aphrodite
+        manaToGive += 20 * countCardPairsIn(PLAYER_GAMECARD_OBJS, PAIRING_LIST);
+      }
+      if (!this.p1 && this.cardName == "Aphrodite") {
+        manaToGive += 20 * countCardPairsIn(ENEMY_GAMECARD_OBJS, PAIRING_LIST);
+      }
+
+      this.giveMana(manaToGive);
     }
     giveAttackMana(){
       this.giveMana(this.current_mana_per_atk);

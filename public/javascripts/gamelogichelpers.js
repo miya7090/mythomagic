@@ -137,6 +137,17 @@ function countCardsMatching(gamecardObjs, cList){
   return listCount;
 }
 
+function countCardPairsIn(gamecardObjs, cList){
+  var listCount = 0;
+  var gamecardNames = getPCNames(gamecardObjs);
+  cList.forEach(pairing => {
+    if (gamecardNames.includes(pairing[0]) && gamecardNames.includes(pairing[1])) {
+      listCount += 1;
+    }
+  });
+  return listCount;
+}
+
 function autoattack(pcard){
   attack(0, pcard, pcard.getQ(), pcard.getR(), pcard.getS(), pcard.getCurrentNormAtkRange());
   pcard.giveAttackMana();
@@ -195,6 +206,7 @@ function attack(atkType, attacker, centerQ, centerR, centerS, aoe) {
             broadcastMsg("autoattack", true, attacker.cardName, tokenOnTile.pcardLink.cardName);
             tokenOnTile.pcardLink.takeDamage(dmg);
             passive_echo(attacker, tokenOnTile.pcardLink, dmg);
+            passive_eros(attacker, tokenOnTile.pcardLink);
             anim_tileHitByAttack(hitTile); // #TODO add sound
           }
         } else { // #TODO avoid attacking defeated cards if not a certain card e.g. hades
