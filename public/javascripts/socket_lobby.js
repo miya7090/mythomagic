@@ -7,6 +7,18 @@ document.addEventListener("DOMContentLoaded", () => {
   nicknameDiv.focus();
   nicknameDiv.select();
 
+  const urlParams = new URLSearchParams(window.location.search);
+  const selectedRegion = urlParams.get('selectedRegion');
+  if (selectedRegion == "olympia") {
+    document.getElementById("region").selectedIndex = 0;
+  } else if (selectedRegion == "corinth") {
+    document.getElementById("region").selectedIndex = 1;
+  } else if (selectedRegion == "athens") {
+    document.getElementById("region").selectedIndex = 2;
+  } else if (selectedRegion == "sparta") {
+    document.getElementById("region").selectedIndex = 3;
+  }
+
   socket.on('connect', ()=>{
     console.log("new lobby socket connected", socket);
     socket.emit("requestAllHeroboards");
@@ -54,7 +66,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   socket.on("lobbyJoined", (nickname, region, regionUsers)=>{
     console.log(nickname, "has joined region", region);
-    populateRegionList(regionUsers);
+    populateRegionList(region, regionUsers);
   });
 
   socket.on("lobbyLeft", (socketId, nickname, region, regionUsers)=>{
@@ -62,13 +74,13 @@ document.addEventListener("DOMContentLoaded", () => {
     if (socketId == socket.id){
       clearRegionList(regionUsers);
     } else {
-      populateRegionList(regionUsers);
+      populateRegionList(region, regionUsers);
     }
   });
 
   socket.on("lobbyLeft2", (nicknameA, nicknameB, region, regionUsers)=>{
     console.log(nicknameA,"and",nicknameB,"have begun a game");
-    populateRegionList(regionUsers);
+    populateRegionList(region, regionUsers);
   });
 
   socket.on("redirectToGame", (selfNickname, opponentNickname, roomCode, lobbyCode)=>{
@@ -100,10 +112,16 @@ function clearRegionList(){
   lobbiersInRegion.innerHTML = "";
 }
 
-function populateRegionList(regionUsers){
+function copySharelinkText(){
+  var copyText = document.getElementById("sharelink");
+  navigator.clipboard.writeText(copyText.innerText);
+  document.getElementById('copyPrompt').innerText = "[copied link!]";
+}
+
+function populateRegionList(thisRegion, regionUsers){
   const regionNotesText = document.getElementById("queueNotes");
   if (Object.keys(regionUsers).length == 1){
-    regionNotesText.textContent = "nobody else here yet... invite your friends? (automatically refreshes)";
+    regionNotesText.innerHTML = "nobody else here... invite your friends with <span id='sharelink' style='color:gray;'>https://mythomagic.herokuapp.com/join_" + thisRegion + "</span> <a href='#' id='copyPrompt' onclick='copySharelinkText()'>[copy link]</span>";
   } else {
     regionNotesText.textContent = "";
   }
