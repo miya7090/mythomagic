@@ -28,7 +28,7 @@ br
         option(value='olympia') olympia
         option(value='corinth') corinth (60-)
         option(value='athens') athens (45-30)
-        option(value='sparta') sparta (20-20)
+        option(value='sparta') sparta (15-15)
       input#lobbyJoinButton(type='button' value='join waiting lobby')
       input#lobbyLeaveButton(type='button' value='leave lobby' hidden)
       p#queueNotes &nbsp;
@@ -41,7 +41,7 @@ br
 br
 hr
 #leaderboard
-  h3 leaderboard
+  h3#leaderboardTitle leaderboard
   table#leaderboardTable
     tr
       th
@@ -88,7 +88,7 @@ hr
 br
 br
 br
-br
+hr
 br
 p#credsFixed
   | made by 

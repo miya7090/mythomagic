@@ -86,6 +86,11 @@ document.addEventListener("DOMContentLoaded", () => {
     window.location.href = "/";
   });
 
+  MY_SOCKET.on('winThroughForfeit', (reason)=>{
+    alert(OTHER_NAME + " has forfeited the game");
+    window.location.href = "/";
+  });
+
   MY_SOCKET.on('gameTie', ()=>{
     alert("game over: you have tied with "+OTHER_NAME);
     window.location.href = "/";

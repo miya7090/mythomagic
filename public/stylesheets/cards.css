@@ -50,7 +50,7 @@
 }
 
 .classCard {
-    width: 350px;
+    width: 400px;
 }
 
 .classCard .cards { /* preview page */
@@ -59,10 +59,11 @@
     overflow-x: auto;
     overflow-y: hidden;
     overflow: overlay;
+    margin: 10px;
 }
 
 .classCardTitle {
-    margin-left: 20px;
+    margin: 10px;
 }
 
 ::-webkit-scrollbar { height: 8px; width: 8px; }

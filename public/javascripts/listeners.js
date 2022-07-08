@@ -99,7 +99,13 @@ function updateTurnClock(){
   }
 
   if (secLeft <= 0) {
-    //clockBeep(1.0);
+    if (GAME_MODE == "p1-abilityAim") {
+      relinquishAimingMouseHighlight()
+      aimingTargetReachHighlight(false, GAME_MODE_MEMORYTARGET.ability_aim_range);
+    } else if (GAME_MODE == "p1-ultimateAim") {
+      relinquishAimingMouseHighlight();
+      aimingTargetReachHighlight(false, GAME_MODE_MEMORYTARGET.ult_aim_range);
+    }
     attackComplete();
   } else {
     if (secLeft < 5){ playSound("playerPhaseTick", 0.7); }

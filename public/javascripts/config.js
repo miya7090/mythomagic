@@ -136,7 +136,7 @@ const BASE_STAT_DICT = {
       "Efficiency","Attack all targets within 3 tiles with 50% more damage",
       "Lion Cloak","Double the DEF of all adjacent allies",
       "Determination","Will take at maximum 300 HP of damage per attack", "Melee"],
-    "Hades":[3100,1,10,800,50,0,2, 2,0,undefined,undefined,
+    "Hades":[2800,1,10,800,50,0,2, 2,0,undefined,undefined,
       "Conductor","Cause a defeated target within 2 tiles to autoattack enemies",
       "Overlord","All defeated heroes gain 300 ATK and autoattack enemies",
       "Cerberus","Prevents any enemy from being revived", "Special"],

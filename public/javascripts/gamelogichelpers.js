@@ -16,9 +16,9 @@ function processLobbyCode(lobbyCode){
     TURN_TIMER = 30000;
   } else if (lobbyCode == "sparta"){
     PICK_PHASE_RANDOM = false;
-    PICK_PHASE_TIMER = 20000;
+    PICK_PHASE_TIMER = 15000;
     TIMED_TURNS = true;
-    TURN_TIMER = 20000;
+    TURN_TIMER = 15000;
   } else {
     console.error("lobby code not recognized");
   }
