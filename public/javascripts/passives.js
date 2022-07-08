@@ -35,12 +35,12 @@ function passive_gaea(target) {
         if (target.p1) {
             broadcastMsg("passive", true, "Gaea", undefined);
             PLAYER_GAMECARD_OBJS.forEach(pc => {
-                pc.heal(100);
+                if (pc.cardName != "Gaea"){ pc.heal(50); }
             });
         } else {
             broadcastMsg("passive", false, "Gaea", undefined);
             ENEMY_GAMECARD_OBJS.forEach(pc => {
-                pc.heal(100);
+                if (pc.cardName != "Gaea"){ pc.heal(50); }
             });
         }
     }

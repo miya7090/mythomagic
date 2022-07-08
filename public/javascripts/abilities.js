@@ -87,7 +87,7 @@ function ability_jason(attacker, target) {
 function ult_gaea(attacker, target) {
     broadcastMsg("ultimate", true, "Gaea", undefined);
     PLAYER_GAMECARD_OBJS.forEach(pc => {
-        pc.heal(200);
+        pc.heal(100);
     });
 }
 
@@ -107,7 +107,7 @@ function ability_atalanta(attacker, target) {
     broadcastMsg("ability", true, "Atalanta", target.cardName);
     let dmg = calcDamage(attacker, target);
     if (target.current_health == target.getMaxHealth()){
-        dmg += 200;
+        dmg += 150;
     }
     target.takeDamage(dmg);
 }
@@ -168,7 +168,7 @@ function ability_orpheus(attacker, target) {
     let lowestHealth = undefined;
     let pcWithLowestHealth = undefined;
     PLAYER_GAMECARD_OBJS.forEach(pc => {
-        if (lowestHealth == undefined || pc.current_health < lowestHealth) {
+        if (lowestHealth == undefined || (pc.current_health < lowestHealth && pc.dead != "defeated")) {
             lowestHealth = pc.current_health;
             pcWithLowestHealth = pc;
         }
@@ -359,7 +359,7 @@ function ult_perseus(attacker, target) {
 
 function ability_hera(attacker, target) {
     broadcastMsg("ability", true, "Hera", target.cardName);
-    target.current_defense += 10;
+    target.current_defense += 5;
     target.heal(200);
     target.giveMana(100);
 }
