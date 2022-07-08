@@ -197,18 +197,6 @@ body {
   color: var(--p2FontColor);
 }
 
-#abilityTitle { color: var(--p0ActionTextColor); }
-#ultTitle { color: var(--p0ActionTextColor); }
-#passiveTitle { color: var(--p0PassiveTextColor); }
-
-#abilityTitle[p1=true] { color: var(--p1ActionTextColor); }
-#ultTitle[p1=true] { color: var(--p1ActionTextColor); }
-#passiveTitle[p1=true] { color: var(--p1PassiveTextColor); }
-
-#abilityTitle[p1=false] { color: var(--p2ActionTextColor); }
-#ultTitle[p1=false] { color: var(--p2ActionTextColor); }
-#passiveTitle[p1=false] { color: var(--p2PassiveTextColor); }
-
 .hoverColWrap {
   height:100px;
 }
@@ -248,3 +236,42 @@ body {
 #hoverInfoClass.hc-Supporter { color: var(--SUPPORTER); }
 #hoverInfoClass.hc-Caster { color: var(--CASTER); }
 #hoverInfoClass.hc-Special { color: var(--SPECIAL); }
+
+.hoverBoxSkill {
+  position: relative;
+}
+
+.hoverBoxSkill .hoverBoxSkillTooltip {
+  pointer-events: none;
+  visibility: hidden;
+  width: 60px;
+  background-color: rgba(33, 33, 33, 0.8);
+  color: #fff;
+  text-align: center;
+  border-radius: 3px;
+  padding: 5px 5px;
+
+  position: absolute;
+  z-index: 20;
+  bottom: 15px;
+  right: calc(100% - 80px);
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+
+.hoverBoxSkill:hover .hoverBoxSkillTooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
+#abilityTitle { color: var(--p0ActionTextColor); }
+#ultTitle { color: var(--p0ActionTextColor); }
+#passiveTitle { color: var(--p0PassiveTextColor); }
+
+#abilityTitle[p1=true] { color: var(--p1ActionTextColor); }
+#ultTitle[p1=true] { color: var(--p1ActionTextColor); }
+#passiveTitle[p1=true] { color: var(--p1PassiveTextColor); }
+
+#abilityTitle[p1=false] { color: var(--p2ActionTextColor); }
+#ultTitle[p1=false] { color: var(--p2ActionTextColor); }
+#passiveTitle[p1=false] { color: var(--p2PassiveTextColor); }
