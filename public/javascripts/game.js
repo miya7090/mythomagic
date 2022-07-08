@@ -92,13 +92,22 @@ document.addEventListener("DOMContentLoaded", () => {
     window.location.href = "/";
   });
 
-  MY_SOCKET.on('gameWin', ()=>{
-    alert("congrats! you defeated "+OTHER_NAME+"!");
+  MY_SOCKET.on('gameWin', (wasSurrender)=>{
+    if (wasSurrender == true) {
+      alert("congrats! "+OTHER_NAME+" has surrendered");
+    } else {
+      alert("congrats! you defeated "+OTHER_NAME+"!");
+    }
     window.location.href = "/";
   });
 
-  MY_SOCKET.on('gameLoss', ()=>{
-    alert(OTHER_NAME+" has won the game");
+  MY_SOCKET.on('gameLoss', (wasSurrender)=>{
+    if (wasSurrender == true) {
+      alert("you surrendered the game to "+OTHER_NAME);
+    } else {
+      alert(OTHER_NAME+" has won the game");
+    }
+    
     window.location.href = "/";
   });
 

@@ -136,16 +136,27 @@ function populateRegionList(regionUsers){
 function updateLobbyBoard(regionName, res) {
   var thisCol;
   switch (regionName) {
-    case "olympia": thisCol = 1; break;
-    case "corinth": thisCol = 2; break;
-    case "athens": thisCol = 3; break;
-    case "sparta": thisCol = 4; break;
+    case "TOTAL": thisCol = 1; break;
+    case "olympia": thisCol = 2; break;
+    case "corinth": thisCol = 3; break;
+    case "athens": thisCol = 4; break;
+    case "sparta": thisCol = 5; break;
   }
   let lobbyBoard = document.getElementById("leaderboardTable");
-  for (let i = 0; i < 5; i++) {
-    let tableText = res[i].heroName + " (" + res[i].heroWins;
-    if (res[i].heroWins == 1) { tableText += " win)"; }
-    else { tableText += " wins)"; }
-    lobbyBoard.getElementsByTagName('tr')[i+1].getElementsByTagName('td')[thisCol].innerText = tableText;
+  
+  if (regionName == "TOTAL") {
+    for (let i = 0; i < 5; i++) {
+      let tableTotalText = res[i]._id + " (" + res[i].total;
+      if (res[i].total == 1) { tableTotalText += " win)"; }
+      else { tableTotalText += " wins)"; }
+      lobbyBoard.getElementsByTagName('tr')[i+1].getElementsByTagName('td')[thisCol].innerText = tableTotalText;
+    }
+  } else {
+    for (let i = 0; i < 5; i++) {
+      let tableText = res[i].heroName + " (" + res[i].heroWins;
+      if (res[i].heroWins == 1) { tableText += " win)"; }
+      else { tableText += " wins)"; }
+      lobbyBoard.getElementsByTagName('tr')[i+1].getElementsByTagName('td')[thisCol].innerText = tableText;
+    }
   }
 }

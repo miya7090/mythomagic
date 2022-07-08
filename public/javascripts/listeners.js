@@ -53,8 +53,15 @@ function keyProcessing(event) {
   }
 
   // C
-  if (event.keyCode === 67) { // z, reduce radius
+  if (event.keyCode === 67) { // c, clear selection
     clearSelection();
+  }
+
+  // ESC
+  if (event.keyCode === 27) { // esc, forfeit game
+    if (confirm("do you wish to surrender the game to " + OTHER_NAME + "?")) {
+      MY_SOCKET.emit("gameEnded_withEnemyWin", REGION_NAME, SELF_NAME, getPCNames(PLAYER_GAMECARD_OBJS), OTHER_NAME, getPCNames(ENEMY_GAMECARD_OBJS), true);
+    }
   }
   return;
 }
@@ -362,7 +369,7 @@ function startBgm(){
       SOUND_OBJECTS["bgm"][0].currentTime = 0;
   } else {
     console.log(SOUND_OBJECTS["bgm"], SOUND_OBJECTS);
-    SOUND_OBJECTS["bgm"][0].volume = 0.1;
+    SOUND_OBJECTS["bgm"][0].volume = 0.2;
     SOUND_OBJECTS["bgm"][0].play();
   }
 }

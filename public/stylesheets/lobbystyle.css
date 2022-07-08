@@ -51,11 +51,11 @@ p {
 }
 
 #leaderboard td:hover {
-    background-color: #ffffd5;
+    background-color: #e9e9c9;
 }
 
 #leaderboard .highlightTopTR {
-    background-color: #fff2a8;
+    background-color: #fff7c9;
 }
 
 #leaderboard .highlightTopTR :hover {
@@ -69,6 +69,14 @@ p {
 
 #leaderboard .highlightTR :hover {
     background-color: #d8d1b9;
+}
+
+#topTopTR {
+    background-color: #ffef45;
+}
+
+.lightGray {
+    background-color: #efefef;
 }
 
 #credits {

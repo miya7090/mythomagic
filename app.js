@@ -244,23 +244,30 @@ io.on("connection", socket => {
     console.log("win", p1Name, p1cardNames, p2Name, p2cardNames);
   });
 
-  socket.on("gameEnded_withEnemyWin", (regionName, p1Name, p1cardNames, p2Name, p2cardNames) => {
+  socket.on("gameEnded_withEnemyWin", (regionName, p1Name, p1cardNames, p2Name, p2cardNames, wasSurrender) => {
     addWinsToRegionHeroboard(regionName, p2cardNames);
     addLossesToRegionHeroboard(regionName, p1cardNames);
     let rivalId = rivalFinder[socket.id];
-    io.to(socket.id).emit("gameLoss");
-    io.to(rivalId).emit("gameWin");
+    io.to(socket.id).emit("gameLoss", wasSurrender);
+    io.to(rivalId).emit("gameWin", wasSurrender);
     demolishRoomOf(socket.id);
     console.log("loss", p1Name, p1cardNames, p2Name, p2cardNames);
   });
 
   socket.on("requestAllHeroboards", () => {
-    console.log("sending",socket.id,"new heroboards");
     if (!MONGO_CONNECTED) {
       io.to(socket.id).emit("heroboardUpdate", undefined);
     } else {
+      console.log("sending",socket.id,"new heroboards");
+
+      db.collection('heroboard').aggregate([{$group: { _id: "$heroName", total: { $sum: "$heroWins" }}}]).sort({total:-1}).limit(5).toArray().then((res) => {
+        io.to(socket.id).emit("heroboardUpdate", "TOTAL", res);
+      });
+
       ALL_REGION_NAMES.forEach((regionName) => {
-        db.collection('heroboard').find({region:regionName}).sort({heroWins:-1}).limit(5).toArray().then((res) => io.to(socket.id).emit("heroboardUpdate", regionName, res));
+        db.collection('heroboard').find({region:regionName}).sort({heroWins:-1}).limit(5).toArray().then((res) => {
+          io.to(socket.id).emit("heroboardUpdate", regionName, res);
+        });
       });
     }
   });
