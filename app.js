@@ -226,6 +226,8 @@ io.on("connection", socket => {
   socket.on("gameEnded_withTie", (regionName, p1Name, p1cardNames, p2Name, p2cardNames) => {
     addWinsToRegionHeroboard(regionName, p1cardNames);
     addWinsToRegionHeroboard(regionName, p2cardNames);
+    let thisDate = new Date();
+    db.collection('rawgamestats').insertOne({isTie:true, time:thisDate, region:regionName, winName:p1Name, winTeam:p1cardNames, loseName:p2Name, loseTeam:p2cardNames});
     let rivalId = rivalFinder[socket.id];
     io.to(socket.id).emit("gameTie");
     io.to(rivalId).emit("gameTie");
@@ -236,6 +238,8 @@ io.on("connection", socket => {
   socket.on("gameEnded_withMyWin", (regionName, p1Name, p1cardNames, p2Name, p2cardNames) => {
     addWinsToRegionHeroboard(regionName, p1cardNames);
     addLossesToRegionHeroboard(regionName, p2cardNames);
+    let thisDate = new Date();
+    db.collection('rawgamestats').insertOne({isTie:false, time:thisDate, region:regionName, winName:p1Name, winTeam:p1cardNames, loseName:p2Name, loseTeam:p2cardNames});
     let rivalId = rivalFinder[socket.id];
     io.to(socket.id).emit("gameWin");
     io.to(rivalId).emit("gameLoss");
@@ -246,6 +250,8 @@ io.on("connection", socket => {
   socket.on("gameEnded_withEnemyWin", (regionName, p1Name, p1cardNames, p2Name, p2cardNames, wasSurrender) => {
     addWinsToRegionHeroboard(regionName, p2cardNames);
     addLossesToRegionHeroboard(regionName, p1cardNames);
+    let thisDate = new Date();
+    db.collection('rawgamestats').insertOne({isTie:false, time:thisDate, region:regionName, winName:p2Name, winTeam:p2cardNames, loseName:p1Name, loseTeam:p1cardNames});
     let rivalId = rivalFinder[socket.id];
     io.to(socket.id).emit("gameLoss", wasSurrender);
     io.to(rivalId).emit("gameWin", wasSurrender);
