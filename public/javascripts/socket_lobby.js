@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
   nicknameDiv.select();
 
   const urlParams = new URLSearchParams(window.location.search);
-  const selectedRegion = urlParams.get('selectedRegion');
+  const selectedRegion = urlParams.get('join_region');
   if (selectedRegion == "olympia") {
     document.getElementById("region").selectedIndex = 0;
   } else if (selectedRegion == "corinth") {
@@ -121,7 +121,7 @@ function copySharelinkText(){
 function populateRegionList(thisRegion, regionUsers){
   const regionNotesText = document.getElementById("queueNotes");
   if (Object.keys(regionUsers).length == 1){
-    regionNotesText.innerHTML = "nobody else here... invite your friends with <span id='sharelink' style='color:gray;'>https://mythomagic.herokuapp.com/join_" + thisRegion + "</span> <a href='#' id='copyPrompt' onclick='copySharelinkText()'>[copy link]</span>";
+    regionNotesText.innerHTML = "nobody else here... invite your friends with <span id='sharelink' style='color:gray;'>https://mythomagic.herokuapp.com/lobby?join_region=" + thisRegion + "</span> <a href='#' id='copyPrompt' onclick='copySharelinkText()'>[copy link]</span>";
   } else {
     regionNotesText.textContent = "";
   }

@@ -305,20 +305,8 @@ router.get('/preview',(req,res) => {
   res.render("preview");
 });
 
-router.get('/join_olympia',(req,res) => {
-  res.render("lobby", {selectedRegion: "olympia"});
-});
-
-router.get('/join_corinth',(req,res) => {
-  res.render("lobby", {selectedRegion: "corinth"});
-});
-
-router.get('/join_athens',(req,res) => {
-  res.render("lobby", {selectedRegion: "athens"});
-});
-
-router.get('/join_sparta',(req,res) => {
-  res.render("lobby",  {selectedRegion: "sparta"});
+router.get('/lobby',(req,res) => {
+  res.render("lobby",  {join_region: req.query.join_region});
 });
 
 app.use('/', router);
