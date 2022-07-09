@@ -332,7 +332,8 @@ io.on("connection", socket => {
             db.collection('invitationcodes').updateOne({code: inviteCode}, {$inc:{uses:-1}});
             const newInviteCode = (Math.random() + 1).toString(36).substring(4);
             db.collection('invitationcodes').insertOne({code:newInviteCode, uses:2});
-            db.collection('login').insertOne({username:username, password:saltedPassword, usedCode:inviteCode, newCode:newInviteCode, wins:{olympia:0,corinth:0,athens:0,sparta:0}, ties:{olympia:0,corinth:0,athens:0,sparta:0}, losses:{olympia:0,corinth:0,athens:0,sparta:0}, score:10.0});
+            let newTime = new Date();
+            db.collection('login').insertOne({username:username, password:saltedPassword, creationTime:newTime, usedCode:inviteCode, newCode:newInviteCode, wins:{olympia:0,corinth:0,athens:0,sparta:0}, ties:{olympia:0,corinth:0,athens:0,sparta:0}, losses:{olympia:0,corinth:0,athens:0,sparta:0}, score:10.0});
             io.to(socket.id).emit("newAccount", newInviteCode);
           });
         });
