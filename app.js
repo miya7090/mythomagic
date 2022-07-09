@@ -5,6 +5,7 @@ const io = require("socket.io")(server); // create instance of socketio
 const PORT = process.env.PORT || 3000;
 
 // db connection for leaderboard tracking
+const bcrypt = require('bcrypt');
 const mongoose = require('mongoose');
 var mongoDB = process.env.MONGODB_URI;
 var MONGO_CONNECTED = false;
@@ -227,7 +228,7 @@ io.on("connection", socket => {
     addWinsToRegionHeroboard(regionName, p1cardNames);
     addWinsToRegionHeroboard(regionName, p2cardNames);
     let thisDate = new Date();
-    db.collection('rawgamestats').insertOne({isTie:true, time:thisDate, region:regionName, winName:p1Name, winTeam:p1cardNames, loseName:p2Name, loseTeam:p2cardNames});
+    db.collection('gamestats').insertOne({isTie:true, time:thisDate, region:regionName, winName:p1Name, winTeam:p1cardNames, loseName:p2Name, loseTeam:p2cardNames});
     let rivalId = rivalFinder[socket.id];
     io.to(socket.id).emit("gameTie");
     io.to(rivalId).emit("gameTie");
@@ -239,7 +240,7 @@ io.on("connection", socket => {
     addWinsToRegionHeroboard(regionName, p1cardNames);
     addLossesToRegionHeroboard(regionName, p2cardNames);
     let thisDate = new Date();
-    db.collection('rawgamestats').insertOne({isTie:false, time:thisDate, region:regionName, winName:p1Name, winTeam:p1cardNames, loseName:p2Name, loseTeam:p2cardNames});
+    db.collection('gamestats').insertOne({isTie:false, time:thisDate, region:regionName, winName:p1Name, winTeam:p1cardNames, loseName:p2Name, loseTeam:p2cardNames});
     let rivalId = rivalFinder[socket.id];
     io.to(socket.id).emit("gameWin");
     io.to(rivalId).emit("gameLoss");
@@ -251,12 +252,51 @@ io.on("connection", socket => {
     addWinsToRegionHeroboard(regionName, p2cardNames);
     addLossesToRegionHeroboard(regionName, p1cardNames);
     let thisDate = new Date();
-    db.collection('rawgamestats').insertOne({isTie:false, time:thisDate, region:regionName, winName:p2Name, winTeam:p2cardNames, loseName:p1Name, loseTeam:p1cardNames});
+    db.collection('gamestats').insertOne({isTie:false, time:thisDate, region:regionName, winName:p2Name, winTeam:p2cardNames, loseName:p1Name, loseTeam:p1cardNames});
     let rivalId = rivalFinder[socket.id];
     io.to(socket.id).emit("gameLoss", wasSurrender);
     io.to(rivalId).emit("gameWin", wasSurrender);
     demolishRoomOf(socket.id);
     console.log("loss", p1Name, p1cardNames, p2Name, p2cardNames);
+  });
+
+  socket.on("account_creation_request", (inviteCode, username, password) => {
+    db.collection('invitationcodes').find({code: inviteCode}).toArray().then((existingInviteCodeEntry) => {
+      console.log(existingInviteCodeEntry);
+      if (existingInviteCodeEntry.length != 1) { io.to(socket.id).emit("accountMessage", "invalid invitation code"); return; }
+      if (existingInviteCodeEntry[0].valid != true) { io.to(socket.id).emit("accountMessage", "this invitation code has already been used"); return; }
+  
+      db.collection('login').find({username: username}).toArray().then((existingLoginEntry) => {
+        if (existingLoginEntry.length > 0) { io.to(socket.id).emit("accountMessage", "this username already exists"); return; }
+      
+        // all ok
+        bcrypt.genSalt(10).then((salt) => {
+          bcrypt.hash(password, salt).then((saltedPassword) => {
+            db.collection('invitationcodes').updateOne({code: inviteCode}, {$set:{valid:false}});
+            const newInviteCode = (Math.random() + 1).toString(36).substring(4);
+            db.collection('invitationcodes').insertOne({code:newInviteCode, valid:true});
+            db.collection('login').insertOne({username:username, password:saltedPassword, usedCode:inviteCode, newCode:newInviteCode, wins:{olympia:0,corinth:0,athens:0,sparta:0}, ties:{olympia:0,corinth:0,athens:0,sparta:0}, losses:{olympia:0,corinth:0,athens:0,sparta:0}});
+            io.to(socket.id).emit("newAccount", newInviteCode);
+          });
+        });
+      });
+    })
+  });
+  
+  socket.on("login_request", (username, password) => {
+    db.collection('login').find({username: username}).toArray().then((existingLoginEntry) => {
+      if (existingLoginEntry.length != 1) { io.to(socket.id).emit("accountMessage", "invalid username/password combination"); return; }
+      bcrypt.compare(password, existingLoginEntry[0].password).then((validPassword) => {
+        if (!validPassword) { io.to(socket.id).emit("accountMessage", "invalid username/password combination"); return; }
+        io.to(socket.id).emit("loginSuccess", username);
+      });
+    });
+  });
+
+  socket.on("requestUserDataBox", (username) => {
+    db.collection('login').find({username: username}).toArray().then((userData) => {
+      io.to(socket.id).emit("getUserDataBox", userData[0].username, userData[0].newCode, userData[0].wins, userData[0].losses);
+    });
   });
 
   socket.on("requestAllHeroboards", () => {

@@ -7,6 +7,8 @@ document.addEventListener("DOMContentLoaded", () => {
   nicknameDiv.focus();
   nicknameDiv.select();
 
+  requestLoginBoxLoggedIn();
+
   const urlParams = new URLSearchParams(window.location.search);
   const selectedRegion = urlParams.get('join_region');
   if (selectedRegion == "olympia") {
@@ -32,6 +34,56 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const lJoinButton = document.getElementById("lobbyJoinButton");
   const lLeaveButton = document.getElementById("lobbyLeaveButton");
+  const lLoginButton = document.getElementById("loginButton");
+  const lAccountButton = document.getElementById("createAccountButton");
+  const usernameDiv = document.getElementById("username");
+  const passwordDiv = document.getElementById("password");
+  const inviteCodeDiv = document.getElementById("inviteCode");
+
+  lLoginButton.addEventListener("click", ()=>{
+    const username = usernameDiv.value;
+    const password = passwordDiv.value;
+    
+    if (username.length < 3){
+      alert("username must be at least 3 characters long");
+      usernameDiv.focus();
+      usernameDiv.select();
+      return;
+    }
+
+    if (password.length < 8){
+      alert("password must be at least 8 characters long");
+      passwordDiv.focus();
+      passwordDiv.select();
+      return;
+    }
+
+    console.log("sending login request for", username);
+    socket.emit("login_request", username, password);
+  });
+
+  lAccountButton.addEventListener("click", ()=>{
+    const username = usernameDiv.value;
+    const password = passwordDiv.value;
+    const inviteCode = inviteCodeDiv.value;
+    
+    if (username.length < 3){
+      alert("username must be at least 3 characters long");
+      usernameDiv.focus();
+      usernameDiv.select();
+      return;
+    }
+
+    if (password.length < 8){
+      alert("password must be at least 8 characters long");
+      passwordDiv.focus();
+      passwordDiv.select();
+      return;
+    }
+
+    console.log("sending account creation request for", username, "with", inviteCode);
+    socket.emit("account_creation_request", inviteCode, username, password);
+  });
 
   lJoinButton.addEventListener("click", ()=>{
     if (nicknameDiv.value.length == 0){
@@ -54,7 +106,80 @@ document.addEventListener("DOMContentLoaded", () => {
     nicknameDiv.disabled = false;
     lLeaveButton.hidden = true;
   });
-  
+
+  socket.on("newAccount", (inviteCode) => {
+    //navigator.clipboard.writeText(inviteCode);
+    alert("your account has been created! you can invite one friend with " + inviteCode);
+    socket.emit("login_request", usernameDiv.value, passwordDiv.value);
+  });
+
+  socket.on("accountMessage", (notes) => {
+    alert(notes);
+  });
+
+  socket.on("loginSuccess", (username) => {
+    let exdays = 3; // expire after 3 days
+    const d = new Date();
+    d.setTime(d.getTime() + (exdays*24*60*60*1000));
+    let expires = "expires="+ d.toUTCString();
+    document.cookie = "user" + "=" + username + ";" + expires + ";path=/";
+    requestLoginBoxLoggedIn();
+  });
+
+  function requestLoginBoxLoggedIn() {
+    let thisUser = getUserLoggedIn();
+    if (thisUser != "") {
+      socket.emit("requestUserDataBox", thisUser);
+    }
+    // if no cookie, make no change
+  }
+
+  socket.on("getUserDataBox", (username, newCode, wins, losses) => {
+    const thisLoginBox = document.getElementById("loginBox");
+    thisLoginBox.innerHTML = "";
+
+    let totalWins = Object.values(wins).reduce((a, b) => a+b);
+    let totalLosses = Object.values(losses).reduce((a, b) => a+b);
+
+    console.log(wins, losses, totalWins);
+
+    const loginText = document.createElement("div");
+    loginText.innerHTML = "you are logged in as <b>" + username + "</b><br/>";
+    loginText.innerHTML += "invitation code: " + newCode + "<br/>";
+    loginText.innerHTML += "total wins: " + totalWins + "<br/>"; // #TODO count only if against logged in players
+    loginText.innerHTML += "total losses: " + totalLosses + "<br/>"; // #TODO create a ranking score
+
+    const logoutButton = document.createElement("input"); // create tile and add to row
+    logoutButton.type = "button";
+    logoutButton.value = "logout";
+    logoutButton.onclick = logoutUser;
+
+    thisLoginBox.appendChild(loginText);
+    thisLoginBox.appendChild(logoutButton);
+  });
+
+  function logoutUser(){
+    document.cookie.split(";").forEach(function(c) { document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); });
+    const thisLoginBox = document.getElementById("loginBox");
+    thisLoginBox.innerHTML = "logged out successfully!";
+  }
+
+  function getUserLoggedIn() {
+    let name = "user" + "=";
+    let decodedCookie = decodeURIComponent(document.cookie);
+    let ca = decodedCookie.split(';');
+    for(let i = 0; i <ca.length; i++) {
+      let c = ca[i];
+      while (c.charAt(0) == ' ') {
+        c = c.substring(1);
+      }
+      if (c.indexOf(name) == 0) {
+        return c.substring(name.length, c.length);
+      }
+    }
+    return "";
+  }
+
   socket.on("heroboardUpdate", (region, res)=>{
     if (region == undefined) {
       console.error("error retrieving leaderboards from mongodb");

@@ -13,6 +13,19 @@ h2 {
     margin-left: 0px;
 }
 
+#loginBox {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    background-color: #dcdcdc;
+    padding: 10px;
+    text-align: right;
+}
+
+#inviteCode {
+    width: 95px;
+}
+
 #betaVersion {
     margin: 0px;
     font-weight: bold;

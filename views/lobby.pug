@@ -11,6 +11,23 @@ head
   link(rel="icon" href="https://raw.githubusercontent.com/miya7090/mythomagic/main/public/images/favicon/favicon.ico" type="image/x-icon")
 h2 mythomagic
 br
+#loginBox
+  label username: 
+  input#username(type='text' maxlength='16')
+  br
+  label password: 
+  input#password(type='text' maxlength='30')
+  br
+  input#loginButton(type='button' value='login')
+  br
+  br
+  label invitation code: 
+  input#inviteCode(type='text' maxlength='30')
+  br
+  input#createAccountButton(type='button' value='create account')
+br
+//"account_creation_request", (inviteCode, username, password) => {
+//socket.on("login_request",username, password
 #playersInRegion
 #gameStart
   form#gameform(method='POST' action='/game')
@@ -52,7 +69,7 @@ hr
       th Sparta
     tr.highlightTopTR
       td 1
-      td#topTopTR
+      td#topTopTR database still loading, please wait...
       td
       td
       td
