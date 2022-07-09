@@ -34,8 +34,18 @@ h2 {
     border-bottom: 1px #686868 solid;
 }
 
-#inviteCode {
-    width: 95px;
+#pwDiv {
+    margin-bottom: 15px;
+}
+
+#newPW {
+    width: 100px;
+}
+
+input.darkInputBox {
+    background-color : #d6d6d6; 
+    border: none;
+    margin: 3px;
 }
 
 #betaVersion {

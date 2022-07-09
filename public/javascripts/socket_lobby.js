@@ -38,6 +38,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const lAccountButton = document.getElementById("createAccountButton");
   const usernameDiv = document.getElementById("username");
   const passwordDiv = document.getElementById("password");
+  const emailDiv = document.getElementById("email");
   const inviteCodeDiv = document.getElementById("inviteCode");
 
   lLoginButton.addEventListener("click", ()=>{
@@ -66,6 +67,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const username = usernameDiv.value;
     const password = passwordDiv.value;
     const inviteCode = inviteCodeDiv.value;
+    const email = emailDiv.value;
     
     if (username.length < 3){
       alert("username must be at least 3 characters long");
@@ -81,8 +83,16 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
+    if (email.length == 0){
+      if (!confirm("are you sure you want to leave your email blank? you won't be able to retrieve or change your account information")){
+        emailDiv.focus();
+        emailDiv.select();
+        return;
+      }
+    }
+
     console.log("sending account creation request for", username, "with", inviteCode);
-    socket.emit("account_creation_request", inviteCode, username, password);
+    socket.emit("account_creation_request", inviteCode, username, password, email);
   });
 
   lJoinButton.addEventListener("click", ()=>{
@@ -184,16 +194,53 @@ document.addEventListener("DOMContentLoaded", () => {
 
     rightColumn.innerHTML += "games played: " + (totalWins + totalLosses) + "<br/><br/>";
 
-    const logoutButton = document.createElement("input"); // create tile and add to row
+    const logoutButton = document.createElement("input");
     logoutButton.type = "button";
     logoutButton.value = "logout";
     logoutButton.onclick = logoutUser;
 
+    const emailDiv = document.createElement("div");
+
+    const emailLabel = document.createElement("label");
+    emailLabel.innerText = "email: ";
+    emailDiv.appendChild(emailLabel);
+
+    const emailField = document.createElement("input");
+    emailField.type = "text";
+    emailField.classList.add("darkInputBox");
+    emailField.id = "confirmEmail";
+    emailDiv.appendChild(emailField);
+
+    const pwDiv = document.createElement("div");
+    pwDiv.id = "pwDiv";
+
+    const newPWField = document.createElement("input");
+    newPWField.type = "password";
+    newPWField.classList.add("darkInputBox");
+    newPWField.id = "newPW";
+    pwDiv.appendChild(newPWField);
+
+    const changePWButton = document.createElement("input");
+    changePWButton.type = "button";
+    changePWButton.value = "change password";
+    changePWButton.onclick = changePassword;
+    pwDiv.appendChild(changePWButton);
+
     loginText.appendChild(leftColumn);
     loginText.appendChild(rightColumn);
     thisLoginBox.appendChild(loginText);
+    thisLoginBox.appendChild(emailDiv);
+    thisLoginBox.appendChild(pwDiv);
     thisLoginBox.appendChild(logoutButton);
   });
+
+  function changePassword(){
+    let typedEmail = document.getElementById("confirmEmail").value;
+    let typedPW = document.getElementById("newPW").value;
+    if (typedEmail.length == 0) { alert("enter your email for verification"); return; }
+    if (typedPW.length < 8) { alert("new password must be at least 8 characters long"); return; }
+    socket.emit("passwordChangeRequest", getUserLoggedIn(), typedEmail, typedPW); // #TODO improve typedPW not sent directly
+  }
 
   function logoutUser(){
     nicknameDiv.value = "";

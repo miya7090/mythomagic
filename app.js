@@ -317,7 +317,7 @@ io.on("connection", socket => {
     demolishRoomOf(socket.id);
   });
 
-  socket.on("account_creation_request", (inviteCode, username, password) => {
+  socket.on("account_creation_request", (inviteCode, username, password, email) => {
     db.collection('invitationcodes').find({code: inviteCode}).toArray().then((existingInviteCodeEntry) => {
       console.log(existingInviteCodeEntry);
       if (existingInviteCodeEntry.length != 1) { io.to(socket.id).emit("accountMessage", "invalid invitation code"); return; }
@@ -333,12 +333,26 @@ io.on("connection", socket => {
             const newInviteCode = (Math.random() + 1).toString(36).substring(4);
             db.collection('invitationcodes').insertOne({code:newInviteCode, uses:5});
             let newTime = new Date();
-            db.collection('login').insertOne({username:username, password:saltedPassword, creationTime:newTime, usedCode:inviteCode, newCode:newInviteCode, wins:{olympia:0,corinth:0,athens:0,sparta:0}, ties:{olympia:0,corinth:0,athens:0,sparta:0}, losses:{olympia:0,corinth:0,athens:0,sparta:0}, score:10.0});
+            db.collection('login').insertOne({username:username, password:saltedPassword, email:email, creationTime:newTime, usedCode:inviteCode, newCode:newInviteCode, wins:{olympia:0,corinth:0,athens:0,sparta:0}, ties:{olympia:0,corinth:0,athens:0,sparta:0}, losses:{olympia:0,corinth:0,athens:0,sparta:0}, score:10.0});
             io.to(socket.id).emit("newAccount", newInviteCode);
           });
         });
       });
     })
+  });
+  
+  socket.on("passwordChangeRequest", (username, email, newPassword) => {
+    db.collection('login').find({username: username}).toArray().then((loginEntry) => {
+      if (loginEntry[0].email != email) { io.to(socket.id).emit("accountMessage", "password not changed: email does not match email on record"); return; }
+    
+      // all ok
+      bcrypt.genSalt(10).then((salt) => {
+        bcrypt.hash(newPassword, salt).then((saltedPassword) => {
+          db.collection('login').updateOne({username:username}, {$set:{password:saltedPassword}});
+          io.to(socket.id).emit("accountMessage", "password has been changed successfully");
+        });
+      });
+    });
   });
   
   socket.on("login_request", (username, password) => {

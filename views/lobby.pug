@@ -21,7 +21,10 @@ h2 mythomagic
   input#loginButton(type='button' value='login')
   br
   br
-  label invitation code: 
+  label email: 
+  input#email(type='text')
+  br
+  label code: 
   input#inviteCode(type='text' maxlength='30')
   br
   input#createAccountButton(type='button' value='create account')
@@ -67,14 +70,14 @@ hr
       th Sparta
     tr.highlightTopTR
       td 1
-      td#topTopTR database still loading, please wait...
+      td#topTopTR database is still loading...
       td
       td
       td
       td
     tr
       td 2
-      td
+      td (try waiting a minute then refreshing)
       td.lightGray
       td.lightGray
       td.lightGray
