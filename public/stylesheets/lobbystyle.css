@@ -13,6 +13,16 @@ h2 {
     margin-left: 0px;
 }
 
+#loginColWrap {
+    display: flex;
+}
+
+.column {
+    flex: 50%;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
 #loginBox {
     position: absolute;
     top: 0px;

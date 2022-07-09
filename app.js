@@ -30,6 +30,7 @@ var rivalFinder = {}; // {socketid: socketid}
 var roommateFinder = {}; // {room: [socketid, socketid]}
 var doneTokenPick = {}; // {room: gameCardJsonObjs} where objs array is included if 1 person finished token pick
 var gameHasBegun = {}; // {room: bool} where true if token pick is done
+var cookieMap = {}; // {socketid: username}
 
 // lobby code processing
 function rk(regionName){ return regionName + "====="; }
@@ -63,6 +64,7 @@ function kickOutSocketFromLastRoom(socketId) { // returns the room code that was
 
     } else { // if it's in a game room
       delete rivalFinder[socketId];
+      //delete cookieMap[socketId];
       roommateFinder[thisRoomCode].splice(roommateFinder[thisRoomCode].indexOf(socketId), 1);
     }
 
@@ -145,7 +147,9 @@ io.on("connection", socket => {
   });
 
   /* ~~~~~ player socket operations ~~~~~ */
-  socket.on("registerPlayer", (roomCode) => {
+  socket.on("registerPlayer", (roomCode, cookieName) => {
+    cookieMap[socket.id] = cookieName;
+
     if (gameHasBegun[roomCode] == true) { // rejoining a disconnected game
       if (roommateFinder[roomCode].length >= 2) { // players already playing
         io.to(socket.id).emit("cannotJoinGame");
@@ -224,40 +228,89 @@ io.on("connection", socket => {
     io.to(rivalId).emit("giveMessage", msgType, p1, arg1, arg2);
   });
 
-  socket.on("gameEnded_withTie", (regionName, p1Name, p1cardNames, p2Name, p2cardNames) => {
-    addWinsToRegionHeroboard(regionName, p1cardNames);
-    addWinsToRegionHeroboard(regionName, p2cardNames);
-    let thisDate = new Date();
-    db.collection('gamestats').insertOne({isTie:true, time:thisDate, region:regionName, winName:p1Name, winTeam:p1cardNames, loseName:p2Name, loseTeam:p2cardNames});
-    let rivalId = rivalFinder[socket.id];
-    io.to(socket.id).emit("gameTie");
-    io.to(rivalId).emit("gameTie");
-    demolishRoomOf(socket.id);
-    console.log("tie", p1Name, p1cardNames, p2Name, p2cardNames);
+  socket.on("updateUserStats", (regionName, winType, cookieName, opponentCookieName, forceOpponentLossIncrease) => {
+    // update user stats
+    if (cookieMap[socket.id] != ""){ // user logged in
+      db.collection('login').find({username: cookieName}).toArray().then((existingLoginEntry) => {
+        // increment tie/win/loss counts
+        if (winType == "tie") {
+          let newTrackObj = existingLoginEntry[0].ties;
+          newTrackObj[regionName] += 1;
+          db.collection('login').updateOne({username: cookieName}, {$set:{ties:newTrackObj}});
+        } else if (winType == "win") {
+          let newTrackObj = existingLoginEntry[0].wins;
+          newTrackObj[regionName] += 1;
+          db.collection('login').updateOne({username: cookieName}, {$set:{wins:newTrackObj}});
+        } else if (winType == "loss") {
+          let newTrackObj = existingLoginEntry[0].losses;
+          newTrackObj[regionName] += 1;
+          db.collection('login').updateOne({username: cookieName}, {$set:{losses:newTrackObj}});
+        }
+
+        // the winner adjusts the user scores
+        if (!(opponentCookieName == "" || opponentCookieName == undefined)) { // rival also logged in
+          db.collection('login').find({username: opponentCookieName}).toArray().then((rivalEntry) => {
+            let myScorePercent = (0.1 * (100*existingLoginEntry[0].score))/100.0;
+            let theirScorePercent = (0.1 * (100*rivalEntry[0].score))/100.0;
+            // absorb 10% of opponent's score
+            if (winType == "win") {
+              db.collection('login').updateOne({username: cookieName}, {$inc:{score:theirScorePercent}});
+              db.collection('login').updateOne({username: opponentCookieName}, {$inc:{score:-myScorePercent}});
+            }
+
+            if (forceOpponentLossIncrease) { // used if opponent disconnects: P1 helps update the losses
+              let enemyTrackObj = rivalEntry[0].losses;
+              enemyTrackObj[regionName] += 1;
+              db.collection('login').updateOne({username: opponentCookieName}, {$set:{losses:enemyTrackObj}});
+            }
+          });
+        }
+      });
+    }
   });
 
-  socket.on("gameEnded_withMyWin", (regionName, p1Name, p1cardNames, p2Name, p2cardNames) => {
+  socket.on("gameEnded_withTie", (regionName, p1Name, p1cardNames, p2Name, p2cardNames) => {
+    // update hero stats
+    addWinsToRegionHeroboard(regionName, p1cardNames);
+    addWinsToRegionHeroboard(regionName, p2cardNames);
+
+    // log game results
+    let thisDate = new Date();
+    db.collection('gamestats').insertOne({isTie:true, time:thisDate, region:regionName, winName:p1Name, winTeam:p1cardNames, loseName:p2Name, loseTeam:p2cardNames});
+
+    let rivalId = rivalFinder[socket.id];
+    io.to(socket.id).emit("gameTie", cookieMap[rivalId]);
+    io.to(rivalId).emit("gameTie", cookieMap[socket.id]);
+    demolishRoomOf(socket.id);
+  });
+
+  socket.on("gameEnded_withMyWin", (regionName, p1Name, p1cardNames, p2Name, p2cardNames, wasSurrender) => {
+    // update hero stats
     addWinsToRegionHeroboard(regionName, p1cardNames);
     addLossesToRegionHeroboard(regionName, p2cardNames);
+
+    // log game results
     let thisDate = new Date();
     db.collection('gamestats').insertOne({isTie:false, time:thisDate, region:regionName, winName:p1Name, winTeam:p1cardNames, loseName:p2Name, loseTeam:p2cardNames});
+    
     let rivalId = rivalFinder[socket.id];
-    io.to(socket.id).emit("gameWin");
-    io.to(rivalId).emit("gameLoss");
+    io.to(socket.id).emit("gameWin", wasSurrender, cookieMap[rivalId]);
+    io.to(rivalId).emit("gameLoss", wasSurrender, cookieMap[socket.id]);
     demolishRoomOf(socket.id);
-    console.log("win", p1Name, p1cardNames, p2Name, p2cardNames);
   });
 
   socket.on("gameEnded_withEnemyWin", (regionName, p1Name, p1cardNames, p2Name, p2cardNames, wasSurrender) => {
+    // update hero stats
     addWinsToRegionHeroboard(regionName, p2cardNames);
     addLossesToRegionHeroboard(regionName, p1cardNames);
+
+    // log game results
     let thisDate = new Date();
     db.collection('gamestats').insertOne({isTie:false, time:thisDate, region:regionName, winName:p2Name, winTeam:p2cardNames, loseName:p1Name, loseTeam:p1cardNames});
     let rivalId = rivalFinder[socket.id];
-    io.to(socket.id).emit("gameLoss", wasSurrender);
-    io.to(rivalId).emit("gameWin", wasSurrender);
+    io.to(socket.id).emit("gameLoss", wasSurrender, cookieMap[rivalId]);
+    io.to(rivalId).emit("gameWin", wasSurrender, cookieMap[socket.id]);
     demolishRoomOf(socket.id);
-    console.log("loss", p1Name, p1cardNames, p2Name, p2cardNames);
   });
 
   socket.on("account_creation_request", (inviteCode, username, password) => {
@@ -275,7 +328,7 @@ io.on("connection", socket => {
             db.collection('invitationcodes').updateOne({code: inviteCode}, {$set:{valid:false}});
             const newInviteCode = (Math.random() + 1).toString(36).substring(4);
             db.collection('invitationcodes').insertOne({code:newInviteCode, valid:true});
-            db.collection('login').insertOne({username:username, password:saltedPassword, usedCode:inviteCode, newCode:newInviteCode, wins:{olympia:0,corinth:0,athens:0,sparta:0}, ties:{olympia:0,corinth:0,athens:0,sparta:0}, losses:{olympia:0,corinth:0,athens:0,sparta:0}});
+            db.collection('login').insertOne({username:username, password:saltedPassword, usedCode:inviteCode, newCode:newInviteCode, wins:{olympia:0,corinth:0,athens:0,sparta:0}, ties:{olympia:0,corinth:0,athens:0,sparta:0}, losses:{olympia:0,corinth:0,athens:0,sparta:0}, score:10.0});
             io.to(socket.id).emit("newAccount", newInviteCode);
           });
         });
@@ -294,8 +347,12 @@ io.on("connection", socket => {
   });
 
   socket.on("requestUserDataBox", (username) => {
-    db.collection('login').find({username: username}).toArray().then((userData) => {
-      io.to(socket.id).emit("getUserDataBox", userData[0].username, userData[0].newCode, userData[0].wins, userData[0].losses);
+    // calculate user ranking
+    db.collection('login').aggregate([{
+      $setWindowFields: { sortBy: { score: -1 }, output: { userRank: {$rank: {}} } }
+    }]).toArray().then((userData) => {
+      let relevantEntry = userData.find(element => element["username"] == username);
+      io.to(socket.id).emit("getUserDataBox", relevantEntry.username, relevantEntry.newCode, relevantEntry.wins, relevantEntry.losses, relevantEntry.score, relevantEntry.userRank);
     });
   });
 

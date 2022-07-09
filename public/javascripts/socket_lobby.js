@@ -134,26 +134,46 @@ document.addEventListener("DOMContentLoaded", () => {
     // if no cookie, make no change
   }
 
-  socket.on("getUserDataBox", (username, newCode, wins, losses) => {
+  socket.on("getUserDataBox", (username, newCode, wins, losses, playerScore, playerRanking) => {
     const thisLoginBox = document.getElementById("loginBox");
     thisLoginBox.innerHTML = "";
 
     let totalWins = Object.values(wins).reduce((a, b) => a+b);
     let totalLosses = Object.values(losses).reduce((a, b) => a+b);
+    var tier;
+    if (playerScore > 40) { tier = "grandmaster"; thisLoginBox.style.backgroundColor = "#a8aded"; }
+    else if (playerScore > 30) { tier = "gold"; thisLoginBox.style.backgroundColor = "#ffcb78"; }
+    else if (playerScore > 20) { tier = "silver"; thisLoginBox.style.backgroundColor = "#ededed"; }
+    else if (playerScore > 15) { tier = "bronze"; thisLoginBox.style.backgroundColor = "#ad8647"; }
+    else { tier = "iron"; thisLoginBox.style.backgroundColor = "darkgray"; }
 
-    console.log(wins, losses, totalWins);
+    const loginText = document.createElement("div"); loginText.id = "loginColWrap";
+    const leftColumn = document.createElement("div"); leftColumn.classList.add("column");
+    const rightColumn = document.createElement("div"); rightColumn.classList.add("column");
 
-    const loginText = document.createElement("div");
-    loginText.innerHTML = "you are logged in as <b>" + username + "</b><br/>";
-    loginText.innerHTML += "invitation code: " + newCode + "<br/>";
-    loginText.innerHTML += "total wins: " + totalWins + "<br/>"; // #TODO count only if against logged in players
-    loginText.innerHTML += "total losses: " + totalLosses + "<br/>"; // #TODO create a ranking score
+    leftColumn.innerHTML = "<b>" + username + ", " + tier + " tier</b><br/>";
+    leftColumn.innerHTML += "code: " + newCode + "<br/><br/>";
+
+    rightColumn.innerHTML = "score: " + playerScore.toFixed(2) + " <a href='/help.html#scoring' target='_blank'>[?]</a><br/>";
+    rightColumn.innerHTML += "your ranking: <b>#" + playerRanking + "</b><br/><br/>";
+
+    leftColumn.innerHTML += "total wins: " + totalWins + "<br/>"; // #TODO count only if against logged in players
+    leftColumn.innerHTML += "<i>olympia: " + wins["olympia"] + ", corinth: " + wins["corinth"] + "</i><br/>";
+    leftColumn.innerHTML += "<i>athens: " + wins["athens"] + ",  sparta: " + wins["sparta"] + "</i><br/><br/>";
+
+    rightColumn.innerHTML += "total losses: " + totalLosses + "<br/>";
+    rightColumn.innerHTML += "<i>olympia: " + losses["olympia"] + ",  corinth: " + losses["corinth"] + "</i><br/>";
+    rightColumn.innerHTML += "<i>athens: " + losses["athens"] + ",  sparta: " + losses["sparta"] + "</i><br/><br/>";
+
+    rightColumn.innerHTML += "games played: " + (totalWins + totalLosses) + "<br/><br/>";
 
     const logoutButton = document.createElement("input"); // create tile and add to row
     logoutButton.type = "button";
     logoutButton.value = "logout";
     logoutButton.onclick = logoutUser;
 
+    loginText.appendChild(leftColumn);
+    loginText.appendChild(rightColumn);
     thisLoginBox.appendChild(loginText);
     thisLoginBox.appendChild(logoutButton);
   });
@@ -167,6 +187,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function getUserLoggedIn() {
     let name = "user" + "=";
     let decodedCookie = decodeURIComponent(document.cookie);
+    console.log(decodedCookie, "DEBUG");
     let ca = decodedCookie.split(';');
     for(let i = 0; i <ca.length; i++) {
       let c = ca[i];

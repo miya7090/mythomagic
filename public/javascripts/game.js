@@ -2,7 +2,21 @@
 
 const MY_SOCKET = io(); // create new instance
 
-// #TODO get rid of figurine code
+function getUserLoggedIn() {
+  let name = "user" + "=";
+  let decodedCookie = decodeURIComponent(document.cookie);
+  let ca = decodedCookie.split(';');
+  for(let i = 0; i <ca.length; i++) {
+    let c = ca[i];
+    while (c.charAt(0) == ' ') {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
+}
 
 document.addEventListener("DOMContentLoaded", () => {
   /* ui bgm set up */
@@ -25,7 +39,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   /* socket stuff */
   MY_SOCKET.on('connect', ()=>{
-    MY_SOCKET.emit("registerPlayer", roomCode);
+    MY_SOCKET.emit("registerPlayer", roomCode, getUserLoggedIn());
   });
 
   MY_SOCKET.on('cannotJoinGame', ()=>{
@@ -56,7 +70,7 @@ document.addEventListener("DOMContentLoaded", () => {
           setTimeout(mySocketPromptDisconnected, WAIT_FOR_RECONNECT);
           AM_WAITING_FOR_OPPONENT_RECONNECT = true;
         } else {
-          MY_SOCKET.emit("gameEnded_withMyWin", REGION_NAME, SELF_NAME, getPCNames(PLAYER_GAMECARD_OBJS), OTHER_NAME, getPCNames(ENEMY_GAMECARD_OBJS));
+          MY_SOCKET.emit("gameEnded_withMyWin", REGION_NAME, SELF_NAME, getPCNames(PLAYER_GAMECARD_OBJS), OTHER_NAME, getPCNames(ENEMY_GAMECARD_OBJS), true);
         }
       }
     }
@@ -87,16 +101,18 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   MY_SOCKET.on('winThroughForfeit', (reason)=>{
-    alert(OTHER_NAME + " has forfeited the game");
+    alert(OTHER_NAME + " has forfeited the game ("+reason+")"); // used only in card picking
     window.location.href = "/";
   });
 
   MY_SOCKET.on('gameTie', ()=>{
+    MY_SOCKET.emit("updateUserStats", REGION_NAME, "tie", getUserLoggedIn());
     alert("game over: you have tied with "+OTHER_NAME);
     window.location.href = "/";
   });
 
-  MY_SOCKET.on('gameWin', (wasSurrender)=>{
+  MY_SOCKET.on('gameWin', (wasSurrender, opponentCookieName)=>{
+    MY_SOCKET.emit("updateUserStats", REGION_NAME, "win", getUserLoggedIn(), opponentCookieName, wasSurrender);
     if (wasSurrender == true) {
       alert("congrats! "+OTHER_NAME+" has surrendered");
     } else {
@@ -105,7 +121,8 @@ document.addEventListener("DOMContentLoaded", () => {
     window.location.href = "/";
   });
 
-  MY_SOCKET.on('gameLoss', (wasSurrender)=>{
+  MY_SOCKET.on('gameLoss', (wasSurrender, opponentCookieName)=>{
+    MY_SOCKET.emit("updateUserStats", REGION_NAME, "loss", getUserLoggedIn(), opponentCookieName);
     if (wasSurrender == true) {
       alert("you surrendered the game to "+OTHER_NAME);
     } else {
