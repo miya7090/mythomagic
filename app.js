@@ -116,12 +116,16 @@ io.on("connection", socket => {
   });
 
   /* ~~~~~ lobby socket operations ~~~~~ */
-  socket.on("lobbyJoin", (nickname, region) => {
-    kickOutSocketFromLastRoom(socket.id);
-    socket.join(rk(region));
-    regionUsers[rk(region)][socket.id] = nickname;
-    roomBook[socket.id] = rk(region);
-    io.to(rk(region)).emit("lobbyJoined", nickname, region, regionUsers[rk(region)]);
+  socket.on("lobbyJoin", (nickname, region, cookieName) => {
+    db.collection('login').find({username: nickname}).toArray().then((existingLoginEntry) => {
+      if (existingLoginEntry.length > 0 && cookieName != nickname) { io.to(socket.id).emit("nicknameFailure"); return; }
+
+      kickOutSocketFromLastRoom(socket.id);
+      socket.join(rk(region));
+      regionUsers[rk(region)][socket.id] = nickname;
+      roomBook[socket.id] = rk(region);
+      io.to(rk(region)).emit("lobbyJoined", nickname, region, regionUsers[rk(region)]);
+    });
   });
 
   socket.on("lobbyLeave", () => {

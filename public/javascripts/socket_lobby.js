@@ -92,7 +92,7 @@ document.addEventListener("DOMContentLoaded", () => {
       nicknameDiv.select();
     } else {
       const regionDiv = document.getElementById("region");
-      socket.emit("lobbyJoin", nicknameDiv.value, regionDiv.value);
+      socket.emit("lobbyJoin", nicknameDiv.value, regionDiv.value, getUserLoggedIn());
       regionNotesText.textContent = "joining "+regionDiv.value+" lobby...";
       nicknameDiv.disabled = true;
       lLeaveButton.hidden = false;
@@ -103,8 +103,15 @@ document.addEventListener("DOMContentLoaded", () => {
     socket.emit("lobbyLeave");
     clearRegionList();
     regionNotesText.textContent = "";
-    nicknameDiv.disabled = false;
+    if (getUserLoggedIn() == "" || getUserLoggedIn() == undefined){
+      nicknameDiv.disabled = false;
+    }
     lLeaveButton.hidden = true;
+  });
+
+  socket.on("nicknameFailure", () => {
+    regionNotesText.textContent = "this nickname has been reserved";
+    nicknameDiv.disabled = false;
   });
 
   socket.on("newAccount", (inviteCode) => {
@@ -135,18 +142,23 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   socket.on("getUserDataBox", (username, newCode, wins, losses, playerScore, playerRanking) => {
+    // also freeze the nickname box
+    nicknameDiv.value = username;
+    nicknameDiv.disabled = true;
+
+    /////
     const thisLoginBox = document.getElementById("loginBox");
     thisLoginBox.innerHTML = "";
 
     let totalWins = Object.values(wins).reduce((a, b) => a+b);
     let totalLosses = Object.values(losses).reduce((a, b) => a+b);
     var tier;
-    if (playerScore > 40) { tier = "grandmaster"; thisLoginBox.style.backgroundColor = "#a8aded"; }
-    else if (playerScore > 30) { tier = "gold"; thisLoginBox.style.backgroundColor = "#ffcb78"; }
-    else if (playerScore > 20) { tier = "silver"; thisLoginBox.style.backgroundColor = "#ededed"; }
-    else if (playerScore > 15) { tier = "bronze"; thisLoginBox.style.backgroundColor = "#ad8647"; }
-    else { tier = "iron"; thisLoginBox.style.backgroundColor = "darkgray"; }
-
+    if (playerScore > 40) { tier = "grandmaster"; thisLoginBox.style.backgroundColor = "rgba(168, 173, 237, 0.5)"; }
+    else if (playerScore > 30) { tier = "gold"; thisLoginBox.style.backgroundColor = "rgba(255, 203, 120, 0.5)"; }
+    else if (playerScore > 20) { tier = "silver"; thisLoginBox.style.backgroundColor = "rgba(237, 237, 237, 0.5)"; }
+    else if (playerScore > 15) { tier = "bronze"; thisLoginBox.style.backgroundColor = "rgba(173, 134, 71, 0.5)"; }
+    else { tier = "iron"; thisLoginBox.style.backgroundColor = "rgba(124, 124, 124, 0.5)"; }
+    
     const loginText = document.createElement("div"); loginText.id = "loginColWrap";
     const leftColumn = document.createElement("div"); leftColumn.classList.add("column");
     const rightColumn = document.createElement("div"); rightColumn.classList.add("column");
@@ -179,6 +191,9 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   function logoutUser(){
+    nicknameDiv.value = "";
+    nicknameDiv.disabled = false;
+
     document.cookie.split(";").forEach(function(c) { document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); });
     const thisLoginBox = document.getElementById("loginBox");
     thisLoginBox.innerHTML = "logged out successfully!";
@@ -187,7 +202,6 @@ document.addEventListener("DOMContentLoaded", () => {
   function getUserLoggedIn() {
     let name = "user" + "=";
     let decodedCookie = decodeURIComponent(document.cookie);
-    console.log(decodedCookie, "DEBUG");
     let ca = decodedCookie.split(';');
     for(let i = 0; i <ca.length; i++) {
       let c = ca[i];
