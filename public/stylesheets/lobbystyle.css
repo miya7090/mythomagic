@@ -30,6 +30,8 @@ h2 {
     background-color: #dcdcdc;
     padding: 10px;
     text-align: right;
+    border-left: 1px #686868 solid;
+    border-bottom: 1px #686868 solid;
 }
 
 #inviteCode {

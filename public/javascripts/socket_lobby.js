@@ -116,7 +116,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   socket.on("newAccount", (inviteCode) => {
     //navigator.clipboard.writeText(inviteCode);
-    alert("your account has been created! you can invite one friend with " + inviteCode);
+    alert("your account has been created! you can invite up to two friends with " + inviteCode);
     socket.emit("login_request", usernameDiv.value, passwordDiv.value);
   });
 
@@ -141,7 +141,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // if no cookie, make no change
   }
 
-  socket.on("getUserDataBox", (username, newCode, wins, losses, playerScore, playerRanking) => {
+  socket.on("getUserDataBox", (username, newCode, codeUses, wins, losses, playerScore, playerRanking) => {
     // also freeze the nickname box
     nicknameDiv.value = username;
     nicknameDiv.disabled = true;
@@ -164,8 +164,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const rightColumn = document.createElement("div"); rightColumn.classList.add("column");
 
     leftColumn.innerHTML = "<b>" + username + ", " + tier + " tier</b><br/>";
-    leftColumn.innerHTML += "code: " + newCode + "<br/><br/>";
-
+    
+    if (codeUses > 0){
+      leftColumn.innerHTML += "code: " + newCode + " (" + codeUses + "/2)<br/><br/>";
+    } else {
+      leftColumn.innerHTML += "<strike>code: " + newCode + "</strike><br/><br/>";
+    }
+    
     rightColumn.innerHTML = "score: " + playerScore.toFixed(2) + " <a href='/help.html#scoring' target='_blank'>[?]</a><br/>";
     rightColumn.innerHTML += "your ranking: <b>#" + playerRanking + "</b><br/><br/>";
 

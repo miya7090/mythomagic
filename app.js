@@ -321,7 +321,7 @@ io.on("connection", socket => {
     db.collection('invitationcodes').find({code: inviteCode}).toArray().then((existingInviteCodeEntry) => {
       console.log(existingInviteCodeEntry);
       if (existingInviteCodeEntry.length != 1) { io.to(socket.id).emit("accountMessage", "invalid invitation code"); return; }
-      if (existingInviteCodeEntry[0].valid != true) { io.to(socket.id).emit("accountMessage", "this invitation code has already been used"); return; }
+      if (existingInviteCodeEntry[0].uses == 0) { io.to(socket.id).emit("accountMessage", "this invitation code has already been used"); return; }
   
       db.collection('login').find({username: username}).toArray().then((existingLoginEntry) => {
         if (existingLoginEntry.length > 0) { io.to(socket.id).emit("accountMessage", "this username already exists"); return; }
@@ -329,9 +329,9 @@ io.on("connection", socket => {
         // all ok
         bcrypt.genSalt(10).then((salt) => {
           bcrypt.hash(password, salt).then((saltedPassword) => {
-            db.collection('invitationcodes').updateOne({code: inviteCode}, {$set:{valid:false}});
+            db.collection('invitationcodes').updateOne({code: inviteCode}, {$inc:{uses:-1}});
             const newInviteCode = (Math.random() + 1).toString(36).substring(4);
-            db.collection('invitationcodes').insertOne({code:newInviteCode, valid:true});
+            db.collection('invitationcodes').insertOne({code:newInviteCode, uses:2});
             db.collection('login').insertOne({username:username, password:saltedPassword, usedCode:inviteCode, newCode:newInviteCode, wins:{olympia:0,corinth:0,athens:0,sparta:0}, ties:{olympia:0,corinth:0,athens:0,sparta:0}, losses:{olympia:0,corinth:0,athens:0,sparta:0}, score:10.0});
             io.to(socket.id).emit("newAccount", newInviteCode);
           });
@@ -356,7 +356,11 @@ io.on("connection", socket => {
       $setWindowFields: { sortBy: { score: -1 }, output: { userRank: {$rank: {}} } }
     }]).toArray().then((userData) => {
       let relevantEntry = userData.find(element => element["username"] == username);
-      io.to(socket.id).emit("getUserDataBox", relevantEntry.username, relevantEntry.newCode, relevantEntry.wins, relevantEntry.losses, relevantEntry.score, relevantEntry.userRank);
+      let retrievedCode = relevantEntry.newCode;
+      db.collection('invitationcodes').find({code: retrievedCode}).toArray().then((existingInviteCodeEntry) => {
+        let retrievedUses = existingInviteCodeEntry[0].uses;
+        io.to(socket.id).emit("getUserDataBox", relevantEntry.username, retrievedCode, retrievedUses, relevantEntry.wins, relevantEntry.losses, relevantEntry.score, relevantEntry.userRank);
+      });
     });
   });
 

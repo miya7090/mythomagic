@@ -10,7 +10,6 @@ head
   script(src='../javascripts/socket_lobby.js' charset='utf8')
   link(rel="icon" href="https://raw.githubusercontent.com/miya7090/mythomagic/main/public/images/favicon/favicon.ico" type="image/x-icon")
 h2 mythomagic
-br
 #loginBox
   label username: 
   input#username(type='text' maxlength='16')
@@ -26,19 +25,17 @@ br
   input#inviteCode(type='text' maxlength='30')
   br
   input#createAccountButton(type='button' value='create account')
+a(href="../help.html" target="_blank") click here for rules & how to play
 br
-//"account_creation_request", (inviteCode, username, password) => {
-//socket.on("login_request",username, password
-#playersInRegion
+br
 #gameStart
   form#gameform(method='POST' action='/game')
     label(for='nickname') enter nickname: 
     input#nickname(type='text' name='nickname' maxlength='10' onkeydown=" if(event.keyCode==13){ $('#lobbyJoinButton').focus(); event.preventDefault(); }")
-    a(href="../help.html" target="_blank") (how to play?)
     br
     br
     input#cp1(type='checkbox' name='cp1' checked='' disabled='')
-    label(for='cp1') &nbsp;default card pack <a href="/preview" target="_blank">(preview card details)</a>
+    label(for='cp1') &nbsp;default card pack <a href="/preview" target="_blank">(preview details)</a>
     br
     br
     div#regionselect
