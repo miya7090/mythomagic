@@ -116,7 +116,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   socket.on("newAccount", (inviteCode) => {
     //navigator.clipboard.writeText(inviteCode);
-    alert("your account has been created! you can invite up to two friends with " + inviteCode);
+    alert("your account has been created! you can invite up to five friends with " + inviteCode);
     socket.emit("login_request", usernameDiv.value, passwordDiv.value);
   });
 
@@ -166,7 +166,7 @@ document.addEventListener("DOMContentLoaded", () => {
     leftColumn.innerHTML = "<b>" + username + ", " + tier + " tier</b><br/>";
     
     if (codeUses > 0){
-      leftColumn.innerHTML += "code: " + newCode + " (" + codeUses + "/2)<br/><br/>";
+      leftColumn.innerHTML += "code: " + newCode + " (" + codeUses + "/5)<br/><br/>";
     } else {
       leftColumn.innerHTML += "<strike>code: " + newCode + "</strike><br/><br/>";
     }
