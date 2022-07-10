@@ -275,3 +275,7 @@ body {
 #abilityTitle[p1=false] { color: var(--p2ActionTextColor); }
 #ultTitle[p1=false] { color: var(--p2ActionTextColor); }
 #passiveTitle[p1=false] { color: var(--p2PassiveTextColor); }
+
+.hoverHintSkillText {
+  color: rgb(118, 118, 118);
+}
