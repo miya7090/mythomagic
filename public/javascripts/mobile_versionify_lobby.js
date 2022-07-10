@@ -2,7 +2,11 @@ document.addEventListener("DOMContentLoaded", () => {
   resizer();
 });
 
-if( /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+  resizer(true);
+}
+
+if('ontouchstart' in document.documentElement || navigator.userAgent.match(/Mobi/)) {
   resizer(true);
 }
 
