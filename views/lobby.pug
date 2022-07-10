@@ -28,6 +28,9 @@ h1 mythomagic
   input#inviteCode(type='text' maxlength='30')
   br
   input#createAccountButton(type='button' value='create account')
+a(href="/preview" target="_blank") view all card details
+br
+br
 a(href="../help.html" target="_blank") click here for rules & how to play
 br
 br
@@ -35,10 +38,6 @@ br
   form#gameform(method='POST' action='/game')
     label(for='nickname') enter nickname: 
     input#nickname(type='text' name='nickname' maxlength='10' onkeydown=" if(event.keyCode==13){ $('#lobbyJoinButton').focus(); event.preventDefault(); }")
-    br
-    br
-    input#cp1(type='checkbox' name='cp1' checked='' disabled='')
-    label(for='cp1') &nbsp;default card pack <a href="/preview" target="_blank">(preview details)</a>
     br
     br
     div#regionselect

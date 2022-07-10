@@ -162,12 +162,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let totalWins = Object.values(wins).reduce((a, b) => a+b);
     let totalLosses = Object.values(losses).reduce((a, b) => a+b);
-    var tier;
-    if (playerScore > 40) { tier = "grandmaster"; thisLoginBox.style.backgroundColor = "rgba(168, 173, 237, 0.5)"; }
-    else if (playerScore > 30) { tier = "gold"; thisLoginBox.style.backgroundColor = "rgba(255, 203, 120, 0.5)"; }
-    else if (playerScore > 20) { tier = "silver"; thisLoginBox.style.backgroundColor = "rgba(237, 237, 237, 0.5)"; }
-    else if (playerScore > 15) { tier = "bronze"; thisLoginBox.style.backgroundColor = "rgba(173, 134, 71, 0.5)"; }
-    else { tier = "iron"; thisLoginBox.style.backgroundColor = "rgba(124, 124, 124, 0.5)"; }
+    var tier = tierOf(playerScore);
+    
+    thisLoginBox.style.backgroundColor = "rgba(84, 84, 84, 0.4)";
     
     const loginText = document.createElement("div"); loginText.id = "loginColWrap";
     const leftColumn = document.createElement("div"); leftColumn.classList.add("column");
@@ -176,9 +173,9 @@ document.addEventListener("DOMContentLoaded", () => {
     leftColumn.innerHTML = "<b>" + username + ", " + tier + " tier</b><br/>";
     
     if (codeUses > 0){
-      leftColumn.innerHTML += "code: " + newCode + " (" + codeUses + "/5)<br/><br/>";
+      leftColumn.innerHTML += "invite code: " + newCode + " (" + codeUses + "/5)<br/><br/>";
     } else {
-      leftColumn.innerHTML += "<strike>code: " + newCode + "</strike><br/><br/>";
+      leftColumn.innerHTML += "<strike>invite code: " + newCode + "</strike><br/><br/>";
     }
     
     rightColumn.innerHTML = "score: " + playerScore.toFixed(2) + " <a href='/help.html#scoring' target='_blank'>[?]</a><br/>";
@@ -278,25 +275,20 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  socket.on("lobbyJoined", (nickname, region, regionUsers)=>{
+  socket.on("lobbyJoined", (nickname, region, regionUsers, lobbyCookieBook)=>{
     console.log(nickname, "has joined region", region);
-    populateRegionList(region, regionUsers);
+    populateRegionList(region, regionUsers, lobbyCookieBook);
   });
 
-  socket.on("lobbyLeft", (socketId, nickname, region, regionUsers)=>{
+  socket.on("lobbyLeft", (socketId, nickname, region, regionUsers, lobbyCookieBook)=>{
     console.log(nickname, "has left region", region);
     if (socketId == socket.id){
-      clearRegionList(regionUsers);
+      clearRegionList();
     } else {
-      populateRegionList(region, regionUsers);
+      populateRegionList(region, regionUsers, lobbyCookieBook);
     }
   });
-
-  socket.on("lobbyLeft2", (nicknameA, nicknameB, region, regionUsers)=>{
-    console.log(nicknameA,"and",nicknameB,"have begun a game");
-    populateRegionList(region, regionUsers);
-  });
-
+  
   socket.on("redirectToGame", (selfNickname, opponentNickname, roomCode, lobbyCode)=>{
     window.location.href = "/game?room="+roomCode+"&lobby="+lobbyCode+"&self="+selfNickname+"&other="+opponentNickname;
   })
@@ -332,7 +324,16 @@ function copySharelinkText(){
   document.getElementById('copyPrompt').innerText = "[copied!]";
 }
 
-function populateRegionList(thisRegion, regionUsers){
+function tierOf(score){
+  if (score > 40) { return "grandmaster"; }
+  if (score > 30) { return "gold"; }
+  if (score > 20) { return "silver"; }
+  if (score > 15) { return "bronze"; }
+  if (score <= 15) { return "iron"; }
+  return undefined;
+}
+
+function populateRegionList(thisRegion, regionUsers, cookieBook){
   const regionNotesText = document.getElementById("queueNotes");
   if (Object.keys(regionUsers).length == 1){
     regionNotesText.innerHTML = "nobody else here... invite your friends with a <a href ='https://mythomagic.herokuapp.com/lobby?join_region=" + thisRegion +" ' id='sharelink' style='color:white;'>link </a><a href='#' id='copyPrompt' onclick='copySharelinkText()'>[copy]</span>";
@@ -342,20 +343,27 @@ function populateRegionList(thisRegion, regionUsers){
   const myNickname = document.getElementById("nickname").value;
   const lobbiersInRegion = document.getElementById("lobbiersinregion");
   lobbiersInRegion.innerHTML = ""; // clear div
-  Object.keys(regionUsers).forEach(socketid => {
+  Object.keys(regionUsers).forEach(indivSocketid => {
     const rUser = document.createElement("button");
-    const nickname = regionUsers[socketid];
+    const nickname = regionUsers[indivSocketid];
     rUser.classList.add("lobbier");
     rUser.textContent = nickname;
-    rUser.name = nickname;
-    if (socketid == socket.id) {
+
+    let rUserTier = tierOf(cookieBook[indivSocketid]);
+
+    var tierAsterisk = "";
+    if (rUserTier != undefined) { tierAsterisk = "*"; }
+
+    rUser.innerHTML = nickname + "<span class='"+ rUserTier +"'>" + tierAsterisk + "</span>";
+
+    if (indivSocketid == socket.id) {
       rUser.disabled = true;
     } else {
       rUser.addEventListener("click", (evt)=>{
         if (PENDING_INVITE_RESPONSE == false) {
           PENDING_INVITE_RESPONSE = true;
           regionNotesText.textContent = "invitation sent...";
-          socket.emit("gameInvite", myNickname, socketid);
+          socket.emit("gameInvite", myNickname, indivSocketid);
         } else {
           console.error("you are still waiting for an invitation response");
         }

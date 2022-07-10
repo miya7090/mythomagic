@@ -24,6 +24,7 @@ var roomBook = {};
 // lobby tracker, REGIONS ONLY {region: {socketid: nickname}}
 var ALL_REGION_NAMES = ["olympia", "corinth", "athens", "sparta"];
 var regionUsers = {"olympia=====": {}, "corinth=====": {}, "athens=====": {}, "sparta=====": {}};
+var lobbyCookieBook = {}; // {socketid: username}
 
 // player tracker, GAMES ONLY
 var rivalFinder = {}; // {socketid: socketid}
@@ -60,7 +61,7 @@ function kickOutSocketFromLastRoom(socketId) { // returns the room code that was
     if (isLobbyId(thisRoomCode)) { // if it's in a lobby room
       let nickname = regionUsers[thisRoomCode][socketId];
       delete regionUsers[thisRoomCode][socketId];
-      io.to(thisRoomCode).emit("lobbyLeft", socketId, nickname, nk(thisRoomCode), regionUsers[thisRoomCode]);
+      io.to(thisRoomCode).emit("lobbyLeft", socketId, nickname, nk(thisRoomCode), regionUsers[thisRoomCode], lobbyCookieBook);
 
     } else { // if it's in a game room
       delete rivalFinder[socketId];
@@ -118,17 +119,24 @@ io.on("connection", socket => {
   /* ~~~~~ lobby socket operations ~~~~~ */
   socket.on("lobbyJoin", (nickname, region, cookieName) => {
     db.collection('login').find({username: nickname}).toArray().then((existingLoginEntry) => {
-      if (existingLoginEntry.length > 0 && cookieName != nickname) { io.to(socket.id).emit("nicknameFailure"); return; }
+      if (existingLoginEntry.length > 0 && cookieName != nickname) { io.to(socket.id).emit("nicknameFailure"); return; } // nickname is reserved
 
+      // if logged in, update cookie book
+      if (cookieName == nickname) { lobbyCookieBook[socket.id] = existingLoginEntry[0].score; }
+
+      // otherwise, okay
       kickOutSocketFromLastRoom(socket.id);
       socket.join(rk(region));
       regionUsers[rk(region)][socket.id] = nickname;
       roomBook[socket.id] = rk(region);
-      io.to(rk(region)).emit("lobbyJoined", nickname, region, regionUsers[rk(region)]);
+      io.to(rk(region)).emit("lobbyJoined", nickname, region, regionUsers[rk(region)], lobbyCookieBook);
     });
   });
 
   socket.on("lobbyLeave", () => {
+    if (lobbyCookieBook[socket.id] != undefined) {
+      delete lobbyCookieBook[socket.id];
+    }
     kickOutSocketFromLastRoom(socket.id);
   });
 
@@ -319,7 +327,6 @@ io.on("connection", socket => {
 
   socket.on("account_creation_request", (inviteCode, username, password, email) => {
     db.collection('invitationcodes').find({code: inviteCode}).toArray().then((existingInviteCodeEntry) => {
-      console.log(existingInviteCodeEntry);
       if (existingInviteCodeEntry.length != 1) { io.to(socket.id).emit("accountMessage", "invalid invitation code"); return; }
       if (existingInviteCodeEntry[0].uses == 0) { io.to(socket.id).emit("accountMessage", "this invitation code has already been used"); return; }
   

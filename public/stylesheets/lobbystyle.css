@@ -30,7 +30,7 @@ h1,h2 {
 
 .column {
     flex: 50%;
-    width: 160px;
+    width: 170px;
     margin-left: 5px;
     margin-right: 5px;
 }
@@ -69,7 +69,7 @@ select option{
 }
 
 input {
-    margin-left: 8px;
+    margin-left: 3px;
     padding-left: 12px;
     padding-right: 12px;
 }
@@ -91,10 +91,6 @@ button {
     color: white;
 }
 
-button:disabled {
-    color: rgb(91, 91, 91);
-}
-
 #betaVersion {
     margin: 0px;
     font-weight: bold;
@@ -112,6 +108,35 @@ p {
 #regionselect {
     display: flex;
     align-items: center;
+}
+
+.iron {
+    color: rgb(131, 131, 131);
+}
+
+.lobbier.bronze {
+    color: rgb(177, 139, 26);
+}
+
+.silver {
+    color: rgb(255, 255, 255);
+}
+
+.gold {
+    color: rgb(232, 195, 83);
+}
+
+.grandmaster {
+    color: rgb(141, 148, 241);
+}
+
+.lobbier:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+.lobbier:disabled {
+    color: rgb(91, 91, 91);
+    background-color: rgba(93, 93, 93, 0.3);
 }
 
 #queueNotes {
