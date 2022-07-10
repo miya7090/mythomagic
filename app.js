@@ -263,7 +263,7 @@ io.on("connection", socket => {
         if (!(opponentCookieName == "" || opponentCookieName == undefined)) { // rival also logged in
           db.collection('login').find({username: opponentCookieName}).toArray().then((rivalEntry) => {
             let myScorePercent = (0.1 * (100*existingLoginEntry[0].score))/100.0;
-            let theirScorePercent = (0.1 * (100*rivalEntry[0].score))/100.0;
+            let theirScorePercent = ( (0.1 * (100*rivalEntry[0].score))/100.0 ) + 1.00;
             // absorb 10% of opponent's score
             if (winType == "win") {
               db.collection('login').updateOne({username: cookieName}, {$inc:{score:theirScorePercent}});
