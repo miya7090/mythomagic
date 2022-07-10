@@ -55,6 +55,7 @@ h1,h2 {
 }
 
 input,select {
+    -webkit-appearance: none;
     background-color: rgba(80, 80, 80, 0.5);
     border: none;
     color: white;
@@ -86,6 +87,7 @@ input.darkInputBox {
 }
 
 button {
+    -webkit-appearance: none;
     font-family: "regularFont";
     background-color: rgba(80, 80, 80, 0.5);
     color: white;

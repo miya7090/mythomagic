@@ -6,7 +6,7 @@ if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(naviga
   resizer(true);
 }
 
-if('ontouchstart' in document.documentElement || navigator.userAgent.match(/Mobi/)) {
+if (/Mobi/.test(navigator.userAgent)) {
   resizer(true);
 }
 

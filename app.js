@@ -373,6 +373,7 @@ io.on("connection", socket => {
   });
 
   socket.on("requestUserDataBox", (username) => {
+    if (!MONGO_CONNECTED) { return; }
     // calculate user ranking
     db.collection('login').aggregate([{
       $setWindowFields: { sortBy: { score: -1 }, output: { userRank: {$rank: {}} } }
