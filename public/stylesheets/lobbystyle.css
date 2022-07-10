@@ -3,14 +3,25 @@
     src: url("../fonts/DalekPinpointBold.ttf");
 }
 
+/* GENERAL RULES */
+
 body {
-    font-family: 'Times New Roman', Times, serif;
-    font-size: medium;
+    margin: 20px;
+
+    background: url("../images/forestbg.jpg") no-repeat center center fixed;
+    background-size: cover;
+    background-color: rgba(0,0,0,0.2);
+    background-blend-mode: darken;
+    font-family: Georgia;
+
+    font-size: 14px;
+    color: rgb(255,255,255);
 }
 
-h2 {
+h1,h2 {
     font-family: "regularFont";
     margin-left: 0px;
+    margin-bottom: 10px;
 }
 
 #loginColWrap {
@@ -19,6 +30,7 @@ h2 {
 
 .column {
     flex: 50%;
+    width: 160px;
     margin-left: 5px;
     margin-right: 5px;
 }
@@ -27,11 +39,11 @@ h2 {
     position: absolute;
     top: 0px;
     right: 0px;
-    background-color: #dcdcdc;
+    background-color: rgba(255,255,255,0.1);
     padding: 10px;
     text-align: right;
-    border-left: 1px #686868 solid;
-    border-bottom: 1px #686868 solid;
+    border-left: 3px rgba(152, 152, 152, 0.8) solid;
+    border-bottom: 2px rgba(195, 195, 195, 0.877) solid;
 }
 
 #pwDiv {
@@ -42,16 +54,51 @@ h2 {
     width: 100px;
 }
 
+input,select {
+    background-color: rgba(80, 80, 80, 0.5);
+    border: none;
+    color: white;
+    margin: 2px;
+    padding: 6px;
+    font-family: Georgia;
+}
+
+select option{
+    background-color: #3a3a3a;
+    border: none;
+}
+
+input {
+    margin-left: 8px;
+    padding-left: 12px;
+    padding-right: 12px;
+}
+
+input:disabled {
+    background-color: rgba(46, 46, 46, 0.5);
+    color: rgba(110, 110, 110, 0.692);
+}
+
 input.darkInputBox {
-    background-color : #d6d6d6; 
+    background-color : rgba(111, 111, 111, 0.5); 
     border: none;
     margin: 3px;
+}
+
+button {
+    font-family: "regularFont";
+    background-color: rgba(80, 80, 80, 0.5);
+    color: white;
+}
+
+button:disabled {
+    color: rgb(91, 91, 91);
 }
 
 #betaVersion {
     margin: 0px;
     font-weight: bold;
-    color: black;
+    color: rgb(255, 230, 148);
 }
 
 p {
@@ -69,7 +116,7 @@ p {
 
 #queueNotes {
     margin-left: 5px;
-    color: blueviolet;
+    color: rgb(183, 179, 251);
 }
 
 #credsFixed {
@@ -78,43 +125,29 @@ p {
     line-height: 17px;
 }
 
-#leaderboard table {
-    border-collapse: collapse;
-}
-  
 #leaderboard td, th {
-    border: 1px solid #959595;
+    border-left: 2px solid #7a7a7a;
+    border-top: 1px solid #bebebe;
+    background-color: rgba(231, 231, 231, 0.1);
     text-align: left;
     padding: 5px;
 }
 
 #leaderboard td:hover {
-    background-color: #e9e9c9;
-}
-
-#leaderboard .highlightTopTR {
-    background-color: #fff7c9;
-}
-
-#leaderboard .highlightTopTR :hover {
-    background-color: #ffec82;
+    background-color: #e7e7e754;
 }
 
 #leaderboard .highlightTR {
-    background-color: #d2d2d2;
-    color: #767676;
+    background-color: #d8d8d84a;
+    color: #878787;
 }
 
 #leaderboard .highlightTR :hover {
-    background-color: #d8d1b9;
-}
-
-#topTopTR {
-    background-color: #ffef45;
+    background-color: #dcdcdc3b;
 }
 
 .lightGray {
-    background-color: #efefef;
+    background-color: #efefef32;
 }
 
 #credits {
@@ -129,6 +162,6 @@ p {
 }
 
 a{
-    color: dodgerblue;
+    color: rgb(237, 197, 133);
     text-decoration: none;
 }

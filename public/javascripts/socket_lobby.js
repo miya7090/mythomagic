@@ -197,6 +197,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const logoutButton = document.createElement("input");
     logoutButton.type = "button";
     logoutButton.value = "logout";
+    logoutButton.classList.add("lightGray");
     logoutButton.onclick = logoutUser;
 
     const emailDiv = document.createElement("div");
@@ -223,6 +224,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const changePWButton = document.createElement("input");
     changePWButton.type = "button";
     changePWButton.value = "change password";
+    changePWButton.classList.add("lightGray");
     changePWButton.onclick = changePassword;
     pwDiv.appendChild(changePWButton);
 
@@ -326,14 +328,14 @@ function clearRegionList(){
 
 function copySharelinkText(){
   var copyText = document.getElementById("sharelink");
-  navigator.clipboard.writeText(copyText.innerText);
-  document.getElementById('copyPrompt').innerText = "[copied link!]";
+  navigator.clipboard.writeText(copyText.href);
+  document.getElementById('copyPrompt').innerText = "[copied!]";
 }
 
 function populateRegionList(thisRegion, regionUsers){
   const regionNotesText = document.getElementById("queueNotes");
   if (Object.keys(regionUsers).length == 1){
-    regionNotesText.innerHTML = "nobody else here... invite your friends with <span id='sharelink' style='color:gray;'>https://mythomagic.herokuapp.com/lobby?join_region=" + thisRegion + "</span> <a href='#' id='copyPrompt' onclick='copySharelinkText()'>[copy link]</span>";
+    regionNotesText.innerHTML = "nobody else here... invite your friends with a <a href ='https://mythomagic.herokuapp.com/lobby?join_region=" + thisRegion +" ' id='sharelink' style='color:white;'>link </a><a href='#' id='copyPrompt' onclick='copySharelinkText()'>[copy]</span>";
   } else {
     regionNotesText.textContent = "";
   }
