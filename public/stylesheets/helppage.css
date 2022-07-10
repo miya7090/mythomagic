@@ -3,15 +3,15 @@ h2 {
 }
 
 .helpSlide {
-    border: 2px white dashed;
     margin: 10px;
     margin-right: 30px;
+    padding-bottom: 20px;
 }
 
 .helpSlide h3 {
     margin: 10px;
-    padding: 5px;
-    background-color: rgb(233, 233, 233);
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.5);
 }
 
 .helpSlide p {
