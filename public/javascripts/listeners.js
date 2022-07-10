@@ -224,7 +224,7 @@ function mouseClickTile(evt) {
       resetToActiveMode(); return;
     }
     if (thisTile.classList.contains("offgrid")) {
-      if (GAME_MODE_MEMORYTARGET.cardName == "Nyx") { // passive_nyx
+      if (hasAllyCard("Nyx")) { // passive_nyx
         broadcastMsg("passive", true, "Nyx", undefined);
       } else {
         let errorMsg = GAME_MODE_MEMORYTARGET.cardName + " cannot use off-grid tiles";

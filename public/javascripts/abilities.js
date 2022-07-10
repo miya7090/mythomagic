@@ -62,7 +62,7 @@ function ability_nyx(attacker, target) {
 function ult_eros(attacker, target) {
     broadcastMsg("ultimate", true, "Eros", undefined);
     ENEMY_GAMECARD_OBJS.forEach(pc => {
-        if (pc.statuses["charmed"] == 1) {
+        if (pc.statuses["charmed"] != 0) {
             pc.current_mana = 0;
             pc.takeDamage(200);
         }
@@ -218,6 +218,7 @@ function ability_orpheus(attacker, target) {
 function ult_icarus(attacker, target) {
     broadcastMsg("ultimate", true, "Icarus", undefined);
     attacker.current_movement += 3;
+    attacker.addToCMPT(50);
     attacker.takeDamage(attacker.current_health / 2);
 }
 
@@ -303,7 +304,7 @@ function ult_kronos(attacker, target) {
     //Deals 200 true damage to all Stunned enemies, and grants additional turn
     broadcastMsg("ultimate", true, "Kronos", "enemies");
     ENEMY_GAMECARD_OBJS.forEach(pc => {
-        if (pc.statuses["stunned"] == 1) {
+        if (pc.statuses["stunned"] != 0) {
             pc.takeDamage(200);
         }
     });
@@ -343,8 +344,8 @@ function ult_medea(attacker, target) {
     if (target.cardName != "Medea"){
         attacker.fullHeal();
         target.takeDamage(target.current_health);
-        attacker.current_attack += target.current_attack;
-        attacker.current_movement += target.current_movement;
+        attacker.current_attack += target.getCurrentAttack();
+        attacker.current_movement += target.getCurrentMovement();
     } else {
         console.error("medea cannot apply ult to self");
     }
@@ -387,10 +388,10 @@ function ability_perseus(attacker, target) {
 }
 
 function ult_perseus(attacker, target) {
-    broadcastMsg("ultimate", true, "Perseus", undefined);
-    attacker.current_attack += Math.round(0.2 * attacker.current_attack);
-    attacker.current_defense += Math.round(0.2 * attacker.current_defense);
-    attacker.current_movement += 1;
+    broadcastMsg("ultimate", true, "Perseus", target.cardName);
+    target.current_attack += Math.round(0.2 * target.current_attack);
+    target.current_defense += Math.round(0.2 * target.current_defense);
+    target.current_movement += 1;
 }
 
 function ability_hera(attacker, target) {

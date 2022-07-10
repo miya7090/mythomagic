@@ -170,7 +170,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const leftColumn = document.createElement("div"); leftColumn.classList.add("column");
     const rightColumn = document.createElement("div"); rightColumn.classList.add("column");
 
-    leftColumn.innerHTML = "<b>" + username + ", " + tier + " tier</b><br/>";
+    leftColumn.innerHTML = "<b>" + username + "</b>, " + tier + " class<br/>";
     
     if (codeUses > 0){
       leftColumn.innerHTML += "invite code: " + newCode + " (" + codeUses + "/5)<br/><br/>";
@@ -294,9 +294,10 @@ document.addEventListener("DOMContentLoaded", () => {
   })
 
   socket.on("gameInvite", (enemyNickname, enemyId)=>{
-    console.log("**");
+    console.log("*received invite*");
     const myNickname = document.getElementById("nickname").value;
     regionNotesText.textContent = "loading, please wait...";
+    console.log(regionNotesText.textContent);
     if (confirm("accept challenge from "+enemyNickname+"?")){
       const genRoomCode = Math.random().toString(36).slice(2);
       socket.emit("roomRequest", genRoomCode, enemyNickname, enemyId, myNickname);

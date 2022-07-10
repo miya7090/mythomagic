@@ -111,6 +111,7 @@ body {
 .lowerPageText{
   position: fixed;
   bottom: 8px;
+  z-index: 3;
 }
 
 .lowerPageText p{
@@ -278,4 +279,19 @@ body {
 
 .hoverHintSkillText {
   color: rgb(118, 118, 118);
+}
+
+#footerFill {
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  width: 100%;
+  height: 90px;
+
+  background: url("../images/forestbg.jpg") no-repeat center center fixed;
+  background-size: cover;
+  background-color: rgba(0,0,0,0.4);
+  background-blend-mode: darken;
+
+  z-index: 1;
 }

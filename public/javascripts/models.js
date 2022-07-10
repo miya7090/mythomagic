@@ -174,8 +174,8 @@ function importAllP2Cs(pcListObj){
       if (effectiveAttack < 0) { effectiveAttack = 0; }
 
       if ((this.p1 && hasEnemyCard("Themis")) || (!this.p1 && hasAllyCard("Themis"))) { // passive_themis
-        if (effectiveAttack > 5000){
-          effectiveAttack = 5000;
+        if (effectiveAttack > 3500){
+          effectiveAttack = 3500;
         }
       }
 
@@ -185,7 +185,7 @@ function importAllP2Cs(pcListObj){
       let effectiveDefense = this.current_defense;
 
       if (this.cardName == "Icarus") { // passive_icarus
-        effectiveDefense -= 2 * this.current_movement;
+        effectiveDefense -= 1 * this.current_movement;
       }
 
       if (this.p1 && hasAllyCard("Hera")) { // passive_hera
@@ -204,8 +204,8 @@ function importAllP2Cs(pcListObj){
       if (effectiveDefense < 1) { effectiveDefense = 1; }
 
       if ((this.p1 && hasEnemyCard("Themis")) || (!this.p1 && hasAllyCard("Themis"))) { // passive_themis
-        if (effectiveDefense > 30){
-          effectiveDefense = 30;
+        if (effectiveDefense > 20){
+          effectiveDefense = 20;
         }
       }
 
@@ -360,9 +360,9 @@ function importAllP2Cs(pcListObj){
     }
     takeDamage(fn){
       let flatNum = Math.round(fn);
-      if (this.cardName == "Heracles" && fn > 300) { // passive_heracles
+      if (this.cardName == "Heracles" && fn > 200) { // passive_heracles
         broadcastMsg("passive", this.p1, "Heracles", undefined);
-        flatNum = 300;
+        flatNum = 200;
       }
       if (this.dead != "defeated") {
         if (flatNum / this.current_health > 0.5) { // lost >50% HP in this attack

@@ -2,13 +2,17 @@ document.addEventListener("DOMContentLoaded", () => {
   resizer();
 });
 
+if( /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+  resizer(true);
+}
+
 window.addEventListener('resize', resizer);
 
-function resizer() {
-  console.log("dsaf");
+function resizer(override) {
   let loginBox = document.getElementById("loginBox");
   let leaderboard = document.getElementById("leaderboard");
-  if (window.innerWidth < 700){
+  
+  if (window.innerWidth < 700 || override == true){
     loginBox.style.textAlign = "center";
     loginBox.style.position = "inherit";
     
