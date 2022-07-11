@@ -170,6 +170,12 @@ function ultimateAttack(pcard, q, r, s){
     return;
   }
 
+  if (pcard.blessings["Dionysus"] == true) { // passive_dionysus
+    broadcastMsg("passive", false, "Dionysus", pcard.cardName);
+    pcard.takeDamage(100);
+    return;
+  }
+
   let [cQ,cR,cS] = [q,r,s];
   if (q == undefined) { // if not an aimed attack
     cQ = GAME_MODE_MEMORYTARGET.getQ();
@@ -195,7 +201,6 @@ function attack(atkType, attacker, centerQ, centerR, centerS, aoe) {
     console.log("doing action with aoe",atkType, attacker, centerQ, centerR, centerS, aoe);
     let coordTagsInRangeAll = getCoordinatesWithinRadius(centerQ, centerR, centerS, aoe, true);
     const coordTagsInRange = filterOnlyCoordinatesOnBoard(coordTagsInRangeAll);
-    console.log(coordTagsInRange,"xxx",coordTagsInRangeAll);
     coordTagsInRange.forEach(hitTag => {
       let hitTile = HEXTILE_CUBIC_INDEX[hitTag];
       let tokenOnTile = hitTile.querySelector('.token');

@@ -69,6 +69,9 @@ const ARGONAUT_LIST = ["Jason", "Atalanta", "Argus", "Heracles", "Orpheus", "Pel
 
 // alphabetically first goes first
 const PAIRING_LIST = [["Jason","Medea"], ["Hera","Zeus"], ["Hades","Persephone"], ["Echo","Narcissus"], ["Aphrodite","Hephaestus"], ["Andromeda","Perseus"], ["Ariadne","Theseus"], ["Eros","Psyche"], ["Aphrodite","Ares"], ["Kronos","Rhea"], ["Ariadne","Dionysus"], ["Gaea","Ouranos"], ["Amphitrite","Poseidon"], ["Adonis","Aphrodite"]];
+const MORTAL_LIST = ["Atalanta", "Achilles", "Jason", "Medea", "Perseus", "Heracles", "Icarus", "Orpheus", "Ariadne"];
+
+BEGINGAME_PASSIVE_CHECK_DONE = false;
 
 const BASE_STAT_DICT = {
     // name, base atk, normal atk range, defense, hp, mana per turn, mana per attack, mvt speed
@@ -175,7 +178,15 @@ const BASE_STAT_DICT = {
     "Nyx":[1600,2,10,600,60,0,2, 3,0,1,0,
       "Twilight","Reduce MP/turn accumulation by 20 for an enemy up to 3 tiles away",
       "Oblivion","Permanently disable the ultimate of an adjacent enemy",
-      "Night Walk","Allies are able to move on off-grid tiles", "Caster"]
+      "Night Walk","Allies are able to move on off-grid tiles", "Caster"],
+    "Dolphin":[200,2,10,200,50,0,3, 1,0,3,0,
+      "Ram","Attack all enemies within 2 tiles",
+      "Splash","Attack all enemies within 4 tiles",
+      "Scheme","Allies accumulate an extra 10 MP/turn", "Melee"],
+    "Dionysus":[800,2,10,600,1000,0,12, 3,0,1,0,
+      "Frenzy","An adjacent enemy becomes Distracted and attempts to autoattack self and other enemies",
+      "Mutation","An adjacent enemy is turned into a dolphin (maximum one use)",
+      "Bacchanalian Jingle","One enemy's ultimate instead backfires, dealing 100 true damage to its user", "Caster"]
   }
 
   const STATUSES_DEF_DICT = {
@@ -199,6 +210,7 @@ const BASE_STAT_DICT = {
   
   let PLAYER_OWNED_temp = Object.keys(BASE_STAT_DICT);
   PLAYER_OWNED_temp.sort();
+  PLAYER_OWNED_temp.splice(PLAYER_OWNED_temp.indexOf("Dolphin"), 1);
   const PLAYER_OWNED = PLAYER_OWNED_temp;
   const PLAYER_OWNED_FIGHTERS = PLAYER_OWNED.filter(key => (BASE_STAT_DICT[key][17] == "Melee" || BASE_STAT_DICT[key][17] == "Ranged"));
 

@@ -574,13 +574,14 @@ function get_PC_BroadcastForInfoBox(PCard, isPlayer1) {
     res += "</div>";
 
     res += '<div class="hoverColumn">';
+    res += "<p>MVT: " + PCard.getCurrentMovement() + " <i>(";
+    if (PCard.getCurrentMovement() - PCard.base_movement >=0 ) { res += "+"; }
+    res += (PCard.getCurrentMovement() - PCard.base_movement) + ")</i></p>";
+    
     res += "<p>RC: " + PCard.getCurrentNormAtkRange() + " <i>(";
     if (PCard.getCurrentNormAtkRange() - PCard.base_normal_attack_range >=0 ) { res += "+"; }
     res += (PCard.getCurrentNormAtkRange() - PCard.base_normal_attack_range) + ")</i></p>";
 
-    res += "<p>MVT: " + PCard.getCurrentMovement() + " <i>(";
-    if (PCard.getCurrentMovement() - PCard.base_movement >=0 ) { res += "+"; }
-    res += (PCard.getCurrentMovement() - PCard.base_movement) + ")</i></p>";
     res += "</div>";
 
   res += "</div>";

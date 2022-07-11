@@ -82,7 +82,6 @@ function updateTokenClock(){
 
 function tokenClockDone(){
   changeGameModeTo("startup");
-  passive_athena();
   MY_SOCKET.emit("doneWithTokenPick", exportAllP1Cs(false));
 }
 
@@ -130,6 +129,12 @@ function beginTurn(yourEnemysCards, yourEnemysVerOfYourCards){
     }
   }
 
+  if (!BEGINGAME_PASSIVE_CHECK_DONE){
+    passive_dionysus();
+    passive_athena();
+    BEGINGAME_PASSIVE_CHECK_DONE = true;
+  }
+
   atTurnStart(false); // if true, flip enemy
 }
 
@@ -137,7 +142,6 @@ function atTurnStart(suppressNotif){
   poisonThePoisoned();
   passive_hestia(true, suppressNotif);
   passive_hermes(suppressNotif);
-  console.log("AT TURN START");
   forAll_decreaseStatusCooldowns();
 
   rerenderAllGamecardsAndTokens();
@@ -383,7 +387,6 @@ function startBgm(){
       SOUND_OBJECTS["bgm"][0].pause();
       SOUND_OBJECTS["bgm"][0].currentTime = 0;
   } else {
-    console.log(SOUND_OBJECTS["bgm"], SOUND_OBJECTS);
     SOUND_OBJECTS["bgm"][0].volume = 0.2;
     SOUND_OBJECTS["bgm"][0].play();
   }

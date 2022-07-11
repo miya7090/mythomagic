@@ -174,8 +174,8 @@ function importAllP2Cs(pcListObj){
       if (effectiveAttack < 0) { effectiveAttack = 0; }
 
       if ((this.p1 && hasEnemyCard("Themis")) || (!this.p1 && hasAllyCard("Themis"))) { // passive_themis
-        if (effectiveAttack > 3500){
-          effectiveAttack = 3500;
+        if (effectiveAttack > 3000){
+          effectiveAttack = 3000;
         }
       }
 
@@ -226,7 +226,7 @@ function importAllP2Cs(pcListObj){
       return effectiveCNAR;
     }
     clearBlessings(){
-      this.blessings = {"Hestia": false, "Hermes": false, "Nyx": false}; 
+      this.blessings = {"Hestia": false, "Hermes": false, "Nyx": false, "Dionysus": false}; 
     }
     giveBlessing(blessName){
       if (this.blessings[blessName] == false) {
@@ -239,6 +239,8 @@ function importAllP2Cs(pcListObj){
           blessing_hermes(true, this);
         } else if (blessName == "Nyx"){
           console.log("have added nyx blessing to",this);
+        } else if (blessName == "Dionysus"){
+          console.log("have added dionysus blessing to",this);
         } else {
           console.error("blessing code missing for",blessName);
         }
@@ -322,7 +324,7 @@ function importAllP2Cs(pcListObj){
       return Object.values(this.statuses).every(v => v == 0);
     }
     giveTurnMana(){
-      let manaToGive = this.current_mana_per_turn + passive_hecate(this.p1);
+      let manaToGive = this.current_mana_per_turn + passive_hecate(this.p1) + passive_dolphin(this.p1);
 
       if (this.p1 && this.cardName == "Aphrodite") { // passive_aphrodite
         manaToGive += 20 * countCardPairsIn(PLAYER_GAMECARD_OBJS, PAIRING_LIST);
@@ -333,6 +335,7 @@ function importAllP2Cs(pcListObj){
 
       this.giveMana(manaToGive);
     }
+    
     giveAttackMana(){
       this.giveMana(this.current_mana_per_atk);
     }

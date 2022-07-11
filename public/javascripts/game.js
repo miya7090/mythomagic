@@ -179,8 +179,8 @@ document.addEventListener("DOMContentLoaded", () => {
   // powerbox-hoverbox hover link
   $('#abilityButton').hover(function() {
     let p1Attr = $('#abilityTitle').attr("p1");
-    if (p1Attr == "true") { $('#abilityTitle').css('color', '#ffffff'); }
-    else if (p1Attr == "false") { $('#abilityTitle').css('color', '#ffffff'); }
+    if (p1Attr == "true") { $('#abilityTitle').css('color', 'yellow'); }
+    else if (p1Attr == "false") { $('#abilityTitle').css('color', 'yellow'); }
   }, function() {
     let p1Attr = $('#abilityTitle').attr("p1");
     if (p1Attr == "true") { $('#abilityTitle').css('color', 'var(--p1ActionTextColor)'); }
@@ -189,8 +189,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   $('#ultButton').hover(function() {
     let p1Attr = $('#ultTitle').attr("p1");
-    if (p1Attr == true) { $('#abilityTitle').css('color', '#ffffff'); }
-    else if (p1Attr == false) { $('#abilityTitle').css('color', '#ffffff'); }
+    if (p1Attr == true) { $('#abilityTitle').css('color', 'yellow'); }
+    else if (p1Attr == false) { $('#abilityTitle').css('color', 'yellow'); }
   }, function() {
     let p1Attr = $('#ultTitle').attr("p1");
     if (p1Attr == true) { $('#ultTitle').css('color', 'var(--p1ActionTextColor)'); }

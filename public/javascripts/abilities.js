@@ -12,7 +12,8 @@ const ABILITY_MAP = {
     "Atalanta":[ability_atalanta,1], "Gaea":[ability_gaea,0],
     "Jason":[ability_jason,3], "Hephaestus":[ability_hephaestus,2],
     "Eros":[ability_eros,1], "Aphrodite":[ability_aphrodite,0],
-    "Nyx":[ability_nyx,1]};
+    "Nyx":[ability_nyx,1], "Dolphin":[ability_dolphin,1],
+    "Dionysus":[ability_dionysus,1]};
 
 const ULT_MAP = {
     "Athena":[ult_athena,1],
@@ -28,7 +29,8 @@ const ULT_MAP = {
     "Atalanta":[ult_atalanta,2], "Gaea":[ult_gaea,3],
     "Jason":[ult_jason,3], "Hephaestus":[ult_hephaestus,1],
     "Eros":[ult_eros,3], "Aphrodite":[ult_aphrodite,0],
-    "Nyx":[ult_nyx,1]};
+    "Nyx":[ult_nyx,1], "Dolphin":[ult_dolphin,1],
+    "Dionysus":[ult_dionysus,1]};
 
 function doUniqueSkill(atkType, attacker, target, targetIsOpponent) { // atkType 1=ability, 2=ultimate
     let map = ABILITY_MAP;
@@ -47,6 +49,37 @@ function doUniqueSkill(atkType, attacker, target, targetIsOpponent) { // atkType
     } else {
         console.error("action not defined yet");
     }
+}
+
+function ult_dionysus(attacker, target) {
+    broadcastMsg("ultimate", true, "Dionysus", target.cardName);
+    if (hasEnemyCard("Dolphin")){
+        processBroadcast("alert", true, "Dionysus can only create one dolphin per game");
+        return;
+    }
+    let lastQ = target.getQ();
+    let lastR = target.getR();
+    ENEMY_GAMECARD_OBJS.splice(ENEMY_GAMECARD_OBJS.indexOf(target), 1);
+    let newDolphin = new PlayerCard("Dolphin", lastQ, lastR, -lastQ-lastR, false);
+    ENEMY_GAMECARD_OBJS.push(newDolphin); // attackComplete will have a rerender
+}
+
+function ability_dionysus(attacker, target) {
+    broadcastMsg("ability", true, "Dionysus", target.cardName);
+    target.inflictStatus("distracted");
+    autoattack(target);
+}
+
+function ult_dolphin(attacker, target) {
+    broadcastMsg("ultimate", true, "Dolphin", target.cardName);
+    let dmg = calcDamage(attacker, target);
+    target.takeDamage(dmg);
+}
+
+function ability_dolphin(attacker, target) {
+    broadcastMsg("ability", true, "Dolphin", target.cardName);
+    let dmg = calcDamage(attacker, target);
+    target.takeDamage(dmg);
 }
 
 function ult_nyx(attacker, target) {
@@ -345,7 +378,7 @@ function ult_medea(attacker, target) {
         attacker.current_attack += target.getCurrentAttack();
         attacker.current_movement += target.getCurrentMovement();
     } else {
-        console.error("medea cannot apply ult to self");
+        processBroadcast("alert", true, "Medea cannot use her ultimate on herself");
     }
 }
 
@@ -437,11 +470,11 @@ function ult_hermes(attacker, target) {
 
 function ability_hermes(attacker, target) {
     broadcastMsg("ability", true, "Hermes", undefined);
-    target.current_attack = Math.round(hermes_multiplier() * target.current_attack);
-    target.current_defense = Math.round(hermes_multiplier()  * target.current_defense);
-    if (target.current_defense < 1) {target.current_defense = 1; }
-    target.current_mana_per_turn = Math.round(hermes_multiplier() * target.current_mana_per_turn);
-    target.current_movement = Math.round(hermes_multiplier() * target.current_movement);
+    attacker.current_attack = Math.round(hermes_multiplier() * attacker.current_attack);
+    attacker.current_defense = Math.round(hermes_multiplier()  * attacker.current_defense);
+    if (attacker.current_defense < 1) {attacker.current_defense = 1; }
+    attacker.current_mana_per_turn = Math.round(hermes_multiplier() * attacker.current_mana_per_turn);
+    attacker.current_movement = Math.round(hermes_multiplier() * attacker.current_movement);
 }
 
 function hermes_multiplier(){

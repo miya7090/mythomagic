@@ -23,6 +23,14 @@ function getEnemyCard(cardName) {
 function hasAllyCard(cardName) { return getAllyCard(cardName) != undefined; }
 function hasEnemyCard(cardName) { return getEnemyCard(cardName) != undefined; }
 
+function passive_dionysus(){ // run by both players at the beginning of the game
+    if (hasAllyCard("Dionysus")) {
+        broadcastMsg("passive", true, "Dionysus", undefined);
+        let pc = pickRandomEntries(ENEMY_GAMECARD_OBJS, 1)[0];
+        pc.giveBlessing("Dionysus");
+    }
+}
+
 function passive_eros(attacker, target){
     if (target.cardName == "Eros"){
         broadcastMsg("passive", target.p1, "Eros", attacker.cardName);
@@ -89,12 +97,22 @@ function passive_orpheus(p1, targetName){
     return false;
 }
 
-function passive_hecate(p1){ // #TODO add notification
+function passive_hecate(p1){
     if (p1 && hasAllyCard("Hecate")){
         return 30;
     }
     if (!p1 && hasEnemyCard("Hecate")){
         return 30;
+    }
+    return 0;
+}
+
+function passive_dolphin(p1){
+    if (p1 && hasAllyCard("Dolphin")){
+        return 10;
+    }
+    if (!p1 && hasEnemyCard("Dolphin")){
+        return 10;
     }
     return 0;
 }
@@ -208,7 +226,6 @@ function passive_hermes(suppressNotif) { // run by player1 at the beginning of t
                 pc.removeBlessing("Hermes");
             }
         });
-        if (!suppressNotif && numberBlessed > 0) { broadcastMsg("passive", true, "Hermes"); }
     }
     if (hasEnemyCard("Hermes")) {
         let yc = getEnemyCard("Hermes");
@@ -221,7 +238,6 @@ function passive_hermes(suppressNotif) { // run by player1 at the beginning of t
                 pc.removeBlessing("Hermes");
             }
         });
-        if (!suppressNotif && numberBlessed > 0) { broadcastMsg("passive", false, "Hermes"); } // #TODO debug dupe
     }
 }
 
