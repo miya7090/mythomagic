@@ -60,7 +60,7 @@ function keyProcessing(event) {
   // ESC
   if (event.keyCode === 27) { // esc, forfeit game
     if (confirm("do you wish to surrender the game to " + OTHER_NAME + "?")) {
-      MY_SOCKET.emit("gameEnded_withEnemyWin", REGION_NAME, SELF_NAME, getPCNames(PLAYER_GAMECARD_OBJS), OTHER_NAME, getPCNames(ENEMY_GAMECARD_OBJS), true);
+      MY_SOCKET.emit("gameEnded_withEnemyWin", REGION_NAME, SELF_NAME, PLAYER_HERO_INITIAL_NAMES, OTHER_NAME, ENEMY_HERO_INITIAL_NAMES, true);
     }
   }
   return;
@@ -139,6 +139,11 @@ function beginTurn(yourEnemysCards, yourEnemysVerOfYourCards){
 }
 
 function atTurnStart(suppressNotif){
+  if (PLAYER_HERO_INITIAL_NAMES.length == 0){
+    PLAYER_HERO_INITIAL_NAMES = getPCNames(PLAYER_GAMECARD_OBJS);
+    ENEMY_HERO_INITIAL_NAMES = getPCNames(ENEMY_GAMECARD_OBJS);
+  }
+
   poisonThePoisoned();
   passive_hestia(true, suppressNotif);
   passive_hermes(suppressNotif);
@@ -293,11 +298,11 @@ function attackComplete(){
       MY_SOCKET.emit("tellRival_yourTurn", exportAllP1Cs(), exportAllP2Cs());
     }
   } else if (gameOver == "tie") {
-    MY_SOCKET.emit("gameEnded_withTie", REGION_NAME, SELF_NAME, getPCNames(PLAYER_GAMECARD_OBJS), OTHER_NAME, getPCNames(ENEMY_GAMECARD_OBJS));
+    MY_SOCKET.emit("gameEnded_withTie", REGION_NAME, SELF_NAME, PLAYER_HERO_INITIAL_NAMES, OTHER_NAME, ENEMY_HERO_INITIAL_NAMES);
   } else if (gameOver == "p1win") {
-    MY_SOCKET.emit("gameEnded_withMyWin", REGION_NAME, SELF_NAME, getPCNames(PLAYER_GAMECARD_OBJS), OTHER_NAME, getPCNames(ENEMY_GAMECARD_OBJS));
+    MY_SOCKET.emit("gameEnded_withMyWin", REGION_NAME, SELF_NAME, PLAYER_HERO_INITIAL_NAMES, OTHER_NAME, ENEMY_HERO_INITIAL_NAMES);
   } else if (gameOver == "p2win") {
-    MY_SOCKET.emit("gameEnded_withEnemyWin", REGION_NAME, SELF_NAME, getPCNames(PLAYER_GAMECARD_OBJS), OTHER_NAME, getPCNames(ENEMY_GAMECARD_OBJS));
+    MY_SOCKET.emit("gameEnded_withEnemyWin", REGION_NAME, SELF_NAME, PLAYER_HERO_INITIAL_NAMES, OTHER_NAME, ENEMY_HERO_INITIAL_NAMES);
   } else {
     console.error("gameOver issue", gameOver);
   }  

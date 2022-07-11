@@ -70,7 +70,7 @@ document.addEventListener("DOMContentLoaded", () => {
           setTimeout(mySocketPromptDisconnected, WAIT_FOR_RECONNECT);
           AM_WAITING_FOR_OPPONENT_RECONNECT = true;
         } else {
-          MY_SOCKET.emit("gameEnded_withMyWin", REGION_NAME, SELF_NAME, getPCNames(PLAYER_GAMECARD_OBJS), OTHER_NAME, getPCNames(ENEMY_GAMECARD_OBJS), true);
+          MY_SOCKET.emit("gameEnded_withMyWin", REGION_NAME, SELF_NAME, PLAYER_HERO_INITIAL_NAMES, OTHER_NAME, ENEMY_HERO_INITIAL_NAMES, true);
         }
       }
     }
