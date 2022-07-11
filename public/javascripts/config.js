@@ -183,7 +183,7 @@ const BASE_STAT_DICT = {
       "Ram","Attack all enemies within 2 tiles",
       "Splash","Attack all enemies within 4 tiles",
       "Scheme","Allies accumulate an extra 10 MP/turn", "Melee"],
-    "Dionysus":[800,2,10,600,1000,0,12, 3,0,1,0,
+    "Dionysus":[800,2,10,600,50,0,2, 3,0,1,0,
       "Frenzy","An adjacent enemy becomes Distracted and attempts to autoattack self and other enemies",
       "Mutation","An adjacent enemy is turned into a dolphin (maximum one use)",
       "Bacchanalian Jingle","One enemy's ultimate instead backfires, dealing 100 true damage to its user", "Caster"]
