@@ -93,7 +93,7 @@ const BASE_STAT_DICT = {
       "Ambush","Skillful Shot does 3x damage when targeting an enemy with over 75% HP", "Ranged"],
     "Atalanta":[2800,2,10,700,60,0,3, undefined,1,undefined,1,
       "First Blood","Attack all adjacent enemies, dealing an extra 150 true damage to enemies with full HP",
-      "Grapple","Inflict Stunned on an adjacent enemy and deal 300 true damage",
+      "Grapple","Inflict Stunned on all adjacent enemies and deal 300 true damage",
       "Dismissal","Autoattacks deal an extra 100 true damage to enemies with lesser MVT", "Melee"],
     "Achilles":[2600,2,20,500,50,0,3, undefined,3,undefined,undefined,
       "Berserk","Clear all statuses from self and attack all enemies within 3 tiles with 20% more damage",

@@ -293,6 +293,6 @@ function passive_perseus_onEnemy(){ // enemy card was defeated
     if (hasAllyCard("Perseus")) {
         broadcastMsg("passive", true, "Perseus", undefined);
         mc.inflictStatus("obscured");
-        mc.current_movement += 2;
+        mc.current_movement += 1;
     }
 }

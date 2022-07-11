@@ -169,7 +169,7 @@ function mouseOverTile(evt) {
       tokenOnTile = evt.target.querySelector('.token');
     }
     if (tokenOnTile != undefined) {
-      if (!(tokenOnTile.pcardLink.p1 == false && tokenOnTile.pcardLink.statuses["obscured"] == 1)) { // if not an obscured enemy
+      if (!(!tokenOnTile.classList.contains("player1") && tokenOnTile.pcardLink.statuses["obscured"] == 1)) { // if not an obscured enemy
         gameInfoBox.innerHTML = get_PC_BroadcastForInfoBox(tokenOnTile.pcardLink, tokenOnTile.classList.contains("player1"));
       }
     }

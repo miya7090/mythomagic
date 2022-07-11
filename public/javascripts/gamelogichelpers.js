@@ -219,7 +219,7 @@ function attack(atkType, attacker, centerQ, centerR, centerS, aoe) {
             passive_eros(attacker, tokenOnTile.pcardLink);
             anim_tileHitByAttack(hitTile); // #TODO add sound
           }
-        } else { // #TODO avoid attacking defeated cards if not a certain card e.g. hades
+        } else {
           if (tokenOnTile.pcardLink.dead != "defeated" || canWorkWithDead(attacker.cardName)){
             let animCode = doUniqueSkill(atkType, attacker, tokenOnTile.pcardLink, targetIsOpponent);
             if (animCode == 0) { // do animation
@@ -227,7 +227,7 @@ function attack(atkType, attacker, centerQ, centerR, centerS, aoe) {
             } else if (animCode == 1) {
               anim_tileHitByAttack(hitTile);
             } else {
-              console.error("need to implement anim for neutral skill"); // #TODO
+              console.log("need to implement anim for neutral skill"); // #TODO
             }
           } else {
             console.log("hero already defeated");
