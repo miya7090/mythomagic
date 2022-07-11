@@ -144,10 +144,10 @@ function ult_jason(attacker, target) {
 }
 
 function ability_jason(attacker, target) {
-    let lowestDef = undefined;
+    let lowestDef = 9999;
     let pcWithLowestDef = undefined;
     PLAYER_GAMECARD_OBJS.forEach(pc => {
-        if (lowestDef == undefined || pc.getCurrentDefense() < lowestDef) {
+        if (lowestDef == 9999 || pc.getCurrentDefense() < lowestDef) {
             lowestDef = pc.getCurrentDefense();
             pcWithLowestDef = pc;
         }
@@ -235,10 +235,10 @@ function ult_orpheus(attacker, target) {
 }
 
 function ability_orpheus(attacker, target) {
-    let lowestHealth = undefined;
+    let lowestHealth = 9999;
     let pcWithLowestHealth = undefined;
     PLAYER_GAMECARD_OBJS.forEach(pc => {
-        if (lowestHealth == undefined || (pc.current_health < lowestHealth && pc.dead != "defeated")) {
+        if (lowestHealth == 9999 || (pc.current_health < lowestHealth && pc.dead != "defeated")) {
             lowestHealth = pc.current_health;
             pcWithLowestHealth = pc;
         }
