@@ -126,10 +126,10 @@ io.on("connection", socket => {
       if (cookieName == nickname) { lobbyCookieBook[socket.id] = existingLoginEntry[0].score; }
 
       // if login is not found, yet cookie name provided, command user to remove cookie
-      if (existingLoginEntry.length == 0 && (cookieName == "" || cookieName == undefined)) {
+      /*if (existingLoginEntry.length == 0 && (cookieName == "" || cookieName == undefined)) {
         io.to(socket.id).emit("commandCookieLogout");
         return;
-      }
+      }*/  // #TODO debug
 
       // otherwise, okay
       kickOutSocketFromLastRoom(socket.id);
