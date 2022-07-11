@@ -93,6 +93,7 @@ body {
 
 .button {
   -webkit-appearance: none;
+  cursor: pointer;
   background-color: rgba(0, 0, 0, 0.4); /* Green */
   color: white;
   padding: 5px 10px;
@@ -106,6 +107,7 @@ body {
 }
 
 .button:disabled {
+  cursor: default;
   background-color: rgba(0, 0, 0, 0.3);
   color: rgba(255,255,255,0.1);
 }

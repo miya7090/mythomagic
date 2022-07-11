@@ -65,6 +65,7 @@ input,select {
 
 select {
     -webkit-appearance: none;
+    cursor: pointer;
     padding: 8px;
     padding-right: 30px;
     
@@ -84,6 +85,10 @@ input {
     margin-left: 3px;
     padding-left: 12px;
     padding-right: 12px;
+}
+
+input[type="button"] {
+    cursor: pointer;
 }
 
 input:disabled {
@@ -165,6 +170,10 @@ p {
 
 #orientation {
     text-align: center;
+}
+
+#leaderboardTable {
+    cursor: pointer;
 }
 
 #leaderboard td, th {

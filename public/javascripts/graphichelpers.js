@@ -527,17 +527,14 @@ function get_BC_BroadcastForInfoBox(BCard, BCardname, suppressSkillLabels) {
   res += '<p class="hoverBoxSkill">';
     if (!suppressSkillLabels) { res += '<span class="hoverHintSkillText">Ability:</span> '; }
     res += '<span id="abilityTitle">'+BCard.ability_title+'</span> '+BCard.ability_text;
-    res += '<span class="hoverBoxSkillTooltip">ability</span>';
     res += '</p>';
   res += '<p class="hoverBoxSkill">';
     if (!suppressSkillLabels) { res += '<span class="hoverHintSkillText">Ultimate:</span> '; }
     res += '<span id="ultTitle">'+BCard.ult_title+'</span> '+BCard.ult_text;
-    res += '<span class="hoverBoxSkillTooltip">ultimate</span>';
     res += '</p>';
   res += '<p class="hoverBoxSkill">';
     if (!suppressSkillLabels) { res += '<span class="hoverHintSkillText"><i>Passive:</span> '; }
     res += '<span id="passiveTitle">'+BCard.passive_title+'</span></i> '+BCard.passive_text;
-    res += '<span class="hoverBoxSkillTooltip">passive</span>';
     res += '</p>';
 
   return res;
@@ -601,13 +598,10 @@ function get_PC_BroadcastForInfoBox(PCard, isPlayer1) {
   res += "</div>";
 
   res += '<p class="hoverBoxSkill"><span class="hoverHintSkillText">Ability:</span> <span id="abilityTitle" p1='+isPlayer1+'>'+PCard.ability_title+'</span> '+PCard.ability_text;
-    res += '<span class="hoverBoxSkillTooltip">ability</span>';
     res += '</p>';
   res += '<p class="hoverBoxSkill"><span class="hoverHintSkillText">Ultimate:</span> <span id="ultTitle" p1='+isPlayer1+'>'+PCard.ult_title+'</span> '+PCard.ult_text;
-    res += '<span class="hoverBoxSkillTooltip">ultimate</span>';
     res += '</p>';
   res += '<p class="hoverBoxSkill"><i><span class="hoverHintSkillText">Passive:</span> <span id="passiveTitle" p1='+isPlayer1+'>'+PCard.passive_title+'</span></i> '+PCard.passive_text;
-    res += '<span class="hoverBoxSkillTooltip">passive</span>';
     res += '</p>';
   
   return res;

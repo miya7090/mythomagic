@@ -29,6 +29,16 @@ document.addEventListener("DOMContentLoaded", () => {
     powerButtons[i].addEventListener('mouseenter', mouseOverPowerbutton);
     //powerButtons[i].addEventListener('mouseup', mouseClickPowerbutton);
   }
+
+  $(".hexgrid").hover(function() {
+    if (getTurn() == "p1"){
+      $(this).css('cursor','crosshair');
+    } else {
+      $(this).css('cursor','wait');
+    }
+  }, function() {
+      $(this).css('cursor','auto');
+  });
   
   /* get url parameters */
   const urlParams = new URLSearchParams(window.location.search);

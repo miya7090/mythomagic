@@ -17,8 +17,8 @@ document.addEventListener("DOMContentLoaded", () => {
     MOUSE_X = e.clientX;
     MOUSE_Y = e.clientY;
     if (document.contains(LEADERBOARD_CURSOR_DIV[1])) {
-      LEADERBOARD_CURSOR_DIV[1].style.left = MOUSE_X + "px";
-      LEADERBOARD_CURSOR_DIV[1].style.top = MOUSE_Y + "px";
+      LEADERBOARD_CURSOR_DIV[1].style.left = (MOUSE_X + 0) + "px";
+      LEADERBOARD_CURSOR_DIV[1].style.top = (MOUSE_Y + 12) + "px";
     }
   });
 

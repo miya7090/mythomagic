@@ -88,6 +88,8 @@
     overflow: visible;
     text-align: center;
     color: rgba(0, 0, 0, 0.7);
+
+    cursor: pointer;
 }
 
 .deadCard {
