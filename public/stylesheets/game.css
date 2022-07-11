@@ -1,42 +1,45 @@
 :root {
-  --normalTile: rgba(101, 97, 166, 0.5);
-  --highlightedTile: rgba(130, 130, 227, 0.9);
-  --default_highlightedTile: rgba(130, 130, 227, 0.9);
-  --rangeHighlightedTile: rgba(127, 89, 157, 0.6);
-  --aimingReachHighlightedTile: rgba(54, 117, 108, 0.9);
-  --aimingHighlightedTile: rgba(34, 156, 152, 0.9);
-  --autoattackHighlightedTile: rgba(255, 148, 148, 0.6);
+  --normalTile: rgba(59,68,63,0.9); /* black olive */
+  --highlightedTile: rgba(121, 137, 127, 0.8); /* ash gray */
+  --default_highlightedTile: rgba(187, 195, 190, 0.8); /* ^ ash gray */
+
+  --autoattackHighlightedTile: #6F4B28; /* kobicha */
+  --rangeHighlightedTile: #522520; /* rgba(176, 135, 127, 0.8); /* burnished brown */
+  --aimingReachHighlightedTile: rgba(176, 135, 127, 0.8); /* ^ burnished brown */
+  --aimingHighlightedTile: rgba(190, 103, 71, 0.8); /* copper red */
 
   --offgridTile: rgba(0, 0, 0, 0.4);
   --highlightedOffgrid: rgba(0, 0, 0, 0.9);
   --default_highlightedOffgrid: rgba(0, 0, 0, 0.9);
-  --rangeHighlightedOffgrid: rgba(60, 40, 81, 0.9);
-  --aimingReachHighlightedOffgrid: rgba(15, 38, 42, 0.8);
-  --aimingHighlightedOffgrid: rgba(15, 76, 75, 0.9);
+  --rangeHighlightedOffgrid: rgba(176, 135, 127, 0.4); /* burnished brown */
+  --aimingReachHighlightedOffgrid: rgba(176, 135, 127, 0.4); /* ^ burnished brown */
+  --aimingHighlightedOffgrid: rgba(190, 103, 71, 0.4); /* copper red */
 
-  --animAtkHit: rgb(145, 0, 0);
-  --animHealHit: rgb(0, 164, 30);
-  --animAtkInRange: rgba(146, 52, 35, 0.9);
+  --animAtkHit: rgb(160, 57, 10); /* chinese red */
+  --animHealHit: rgb(80, 98, 74); /* feldgrau */
+  --animAtkInRange: rgb(141, 52, 5); /* saddle brown */
 
-  --p0ActionTextColor: rgb(183, 183, 183);
-  --p0PassiveTextColor: rgb(143, 143, 143);
-  --p1ActionTextColor: rgb(237, 159, 177);
-  --p1PassiveTextColor: rgb(209, 124, 134);
-  --p2ActionTextColor: rgb(135, 193, 255);
-  --p2PassiveTextColor: rgb(96, 165, 243);
+  --p0ActionTextColor: #a4d1a6;
+  --p0PassiveTextColor: #699d7a;
+  --p1ActionTextColor: #d3968e; /* pastel pink, from medium carmine */
+  --p1PassiveTextColor: #bb6a60; /* copper penny, from medium carmine */
+  --p2ActionTextColor: #c092c4; /* lilac luster, from twilight lavender */
+  --p2PassiveTextColor: #ac66ab; /* mountbatten pink, from twilight lavender */
 
-  --p0FontColor: rgb(255, 255, 255);
-  --p1FontColor: rgb(255, 189, 167);
-  --p2FontColor: rgb(167, 223, 255);
-  --p1CardAreaBGColor: rgba(37, 0, 0, 0.3);
-  --p2CardAreaBGColor: rgba(0, 15, 54, 0.3);
-  --p1TooltipBGColor: rgba(100, 0, 0,0.7);
-  --p2TooltipBGColor: rgba(9, 39, 114, 0.7);
+  --p0FontColor: #87c38a;
+  --p1FontColor: #db7f5a; /* chestnut, previously #A44A3F medium carmine */
+  --p2FontColor: #b471c6; /* twilight lavender */
+  --p1CardAreaBGColor: rgba(61, 24, 0, 0.3); /* black bean */
+  --p2CardAreaBGColor: rgba(45, 19, 44, 0.3); /* dark purple */
+  --p1TooltipBGColor: rgba(41, 21, 10, 0.9); /* seal brown darkened */
+  --p2TooltipBGColor: rgba(32, 19, 32, 0.9); /* dark purple darkened */
   
-  --p1TokenColor: rgba(86, 1, 1, 0.9);
-  --p2TokenColor: rgba(8, 46, 144, 0.9);
-  --p1TokenHoverColor: rgba(60, 0, 0, 0.9);
-  --p2TokenHoverColor: rgba(5, 35, 111, 0.9);
+  --p1TokenColor: #5D2400;
+  --p2TokenColor: #5A2558; /* palatinate purple */
+  --p1TokenHoverColor: rgb(52, 21, 9); /* chestnut, previously #A44A3F medium carmine */
+  --p2TokenHoverColor: #341032; /* twilight lavender */
+
+  --powerBox: #32393072;
 
   --MELEE: rgb(214, 115, 115);
   --RANGED: rgb(228, 159, 56);
@@ -81,7 +84,7 @@ body {
   margin-left: 5px;
   margin-right: 10px;
   height: 80px;
-  background-color: rgba(71, 67, 124, 0.4);
+  background-color: var(--powerBox);
   box-shadow: inset 1px 1px 2px 2px rgba(0,0,0,0.3);
   display: flex;
   align-items: center;
@@ -120,7 +123,7 @@ body {
 }
 
 #playerTurn {
-  color: rgb(211, 199, 255);
+  color: #FFDE65; /* naples yellow */
   font-size: 24px;
 }
 
@@ -149,7 +152,7 @@ body {
 }
 
 #creditText a {
-  color: rgb(154, 135, 194);
+  color: rgba(118, 135, 125, 0.8); /* xanadu */
 }
 
 /* INFO BOX RULES */

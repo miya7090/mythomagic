@@ -10,9 +10,11 @@
     opacity: 100%;
 }
 
+/* #D2312B maximum red */
 .token.player1 { filter: invert(72%) sepia(25%) saturate(1427%) hue-rotate(300deg) brightness(97%) contrast(102%); } /* https://codepen.io/sosuke/pen/Pjoqqp used to convert black to target color */
 
-.token.player2 { filter: invert(89%) sepia(5%) saturate(6229%) hue-rotate(176deg) brightness(101%) contrast(101%); }
+/* #B888E2 lavender floral */
+.token.player2 { filter: invert(64%) sepia(68%) saturate(1148%) hue-rotate(213deg) brightness(92%) contrast(91%); }
 
 .token[isDefeated=true] { filter: invert(0.0); }
 
