@@ -492,7 +492,11 @@ function addGameCardStatusesOnDiv(PCard, PCardDiv){
   PCardDiv.appendChild(statusIconWrap);
 }
 
-function get_BC_BroadcastForInfoBox(BCard) {
+function get_BC_BroadcastForInfoBox(BCard, BCardname, suppressSkillLabels) {
+  if (BCardname != undefined){
+    BCard = new Card(BCardname);
+  }
+
   var res = "";
   res += '<div class="hoverTitleColumn">';
     res += '<h3 id="hoverInfoTitle">' + BCard.cardName + "</h3>";
@@ -520,13 +524,19 @@ function get_BC_BroadcastForInfoBox(BCard) {
     res += "</div>";
   res += "</div>";
   
-  res += '<p class="hoverBoxSkill"><span class="hoverHintSkillText">Ability:</span> <span id="abilityTitle">'+BCard.ability_title+'</span> '+BCard.ability_text;
+  res += '<p class="hoverBoxSkill">';
+    if (!suppressSkillLabels) { res += '<span class="hoverHintSkillText">Ability:</span> '; }
+    res += '<span id="abilityTitle">'+BCard.ability_title+'</span> '+BCard.ability_text;
     res += '<span class="hoverBoxSkillTooltip">ability</span>';
     res += '</p>';
-  res += '<p class="hoverBoxSkill"><span class="hoverHintSkillText">Ultimate:</span> <span id="ultTitle">'+BCard.ult_title+'</span> '+BCard.ult_text;
+  res += '<p class="hoverBoxSkill">';
+    if (!suppressSkillLabels) { res += '<span class="hoverHintSkillText">Ultimate:</span> '; }
+    res += '<span id="ultTitle">'+BCard.ult_title+'</span> '+BCard.ult_text;
     res += '<span class="hoverBoxSkillTooltip">ultimate</span>';
     res += '</p>';
-  res += '<p class="hoverBoxSkill"><span class="hoverHintSkillText"><i>Passive:</span> <span id="passiveTitle">'+BCard.passive_title+'</span></i> '+BCard.passive_text;
+  res += '<p class="hoverBoxSkill">';
+    if (!suppressSkillLabels) { res += '<span class="hoverHintSkillText"><i>Passive:</span> '; }
+    res += '<span id="passiveTitle">'+BCard.passive_title+'</span></i> '+BCard.passive_text;
     res += '<span class="hoverBoxSkillTooltip">passive</span>';
     res += '</p>';
 

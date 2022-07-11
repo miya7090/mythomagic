@@ -2,12 +2,60 @@ const socket = io(); // create new instance
 socket.playerType = "lobby";
 var PENDING_INVITE_RESPONSE = false;
 
+var LEADERBOARD_CURSOR_DIV = [undefined, document.createElement("div")]; // [cardName, div] // the card preview that shows up when hover over leaderboard
+var MOUSE_X;
+var MOUSE_Y;
+
 document.addEventListener("DOMContentLoaded", () => {
   const nicknameDiv = document.getElementById("nickname");
   nicknameDiv.focus();
   nicknameDiv.select();
 
   requestLoginBoxLoggedIn();
+  
+  $("#leaderboardTable tr:has(td)").mousemove(function(e) {
+    MOUSE_X = e.clientX;
+    MOUSE_Y = e.clientY;
+    if (document.contains(LEADERBOARD_CURSOR_DIV[1])) {
+      LEADERBOARD_CURSOR_DIV[1].style.left = MOUSE_X + "px";
+      LEADERBOARD_CURSOR_DIV[1].style.top = MOUSE_Y + "px";
+    }
+  });
+
+  // show previews for leaderboard
+  console.log(LEADERBOARD_CURSOR_DIV[1]);
+  $("#leaderboardTable tr:has(td)").mouseover(function(e) {
+    let cardName = e.target.innerText.split(" ")[0];
+
+    if (cardName.length > 1) {
+      if (LEADERBOARD_CURSOR_DIV[0] != cardName) {
+        LEADERBOARD_CURSOR_DIV[0] = cardName;
+
+        if (document.contains(LEADERBOARD_CURSOR_DIV[1])) { document.body.removeChild(LEADERBOARD_CURSOR_DIV[1]); }
+        LEADERBOARD_CURSOR_DIV[1] = document.createElement("div");
+        LEADERBOARD_CURSOR_DIV[1].innerHTML = get_BC_BroadcastForInfoBox(undefined, cardName, true);
+        LEADERBOARD_CURSOR_DIV[1].style.position = "absolute";
+        LEADERBOARD_CURSOR_DIV[1].style.backgroundColor = "rgba(20,20,20,0.8)"
+        LEADERBOARD_CURSOR_DIV[1].style.padding = "3px";
+        LEADERBOARD_CURSOR_DIV[1].style.borderRadius = "5px";
+        LEADERBOARD_CURSOR_DIV[1].style.border = "2px rgba(255,255,255,0.05) solid";
+        LEADERBOARD_CURSOR_DIV[1].style.borderRight = "2px rgba(255,255,255,0.1) solid";
+        LEADERBOARD_CURSOR_DIV[1].style.borderBottom = "2px rgba(255,255,255,0.1) solid";
+        LEADERBOARD_CURSOR_DIV[1].style.left = MOUSE_X + "px";
+        LEADERBOARD_CURSOR_DIV[1].style.top = MOUSE_Y + "px";
+        LEADERBOARD_CURSOR_DIV[1].style.pointerEvents = "none";
+        document.body.appendChild(LEADERBOARD_CURSOR_DIV[1]); // only done once
+        
+        //console.log(LEADERBOARD_CURSOR_DIV[1]);
+      }
+    } else {
+      if (document.contains(LEADERBOARD_CURSOR_DIV[1])) { document.body.removeChild(LEADERBOARD_CURSOR_DIV[1]); }
+    }
+  });
+
+  $("#leaderboardTable").mouseleave(function(e) {
+    if (document.contains(LEADERBOARD_CURSOR_DIV[1])) { document.body.removeChild(LEADERBOARD_CURSOR_DIV[1]); }
+  });
 
   const urlParams = new URLSearchParams(window.location.search);
   const selectedRegion = urlParams.get('join_region');

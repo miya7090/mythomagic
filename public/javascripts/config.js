@@ -188,6 +188,13 @@ const BASE_STAT_DICT = {
       "Mutation","An adjacent enemy is turned into a dolphin (maximum one use)",
       "Bacchanalian Jingle","One enemy's ultimate instead backfires, dealing 100 true damage to its user", "Caster"]
   }
+  
+  function getBaseStats(cardType) {
+    if (BASE_STAT_DICT[cardType] == undefined){
+        console.error(cardType+" not found in base stat dictionary");
+    }
+    return BASE_STAT_DICT[cardType];
+  }
 
   const STATUSES_DEF_DICT = {
     "charmed": "DEF reduced by 50%",

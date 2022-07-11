@@ -246,14 +246,6 @@ function calcDamage(attacker, target){
   return dmg;
 }
 
-// retrieve base stats of a card, return array
-function getBaseStats(cardType) {
-  if (BASE_STAT_DICT[cardType] == undefined){
-      console.error(cardType+" not found in base stat dictionary");
-  }
-  return BASE_STAT_DICT[cardType];
-}
-
 function clearSelection(){
   if (GAME_MODE == "p1-moveToken") {
     resetToActiveMode();
