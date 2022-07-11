@@ -103,14 +103,14 @@ function giveAllTurnMana() {
 function poisonThePoisoned(){
   PLAYER_GAMECARD_OBJS.forEach(pc => {
     if (pc.statuses["poisoned"] > 0){
-      let poisonDmg = Math.round(500 / pc.getCurrentDefense());
+      let poisonDmg = Math.round(800 / pc.getCurrentDefense());
       console.log(pc.cardName,"takes", poisonDmg, "poison damage");
       pc.takeDamage(poisonDmg);
     }
   });
   ENEMY_GAMECARD_OBJS.forEach(pc => {
     if (pc.statuses["poisoned"] > 0){
-      let poisonDmg = Math.round(500 / pc.getCurrentDefense());
+      let poisonDmg = Math.round(800 / pc.getCurrentDefense());
       console.log(pc.cardName,"takes", poisonDmg, "poison damage");
       pc.takeDamage(poisonDmg);
     }

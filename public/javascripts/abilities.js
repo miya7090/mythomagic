@@ -1,10 +1,10 @@
 const ABILITY_MAP = {
     "Athena":[ability_athena,0], // 0 = ally friendly, 1 = attacks enemy, 2 = all valid, 3 = no target provided
-    "Apollo":[ability_apollo,1], "Achilles":[ability_achilles,1],
+    "Apollo":[ability_apollo,0], "Achilles":[ability_achilles,1],
     "Medea":[ability_medea,1], "Poseidon":undefined,
     "Thanatos":[ability_thanatos,1], "Hestia":[ability_hestia,0],
     "Kronos":[ability_kronos,1], "Perseus":[ability_perseus,1],
-    "Hera":[ability_hera,0], "Hermes":[ability_hermes,2],
+    "Hera":[ability_hera,0], "Hermes":[ability_hermes,3],
     "Heracles":[ability_heracles,1], "Hades":[ability_hades,2],
     "Hecate":[ability_hecate,1], "Icarus":[ability_icarus,3],
     "Orpheus":[ability_orpheus,3], "Echo":[ability_echo,3],
@@ -16,11 +16,11 @@ const ABILITY_MAP = {
 
 const ULT_MAP = {
     "Athena":[ult_athena,1],
-    "Apollo":[ult_apollo,3], "Achilles":[ult_achilles,3],
+    "Apollo":[ult_apollo,1], "Achilles":[ult_achilles,3],
     "Medea":[ult_medea,0], "Poseidon":[ult_poseidon,1],
     "Thanatos":[ult_thanatos,3], "Hestia":[ult_hestia,0],
     "Kronos":[ult_kronos,3], "Perseus":[ult_perseus,3],
-    "Hera":[ult_hera,1], "Hermes":[ult_hermes,0],
+    "Hera":[ult_hera,1], "Hermes":[ult_hermes,2],
     "Heracles":[ult_heracles,3], "Hades":[ult_hades,3],
     "Hecate":[ult_hecate,3], "Icarus":[ult_icarus,3],
     "Orpheus":[ult_orpheus,3], "Echo":[ult_echo,1],
@@ -289,8 +289,15 @@ function ult_athena(attacker, target) {
 
 function ability_apollo(attacker, target) {
     broadcastMsg("ability", true, "Apollo", target.cardName);
+    pc.heal(0.2 * pc.getMaxHealth());
+    
+}
+
+function ult_apollo(attacker, target) {
+    broadcastMsg("ultimate", true, "Apollo", target.cardName);
     let dmg = calcDamage(attacker, target);
-    target.takeDamage(1.1 * dmg);
+    target.takeDamage(dmg);
+    target.inflictStatus("poisoned");
 }
 
 function ability_kronos(attacker, target) {
@@ -309,15 +316,6 @@ function ult_kronos(attacker, target) {
         }
     });
     TURNS_ALLOCATED += 1;
-}
-
-function ult_apollo(attacker, target) {
-    broadcastMsg("ultimate", true, "Apollo", "allies");
-    PLAYER_GAMECARD_OBJS.forEach(pc => {
-        pc.clearStatuses();
-        pc.giveMana(0.2 * pc.getMaxMana());
-        pc.heal(0.2 * pc.getMaxHealth());
-    });
 }
 
 function ability_achilles(attacker, target) {
@@ -419,63 +417,36 @@ function ult_heracles(attacker, target) {
 
 function ult_hermes(attacker, target) {
     broadcastMsg("ultimate", true, "Hermes", target.cardName);
-    let mult = 3;
-    if (coinFlip()) {
-        mult = 0.5;
-    }
-    target.current_attack = Math.round(mult * target.current_attack);
-    target.current_normal_attack_range = Math.round(mult * target.current_normal_attack_range);
-    if (target.current_normal_attack_range < 1) {target.current_normal_attack_range = 1; }
-    target.current_defense = Math.round(mult * target.current_defense);
-    if (target.current_defense < 1) {target.current_defense = 1; }
-    target.current_mana_per_turn = Math.round(mult * target.current_mana_per_turn);
-    target.current_mana_per_atk = Math.round(mult * target.current_mana_per_atk);
-    target.current_movement = Math.round(mult * target.current_movement);
-    if (target.current_movement < 1) {target.current_movement = 1; }
-    target.setMaxHealthTo(mult * target.getMaxHealth());
-    target.setMaxManaTo(mult * target.getMaxMana());
+    
+    let ACA = attacker.current_attack;
+    attacker.current_attack = target.current_attack;
+    target.current_attack = ACA;
+    
+    let ACD = attacker.current_defense;
+    attacker.current_defense = target.current_defense;
+    target.current_defense = ACD;
+    
+    let ACMPT = attacker.current_mana_per_turn;
+    attacker.current_mana_per_turn = target.current_mana_per_turn;
+    target.current_mana_per_turn = ACMPT;
+    
+    let ACM = attacker.current_movement;
+    attacker.current_movement = target.current_movement;
+    target.current_movement = ACM;
 }
 
-function ability_hermes(attacker, target) { // #TODO add more outputting of what happens in abilities, add aesthetic notifications
-    broadcastMsg("ability", true, "Hermes", target.cardName);
-    if (attacker.current_attack < target.current_attack && coinFlip()) {
-        let ACA = attacker.current_attack;
-        attacker.current_attack = target.current_attack;
-        target.current_attack = ACA;
+function ability_hermes(attacker, target) {
+    broadcastMsg("ability", true, "Hermes", undefined);
+    target.current_attack = Math.round(hermes_multiplier() * target.current_attack);
+    target.current_defense = Math.round(hermes_multiplier()  * target.current_defense);
+    if (target.current_defense < 1) {target.current_defense = 1; }
+    target.current_mana_per_turn = Math.round(hermes_multiplier() * target.current_mana_per_turn);
+    target.current_movement = Math.round(hermes_multiplier() * target.current_movement);
+}
+
+function hermes_multiplier(){
+    if (coinFlip()) {
+        return 0.5;
     }
-    if (attacker.current_normal_attack_range < target.current_normal_attack_range && coinFlip()) {
-        let ACNAR = attacker.current_normal_attack_range;
-        attacker.current_normal_attack_range = target.current_normal_attack_range;
-        target.current_normal_attack_range = ACNAR;
-    }
-    if (attacker.current_defense < target.current_defense && coinFlip()) {
-        let ACD = attacker.current_defense;
-        attacker.current_defense = target.current_defense;
-        target.current_defense = ACD;
-    }
-    if (attacker.current_mana_per_turn < target.current_mana_per_turn && coinFlip()) {
-        let ACMPT = attacker.current_mana_per_turn;
-        attacker.current_mana_per_turn = target.current_mana_per_turn;
-        target.current_mana_per_turn = ACMPT;
-    }
-    if (attacker.current_mana_per_atk < target.current_mana_per_atk && coinFlip()) {
-        let ACMPA = attacker.current_mana_per_atk;
-        attacker.current_mana_per_atk = target.current_mana_per_atk;
-        target.current_mana_per_atk = ACMPA;
-    }
-    if (attacker.current_movement < target.current_movement && coinFlip()) {
-        let ACM = attacker.current_movement;
-        attacker.current_movement = target.current_movement;
-        target.current_movement = ACM;
-    }
-    if (attacker.getMaxHealth() < target.getMaxHealth() && coinFlip()) {
-        let AMH = attacker.getMaxHealth();
-        attacker.setMaxHealthTo(target.getMaxHealth());
-        target.setMaxHealthTo(AMH);
-    }
-    if (attacker.getMaxMana() < target.getMaxMana && coinFlip()) {
-        let AMM = attacker.getMaxMana();
-        attacker.setMaxManaTo(target.getMaxMana());
-        target.setMaxManaTo(AMM);
-    }
+    return 2.0;
 }
