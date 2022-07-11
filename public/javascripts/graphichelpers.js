@@ -41,6 +41,10 @@ function processBroadcast(msgType, p1, arg1, arg2){
     bIcon = GITHUB_PUBLIC_PATH + "images/alert.png";
     bText = arg1;
     console.log("okay", bIcon, bText, p1);
+  } else if (msgType == "ultimate" && arg1 == "Dionysus") {
+    p1 = !p1;
+    bIcon = GITHUB_PUBLIC_PATH + "images/portraits/dolphin.png";
+    bText = arg2 + " is turning into a dolphin!";
   } else {
     bIcon = GITHUB_PUBLIC_PATH + "images/portraits/"+arg1.toLowerCase()+".png";
     bText = formatBroadcast(msgType, p1, arg1, arg2);

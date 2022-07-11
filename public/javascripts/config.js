@@ -179,7 +179,7 @@ const BASE_STAT_DICT = {
       "Twilight","Reduce MP/turn accumulation by 20 for an enemy up to 3 tiles away",
       "Oblivion","Permanently disable the ultimate of an adjacent enemy",
       "Night Walk","Allies are able to move on off-grid tiles", "Caster"],
-    "Dolphin":[200,2,10,200,50,0,3, 1,0,3,0,
+    "Dolphin":[200,2,10,200,50,0,3, undefined,2,undefined,4,
       "Ram","Attack all enemies within 2 tiles",
       "Splash","Attack all enemies within 4 tiles",
       "Scheme","Allies accumulate an extra 10 MP/turn", "Melee"],
