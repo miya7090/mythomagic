@@ -124,6 +124,12 @@ document.addEventListener("DOMContentLoaded", () => {
     nicknameDiv.disabled = false;
   });
 
+  socket.on("commandCookieLogout", () => {
+    regionNotesText.textContent = "your account has been removed";
+    nicknameDiv.disabled = false;
+    logoutUser();
+  });
+
   socket.on("newAccount", (inviteCode) => {
     //navigator.clipboard.writeText(inviteCode);
     alert("your account has been created! you can invite up to five friends with " + inviteCode);

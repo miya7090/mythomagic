@@ -119,10 +119,17 @@ io.on("connection", socket => {
   /* ~~~~~ lobby socket operations ~~~~~ */
   socket.on("lobbyJoin", (nickname, region, cookieName) => {
     db.collection('login').find({username: nickname}).toArray().then((existingLoginEntry) => {
-      if (existingLoginEntry.length > 0 && cookieName != nickname) { io.to(socket.id).emit("nicknameFailure"); return; } // nickname is reserved
+      // nickname is reserved
+      if (existingLoginEntry.length > 0 && cookieName != nickname) { io.to(socket.id).emit("nicknameFailure"); return; }
 
       // if logged in, update cookie book
       if (cookieName == nickname) { lobbyCookieBook[socket.id] = existingLoginEntry[0].score; }
+
+      // if login is not found, yet cookie name provided, command user to remove cookie
+      if (existingLoginEntry.length == 0 && (cookieName == "" || cookieName == undefined)) {
+        io.to(socket.id).emit("commandCookieLogout");
+        return;
+      }
 
       // otherwise, okay
       kickOutSocketFromLastRoom(socket.id);

@@ -2,19 +2,19 @@ document.addEventListener("DOMContentLoaded", () => {
   resizer();
 });
 
-if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
-  resizer(true);
-}
-
-if (/Mobi/.test(navigator.userAgent)) {
-  resizer(true);
-}
-
 window.addEventListener('resize', resizer);
 
-function resizer(override) {
+function resizer() {
   let loginBox = document.getElementById("loginBox");
   let leaderboard = document.getElementById("leaderboard");
+  var override = false;
+
+  if (window.innerWidth < window.innerHeight) {
+    document.getElementById("orientation").style.visibility = "visible";
+    override = true;
+  } else {
+    document.getElementById("orientation").style.visibility = "hidden";
+  }
   
   if (window.innerWidth <= 768 || override == true){
     loginBox.style.textAlign = "center";

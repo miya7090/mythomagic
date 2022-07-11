@@ -163,6 +163,10 @@ p {
     line-height: 17px;
 }
 
+#orientation {
+    text-align: center;
+}
+
 #leaderboard td, th {
     border-left: 2px solid #7a7a7a;
     border-top: 1px solid #bebebe;
