@@ -63,7 +63,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!AM_WAITING_FOR_OPPONENT_RECONNECT){
       if (GAME_MODE == "pick-phase") {
         alert(OTHER_NAME+" has disconnected");
-        window.location.href = "/";
+        window.location.href = "/lobby";
         MY_SOCKET.emit("commandDisconnectGame");
       } else {
         if (confirm(OTHER_NAME+" has disconnected... would you like to wait for " + OTHER_NAME + " to return?")){
@@ -81,7 +81,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (confirm(OTHER_NAME+" has not yet reconnected... keep waiting?")){
         setTimeout(mySocketPromptDisconnected, WAIT_FOR_RECONNECT);
       } else {
-        window.location.href = "/";
+        window.location.href = "/lobby";
         MY_SOCKET.emit("commandDisconnectGame");
       }
     }
@@ -97,18 +97,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
   MY_SOCKET.on('forfeit', (reason)=>{
     alert("you have forfeited the game ("+reason+")");
-    window.location.href = "/";
+    window.location.href = "/lobby";
   });
 
   MY_SOCKET.on('winThroughForfeit', (reason)=>{
     alert(OTHER_NAME + " has forfeited the game ("+reason+")"); // used only in card picking
-    window.location.href = "/";
+    window.location.href = "/lobby";
   });
 
   MY_SOCKET.on('gameTie', ()=>{
     MY_SOCKET.emit("updateUserStats", REGION_NAME, "tie", getUserLoggedIn());
     alert("game over: you have tied with "+OTHER_NAME);
-    window.location.href = "/";
+    window.location.href = "/lobby";
   });
 
   MY_SOCKET.on('gameWin', (wasSurrender, opponentCookieName)=>{
@@ -118,7 +118,7 @@ document.addEventListener("DOMContentLoaded", () => {
     } else {
       alert("congrats! you defeated "+OTHER_NAME+"!");
     }
-    window.location.href = "/";
+    window.location.href = "/lobby";
   });
 
   MY_SOCKET.on('gameLoss', (wasSurrender, opponentCookieName)=>{
@@ -129,7 +129,7 @@ document.addEventListener("DOMContentLoaded", () => {
       alert(OTHER_NAME+" has won the game");
     }
     
-    window.location.href = "/";
+    window.location.href = "/lobby";
   });
 
   MY_SOCKET.on('yourTurn', (yourEnemysCards, yourEnemysVerOfYourCards)=>{

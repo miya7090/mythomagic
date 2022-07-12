@@ -1,0 +1,78 @@
+.laurel_completeBG {
+    position: absolute;
+    top: 50px;
+    left: calc(50% - 150px);
+    width: 300px;
+    opacity: 0.6;
+}
+
+.token_completeBG {
+    position: absolute;
+    top: 100px;
+    left: calc(50% - 70px);
+    width: 140px;
+    filter: invert(12%) sepia(77%) saturate(1563%) hue-rotate(353deg) brightness(156%) contrast(99%);
+    opacity: 0.6;
+}
+
+.tier_text {
+    position: absolute;
+    top: 215px;
+    width: 300px;
+    left: calc(50% - 150px);
+    text-align: center;
+    color: white;
+    font-size: 50px;
+    font-family: "regularFont";
+}
+
+#buttons {
+    background-color: rgba(0,0,0,0.2);
+    position: absolute; 
+    top: 360px;
+    left: calc(50% - 200px);
+    width: 400px;
+    
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    box-shadow: inset 1px 1px 2px 2px rgba(0,0,0,0.3);
+}
+  
+.entryButton {
+    -webkit-appearance: none;
+    cursor: pointer;
+    margin: 5px;
+    padding: 10px 15px;
+    font-family: "regularFont";
+    font-size: 16px;
+    background-color: rgba(0, 0, 0, 0.4);
+    color: rgb(217, 217, 217);
+    border: 2px rgb(53, 53, 53) solid;
+    border-left: 2px rgb(82, 82, 82) solid;
+    border-top: 2px rgb(98, 98, 98) solid;
+}
+
+input[type="button"]:hover {
+    background-color: rgba(255, 255, 255, 0.4);
+    color: rgb(0, 0, 0);
+}
+
+hr {
+    border: 1px solid rgba(255,255,255,0.2);
+    position: absolute; 
+    top: 460px;
+    left: calc(50% - 200px);
+    width: 400px;
+}
+
+#credsFixed {
+    position: absolute;
+    top: 490px;
+    left: calc(50% - 200px);
+    width: 400px;
+    text-align: center;
+    font-size: 12px;
+}

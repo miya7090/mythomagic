@@ -309,8 +309,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // https://codepen.io/sosuke/pen/Pjoqqp
     if (tier == "silver") { tokenBG.style.filter = "invert(76%) sepia(46%) saturate(6797%) hue-rotate(217deg) brightness(104%) contrast(130%)"; }
-    else if (tier == "bronze") { tokenBG.style.filter = "invert(34%) sepia(34%) saturate(1620%) hue-rotate(200deg) brightness(136%) contrast(91%)"; }
-    else if (tier == "gold") { tokenBG.style.filter = "invert(36%) sepia(94%) saturate(4876%) hue-rotate(146deg) brightness(96%) contrast(90%)"; }
+    else if (tier == "bronze") { tokenBG.style.filter = "invert(36%) sepia(94%) saturate(1276%) hue-rotate(146deg) brightness(76%) contrast(90%)"; }
+    else if (tier == "gold") { tokenBG.style.filter = "invert(34%) sepia(34%) saturate(1620%) hue-rotate(200deg) brightness(136%) contrast(91%)"; }
     else if (tier == "iron") { tokenBG.style.filter = "invert(12%) sepia(77%) saturate(1563%) hue-rotate(353deg) brightness(156%) contrast(99%)"; }
     else if (tier == "grandmaster") { tokenBG.style.filter = "invert(53%) sepia(90%) saturate(368%) hue-rotate(44deg) brightness(76%) contrast(86%)"; }
     

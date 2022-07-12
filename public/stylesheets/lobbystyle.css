@@ -185,6 +185,11 @@ p {
     border: 2px rgba(255, 255, 255, 0.4) dotted;
 }
 
+#leaderboard {
+    position: fixed;
+    bottom: 20px;
+}
+
 #leaderboardTable {
     cursor: pointer;
 }

@@ -434,7 +434,7 @@ app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
 
 router.get("/", (req, res) => {
-  res.render("lobby");
+  res.render("entry");
 });
 
 router.get('/game',(req,res) => {

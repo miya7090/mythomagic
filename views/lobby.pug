@@ -1,7 +1,7 @@
 doctype html
 head
   meta(charset='utf8')
-  title mythomagic
+  title mythomagic - lobby
   meta(name='description' content='ancient greek gaming')
   meta(name='keywords' content='mythomagic')
   link(rel='stylesheet' href='../stylesheets/game.css')
@@ -33,9 +33,6 @@ head
   br
   input#createAccountButton(type='button' value='create account')
 h1#bigTitle mythomagic
-a(href="../help.html" target="_blank") click here for rules & how to play
-br
-br
 #gameStart
   form#gameform(method='POST' action='/game')
     label(for='nickname') enter nickname: 
@@ -56,8 +53,6 @@ br
     div#lobbiersinregion
   br
   br
-br
-br
 #leaderboard
   h2#leaderboardTitle leaderboard
   a(href="/preview" target="_blank") view all card details
@@ -106,58 +101,3 @@ br
       td
       td
       td
-br
-br
-br
-br
-br
-hr(style="border:1px solid rgba(255,255,255,0.2); width:400px;")
-br
-p#credsFixed
-  a#betaVersion beta version 1.4.0 - 
-  a(href='https://forms.gle/p9WZHYcC2gUuW6LG6' target='_blank') support form
-  br
-  br
-  | a portfolio project inspired by 
-  a(href='https://en.wikipedia.org/wiki/List_of_Greek_mythological_figures' target='_blank') greek mythology 
-  br
-  | and 
-  a(href='https://riordan.fandom.com/wiki/Mythomagic' target='_blank') mythomagic 
-  | from the 
-  a(href='https://rickriordan.com/series/percy-jackson-and-the-olympians/' target='_blank') percy jackson series 
-  | &#x2646;
-  br
-  br
-  | made by 
-  a(href='https://github.com/miya7090/' target='_blank') miya7090
-  |  - view 
-  a(href='https://github.com/miya7090/mythomagic' target='_blank') source code 
-  | on github
-  br
-  |     icons from 
-  a(href='https://www.flaticon.com/authors/freepik' target='_blank') freepik on flaticon
-  | ,
-  |     bgm from 
-  a(href='https://www.youtube.com/c/TheSeventhMidnight/' target='_blank') the seventh midnight
-  br
-  |     sound effects from 
-  a(href='https://github.com/miya7090/' target='_blank') miya7090
-  | , 
-  a(href='https://www.youtube.com/channel/UCBlyQ5LHho5o7JQE1WocXuQ' target='_blank') cpht fluke
-  | , and 
-  a(href='https://www.youtube.com/channel/UCLfn0jnl1ye_AkuSeu5l3Uw' target='_blank') alan dalcastagne
-  br
-  br
-  | contact: fanmademythomagic
-  | [at] 
-  | gmail [dot] com
-  #orientation
-    br
-    br
-    #orientationText
-      | are you on a mobile device?
-      br 
-      | consider using a computer or switching to 
-      br
-      b landscape 
-      | mode if no computer is available
