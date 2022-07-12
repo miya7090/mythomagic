@@ -373,7 +373,6 @@ function importAllP2Cs(pcListObj){
         }
         this.current_health -= flatNum;
         console.log(this.cardName, "took", flatNum, "damage");
-        passive_gaea(this);
         if (this.current_health <= 0) { // card is defeated
 
           if (passive_orpheus(this.p1, this.cardName)){

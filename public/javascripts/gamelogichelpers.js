@@ -217,6 +217,7 @@ function attack(atkType, attacker, centerQ, centerR, centerS, aoe) {
             tokenOnTile.pcardLink.takeDamage(dmg);
             passive_echo(attacker, tokenOnTile.pcardLink, dmg);
             passive_eros(attacker, tokenOnTile.pcardLink);
+            passive_gaea(tokenOnTile.pcardLink);
             anim_tileHitByAttack(hitTile); // #TODO add sound
           }
         } else {
@@ -227,6 +228,7 @@ function attack(atkType, attacker, centerQ, centerR, centerS, aoe) {
             } else if (animCode == 1) {
               anim_tileHitByAttack(hitTile);
             } else {
+              anim_tileHitByHeal(hitTile);
               console.log("need to implement anim for neutral skill"); // #TODO
             }
           } else {

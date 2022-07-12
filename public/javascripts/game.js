@@ -182,6 +182,9 @@ document.addEventListener("DOMContentLoaded", () => {
   previewRadius.textContent="Preview radius: "+MOUSE_HOVER_RADIUS;
   playerTurn.textContent=getPlayerTurnText();
 
+  document.getElementById("playerNameInBox").innerText = SELF_NAME;
+  document.getElementById("enemyNameInBox").innerText = OTHER_NAME;
+
   document.addEventListener('keyup', keyProcessing);
   mainGrid.addEventListener('mouseleave', mouseOutOfGrid);
 

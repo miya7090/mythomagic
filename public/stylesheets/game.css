@@ -3,41 +3,41 @@
   --highlightedTile: rgba(121, 137, 127, 0.8); /* ash gray */
   --default_highlightedTile: rgba(187, 195, 190, 0.8); /* ^ ash gray */
 
-  --autoattackHighlightedTile: #6F4B28; /* kobicha */
-  --rangeHighlightedTile: #522520; /* rgba(176, 135, 127, 0.8); /* burnished brown */
-  --aimingReachHighlightedTile: rgba(176, 135, 127, 0.8); /* ^ burnished brown */
+  --autoattackHighlightedTile: #522520;
+  --rangeHighlightedTile: #522520;
+  --aimingReachHighlightedTile: #522520;
   --aimingHighlightedTile: rgba(190, 103, 71, 0.8); /* copper red */
 
   --offgridTile: rgba(0, 0, 0, 0.4);
   --highlightedOffgrid: rgba(0, 0, 0, 0.9);
   --default_highlightedOffgrid: rgba(0, 0, 0, 0.9);
-  --rangeHighlightedOffgrid: rgba(176, 135, 127, 0.4); /* burnished brown */
-  --aimingReachHighlightedOffgrid: rgba(176, 135, 127, 0.4); /* ^ burnished brown */
+  --rangeHighlightedOffgrid: #341613;
+  --aimingReachHighlightedOffgrid: #341613;
   --aimingHighlightedOffgrid: rgba(190, 103, 71, 0.4); /* copper red */
 
-  --animAtkHit: rgb(160, 57, 10); /* chinese red */
-  --animHealHit: rgb(80, 98, 74); /* feldgrau */
-  --animAtkInRange: rgb(141, 52, 5); /* saddle brown */
+  --animAtkHit: #522520;
+  --animHealHit: #522520;
+  --animAtkInRange: #522520;
 
-  --p0ActionTextColor: #a4d1a6;
-  --p0PassiveTextColor: #699d7a;
+  --p2ActionTextColor: #a4d1a6;
+  --p2PassiveTextColor: #699d7a;
   --p1ActionTextColor: #d3968e; /* pastel pink, from medium carmine */
   --p1PassiveTextColor: #bb6a60; /* copper penny, from medium carmine */
-  --p2ActionTextColor: #c092c4; /* lilac luster, from twilight lavender */
-  --p2PassiveTextColor: #ac66ab; /* mountbatten pink, from twilight lavender */
+  --p0ActionTextColor: #c092c4; /* lilac luster, from twilight lavender */
+  --p0PassiveTextColor: #ac66ab; /* mountbatten pink, from twilight lavender */
 
-  --p0FontColor: #87c38a;
+  --p2FontColor: #87c38a;
   --p1FontColor: #db7f5a; /* chestnut, previously #A44A3F medium carmine */
-  --p2FontColor: #b471c6; /* twilight lavender */
-  --p1CardAreaBGColor: rgba(61, 24, 0, 0.3); /* black bean */
-  --p2CardAreaBGColor: rgba(45, 19, 44, 0.3); /* dark purple */
+  --p0FontColor: #b471c6; /* twilight lavender */
+  --p1CardAreaBGColor: rgba(61, 24, 0, 0.5); /* black bean */
+  --p2CardAreaBGColor: rgba(19, 45, 25, 0.5); /* dark purple */
   --p1TooltipBGColor: rgba(41, 21, 10, 0.9); /* seal brown darkened */
-  --p2TooltipBGColor: rgba(32, 19, 32, 0.9); /* dark purple darkened */
+  --p2TooltipBGColor: rgba(19, 32, 21, 0.9); /* dark purple darkened */
   
   --p1TokenColor: #5D2400;
-  --p2TokenColor: #5A2558; /* palatinate purple */
+  --p2TokenColor: #255a2e; /* palatinate purple */
   --p1TokenHoverColor: rgb(52, 21, 9); /* chestnut, previously #A44A3F medium carmine */
-  --p2TokenHoverColor: #341032; /* twilight lavender */
+  --p2TokenHoverColor: #103417; /* twilight lavender */
 
   --powerBox: #32393072;
 
@@ -125,7 +125,7 @@ body {
 }
 
 #playerTurn {
-  color: #FFDE65; /* naples yellow */
+  color: #ff9865; /* naples yellow */
   font-size: 24px;
 }
 
@@ -298,6 +298,8 @@ body {
   background-size: cover;
   background-color: rgba(0,0,0,0.4);
   background-blend-mode: darken;
+
+  opacity: 0.9;
 
   z-index: 1;
 }

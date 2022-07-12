@@ -10,7 +10,7 @@
     box-shadow: 0 0 8px 5px rgba(146, 146, 146, 0.15);
 }
 
-#onFieldCards {
+#onFieldCards, #enemyCardReference {
     background-color: var(--p1CardAreaBGColor);
     box-shadow: 0 0 8px 4px rgba(0, 0, 0, 0.3);
     display: flex;
@@ -18,16 +18,20 @@
     overflow-x: auto;
     overflow-y: hidden;
     overflow: overlay;
+
+    position: relative;
 }
 
 #enemyCardReference {
     background-color: var(--p2CardAreaBGColor);
-    box-shadow: 0 0 8px 4px rgba(0, 0, 0, 0.25);
-    display: flex;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    overflow-y: hidden;
-    overflow: overlay;
+}
+
+#playerNameInBox, #enemyNameInBox {
+    position: absolute;
+    bottom: 3px;
+    right: 5px;
+    font-size: 30px;
+    color: rgba(255,255,255,0.2);
 }
 
 /* BASECARD AREA: EXTRA RULES */
@@ -82,7 +86,6 @@
     height: 90px;
 
     background-color: rgba(255, 255, 255, 0.5);
-    border: 1px solid rgba(255,255,255,0.3);
     border-radius: 10px;
     box-shadow: 0 0 1rem 0 rgba(0, 0, 0, 0.6);
     overflow: visible;
@@ -93,7 +96,8 @@
 }
 
 .deadCard {
-    background-color: rgba(180, 180, 180, 0.5);
+    background-color: rgba(115, 115, 115, 0.5);
+    opacity: 0.7;
 }
 
 /* BASECARD STYLING */
@@ -119,12 +123,28 @@
     font-size:12px;
 }
 
-.smallestFontGC{
+.normalFontGC {
+    font-size:13px;
+}
+
+.smallestFontGC {
+    padding-top: 2px;
     font-size:10px;
+    height: 88px;
+}
+
+.smallestFontGC .barPreviewContainer {
+    margin-top: 2px;
 }
   
 .smallFontGC{
+    padding-top: 1px;
     font-size:12px;
+    height: 89px;
+}
+
+.smallFontGC .barPreviewContainer {
+    margin-top: 1px;
 }
 
 .baseCardImgHolder{
@@ -151,14 +171,14 @@
 .barPreviewContainer {
     pointer-events: none;
     width: 100%;
-    font-size: 10px;
+    font-size: 9px;
     text-align: center;
     background-color: #ddd;
-    opacity: 80%;
+    opacity: 90%;
 }
   
-.hpBar { background-color: #04AA6D; }
-.manaBar { background-color: #5e6bff; }
+.hpBar { background-color: #04AA6D; text-align: left; }
+.manaBar { background-color: #5e6bff; text-align: left; }
 
 .deadCard .barPreviewContainer { background-color: rgba(255,255,255,0.2); }
 

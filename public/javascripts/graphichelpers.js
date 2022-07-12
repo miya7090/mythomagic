@@ -167,25 +167,25 @@ function aimingTargetReachHighlight(turnOn, radius){
 }
 
 // animation
-function anim_tileHitByAttack(hitTileDiv){ //#TODO also animate the game card
+function anim_tileHitByAttack(hitTileDiv){
   let animColor = getComputedStyle(document.documentElement).getPropertyValue('--animAtkHit');
   hitTileDiv.animate({
     backgroundColor: animColor,
-  }, 700 );
+  }, 600 );
 };
 
-function anim_tileHitByHeal(hitTileDiv){ //#TODO also animate the game card
+function anim_tileHitByHeal(hitTileDiv){
   let animColor = getComputedStyle(document.documentElement).getPropertyValue('--animHealHit');
   hitTileDiv.animate({
     backgroundColor: animColor,
-  }, 700 );
+  }, 600 );
 };
 
 function anim_tileInAttackRange(hitTileDiv){
   let animColor = getComputedStyle(document.documentElement).getPropertyValue('--animAtkInRange');
   hitTileDiv.animate({
     backgroundColor: animColor,
-  }, 700 );
+  }, 400 );
 };
 
 // div creation
@@ -228,6 +228,7 @@ function createAvailableCardDiv(pcNameToRender, availCardGroupDiv) {
   const acard = document.createElement("div");
   putBaseCardHTML(pcNameToRender, acard);
   acard.classList.add("card");
+  acard.classList.add("availCard");
   acard.id = "availCard-" + pcNameToRender;
   if (availCardGroupDiv == undefined) {
     myAvailableCards.appendChild(acard);
@@ -260,6 +261,8 @@ function createGameCardDiv(pcToRender) {
     ccard.classList.add("smallestFontGC");
   } else if (pcToRender.cardName.length > 7) {
     ccard.classList.add("smallFontGC");
+  } else {
+    ccard.classList.add("normalFontGC"); // for gamecards only
   }
   
   addGameCardStatusesOnDiv(pcToRender, ccard);
@@ -268,6 +271,8 @@ function createGameCardDiv(pcToRender) {
   ccard.addEventListener('mouseenter', function(evt){mouseOverGameCard(evt, pcToRender);});
   ccard.addEventListener('mouseleave', function(evt){mouseOutOfGameCard(evt, pcToRender);});
   ccard.addEventListener('mouseup', function(evt){mouseClickGameCard(evt, pcToRender);});
+
+  //ccard.style.boxShadow = "inset 0px 40px 20px -27px var(--"+ getBaseStats(pcToRender.cardName)[17].toUpperCase() +")";
 };
 
 function createEnemyGameCardDiv(pcToRender) { //#TODO reduce redundant code ^
@@ -285,6 +290,8 @@ function createEnemyGameCardDiv(pcToRender) { //#TODO reduce redundant code ^
     ccard.classList.add("smallestFontGC");
   } else if (pcToRender.cardName.length > 7) {
     ccard.classList.add("smallFontGC");
+  } else {
+    ccard.classList.add("normalFontGC"); // for gamecards only
   }
   
   addGameCardStatusesOnDiv(pcToRender, ccard);
@@ -292,6 +299,8 @@ function createEnemyGameCardDiv(pcToRender) { //#TODO reduce redundant code ^
 
   ccard.addEventListener('mouseenter', function(evt){mouseOverGameCard(evt, pcToRender);});
   ccard.addEventListener('mouseleave', function(evt){mouseOutOfGameCard(evt, pcToRender);});
+  
+  //ccard.style.boxShadow = "inset 0px -18px px -10px var(--"+ getBaseStats(pcToRender.cardName)[17].toUpperCase() +")";
 };
 
 function createTokenDiv(pcToRender) {
@@ -445,9 +454,9 @@ function getGameCardHTML(PCard) {
   manaPercentage = Math.round(100 * manaPercentage);
   pcResult += '<div class="barPreviewContainer">'
               +'<div class="hpBar" style="width:'+healthPercentage+'%">'
-              +PCard.current_health+'/'+PCard.getMaxHealth()+'</div>'
+              +"&nbsp;"+PCard.current_health+'/'+PCard.getMaxHealth()+'</div>'
               +'<div class="manaBar" style="width:'+manaPercentage+'%">'
-              +PCard.current_mana+'/'+PCard.getMaxMana()+'</div>'
+              +"&nbsp;"+PCard.current_mana+'/'+PCard.getMaxMana()+'</div>'
               +'</div>';
 
   return pcResult;

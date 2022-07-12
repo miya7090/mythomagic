@@ -14,7 +14,7 @@
 .token.player1 { filter: invert(72%) sepia(25%) saturate(1427%) hue-rotate(300deg) brightness(97%) contrast(102%); } /* https://codepen.io/sosuke/pen/Pjoqqp used to convert black to target color */
 
 /* #B888E2 lavender floral */
-.token.player2 { filter: invert(64%) sepia(68%) saturate(1148%) hue-rotate(213deg) brightness(92%) contrast(91%); }
+.token.player2 { filter: invert(83%) sepia(23%) saturate(402%) hue-rotate(70deg) brightness(83%) contrast(86%); }
 
 .token[isDefeated=true] { filter: invert(0.0); }
 
