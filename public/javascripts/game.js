@@ -29,16 +29,6 @@ document.addEventListener("DOMContentLoaded", () => {
     powerButtons[i].addEventListener('mouseenter', mouseOverPowerbutton);
     //powerButtons[i].addEventListener('mouseup', mouseClickPowerbutton);
   }
-
-  $(".hexgrid").hover(function() {
-    if (getTurn() == "p1"){
-      $(this).css('cursor','pointer');
-    } else {
-      $(this).css('cursor','wait');
-    }
-  }, function() {
-      $(this).css('cursor','auto');
-  });
   
   /* get url parameters */
   const urlParams = new URLSearchParams(window.location.search);
@@ -145,8 +135,6 @@ document.addEventListener("DOMContentLoaded", () => {
   MY_SOCKET.on('yourTurn', (yourEnemysCards, yourEnemysVerOfYourCards)=>{
     TURNS_ALLOCATED = 2;
     beginTurn(yourEnemysCards, yourEnemysVerOfYourCards);
-
-    $(this).css('cursor','pointer');
   });
 
   MY_SOCKET.on('waitTurnAndPopulate', (yourEnemysCards)=>{

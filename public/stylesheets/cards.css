@@ -28,6 +28,7 @@
 
 #playerNameInBox, #enemyNameInBox {
     position: absolute;
+    pointer-events: none;
     bottom: 3px;
     right: 5px;
     font-size: 30px;

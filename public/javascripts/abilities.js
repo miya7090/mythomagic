@@ -144,10 +144,10 @@ function ult_jason(attacker, target) {
 }
 
 function ability_jason(attacker, target) {
-    let lowestDef = 9999;
+    let lowestDef = undefined;
     let pcWithLowestDef = undefined;
     PLAYER_GAMECARD_OBJS.forEach(pc => {
-        if (lowestDef == 9999 || pc.getCurrentDefense() < lowestDef) {
+        if (pc.dead != "defeated" && (lowestDef == undefined || pc.getCurrentDefense() < lowestDef)) {
             lowestDef = pc.getCurrentDefense();
             pcWithLowestDef = pc;
         }
@@ -160,13 +160,13 @@ function ability_jason(attacker, target) {
 function ult_gaea(attacker, target) {
     broadcastMsg("ultimate", true, "Gaea", undefined);
     PLAYER_GAMECARD_OBJS.forEach(pc => {
-        pc.heal(100);
+        pc.heal(200);
     });
 }
 
 function ability_gaea(attacker, target) {
     broadcastMsg("ability", true, "Gaea", target.cardName);
-    target.heal(200);
+    target.heal(100);
     target.giveMana(100);
 }
 
@@ -235,10 +235,10 @@ function ult_orpheus(attacker, target) {
 }
 
 function ability_orpheus(attacker, target) {
-    let lowestHealth = 9999;
+    let lowestHealth = undefined;
     let pcWithLowestHealth = undefined;
     PLAYER_GAMECARD_OBJS.forEach(pc => {
-        if (lowestHealth == 9999 || (pc.current_health < lowestHealth && pc.dead != "defeated")) {
+        if (pc.dead != "defeated" && (lowestHealth == undefined || pc.current_health < lowestHealth)) {
             lowestHealth = pc.current_health;
             pcWithLowestHealth = pc;
         }
@@ -298,7 +298,7 @@ function ability_hades(attacker, target) {
 
 function ability_athena(attacker, target) {
     broadcastMsg("ability", true, "Athena", target.cardName);
-    target.current_defense += 15;
+    target.current_defense += 5;
     target.clearStatuses();
 }
 
@@ -322,7 +322,7 @@ function ult_athena(attacker, target) {
 
 function ability_apollo(attacker, target) {
     broadcastMsg("ability", true, "Apollo", target.cardName);
-    pc.heal(0.2 * pc.getMaxHealth());
+    target.heal(0.2 * target.getMaxHealth());
     
 }
 
@@ -427,7 +427,7 @@ function ult_perseus(attacker, target) {
 
 function ability_hera(attacker, target) {
     broadcastMsg("ability", true, "Hera", target.cardName);
-    target.current_defense += 5;
+    target.current_defense += 3;
     target.heal(200);
     target.giveMana(100);
 }
