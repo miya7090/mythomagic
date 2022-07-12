@@ -210,16 +210,15 @@ document.addEventListener("DOMContentLoaded", () => {
     nicknameDiv.value = username;
     nicknameDiv.disabled = true;
 
-    /////
     const thisLoginBox = document.getElementById("loginBox");
     thisLoginBox.innerHTML = "";
 
+    // get statistics
     let totalWins = Object.values(wins).reduce((a, b) => a+b);
     let totalLosses = Object.values(losses).reduce((a, b) => a+b);
     var tier = tierOf(playerScore);
     
-    thisLoginBox.style.backgroundColor = "rgba(84, 84, 84, 0.4)";
-    
+    // write text
     const loginText = document.createElement("div"); loginText.id = "loginColWrap";
     const leftColumn = document.createElement("div"); leftColumn.classList.add("column");
     const rightColumn = document.createElement("div"); rightColumn.classList.add("column");
@@ -285,6 +284,39 @@ document.addEventListener("DOMContentLoaded", () => {
     thisLoginBox.appendChild(emailDiv);
     thisLoginBox.appendChild(pwDiv);
     thisLoginBox.appendChild(logoutButton);
+
+    // set background
+    let laurelBG = document.createElement("img")
+    laurelBG.classList.add("laurelBG");
+    laurelBG.src = GITHUB_PUBLIC_PATH + "images/laurels/" + tier + "-laurel.svg";
+    laurelBG.style.position = "absolute";
+    laurelBG.width = (thisLoginBox.offsetWidth - 80);
+    laurelBG.style.top = "0px";
+    laurelBG.style.left = "40px";
+    laurelBG.style.opacity = "0.4";
+    laurelBG.style.zIndex = -3;
+    thisLoginBox.appendChild(laurelBG);
+
+    let tokenBG = document.createElement("img")
+    tokenBG.classList.add("laurelBG");
+    tokenBG.src = GITHUB_PUBLIC_PATH + "images/tokens/whitetoken.png";
+    tokenBG.style.position = "absolute";
+    tokenBG.width = (thisLoginBox.offsetWidth - 240);
+    tokenBG.style.top = "50px";
+    tokenBG.style.left = "120px";
+    tokenBG.style.opacity = "0.5";
+    tokenBG.style.zIndex = -3;
+
+    // https://codepen.io/sosuke/pen/Pjoqqp
+    if (tier == "silver") { tokenBG.style.filter = "invert(76%) sepia(46%) saturate(6797%) hue-rotate(217deg) brightness(104%) contrast(130%)"; }
+    else if (tier == "bronze") { tokenBG.style.filter = "invert(34%) sepia(34%) saturate(1620%) hue-rotate(200deg) brightness(136%) contrast(91%)"; }
+    else if (tier == "gold") { tokenBG.style.filter = "invert(36%) sepia(94%) saturate(4876%) hue-rotate(146deg) brightness(96%) contrast(90%)"; }
+    else if (tier == "iron") { tokenBG.style.filter = "invert(12%) sepia(77%) saturate(1563%) hue-rotate(353deg) brightness(156%) contrast(99%)"; }
+    else if (tier == "grandmaster") { tokenBG.style.filter = "invert(53%) sepia(90%) saturate(368%) hue-rotate(44deg) brightness(76%) contrast(86%)"; }
+    
+    thisLoginBox.appendChild(tokenBG);
+    
+    thisLoginBox.style.backgroundColor = "rgba(44, 44, 44, 0.6)";
   });
 
   function changePassword(){

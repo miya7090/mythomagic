@@ -47,8 +47,8 @@ h2 {
     background-color: rgba(255,255,255,0.1);
     padding: 10px;
     text-align: right;
-    border-left: 3px rgba(152, 152, 152, 0.8) solid;
-    border-bottom: 2px rgba(195, 195, 195, 0.877) solid;
+    border-left: 3px rgba(71, 71, 71, 0.8) solid;
+    border-bottom: 2px rgba(169, 169, 169, 0.877) solid;
 }
 
 #pwDiv {
