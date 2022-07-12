@@ -11,7 +11,7 @@ function resizer() {
 
   if (window.innerWidth < window.innerHeight) {
     document.getElementById("orientation").style.visibility = "visible";
-    override = true;
+    //override = true;
   } else {
     document.getElementById("orientation").style.visibility = "hidden";
   }

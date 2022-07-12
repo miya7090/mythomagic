@@ -20,8 +20,13 @@ body {
 
 h1,h2 {
     font-family: "regularFont";
+    font-size: 30px;
     margin-left: 0px;
     margin-bottom: 10px;
+}
+
+h2 {
+    font-size: 25px;
 }
 
 #loginColWrap {
@@ -61,6 +66,7 @@ input,select {
     margin: 2px;
     padding: 6px;
     font-family: Georgia;
+    font-size: 14px;
 }
 
 select {
@@ -68,6 +74,7 @@ select {
     cursor: pointer;
     padding: 8px;
     padding-right: 30px;
+    font-size: 14px;
     
     /* source: https://material.io/tools/icons/?icon=keyboard_arrow_down&style=baseline */
     background-image: url('data:image/svg+xml;charset=utf8,<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" filter="invert(1.0)" width="24px" height="24px" viewBox="0 0 24 24" xml:space="preserve"><path d="M7.41,8.59L12,13.17l4.59-4.58L18,10l-6,6l-6-6L7.41,8.59z"/><path fill="none" d="M0,0h24v24H0V0z"/></svg>');
@@ -172,6 +179,12 @@ p {
     text-align: center;
 }
 
+#orientationText {
+    padding: 5px;
+    background-color: rgba(255, 240, 168, 0.1);
+    border: 2px rgba(255, 255, 255, 0.4) dotted;
+}
+
 #leaderboardTable {
     cursor: pointer;
 }
@@ -182,6 +195,7 @@ p {
     background-color: rgba(231, 231, 231, 0.1);
     text-align: left;
     padding: 5px;
+    font-size: 14px;
 }
 
 #leaderboard td:hover {
@@ -206,7 +220,7 @@ p {
     bottom: 0px;
     right: 0px;
     background-color: rgb(248, 248, 248);
-    font-size: small;
+    font-size: 10px;
     line-height: 17px;
     padding-left: 5px;
     padding-right: 5px;
