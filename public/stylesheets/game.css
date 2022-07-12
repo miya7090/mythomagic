@@ -23,19 +23,19 @@
   --p2PassiveTextColor: #699d7a;
   --p1ActionTextColor: #d3968e; /* pastel pink, from medium carmine */
   --p1PassiveTextColor: #bb6a60; /* copper penny, from medium carmine */
-  --p0ActionTextColor: #c092c4; /* lilac luster, from twilight lavender */
-  --p0PassiveTextColor: #ac66ab; /* mountbatten pink, from twilight lavender */
+  --p0ActionTextColor: #c2c2c2; /* lilac luster, from twilight lavender */
+  --p0PassiveTextColor: #898989; /* mountbatten pink, from twilight lavender */
 
   --p2FontColor: #87c38a;
   --p1FontColor: #db7f5a; /* chestnut, previously #A44A3F medium carmine */
-  --p0FontColor: #b471c6; /* twilight lavender */
+  --p0FontColor: #ffffff; /* twilight lavender */
   --p1CardAreaBGColor: rgba(61, 24, 0, 0.5); /* black bean */
   --p2CardAreaBGColor: rgba(19, 45, 25, 0.5); /* dark purple */
   --p1TooltipBGColor: rgba(41, 21, 10, 0.9); /* seal brown darkened */
   --p2TooltipBGColor: rgba(19, 32, 21, 0.9); /* dark purple darkened */
   
   --p1TokenColor: #5D2400;
-  --p2TokenColor: #255a2e; /* palatinate purple */
+  --p2TokenColor: #334936; /* palatinate purple */
   --p1TokenHoverColor: rgb(52, 21, 9); /* chestnut, previously #A44A3F medium carmine */
   --p2TokenHoverColor: #103417; /* twilight lavender */
 
