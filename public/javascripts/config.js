@@ -9,8 +9,6 @@ OTHER_NAME = undefined;
 BROADCASTING = false;
 BROADCAST_QUEUE = [];
 
-GITHUB_PUBLIC_PATH = "https://raw.githubusercontent.com/miya7090/mythomagic/main/public/";
-
 HEX_SIDELENGTH = 13;
 HEX_RADIUS = (HEX_SIDELENGTH-1)/2;
 CUBE_DIR_VECS = [[1,0,-1],[1,-1,0],[0,-1,1],[-1,0,1],[-1,1,0],[0,1,-1]];
@@ -24,9 +22,7 @@ ABILITY_MANA_REQ = 200;
 MAX_MANA = 1000;
 STATUS_DEFAULT_LENGTH = 4+1;
 
-BGM_MUTE = false;
 const SOUND_MAP = {
-  "bgm":                ["50 mulling"],
   "radiusChange":       ["new_tap"],
   "tileHovers":         ["clack5", "clack6"],
   "playerCardHovers":   ["clack3", "clack4"],

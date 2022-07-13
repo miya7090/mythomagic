@@ -1,8 +1,3 @@
-/*
-a Pen by DIACO : twitter.com/Diaco_ml || codepen.io/MAW
-powered by GSAP : https://www.greensock.com/
-*/
-
 import {gsap, TweenLite, ScrollTrigger, Draggable, Flip, MotionPathPlugin } from "../gsap/all.js";
 
 var MOUSE_X;
@@ -13,7 +8,6 @@ document.addEventListener("DOMContentLoaded", () => {
         MOUSE_X = e.clientX;
         MOUSE_Y = e.clientY;
     });
-
     
     document.addEventListener("mouseleave", function(e) {
         MOUSE_X = undefined;

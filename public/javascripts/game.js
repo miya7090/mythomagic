@@ -19,9 +19,8 @@ function getUserLoggedIn() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  /* ui bgm set up */
+  /* ui sounds set up */
   initializeSoundObjects();
-  setTimeout(startBgm, 2000); // start music 2 secs in
 
   // clack the powerbox buttons
   var powerButtons = document.getElementsByClassName("button");

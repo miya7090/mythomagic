@@ -9,11 +9,12 @@ head
   link(rel='stylesheet' href='../stylesheets/helppage.css')
   script.
     function scrollToThisDiv(idOfDiv) { console.log("hi", idOfDiv); document.getElementById(idOfDiv).scrollIntoView(); }
+  script(src='../javascripts/bgm_player.js' charset='utf8')
   link(rel='apple-touch-icon' sizes='180x180' href='../images/favicon/apple-touch-icon.png')
   link(rel='icon' type='image/png' sizes='32x32' href='../images/favicon/favicon-32x32.png')
   link(rel='icon' type='image/png' sizes='16x16' href='../images/favicon/favicon-16x16.png')
   link(rel='manifest' href='../images/favicon/site.webmanifest')
-#app
+#bgmLinker(page="help")
 h2#h2top how to play
 br
 #tableOfContents 

@@ -387,28 +387,6 @@ function mouseExitAuto(evt) {
   highlightSelfAndRadius("autoattackPreview", false, GAME_MODE_MEMORYTARGET.current_normal_attack_range, GAME_MODE_MEMORYTARGET.getQ(), GAME_MODE_MEMORYTARGET.getR(), GAME_MODE_MEMORYTARGET.getS());
 }
 
-function startBgm(){
-  if (BGM_MUTE){
-      SOUND_OBJECTS["bgm"][0].pause();
-      SOUND_OBJECTS["bgm"][0].currentTime = 0;
-  } else {
-    SOUND_OBJECTS["bgm"][0].volume = 0.2;
-    SOUND_OBJECTS["bgm"][0].play();
-  }
-}
-
-function muteBGM(){
-  console.log("setting bgm mute to", !BGM_MUTE);
-  BGM_MUTE = !BGM_MUTE;
-  startBgm();
-
-  if (BGM_MUTE) {
-    document.getElementById("muteButton").innerText = "unmute";
-  } else {
-    document.getElementById("muteButton").innerText = "mute";
-  }
-}
-
 function mouseOverAvailableCard(evt, referenceCard) {
   const gameInfoBox = document.getElementById("gameInfoBox");
   var gCard = onFieldCards.querySelector('#p1card-'+referenceCard.cardName);

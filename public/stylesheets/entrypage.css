@@ -1,5 +1,6 @@
 html {
     overflow: hidden !important;
+    cursor: crosshair;
 }
 
 .laurel_completeBG {
@@ -47,7 +48,7 @@ html {
   
 .entryButton {
     -webkit-appearance: none;
-    cursor: pointer;
+    cursor: crosshair;
     margin: 9px;
     padding: 10px 15px;
     font-family: "regularFont";

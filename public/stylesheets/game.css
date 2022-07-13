@@ -131,12 +131,13 @@ body {
 }
 
 #playerTurn {
-  color: #ff9865; /* naples yellow */
+  color: #ffffff; /* naples yellow */
   font-size: 24px;
 }
 
 #previewRadius {
   font-size: 12px;
+  color:gray;
 }
 
 #previewRadiusInstructions {
@@ -146,13 +147,14 @@ body {
 
 #mythomagicTitle {
   position: fixed;
-  bottom:18px;
+  bottom:20px;
   right:8px;
   margin:0px;
   font-size: 40px;
 }
 
 #creditText {
+  color:gray;
   position: fixed;
   bottom:8px;
   right:8px;
