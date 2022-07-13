@@ -65,7 +65,16 @@ function refreshBgm(){
         BGM_OBJECT.currentTime = 0;
     } else {
         BGM_OBJECT.volume = BGM_VOLUME;
-        BGM_OBJECT.play();
+        var promise = BGM_OBJECT.play();
+
+        if (promise !== undefined) {
+            promise.then(_ => {
+                // Autoplay started!
+            }).catch(error => {
+                // Autoplay was prevented.
+                muteBGM();
+            });
+        }
     }
 }
   
