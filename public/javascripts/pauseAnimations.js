@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // don't forget to register plugins
     gsap.registerPlugin(ScrollTrigger, Draggable, Flip, MotionPathPlugin); 
 
-    var total = 40;
+    var total = 20;
     var container = document.getElementById('app');
     var w = window.innerWidth;
     var h = window.innerHeight;
@@ -55,8 +55,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         gsap.to(newFirefly, {
             motionPath: thisMotion,
-            duration: R(10)+5,
-            scale: R(1.5)+0.2,
+            duration: R(10)+10,
+            scale: R(1.2)+0.2,
             onComplete: MoveAnim,
             onCompleteParams: [newFirefly]
         });
