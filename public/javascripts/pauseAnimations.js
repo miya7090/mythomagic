@@ -32,23 +32,22 @@ document.addEventListener("DOMContentLoaded", () => {
     for (var i=total;i--;){ 
         let newFirefly = document.createElement('div');
         newFirefly.classList.add("dot");
-        newFirefly.opacity = 0;
         container.appendChild(newFirefly);
         fireflies.push(newFirefly);
 
         gsap.set(newFirefly, {
             x: R(w),
-            y: R(h)
+            y: R(h),
+            opacity: 0
         });
 
         MoveAnim(newFirefly);
         GlowAnim(newFirefly, oneOrZero());
-        console.log(oneOrZero());
     };
 
     function MoveAnim(newFirefly) {
         var thisMotion;
-        if (R(10) > 0 && MOUSE_X != 0 && MOUSE_X != undefined){
+        if (R(10) > 3 && MOUSE_X != 0 && MOUSE_X != undefined){
             thisMotion = [{x:MOUSE_X,y:MOUSE_Y},{x:R(w),y:R(h)}];
         } else {
             thisMotion = [{x:R(w),y:R(h)},{x:R(w),y:R(h)}];
@@ -57,17 +56,19 @@ document.addEventListener("DOMContentLoaded", () => {
         gsap.to(newFirefly, {
             motionPath: thisMotion,
             duration: R(10)+5,
-            scale: R(2),
+            scale: R(1.5)+0.2,
             onComplete: MoveAnim,
             onCompleteParams: [newFirefly]
         });
     }
 
     function GlowAnim(newFirefly, lastOpacity) {
+        var thisDelay = 0;
+        if (lastOpacity == 1){ thisDelay = R(7); }
         gsap.to(newFirefly, {
-            duration: 0.5,
+            duration: 1.0,
             opacity: lastOpacity,
-            delay: R(2),
+            delay: thisDelay,
             onComplete: GlowAnim,
             onCompleteParams: [newFirefly, 1-lastOpacity]
         });
