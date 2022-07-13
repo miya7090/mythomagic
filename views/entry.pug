@@ -1,4 +1,9 @@
 doctype html
+// Quantity should be the same in Sass
+- var quantity = 15
+
+- for (var i = 1; i <= quantity; i++)
+  .firefly
 head
   meta(charset='utf8')
   title mythomagic
@@ -7,10 +12,12 @@ head
   link(rel='shortcut icon' href='favicon.ico')
   link(rel='stylesheet' href='../stylesheets/lobbystyle.css')
   link(rel='stylesheet' href='../stylesheets/gameend.css')
+  link(rel='stylesheet' href='../stylesheets/fireflies.css')
   link(rel='apple-touch-icon' sizes='180x180' href='../images/favicon/apple-touch-icon.png')
   link(rel='icon' type='image/png' sizes='32x32' href='../images/favicon/favicon-32x32.png')
   link(rel='icon' type='image/png' sizes='16x16' href='../images/favicon/favicon-16x16.png')
   link(rel='manifest' href='../images/favicon/site.webmanifest')
+#app
 #banner
   img.laurel_completeBG(src='https://raw.githubusercontent.com/miya7090/mythomagic/main/public/images/laurels/bronze-laurel.svg')
   img.token_completeBG(src='https://raw.githubusercontent.com/miya7090/mythomagic/main/public/images/tokens/whitetoken.png')
