@@ -1,4 +1,9 @@
 doctype html
+// Quantity should be the same in Sass
+- var quantity = 15
+
+- for (var i = 1; i <= quantity; i++)
+  .firefly
 head
   meta(charset='utf8')
   title mythomagic - lobby
@@ -6,6 +11,7 @@ head
   meta(name='keywords' content='mythomagic')
   link(rel='stylesheet' href='../stylesheets/game.css')
   link(rel='stylesheet' href='../stylesheets/boards.css')
+  link(rel='stylesheet' href='../stylesheets/fireflies.css')
   link(rel='stylesheet' href='../stylesheets/lobbystyle.css')
   script(src='//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js')
   script(src='/socket.io/socket.io.js' charset='utf8')
@@ -15,6 +21,7 @@ head
   script(src='../javascripts/socket_lobby.js' charset='utf8')
   script(src='../javascripts/mobile_versionify_lobby.js' charset='utf8')
   link(rel="icon" href="https://raw.githubusercontent.com/miya7090/mythomagic/main/public/images/favicon/favicon.ico" type="image/x-icon")
+#app
 #loginBox
   label username: 
   input#username(type='text' maxlength='16')
