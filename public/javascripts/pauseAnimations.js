@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         gsap.to(newFirefly, {
             motionPath: thisMotion,
-            duration: R(10)+10,
+            duration: R(5)+10,
             scale: R(1.2)+0.2,
             onComplete: MoveAnim,
             onCompleteParams: [newFirefly]
