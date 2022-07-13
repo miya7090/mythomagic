@@ -72,6 +72,7 @@ document.addEventListener("DOMContentLoaded", () => {
   socket.on('connect', ()=>{
     console.log("new lobby socket connected", socket);
     socket.emit("requestAllHeroboards");
+    socket.emit("requestGuildAndPlayerStats");
   });
 
   socket.on('disconnect', ()=>{
@@ -253,7 +254,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const guildDiv = document.createElement("div");
 
     const guildLabel = document.createElement("label");
-    guildLabel.innerText = "guild: ";
+    guildLabel.innerText = "group: ";
     guildDiv.appendChild(guildLabel);
 
     const guildField = document.createElement("input");
@@ -273,7 +274,9 @@ document.addEventListener("DOMContentLoaded", () => {
     guildMemberList.forEach((guildMemberInfo) => {
       let guildMemberDiv = document.createElement("div");
       guildMemberDiv.style.fontWeight = "normal";
-      guildMemberDiv.innerText = guildMemberInfo[0] + " • " + guildMemberInfo[1].toFixed(2) + " • " + Object.values(guildMemberInfo[2]).reduce((a, b) => a+b) + " wins";
+      let numWins = Object.values(guildMemberInfo[2]).reduce((a, b) => a+b);
+      guildMemberDiv.innerText = guildMemberInfo[0] + " • " + guildMemberInfo[1].toFixed(2) + " • " + numWins + " win";
+      if (numWins == 0 || numWins > 1) { guildMemberDiv.innerText += "s"; }
       guildMembers.appendChild(guildMemberDiv);
     });
 
@@ -424,6 +427,22 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+  socket.on("guildboardUpdate", (res)=>{
+    if (res == undefined) {
+      console.error("error retrieving group rankings from mongodb");
+    } else {
+      updateGroupBoard(res);
+    }
+  });
+
+  socket.on("playerboardUpdate", (res)=>{
+    if (res == undefined) {
+      console.error("error retrieving player rankings from mongodb");
+    } else {
+      updatePlayerBoard(res);
+    }
+  });
+
   socket.on("lobbyJoined", (nickname, region, regionUsers, lobbyCookieBook)=>{
     console.log(nickname, "has joined region", region);
     populateRegionList(region, regionUsers, lobbyCookieBook);
@@ -547,6 +566,39 @@ function updateLobbyBoard(regionName, res) {
       if (res[i].heroWins == 1) { tableText += " win)"; }
       else { tableText += " wins)"; }
       lobbyBoard.getElementsByTagName('tr')[i+1].getElementsByTagName('td')[thisCol].innerText = tableText;
+    }
+  }
+}
+
+function updateGroupBoard(res) {
+  let groupBoard = document.getElementById("groupboardTable");
+  
+  var addedRankings = 0;
+  var i = 0;
+  while (addedRankings < 5 && i < res.length) {
+    if (res[i]._id != "") {
+      let olympiaWins = (res[i].olympiaWins == undefined) ? 0 : res[i].olympiaWins;
+      let corinthWins = (res[i].corinthWins == undefined) ? 0 : res[i].corinthWins;
+      let athensWins = (res[i].athensWins == undefined) ? 0 : res[i].athensWins;
+      let spartaWins = (res[i].spartaWins == undefined) ? 0 : res[i].spartaWins;
+      let tableText = res[i]._id + ": " + res[i].guildScore.toFixed(2);
+      groupBoard.getElementsByTagName('tr')[addedRankings+1].getElementsByTagName('td')[1].innerText = tableText;
+      groupBoard.getElementsByTagName('tr')[addedRankings+1].getElementsByTagName('td')[1].title = olympiaWins + "/" + corinthWins + "/" + athensWins + "/" + spartaWins;
+      addedRankings += 1;
+    }
+    i += 1;
+  }
+}
+
+function updatePlayerBoard(res) {
+  let playerBoard = document.getElementById("playerboardTable");
+  for (let i = 0; i < res.length; i++) {
+    let totalWins = Object.values(res[i].wins).reduce((a, b) => a+b);
+    if (totalWins > 0){
+      let tableText = res[i].username + ": " + res[i].score.toFixed(2);/* + " (" + totalWins;
+      if (totalWins == 1) { tableText += " win)"; }
+      else { tableText += " wins)"; }*/ // #TODO remove win count transmission if not used
+      playerBoard.getElementsByTagName('tr')[i+1].getElementsByTagName('td')[1].innerText = tableText;
     }
   }
 }

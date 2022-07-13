@@ -5,6 +5,7 @@ head
   meta(name='description' content='ancient greek gaming')
   meta(name='keywords' content='mythomagic')
   link(rel='stylesheet' href='../stylesheets/game.css')
+  link(rel='stylesheet' href='../stylesheets/boards.css')
   link(rel='stylesheet' href='../stylesheets/lobbystyle.css')
   script(src='//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js')
   script(src='/socket.io/socket.io.js' charset='utf8')
@@ -55,8 +56,51 @@ h1#bigTitle mythomagic
   br
 br
 br
+br
 #leaderboard
   h2#leaderboardTitle leaderboard
+  #groupAndPlayerTables
+    table#groupboardTable
+      tr
+        th
+        th Top Groups
+      tr
+        td 1
+        td
+      tr
+        td 2
+        td
+      tr
+        td 3
+        td.
+      tr
+        td 4
+        td
+      tr
+        td 5
+        td
+    br
+    br
+    table#playerboardTable
+      tr
+        th
+        th Top Players
+      tr
+        td 1
+        td
+      tr
+        td 2
+        td
+      tr
+        td 3
+        td
+      tr
+        td 4
+        td
+      tr
+        td 5
+        td
+  h2#leaderboardTitle hero rankings
   a(href="/preview" target="_blank") view all card details
   br
   br
@@ -67,39 +111,45 @@ br
       th Olympia
       th Corinth
       th Athens
-      th Sparta
+      th.forceRightCol Sparta
     tr.highlightTopTR
       td 1
       td#topTopTR database is still loading...
       td
       td
       td
-      td
+      td.forceRightCol
     tr
       td 2
       td (try waiting a minute then refreshing)
       td
       td
       td
-      td
+      td.forceRightCol
     tr
       td 3
       td.
       td
       td
       td
-      td
+      td.forceRightCol
     tr.highlightTR
       td 4
       td
       td
       td
       td
-      td
+      td.forceRightCol
     tr.highlightTR
       td 5
       td
       td
       td
       td
-      td
+      td.forceRightCol
+
+      //socket.on("requestGuildAndPlayerStats", () => {
+  //io.to(socket.id).emit("guildplayerboardUpdate", undefined);
+   db.collection('login').aggregate([{$group: { _id: "$guild", guildScore: { $sum: "$score" }, totalWins: { $sum: ["$wins.olympia","$wins.corinth","$wins.athens","$wins.olympia"] }}}]).sort({guildScore:-1}).limit(5).toArray().then((res) => {
+     io.to(socket.id).emit("guildplayerboardUpdate", res);*/
+//});

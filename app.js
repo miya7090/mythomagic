@@ -426,6 +426,26 @@ io.on("connection", socket => {
       });
     }
   });
+
+  socket.on("requestGuildAndPlayerStats", () => {
+    if (!MONGO_CONNECTED) {
+      return; // heroboard will already send an error message
+    } else {
+      // guild board update
+      db.collection('login').aggregate([
+        {$group:      { _id: "$guild", 
+                        guildScore: { $sum: "$score" }
+                      }}
+      ]).sort({guildScore:-1}).limit(6).toArray().then((res) => { // get 6 since one may be group where guild=""
+        io.to(socket.id).emit("guildboardUpdate", res);
+      });
+
+      // player board update
+      db.collection('login').find().sort({score:-1}).limit(5).toArray().then((userData) => {
+        io.to(socket.id).emit("playerboardUpdate", userData);
+      });
+    }
+  });
 });
 
 function addWinsToRegionHeroboard(regionName, cardNames) {

@@ -1,0 +1,40 @@
+#leaderboardTable {
+    cursor: pointer;
+}
+
+#groupAndPlayerTables {
+    display: flex;
+}
+
+#groupboardTable, #playerboardTable {
+    margin-right: 20px;
+    cursor: pointer;
+}
+
+#leaderboard td, th {
+    border-left: 2px solid #7a7a7a;
+    border-top: 1px solid #bebebe;
+    background-color: rgba(231, 231, 231, 0.1);
+    text-align: left;
+    padding: 5px;
+    font-size: 14px;
+}
+
+#leaderboard td:last-child, th:last-child {
+    border-right: 2px solid #565656;
+    text-align: left;
+    padding: 5px;
+    font-size: 14px;
+}
+
+#leaderboard td:hover {
+    background-color: #e7e7e754;
+}
+
+#leaderboard tr:nth-child(5),tr:nth-child(6) {
+    background-color: #d8d8d84a;
+    color: #878787;
+}
+
+#leaderboard tr:nth-child(5) :hover { background-color: #dcdcdc3b; }
+#leaderboard tr:nth-child(6) :hover { background-color: #dcdcdc3b; }

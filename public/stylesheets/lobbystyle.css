@@ -47,8 +47,8 @@ h2 {
     background-color: rgba(255,255,255,0.1);
     padding: 10px;
     text-align: right;
-    border-left: 4px rgba(64, 64, 64, 0.8) solid;
-    border-bottom: 3px rgba(88, 88, 88, 0.877) solid;
+    border-left: 3px rgba(71, 71, 71, 0.8) solid;
+    border-bottom: 2px rgba(169, 169, 169, 0.877) solid;
 }
 
 #pwDiv {
@@ -183,32 +183,6 @@ p {
     padding: 5px;
     background-color: rgba(255, 240, 168, 0.1);
     border: 2px rgba(255, 255, 255, 0.4) dotted;
-}
-
-#leaderboardTable {
-    cursor: pointer;
-}
-
-#leaderboard td, th {
-    border-left: 2px solid #7a7a7a;
-    border-top: 1px solid #bebebe;
-    background-color: rgba(231, 231, 231, 0.1);
-    text-align: left;
-    padding: 5px;
-    font-size: 14px;
-}
-
-#leaderboard td:hover {
-    background-color: #e7e7e754;
-}
-
-#leaderboard .highlightTR {
-    background-color: #d8d8d84a;
-    color: #878787;
-}
-
-#leaderboard .highlightTR :hover {
-    background-color: #dcdcdc3b;
 }
 
 .lightGray {
