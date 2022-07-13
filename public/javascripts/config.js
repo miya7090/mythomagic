@@ -1,5 +1,7 @@
 // @miya7090
 
+GITHUB_PUBLIC_PATH = "https://raw.githubusercontent.com/miya7090/mythomagic/main/public/";
+
 MY_SOCKET = undefined;
 OPPONENT_SOCKET_ID = undefined;
 REGION_NAME = undefined;
