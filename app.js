@@ -271,6 +271,7 @@ io.on("connection", socket => {
           db.collection('login').find({username: opponentCookieName}).toArray().then((rivalEntry) => {
             let myScorePercent = (0.1 * (100*existingLoginEntry[0].score))/100.0;
             let theirScorePercent = ( (0.1 * (100*rivalEntry[0].score))/100.0 ) + 1.00;
+            if (theirScorePercent > 10.00) { theirScorePercent = 10.00; }
             // absorb 10% of opponent's score
             if (winType == "win") {
               db.collection('login').updateOne({username: cookieName}, {$inc:{score:theirScorePercent}});
@@ -481,6 +482,10 @@ router.get('/game',(req,res) => {
 
 router.get('/preview',(req,res) => {
   res.render("preview");
+});
+
+router.get('/help',(req,res) => {
+  res.render("help");
 });
 
 router.get('/lobby',(req,res) => {

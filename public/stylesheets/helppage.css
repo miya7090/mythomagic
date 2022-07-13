@@ -1,4 +1,54 @@
+:root {
+    --GENERALHIGHLIGHT: rgb(241, 224, 141);
+
+    --SERVERCOLOR: rgb(137, 179, 239);
+    --STATUSEFFECTCOLOR: rgb(137, 179, 239);
+    --SKILLCOLOR: rgb(128, 234, 116);
+    --KEYCODE: rgb(255, 255, 25);
+    --BACKTOTOP: rgb(93, 93, 93);
+    
+    /* copied from game.css */
+    --MELEE: rgb(214, 115, 115);
+    --RANGED: rgb(228, 159, 56);
+    --PROTECTOR: rgb(191, 194, 99);
+    --HEALER: rgb(117, 189, 113);
+    --SUPPORTER: rgb(94, 169, 231);
+    --CASTER: rgb(120, 125, 245);
+    --SPECIAL: rgb(156, 103, 182);
+
+    --IRON: rgb(131, 131, 131);
+    --BRONZE: rgb(177, 139, 26);
+    --SILVER: rgb(182, 189, 203);
+    --GOLD: rgb(232, 195, 83);
+    --GRANDMASTER: rgb(141, 148, 241);
+}
+
+html {
+    overflow: hidden !important;
+}
+
 h2 {
+    text-align: center;
+}
+
+#tableOfContents {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.tocTitle {
+    -webkit-appearance: none;
+    cursor: pointer;
+    margin: 9px;
+    padding: 5px 7px;
+    font-family: "regularFont";
+    font-size: 12px;
+    background-color: rgba(0, 0, 0, 0.4);
+    color: rgb(217, 217, 217);
+    border: 3px rgb(53, 53, 53) solid;
+    border-left: 3px rgb(82, 82, 82) solid;
+    border-top: 3px rgb(98, 98, 98) solid;
     text-align: center;
 }
 
@@ -6,11 +56,14 @@ h2 {
     margin: 10px;
     margin-right: 30px;
     padding-bottom: 20px;
+    font-size: 14px;
 }
 
 .helpSlide h3 {
     margin: 10px;
     padding: 10px;
+    font-size: 20px;
+    font-family: "regularFont";
     background-color: rgba(0, 0, 0, 0.5);
 }
 

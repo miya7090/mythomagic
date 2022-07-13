@@ -232,8 +232,8 @@ document.addEventListener("DOMContentLoaded", () => {
     } else {
       leftColumn.innerHTML += "<strike>invite code: " + newCode + "</strike><br/><br/>";
     }
-    
-    rightColumn.innerHTML = "score: " + playerScore.toFixed(2) + " <a href='/help.html#scoring' target='_blank'>[?]</a><br/>";
+
+    rightColumn.innerHTML = "score: " + playerScore.toFixed(2) + " <a href='/help' target='_blank'>[?]</a><br/>";
     rightColumn.innerHTML += "your ranking: <b>#" + playerRanking + "</b><br/><br/>";
 
     leftColumn.innerHTML += "total wins: " + totalWins + "<br/>"; // #TODO count only if against logged in players

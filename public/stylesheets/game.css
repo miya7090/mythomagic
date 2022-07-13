@@ -48,6 +48,12 @@
   --SUPPORTER: rgb(94, 169, 231);
   --CASTER: rgb(120, 125, 245);
   --SPECIAL: rgb(156, 103, 182);
+
+  --IRON: rgb(131, 131, 131);
+  --BRONZE: rgb(177, 139, 26);
+  --SILVER: rgb(182, 189, 203);
+  --GOLD: rgb(232, 195, 83);
+  --GRANDMASTER: rgb(141, 148, 241);
 }
 
 @font-face {

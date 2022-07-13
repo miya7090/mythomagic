@@ -1,9 +1,4 @@
 doctype html
-// Quantity should be the same in Sass
-- var quantity = 15
-
-- for (var i = 1; i <= quantity; i++)
-  .firefly
 head
   meta(charset='utf8')
   title mythomagic
@@ -13,6 +8,8 @@ head
   link(rel='stylesheet' href='../stylesheets/lobbystyle.css')
   link(rel='stylesheet' href='../stylesheets/gameend.css')
   link(rel='stylesheet' href='../stylesheets/fireflies.css')
+  script(type="module" src="../gsap/all.js")
+  script(type="module" src='../javascripts/pauseAnimations.js' charset='utf8')
   link(rel='apple-touch-icon' sizes='180x180' href='../images/favicon/apple-touch-icon.png')
   link(rel='icon' type='image/png' sizes='32x32' href='../images/favicon/favicon-32x32.png')
   link(rel='icon' type='image/png' sizes='16x16' href='../images/favicon/favicon-16x16.png')
@@ -23,7 +20,7 @@ head
   img.token_completeBG(src='https://raw.githubusercontent.com/miya7090/mythomagic/main/public/images/tokens/whitetoken.png')
   p.tier_text mythomagic
   #buttons
-    a(class='entryButton' href='/help.html') instructions
+    a(class='entryButton' href='/help') instructions
     a(class='entryButton' href='/lobby') play game
     a(class='entryButton' href='/preview') card index
   #footer

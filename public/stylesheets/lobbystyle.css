@@ -136,23 +136,23 @@ p {
 }
 
 .iron {
-    color: rgb(131, 131, 131);
+    color: var(--IRON);
 }
 
 .bronze {
-    color: rgb(177, 139, 26);
+    color: var(--BRONZE);
 }
 
 .silver {
-    color: rgb(255, 255, 255);
+    color: var(--SILVER);
 }
 
 .gold {
-    color: rgb(232, 195, 83);
+    color: var(--GOLD);
 }
 
 .grandmaster {
-    color: rgb(141, 148, 241);
+    color: var(--GRANDMASTER);
 }
 
 .lobbier:hover {
