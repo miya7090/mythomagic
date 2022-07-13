@@ -20,8 +20,8 @@ document.addEventListener("DOMContentLoaded", () => {
     var bgmName, volume;
     switch (bgmLink.getAttribute("page")) {
         case "entry":      bgmName = "6 wind of melancholy"; break;
-        case "lobby":      bgmName = "89 town of clocks"; BGM_VOLUME = 0.8; break;
-        case "game":       bgmName = "50 mulling"; BGM_VOLUME = 0.2; MUSIC_ICON_PLACEMENT = "topright"; break;
+        case "lobby":      bgmName = "89 town of clocks"; break;
+        case "game":       bgmName = "50 mulling"; BGM_VOLUME = 0.3; MUSIC_ICON_PLACEMENT = "topright"; break;
         case "defeat":     bgmName = "94 the contract"; break;
         case "victory":    bgmName = "18 elemental plane of air"; break;
     }
@@ -54,6 +54,7 @@ document.addEventListener("DOMContentLoaded", () => {
     MUSIC_ICON_IMG.style.filter = "invert(1.0)";
     MUSIC_ICON_IMG.style.width = "30px";
     MUSIC_ICON_IMG.style.cursor = "pointer";
+    MUSIC_ICON_IMG.title = bgmName;
 
     MUSIC_ICON_IMG.addEventListener("mouseenter", raiseOpacity);
     MUSIC_ICON_IMG.addEventListener("mouseleave", lowerOpacity);

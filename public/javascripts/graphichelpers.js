@@ -221,7 +221,7 @@ function createTileDiv(rowDiv, q, r) {
 
   // tile moving receptor
   // token mover function
-  square.addEventListener('mouseup', mouseClickTile);
+  square.onclick = mouseClickTile;
 };
 
 function createAvailableCardDiv(pcNameToRender, availCardGroupDiv) {
@@ -238,7 +238,7 @@ function createAvailableCardDiv(pcNameToRender, availCardGroupDiv) {
 
   const referenceCard = new Card(pcNameToRender); // show stats on hover
   acard.addEventListener('mouseenter', function(evt){mouseOverAvailableCard(evt, referenceCard);});
-  acard.addEventListener('mouseup', mouseClickAvailableCard);
+  acard.onclick = mouseClickAvailableCard;
 };
 
 function highlightMemoryTarget(turnOn) {
@@ -270,7 +270,7 @@ function createGameCardDiv(pcToRender) {
 
   ccard.addEventListener('mouseenter', function(evt){mouseOverGameCard(evt, pcToRender);});
   ccard.addEventListener('mouseleave', function(evt){mouseOutOfGameCard(evt, pcToRender);});
-  ccard.addEventListener('mouseup', function(evt){mouseClickGameCard(evt, pcToRender);});
+  ccard.onclick = function(evt){mouseClickGameCard(evt, pcToRender);};
 
   //ccard.style.boxShadow = "inset 0px 40px 20px -27px var(--"+ getBaseStats(pcToRender.cardName)[17].toUpperCase() +")";
 };
@@ -316,7 +316,7 @@ function createTokenDiv(pcToRender) {
     token.setAttribute("isChosen", pcToRender.cardName == GAME_MODE_MEMORYTARGET.cardName);
   }
 
-  token.addEventListener('mouseup', mouseClickToken);
+  token.onclick = mouseClickToken;
   token.setAttribute("thisObscured", pcToRender.statuses["obscured"] > 0);
 
   // place token on board
