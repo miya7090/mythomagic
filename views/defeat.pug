@@ -1,0 +1,29 @@
+doctype html
+head
+  meta(charset='utf8')
+  title defeat
+  meta(name='description' content='ancient greek gaming')
+  meta(name='keywords' content='mythomagic')
+  link(rel='shortcut icon' href='favicon.ico')
+  link(rel='stylesheet' href='../stylesheets/lobbystyle.css')
+  link(rel='stylesheet' href='../stylesheets/entrypage.css')
+  script(src='../javascripts/bgm_player.js' charset='utf8')
+  script.
+    document.addEventListener("DOMContentLoaded", () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      document.getElementById("gameCompleteDetails").innerText = "you have been defeated by " + urlParams.get("opponent");
+    });
+  link(rel='apple-touch-icon' sizes='180x180' href='../images/favicon/apple-touch-icon.png')
+  link(rel='icon' type='image/png' sizes='32x32' href='../images/favicon/favicon-32x32.png')
+  link(rel='icon' type='image/png' sizes='16x16' href='../images/favicon/favicon-16x16.png')
+  link(rel='manifest' href='../images/favicon/site.webmanifest')
+#bgmLinker(page="defeat")
+#app
+#banner
+  img.laurel_completeBG(src='https://raw.githubusercontent.com/miya7090/mythomagic/main/public/images/laurels/bronze-laurel.svg' style="opacity:0.3;")
+  img.token_completeBG(src='https://raw.githubusercontent.com/miya7090/mythomagic/main/public/images/tokens/whitetoken.png' style="opacity:0.4;")
+  p.tier_text defeat
+  #buttons(bHeight="low")
+    a(class='entryButton' href='/lobby') return to lobby
+    a(class='entryButton' href='/') back to main menu
+  p#gameCompleteDetails loading...

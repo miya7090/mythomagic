@@ -5,7 +5,7 @@ GITHUB_PUBLIC_PATH = "https://raw.githubusercontent.com/miya7090/mythomagic/main
 BGM_MUTE = false;
 BGM_OBJECT = undefined;
 BGM_VOLUME = 1.0;
-BGM_BEGIN_DELAY = 1000;
+BGM_BEGIN_DELAY = 0;
 
 MUSIC_ICON_LINK = GITHUB_PUBLIC_PATH+'images/music.png';
 MUSIC_ICON_IMG = undefined;
@@ -19,11 +19,11 @@ document.addEventListener("DOMContentLoaded", () => {
     // add background music
     var bgmName, volume;
     switch (bgmLink.getAttribute("page")) {
-        case "entry":      bgmName = "6 wind of melancholy"; BGM_BEGIN_DELAY = 0; break;
-        case "lobby":      bgmName = "89 town of clocks"; BGM_VOLUME = 0.8; BGM_BEGIN_DELAY = 0; break;
+        case "entry":      bgmName = "6 wind of melancholy"; break;
+        case "lobby":      bgmName = "89 town of clocks"; BGM_VOLUME = 0.8; break;
         case "game":       bgmName = "50 mulling"; BGM_VOLUME = 0.2; MUSIC_ICON_PLACEMENT = "topright"; break;
-        case "losing":     bgmName = "94 the contract"; break;
-        case "winning":    bgmName = "18 elemental plane of air"; break;
+        case "defeat":     bgmName = "94 the contract"; break;
+        case "victory":    bgmName = "18 elemental plane of air"; break;
     }
     if (bgmName == undefined) { return; }
 

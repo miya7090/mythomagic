@@ -488,6 +488,14 @@ router.get('/help',(req,res) => {
   res.render("help");
 });
 
+router.get('/victory',(req,res) => {
+  res.render("victory", {opponent: req.query.opponent});
+});
+
+router.get('/defeat',(req,res) => {
+  res.render("defeat", {opponent: req.query.opponent});
+});
+
 router.get('/lobby',(req,res) => {
   res.render("lobby",  {join_region: req.query.join_region});
 });

@@ -80,7 +80,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (confirm(OTHER_NAME+" has not yet reconnected... keep waiting?")){
         setTimeout(mySocketPromptDisconnected, WAIT_FOR_RECONNECT);
       } else {
-        window.location.href = "/lobby";
+        window.location.href = "/victory?opponent="+OTHER_NAME;
         MY_SOCKET.emit("commandDisconnectGame");
       }
     }
@@ -96,12 +96,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
   MY_SOCKET.on('forfeit', (reason)=>{
     alert("you have forfeited the game ("+reason+")");
-    window.location.href = "/lobby";
+    window.location.href = "/defeat?opponent="+OTHER_NAME;
   });
 
   MY_SOCKET.on('winThroughForfeit', (reason)=>{
     alert(OTHER_NAME + " has forfeited the game ("+reason+")"); // used only in card picking
-    window.location.href = "/lobby";
+    window.location.href = "/victory?opponent="+OTHER_NAME;
   });
 
   MY_SOCKET.on('gameTie', ()=>{
@@ -113,22 +113,17 @@ document.addEventListener("DOMContentLoaded", () => {
   MY_SOCKET.on('gameWin', (wasSurrender, opponentCookieName)=>{
     MY_SOCKET.emit("updateUserStats", REGION_NAME, "win", getUserLoggedIn(), opponentCookieName, wasSurrender);
     if (wasSurrender == true) {
-      alert("congrats! "+OTHER_NAME+" has surrendered");
-    } else {
-      alert("congrats! you defeated "+OTHER_NAME+"!");
+      alert(OTHER_NAME+" has surrendered or left the game");
     }
-    window.location.href = "/lobby";
+    window.location.href = "/victory?opponent="+OTHER_NAME;
   });
 
   MY_SOCKET.on('gameLoss', (wasSurrender, opponentCookieName)=>{
     MY_SOCKET.emit("updateUserStats", REGION_NAME, "loss", getUserLoggedIn(), opponentCookieName);
     if (wasSurrender == true) {
       alert("you surrendered the game to "+OTHER_NAME);
-    } else {
-      alert(OTHER_NAME+" has won the game");
-    }
-    
-    window.location.href = "/lobby";
+    }    
+    window.location.href = "/defeat?opponent="+OTHER_NAME;
   });
 
   MY_SOCKET.on('yourTurn', (yourEnemysCards, yourEnemysVerOfYourCards)=>{
