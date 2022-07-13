@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", () => {
+/*document.addEventListener("DOMContentLoaded", () => {
   resizer();
 });
 
@@ -8,13 +8,6 @@ function resizer() {
   let loginBox = document.getElementById("loginBox");
   let leaderboard = document.getElementById("leaderboard");
   var override = false;
-
-  if (window.innerWidth < window.innerHeight) {
-    document.getElementById("orientation").style.visibility = "visible";
-    //override = true;
-  } else {
-    document.getElementById("orientation").style.visibility = "hidden";
-  }
   
   if (window.innerWidth <= 768 || override == true){
     loginBox.style.textAlign = "center";
@@ -35,4 +28,4 @@ function resizer() {
     loginBox.style.borderLeft = "3px rgba(152, 152, 152, 0.8) solid";
     loginBox.style.borderBottom = "2px rgba(195, 195, 195, 0.877) solid";
   }
-}
+}*/ // disable for now

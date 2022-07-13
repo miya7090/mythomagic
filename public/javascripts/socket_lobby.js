@@ -205,20 +205,21 @@ document.addEventListener("DOMContentLoaded", () => {
     // if no cookie, make no change
   }
 
-  socket.on("getUserDataBox", (username, newCode, codeUses, wins, losses, playerScore, playerRanking) => {
+  socket.on("getUserDataBox", (username, newCode, codeUses, wins, losses, playerScore, playerRanking, guild, guildMemberList) => {
     // also freeze the nickname box
     nicknameDiv.value = username;
     nicknameDiv.disabled = true;
 
     const thisLoginBox = document.getElementById("loginBox");
     thisLoginBox.innerHTML = "";
+    thisLoginBox.style.textAlign = "right";
 
     // get statistics
     let totalWins = Object.values(wins).reduce((a, b) => a+b);
     let totalLosses = Object.values(losses).reduce((a, b) => a+b);
     var tier = tierOf(playerScore);
     
-    // write text
+    // write text in two columns
     const loginText = document.createElement("div"); loginText.id = "loginColWrap";
     const leftColumn = document.createElement("div"); leftColumn.classList.add("column");
     const rightColumn = document.createElement("div"); rightColumn.classList.add("column");
@@ -244,16 +245,53 @@ document.addEventListener("DOMContentLoaded", () => {
 
     rightColumn.innerHTML += "games played: " + (totalWins + totalLosses) + "<br/><br/>";
 
-    const logoutButton = document.createElement("input");
-    logoutButton.type = "button";
-    logoutButton.value = "logout";
-    logoutButton.classList.add("lightGray");
-    logoutButton.onclick = logoutUser;
+    // various divisions beneath those two columns
+    const hr = document.createElement("hr");
+    hr.style.borderColor = "rgba(255,255,255,0.2)";
+    hr.style.marginBottom = "15px";
+
+    const guildDiv = document.createElement("div");
+
+    const guildLabel = document.createElement("label");
+    guildLabel.innerText = "guild: ";
+    guildDiv.appendChild(guildLabel);
+
+    const guildField = document.createElement("input");
+    guildField.type = "text";
+    guildField.classList.add("darkInputBox");
+    guildField.id = "guildField";
+    guildField.value = guild;
+    guildDiv.appendChild(guildField);
+
+    const guildMembers = document.createElement("div");
+    guildMembers.id = "guildMembers";
+    guildMembers.style.fontWeight = "bold";
+    guildMembers.style.margin = "10px";
+    guildMembers.style.textAlign = "center";
+    guildMembers.innerText = guild;
+
+    guildMemberList.forEach((guildMemberInfo) => {
+      let guildMemberDiv = document.createElement("div");
+      guildMemberDiv.style.fontWeight = "normal";
+      guildMemberDiv.innerText = guildMemberInfo[0] + " • " + guildMemberInfo[1].toFixed(2) + " • " + Object.values(guildMemberInfo[2]).reduce((a, b) => a+b) + " wins";
+      guildMembers.appendChild(guildMemberDiv);
+    });
+
+    const changeGuildButton = document.createElement("input");
+    changeGuildButton.type = "button";
+    changeGuildButton.value = "update";
+    changeGuildButton.classList.add("lightGray");
+    changeGuildButton.onclick = changeGuild;
+    guildDiv.appendChild(changeGuildButton);
+
+    const hr1 = document.createElement("hr");
+    hr1.style.borderColor = "rgba(255,255,255,0.2)";
+    hr1.style.marginBottom = "15px";
 
     const emailDiv = document.createElement("div");
 
     const emailLabel = document.createElement("label");
-    emailLabel.innerText = "email: ";
+    emailLabel.innerText = "confirm your email: ";
     emailDiv.appendChild(emailLabel);
 
     const emailField = document.createElement("input");
@@ -262,8 +300,17 @@ document.addEventListener("DOMContentLoaded", () => {
     emailField.id = "confirmEmail";
     emailDiv.appendChild(emailField);
 
+    const hr2 = document.createElement("hr");
+    hr2.style.borderColor = "rgba(255,255,255,0.2)";
+    hr2.style.marginTop = "15px";
+    hr2.style.marginBottom = "15px";
+
     const pwDiv = document.createElement("div");
     pwDiv.id = "pwDiv";
+    
+    const pwLabel = document.createElement("label");
+    pwLabel.innerText = "new password: ";
+    pwDiv.appendChild(pwLabel);
 
     const newPWField = document.createElement("input");
     newPWField.type = "password";
@@ -276,13 +323,24 @@ document.addEventListener("DOMContentLoaded", () => {
     changePWButton.value = "change password";
     changePWButton.classList.add("lightGray");
     changePWButton.onclick = changePassword;
-    pwDiv.appendChild(changePWButton);
+
+    const logoutButton = document.createElement("input");
+    logoutButton.type = "button";
+    logoutButton.value = "logout";
+    logoutButton.classList.add("lightGray");
+    logoutButton.onclick = logoutUser;
 
     loginText.appendChild(leftColumn);
     loginText.appendChild(rightColumn);
     thisLoginBox.appendChild(loginText);
+    thisLoginBox.appendChild(hr);
+    thisLoginBox.appendChild(guildDiv);
+    thisLoginBox.appendChild(guildMembers);
+    thisLoginBox.appendChild(hr1);
     thisLoginBox.appendChild(emailDiv);
     thisLoginBox.appendChild(pwDiv);
+    thisLoginBox.appendChild(changePWButton);
+    thisLoginBox.appendChild(hr2);
     thisLoginBox.appendChild(logoutButton);
 
     // set background
@@ -325,6 +383,11 @@ document.addEventListener("DOMContentLoaded", () => {
     if (typedEmail.length == 0) { alert("enter your email for verification"); return; }
     if (typedPW.length < 8) { alert("new password must be at least 8 characters long"); return; }
     socket.emit("passwordChangeRequest", getUserLoggedIn(), typedEmail, typedPW); // #TODO improve typedPW not sent directly
+  }
+
+  function changeGuild(){
+    let typedGuild = document.getElementById("guildField").value;
+    socket.emit("guildChangeRequest", getUserLoggedIn(), typedGuild);
   }
 
   function logoutUser(){

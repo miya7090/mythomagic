@@ -17,7 +17,7 @@
 
 .tier_text {
     position: absolute;
-    top: 215px;
+    top: 225px;
     width: 300px;
     left: calc(50% - 150px);
     text-align: center;
@@ -30,8 +30,8 @@
     background-color: rgba(0,0,0,0.2);
     position: absolute; 
     top: 360px;
-    left: calc(50% - 200px);
-    width: 400px;
+    left: calc(50% - 220px);
+    width: 440px;
     
     height: 80px;
     display: flex;
@@ -44,18 +44,18 @@
 .entryButton {
     -webkit-appearance: none;
     cursor: pointer;
-    margin: 5px;
+    margin: 9px;
     padding: 10px 15px;
     font-family: "regularFont";
     font-size: 16px;
     background-color: rgba(0, 0, 0, 0.4);
     color: rgb(217, 217, 217);
-    border: 2px rgb(53, 53, 53) solid;
-    border-left: 2px rgb(82, 82, 82) solid;
-    border-top: 2px rgb(98, 98, 98) solid;
+    border: 3px rgb(53, 53, 53) solid;
+    border-left: 3px rgb(82, 82, 82) solid;
+    border-top: 3px rgb(98, 98, 98) solid;
 }
 
-input[type="button"]:hover {
+.entryButton:hover {
     background-color: rgba(255, 255, 255, 0.4);
     color: rgb(0, 0, 0);
 }
@@ -74,5 +74,5 @@ hr {
     left: calc(50% - 200px);
     width: 400px;
     text-align: center;
-    font-size: 12px;
+    font-size: 13px;
 }

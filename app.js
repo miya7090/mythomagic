@@ -347,7 +347,7 @@ io.on("connection", socket => {
             const newInviteCode = (Math.random() + 1).toString(36).substring(4);
             db.collection('invitationcodes').insertOne({code:newInviteCode, uses:5});
             let newTime = new Date();
-            db.collection('login').insertOne({username:username, password:saltedPassword, email:email, creationTime:newTime, usedCode:inviteCode, newCode:newInviteCode, wins:{olympia:0,corinth:0,athens:0,sparta:0}, ties:{olympia:0,corinth:0,athens:0,sparta:0}, losses:{olympia:0,corinth:0,athens:0,sparta:0}, score:10.0});
+            db.collection('login').insertOne({username:username, password:saltedPassword, email:email, creationTime:newTime, usedCode:inviteCode, newCode:newInviteCode, wins:{olympia:0,corinth:0,athens:0,sparta:0}, ties:{olympia:0,corinth:0,athens:0,sparta:0}, losses:{olympia:0,corinth:0,athens:0,sparta:0}, score:10.0, guild:""});
             io.to(socket.id).emit("newAccount", newInviteCode);
           });
         });
@@ -368,6 +368,11 @@ io.on("connection", socket => {
       });
     });
   });
+
+  socket.on("guildChangeRequest", (username, guildName) => {
+    db.collection('login').updateOne({username:username}, {$set:{guild:guildName}});
+    io.to(socket.id).emit("accountMessage", "guild has been changed successfully, please refresh");
+  });
   
   socket.on("login_request", (username, password) => {
     db.collection('login').find({username: username}).toArray().then((existingLoginEntry) => {
@@ -380,6 +385,10 @@ io.on("connection", socket => {
   });
 
   socket.on("requestUserDataBox", (username) => {
+    sendUserDataBox(username);
+  });
+
+  function sendUserDataBox(username) {
     if (!MONGO_CONNECTED) { return; }
     // calculate user ranking
     db.collection('login').aggregate([{
@@ -389,10 +398,18 @@ io.on("connection", socket => {
       let retrievedCode = relevantEntry.newCode;
       db.collection('invitationcodes').find({code: retrievedCode}).toArray().then((existingInviteCodeEntry) => {
         let retrievedUses = existingInviteCodeEntry[0].uses;
-        io.to(socket.id).emit("getUserDataBox", relevantEntry.username, retrievedCode, retrievedUses, relevantEntry.wins, relevantEntry.losses, relevantEntry.score, relevantEntry.userRank);
+
+        if (relevantEntry.guild != ""){
+          db.collection('login').find({guild: relevantEntry.guild}).toArray().then((rawGuildMemberList) => {
+            let guildMemberList = rawGuildMemberList.map(({ username, score, wins }) => [username, score, wins]);
+            io.to(socket.id).emit("getUserDataBox", relevantEntry.username, retrievedCode, retrievedUses, relevantEntry.wins, relevantEntry.losses, relevantEntry.score, relevantEntry.userRank, relevantEntry.guild, guildMemberList);
+          });
+        } else {
+          io.to(socket.id).emit("getUserDataBox", relevantEntry.username, retrievedCode, retrievedUses, relevantEntry.wins, relevantEntry.losses, relevantEntry.score, relevantEntry.userRank, relevantEntry.guild, []);
+        }
       });
     });
-  });
+  }
 
   socket.on("requestAllHeroboards", () => {
     if (!MONGO_CONNECTED) {
