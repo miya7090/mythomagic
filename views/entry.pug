@@ -11,6 +11,17 @@ head
   script(type="module" src="../gsap/all.js")
   script(type="module" src='../javascripts/fireflyAnim.js' charset='utf8')
   script(src='../javascripts/bgm_player.js' charset='utf8')
+  script(src='//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js')
+  script.
+    document.addEventListener("DOMContentLoaded", () => {
+      document.querySelectorAll(".entryButton").forEach((item) => {
+        item.addEventListener("mouseenter", () => {
+          let clickSound = new Audio(GITHUB_PUBLIC_PATH+'sounds/clack4.mp3');
+          clickSound.volume = 0.7;
+          clickSound.play();
+        });
+      });
+    });
   link(rel='apple-touch-icon' sizes='180x180' href='../images/favicon/apple-touch-icon.png')
   link(rel='icon' type='image/png' sizes='32x32' href='../images/favicon/favicon-32x32.png')
   link(rel='icon' type='image/png' sizes='16x16' href='../images/favicon/favicon-16x16.png')

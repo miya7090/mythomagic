@@ -64,8 +64,11 @@ html {
 }
 
 .entryButton:hover {
-    background-color: rgba(255, 255, 255, 0.4);
-    color: rgb(0, 0, 0);
+    background-color: rgba(152, 33, 33, 0.318);
+    border: 3px rgb(77, 66, 27) solid;
+    border-left: 3px rgb(96, 86, 42) solid;
+    border-top: 3px rgb(137, 116, 59) solid;
+    color: rgb(255, 255, 255);
 }
 
 hr {
