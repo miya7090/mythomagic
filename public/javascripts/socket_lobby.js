@@ -282,8 +282,11 @@ document.addEventListener("DOMContentLoaded", () => {
       let guildMemberDiv = document.createElement("div");
       guildMemberDiv.style.fontWeight = "normal";
       let numWins = Object.values(guildMemberInfo[2]).reduce((a, b) => a+b);
+      let numLosses = Object.values(guildMemberInfo[3]).reduce((a, b) => a+b);
       guildMemberDiv.innerText = guildMemberInfo[0] + " • " + guildMemberInfo[1].toFixed(2) + " • " + numWins + " win";
       if (numWins == 0 || numWins > 1) { guildMemberDiv.innerText += "s"; }
+      guildMemberDiv.innerText += ", " + numLosses + " loss";
+      if (numLosses == 0 || numLosses > 1) { guildMemberDiv.innerText += "es"; }
       guildMembers.appendChild(guildMemberDiv);
     });
 
@@ -596,7 +599,7 @@ function updateGroupBoard(res) {
       let spartaWins = (res[i].spartaWins == undefined) ? 0 : res[i].spartaWins;
       let tableText = res[i]._id + ": " + res[i].guildScore.toFixed(2);
       groupBoard.getElementsByTagName('tr')[addedRankings+1].getElementsByTagName('td')[1].innerText = tableText;
-      groupBoard.getElementsByTagName('tr')[addedRankings+1].getElementsByTagName('td')[1].title = olympiaWins + "/" + corinthWins + "/" + athensWins + "/" + spartaWins;
+      //groupBoard.getElementsByTagName('tr')[addedRankings+1].getElementsByTagName('td')[1].title = olympiaWins + "/" + corinthWins + "/" + athensWins + "/" + spartaWins;
       addedRankings += 1;
     }
     i += 1;

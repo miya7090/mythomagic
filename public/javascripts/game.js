@@ -128,6 +128,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   MY_SOCKET.on('yourTurn', (yourEnemysCards, yourEnemysVerOfYourCards)=>{
     TURNS_ALLOCATED = 2;
+    if ((yourEnemysCards == undefined || yourEnemysCards == null) && (yourEnemysVerOfYourCards == undefined || yourEnemysVerOfYourCards == null)) {
+      // seems like a disconnection
+      alert("this game had both players disconnect and has ended");
+      window.location.href = "/lobby";
+    }
     beginTurn(yourEnemysCards, yourEnemysVerOfYourCards);
   });
 
@@ -139,6 +144,11 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   MY_SOCKET.on('enemysProgress', (yourEnemysCards, yourEnemysVerOfYourCards)=>{
+    if ((yourEnemysCards == undefined || yourEnemysCards == null) && (yourEnemysVerOfYourCards == undefined || yourEnemysVerOfYourCards == null)) {
+      // seems like a disconnection
+      alert("this game had both players disconnect and has ended");
+      window.location.href = "/lobby";
+    }
     changeGameModeTo("p2-turn2");
     importAllP2Cs(yourEnemysCards);
     importAllP1Cs(yourEnemysVerOfYourCards);

@@ -118,6 +118,7 @@ io.on("connection", socket => {
 
   /* ~~~~~ lobby socket operations ~~~~~ */
   socket.on("lobbyJoin", (nickname, region, cookieName) => {
+    if (!MONGO_CONNECTED) { return; }
     db.collection('login').find({username: nickname}).toArray().then((existingLoginEntry) => {
       // nickname is reserved
       if (existingLoginEntry.length > 0 && cookieName != nickname) { io.to(socket.id).emit("nicknameFailure"); return; }
@@ -437,7 +438,7 @@ io.on("connection", socket => {
 
         if (relevantEntry.guild != ""){
           db.collection('login').find({guild: relevantEntry.guild}).toArray().then((rawGuildMemberList) => {
-            let guildMemberList = rawGuildMemberList.map(({ username, score, wins }) => [username, score, wins]);
+            let guildMemberList = rawGuildMemberList.map(({ username, score, wins, losses }) => [username, score, wins, losses]);
             io.to(socket.id).emit("getUserDataBox", relevantEntry.username, retrievedCode, retrievedUses, relevantEntry.wins, relevantEntry.losses, relevantEntry.score, relevantEntry.userRank, relevantEntry.guild, guildMemberList);
           });
         } else {

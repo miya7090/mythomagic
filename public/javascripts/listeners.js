@@ -422,7 +422,7 @@ function mouseClickAvailableCard(evt) {
       return;
     }
     
-    if (countPlayersPicks >= 5){
+    if (countPlayersPicks - 1 >= 5){ // -1 since the player label is counted as a child
       processBroadcast("alert", true, "you can pick at most 5 cards"); return;
       return;
     }
