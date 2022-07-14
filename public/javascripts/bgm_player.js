@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
     setTimeout(refreshBgm, BGM_BEGIN_DELAY); // start music 2 secs in
 
     // styling
-    bgmLink.style.position = "absolute";
+    bgmLink.style.position = "fixed";
     if (MUSIC_ICON_PLACEMENT == "bottomright") {
         bgmLink.style.bottom = "15px";
         bgmLink.style.right = "20px";
@@ -72,9 +72,8 @@ function refreshBgm(){
             promise.then(_ => {
                 // Autoplay started!
             }).catch(error => {
-                // Autoplay was prevented :)
+                // Autoplay was prevented :)))
                 muteBGM();
-                MUSIC_ICON_IMG.click();
             });
         }
     }
