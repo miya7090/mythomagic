@@ -198,6 +198,13 @@ document.addEventListener("DOMContentLoaded", () => {
     requestLoginBoxLoggedIn();
   });
 
+  socket.on("canResetPassword", (username) => {
+    let enteredNewPassword = prompt("Enter your new password (at least 8 characters long)", "");
+    if (enteredNewPassword == null || enteredNewPassword.length < 8) { alert("try again: password must be at least 8 characters long"); return; }
+    
+    socket.emit("resetPasswordRequest", username, enteredNewPassword);
+  });
+
   function requestLoginBoxLoggedIn() {
     let thisUser = getUserLoggedIn();
     if (thisUser != "") {

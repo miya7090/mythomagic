@@ -251,6 +251,8 @@ io.on("connection", socket => {
     // update user stats
     if (cookieMap[socket.id] != ""){ // user logged in
       db.collection('login').find({username: cookieName}).toArray().then((existingLoginEntry) => {
+        if (existingLoginEntry.length == 0) { console.log("db0","updateUserStats1",cookieName); return; }
+
         // increment tie/win/loss counts
         if (winType == "tie") {
           let newTrackObj = existingLoginEntry[0].ties;
@@ -269,6 +271,8 @@ io.on("connection", socket => {
         // the winner adjusts the user scores
         if (!(opponentCookieName == "" || opponentCookieName == undefined)) { // rival also logged in
           db.collection('login').find({username: opponentCookieName}).toArray().then((rivalEntry) => {
+            if (rivalEntry == 0) { console.log("db0","updateUserStats2",opponentCookieName); return; }
+
             let myScorePercent = (0.1 * (100*existingLoginEntry[0].score))/100.0;
             let theirScorePercent = ( (0.1 * (100*rivalEntry[0].score))/100.0 ) + 1.00;
             if (theirScorePercent > 10.00) { theirScorePercent = 10.00; }
@@ -358,8 +362,24 @@ io.on("connection", socket => {
   
   socket.on("passwordChangeRequest", (username, email, newPassword) => {
     db.collection('login').find({username: username}).toArray().then((loginEntry) => {
+      if (loginEntry.length == 0) { console.log("db0","passwordChangeRequest",username); return; }
       if (loginEntry[0].email != email) { io.to(socket.id).emit("accountMessage", "password not changed: email does not match email on record"); return; }
     
+      // all ok
+      bcrypt.genSalt(10).then((salt) => {
+        bcrypt.hash(newPassword, salt).then((saltedPassword) => {
+          db.collection('login').updateOne({username:username}, {$set:{password:saltedPassword}});
+          io.to(socket.id).emit("accountMessage", "password has been changed successfully");
+        });
+      });
+    });
+  });
+
+  socket.on("resetPasswordRequest", (username, newPassword) => {
+    db.collection('login').find({username: username}).toArray().then((loginEntry) => {
+      if (loginEntry.length == 0) { console.log("db0","resetPasswordRequest",username); return; }
+      if (loginEntry[0].password.substring(0,5) != "temp:") { return; }
+      
       // all ok
       bcrypt.genSalt(10).then((salt) => {
         bcrypt.hash(newPassword, salt).then((saltedPassword) => {
@@ -381,11 +401,21 @@ io.on("connection", socket => {
   
   socket.on("login_request", (username, password) => {
     db.collection('login').find({username: username}).toArray().then((existingLoginEntry) => {
-      if (existingLoginEntry.length != 1) { io.to(socket.id).emit("accountMessage", "invalid username/password combination"); return; }
-      bcrypt.compare(password, existingLoginEntry[0].password).then((validPassword) => {
-        if (!validPassword) { io.to(socket.id).emit("accountMessage", "invalid username/password combination"); return; }
-        io.to(socket.id).emit("loginSuccess", username);
-      });
+      if (existingLoginEntry.length != 1) { io.to(socket.id).emit("accountMessage", "invalid username/password combination"); return; } // no account exists
+
+      let storedPasswordString = existingLoginEntry[0].password;
+      if (storedPasswordString.substring(0,5) == "temp:") { // was manually changed in the database
+        if ("temp:"+password == storedPasswordString) { // was manually changed in the database
+          io.to(socket.id).emit("canResetPassword", username);
+        } else {
+          io.to(socket.id).emit("accountMessage", "incorrect temporary password"); return;
+        }
+      } else {
+        bcrypt.compare(password, storedPasswordString).then((validPassword) => {
+          if (!validPassword) { io.to(socket.id).emit("accountMessage", "invalid username/password combination"); return; }
+          io.to(socket.id).emit("loginSuccess", username);
+        });
+      }
     });
   });
 
@@ -402,6 +432,7 @@ io.on("connection", socket => {
       let relevantEntry = userData.find(element => element["username"] == username);
       let retrievedCode = relevantEntry.newCode;
       db.collection('invitationcodes').find({code: retrievedCode}).toArray().then((existingInviteCodeEntry) => {
+        if (existingInviteCodeEntry.length == 0) { console.log("db0","sendUserDataBox",retrievedCode); return; }
         let retrievedUses = existingInviteCodeEntry[0].uses;
 
         if (relevantEntry.guild != ""){
