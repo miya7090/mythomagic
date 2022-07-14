@@ -406,7 +406,7 @@ function mouseOverPowerbutton(evt) {
 function mouseClickAvailableCard(evt) {
     const thisCardName = evt.target.querySelector('.baseCardName').textContent;
     const onFieldCards = document.getElementById("onFieldCards");
-    const countPlayersPicks = onFieldCards.childElementCount;
+    const countPlayersPicks = onFieldCards.childElementCount - 1; // -1 since the player label is counted as a child
     if (GAME_MODE != "pick-phase") {
       console.error("not pick phase"); return;
     }
@@ -422,7 +422,7 @@ function mouseClickAvailableCard(evt) {
       return;
     }
     
-    if (countPlayersPicks - 1 >= 5){ // -1 since the player label is counted as a child
+    if (countPlayersPicks >= 5){
       processBroadcast("alert", true, "you can pick at most 5 cards"); return;
       return;
     }

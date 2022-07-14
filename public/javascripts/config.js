@@ -77,7 +77,7 @@ const BASE_STAT_DICT = {
 
     // available classes: Melee, Ranged, Protector, Healer, Supporter, Caster, Special
 
-    "Athena":[2700,2,15,700,50,0,3, 3,0,6,0,
+    "Athena":[2500,2,15,700,50,0,3, 3,0,6,0,
       "Aegis","Ally within 3 units gains 5 DEF and has their statuses cleared",
       "Deliberate Strike","Deal 600 true damage to one target within 6 units",
       "Well-Prepared","Allies start game with 200 MP", "Supporter"], 
@@ -100,7 +100,7 @@ const BASE_STAT_DICT = {
     "Gaea":[1200,2,15,1000,50,0,1, 2,0,undefined,undefined,
       "Rejuvenation","Heal 100 HP and give 100 MP to ally within 2 tiles",
       "Revitalization", "Heal 200 HP to all allies",
-      "Resurgence","Heal 100 HP to allies after being autoattacked", "Healer"],
+      "Resurgence","Heal 50 HP to allies after being autoattacked", "Healer"],
     "Jason":[1800,2,10,800,70,0,2, undefined,undefined,undefined,undefined,
       "Teamwork","Increase the DEF of the ally with the lowest DEF by 2",
       "Captainship", "Increase DEF of all allies by 1, decrease DEF of all enemies by 3",
@@ -150,7 +150,7 @@ const BASE_STAT_DICT = {
       "Breakneck","Gain 3 MVT, accumulate 50 more MP per turn, and halve current health",
       "Blistering Speed","Gain 400 ATK and lose 1 DEF for each point of MVT", "Supporter"],
     "Orpheus":[400,2,10,600,50,0,2, undefined,undefined,undefined,undefined,
-      "Serenade","Heal 200 HP to the ally with lowest health",
+      "Serenade","Heal 150 HP to the ally with lowest health",
       "Passacaglia","Inflict Distracted on all enemies",
       "Requiem","Allies defeated while Orpheus has full HP and full MP are revived to full health", "Healer"],
     "Echo":[400,2,15,700,80,0,2, undefined,undefined,1,0,
@@ -168,7 +168,7 @@ const BASE_STAT_DICT = {
     "Eros":[2200,2,10,800,50,0,2, 4,0,undefined,undefined,
       "Love Shot","Inflict Charmed on enemy up to 4 tiles away",
       "Crush","Deal 200 true damage to all Charmed enemies and drain their MP",
-      "Heart Attack","Enemies that autoattack Eros become Charmed", "Caster"],
+      "Heart Attack","Enemies that autoattack Eros become Charmed", "Ranged"],
     "Aphrodite":[1400,2,15,600,60,0,2, 3,0,5,0,
       "Letter","Gift 200 MP to ally up to 3 tiles away",
       "Poem","Gift 400 MP to ally up to 5 tiles away, and clear their status effects",

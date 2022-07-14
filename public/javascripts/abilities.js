@@ -245,7 +245,7 @@ function ability_orpheus(attacker, target) {
     });
 
     broadcastMsg("ability", true, "Orpheus", pcWithLowestHealth.cardName);
-    pcWithLowestHealth.heal(200);
+    pcWithLowestHealth.heal(150);
 }
 
 function ult_icarus(attacker, target) {
