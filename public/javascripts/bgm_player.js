@@ -72,8 +72,9 @@ function refreshBgm(){
             promise.then(_ => {
                 // Autoplay started!
             }).catch(error => {
-                // Autoplay was prevented.
+                // Autoplay was prevented :)
                 muteBGM();
+                MUSIC_ICON_IMG.click();
             });
         }
     }
