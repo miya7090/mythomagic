@@ -47,6 +47,7 @@ br
     |  and to 
     span(style='color:var(--GENERALHIGHLIGHT);') play your turn
     | .
+  br
   p
     | heroes are randomly assigned to teams in 
     span(style='color:var(--SERVERCOLOR);') olympia
@@ -143,6 +144,7 @@ br
     | the maximum distance that you can move the token depends on the hero&apos;s 
     span(style='color:var(--STATNAME);') movement
     |  (MVT) stat.
+  br
   p
     | at any point, you can press 
     span(style='color:var(--KEYCODE);') z
@@ -212,6 +214,7 @@ br
   p
     span(style='color: var(--GENERALHIGHLIGHT);') true
     |  damage is applied directly and is not affected by hero stats or statuses.
+  br
   p
     | heroes are defeated when their HP reaches zero. a hero&apos;s passive becomes inactive once they are defeated.
   p
@@ -238,8 +241,13 @@ br
     span(style='color: var(--GENERALHIGHLIGHT);') class 
     | and 
     span(style='color: var(--GENERALHIGHLIGHT);') ranking.
+  br
   p
-    | if a player is logged in, their name in the lobby will have an asterisk (*) with a color denoting their current 
+    | guest players are shown with 
+    span(style='color: var(--NOTIER);') green 
+    | names in the lobby.
+  p
+    | if a player is logged in, their name in the lobby will be colored according to their current 
     span(style='color: var(--GENERALHIGHLIGHT);') class.    
   p
     span(style='color: var(--GENERALHIGHLIGHT);') classes
@@ -254,6 +262,8 @@ br
     |  (&gt;30.00), 
     span(style='color: var(--GRANDMASTER);') grandmaster
     |  (&gt;40.00).
+  p
+    | you can also hover over a name in the lobby to have the score and class shown as text.
 #scoring.helpSlide
   h3 game scoring 
     span(style='font-size:12px;font-weight:normal;color:var(--BACKTOTOP);' onclick="scrollToThisDiv('h2top')") [back to top]

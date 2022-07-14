@@ -41,16 +41,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function MoveAnim(newFirefly) {
         var thisMotion;
+        var thisScale;
         if (R(10) > 3 && MOUSE_X != 0 && MOUSE_X != undefined){
+            // interact with mouse
             thisMotion = [{x:MOUSE_X,y:MOUSE_Y},{x:R(w),y:R(h)}];
+            thisScale = R(0.2)+1.0;
         } else {
             thisMotion = [{x:R(w),y:R(h)},{x:R(w),y:R(h)}];
+            thisScale = R(1.2)+0.2;
         }
 
         gsap.to(newFirefly, {
             motionPath: thisMotion,
             duration: R(5)+10,
-            scale: R(1.2)+0.2,
+            scale: thisScale,
             onComplete: MoveAnim,
             onCompleteParams: [newFirefly]
         });

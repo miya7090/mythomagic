@@ -511,20 +511,26 @@ function populateRegionList(thisRegion, regionUsers, cookieBook){
   }
   const myNickname = document.getElementById("nickname").value;
   const lobbiersInRegion = document.getElementById("lobbiersinregion");
-  lobbiersInRegion.innerHTML = ""; // clear div
+  lobbiersInRegion.innerHTML = ""; // clear div ahead of time
+  
   Object.keys(regionUsers).forEach(indivSocketid => {
+    // create a button for each person in the lobby
     const rUser = document.createElement("button");
-    const nickname = regionUsers[indivSocketid];
+    const rNickname = regionUsers[indivSocketid];
+    const rScore = cookieBook[indivSocketid] != undefined ? cookieBook[indivSocketid][0].toFixed(2) : "none";
+    const rUserTier = cookieBook[indivSocketid] != undefined ? tierOf(cookieBook[indivSocketid][0]) : "noTier";
+    const rUserGuild = cookieBook[indivSocketid] != undefined ? cookieBook[indivSocketid][1] : "";
+
     rUser.classList.add("lobbier");
-    rUser.textContent = nickname;
+    rUser.title = "score: " + rScore + ", class: " + (rUserTier == "noTier" ? "none" : rUserTier);
 
-    let rUserTier = tierOf(cookieBook[indivSocketid]);
+    // add the name text and the guild text
+    rUser.innerHTML = "<span class='"+ rUserTier +"'>" + rNickname + "</span><br>";
+    if (rUserGuild != "" && rUserGuild != undefined) {
+      rUser.innerHTML += "<span class='lobbierGuild'>" + rUserGuild + "</span>";
+    }
 
-    var tierAsterisk = "";
-    if (rUserTier != undefined) { tierAsterisk = "*"; }
-
-    rUser.innerHTML = nickname + "<span class='"+ rUserTier +"'>" + tierAsterisk + "</span>";
-
+    // if not self, add a click listener
     if (indivSocketid == socket.id) {
       rUser.disabled = true;
     } else {

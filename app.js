@@ -24,7 +24,7 @@ var roomBook = {};
 // lobby tracker, REGIONS ONLY {region: {socketid: nickname}}
 var ALL_REGION_NAMES = ["olympia", "corinth", "athens", "sparta"];
 var regionUsers = {"olympia=====": {}, "corinth=====": {}, "athens=====": {}, "sparta=====": {}};
-var lobbyCookieBook = {}; // {socketid: username}
+var lobbyCookieBook = {}; // {socketid: [score, guild]}
 
 // player tracker, GAMES ONLY
 var rivalFinder = {}; // {socketid: socketid}
@@ -123,7 +123,7 @@ io.on("connection", socket => {
       if (existingLoginEntry.length > 0 && cookieName != nickname) { io.to(socket.id).emit("nicknameFailure"); return; }
 
       // if logged in, update cookie book
-      if (cookieName == nickname) { lobbyCookieBook[socket.id] = existingLoginEntry[0].score; }
+      if (cookieName == nickname) { lobbyCookieBook[socket.id] = [existingLoginEntry[0].score, existingLoginEntry[0].guild]; }
 
       // if login is not found, yet cookie name provided, command user to remove cookie
       /*if (existingLoginEntry.length == 0 && (cookieName == "" || cookieName == undefined)) {
@@ -371,6 +371,10 @@ io.on("connection", socket => {
   });
 
   socket.on("guildChangeRequest", (username, guildName) => {
+    if (lobbyCookieBook[socket.id] != undefined){
+      lobbyCookieBook[socket.id] = [ lobbyCookieBook[socket.id][0], guildName ];
+    }
+
     db.collection('login').updateOne({username:username}, {$set:{guild:guildName}});
     io.to(socket.id).emit("accountMessage", "guild has been changed successfully, please refresh");
   });

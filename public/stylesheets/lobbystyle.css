@@ -151,8 +151,24 @@ p {
     color: var(--GOLD);
 }
 
+.noTier {
+    color: var(--NOTIER);
+}
+
 .grandmaster {
     color: var(--GRANDMASTER);
+}
+
+.lobbier {
+    font-size: 14px;
+    line-height: 16px;
+    padding: 5px;
+    margin: 2px;
+}
+
+.lobbierGuild {
+    font-size: 12px;
+    color: #979797;
 }
 
 .lobbier:hover {
@@ -160,8 +176,7 @@ p {
 }
 
 .lobbier:disabled {
-    color: rgb(91, 91, 91);
-    background-color: rgba(93, 93, 93, 0.3);
+    opacity: 0.6;
 }
 
 #queueNotes {
