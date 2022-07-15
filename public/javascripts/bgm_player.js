@@ -20,8 +20,10 @@ document.addEventListener("DOMContentLoaded", () => {
     var bgmName, volume;
     switch (bgmLink.getAttribute("page")) {
         case "entry":      bgmName = "6 wind of melancholy"; break;
-        case "lobby":      bgmName = "89 town of clocks"; break;
-        case "game":       bgmName = "50 mulling"; BGM_VOLUME = 0.3; MUSIC_ICON_PLACEMENT = "topright"; break;
+        case "lobby":      bgmName = "73 campfire"; BGM_VOLUME = 0.6; break;
+        //case "preview":      bgmName = "89 town of clocks"; BGM_VOLUME = 0.7; break;
+        case "preview":      bgmName = "36 elven kingdom"; BGM_VOLUME = 0.8; break;
+        case "game":       bgmName = "50 mulling"; BGM_VOLUME = 0.4; MUSIC_ICON_PLACEMENT = "topright"; break;
         case "defeat":     bgmName = "94 the contract"; break;
         case "victory":    bgmName = "18 elemental plane of air"; break;
     }
