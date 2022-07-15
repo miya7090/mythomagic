@@ -15,9 +15,13 @@ head
   meta(property='og:image' content='https://raw.githubusercontent.com/miya7090/mythomagic/main/public/images/og-image.png')
 iframe(src="../sounds/silence.mp3" allow="autoplay" id="audio" style="display: none")
 #bgmLinker(page="help")
-h2#h2top how to play
 br
-#tableOfContents 
+h2#h2top how to play
+.navigationDiv
+  a(id="playGameForward" class='navigationButton' style="position:absolute;right:90px;top:0px;" href="/index") index
+  a(id="playGameForward" class='navigationButton' style="position:absolute;right:0px;top:0px;" href="/lobby") play game
+  a(class='navigationButton' style="position:absolute;left:0px;top:0px;" href="/") back to main menu
+.navigationDiv 
   span(class='tocTitle' onclick="scrollToThisDiv('joinALobby')") 1. join a lobby
   span(class='tocTitle' onclick="scrollToThisDiv('pickYourHeroes')") 2. pick your heroes
   span(class='tocTitle' onclick="scrollToThisDiv('moveYourHero')") 3. move your hero
@@ -30,7 +34,7 @@ br
   h3
     span(style='color: gray;') 1. 
     |  join a lobby 
-    span(style='font-size:12px;font-weight:normal;color:var(--BACKTOTOP);' onclick="scrollToThisDiv('h2top')") [back to top]
+    span(style='font-size:12px;font-weight:normal;color:var(--BACKTOTOP);' onclick="scrollToThisDiv('playGameForward')") [back to top]
   p
     | enter a nickname and choose one of four possible lobbies to play in: 
     span(style='color:var(--SERVERCOLOR);') olympia
@@ -78,7 +82,7 @@ br
   h3
     span(style='color: gray;') 2. 
     |  pick your heroes 
-    span(style='font-size:12px;font-weight:normal;color:var(--BACKTOTOP);' onclick="scrollToThisDiv('h2top')") [back to top]
+    span(style='font-size:12px;font-weight:normal;color:var(--BACKTOTOP);' onclick="scrollToThisDiv('playGameForward')") [back to top]
   p
     | pick up to five hero cards by clicking in the 
     span(style='color:var(--GENERALHIGHLIGHT);') index
@@ -104,9 +108,8 @@ br
     span(style='color:var(--SPECIAL);') special
     |  heroes.
   p
-    | classes can be 
-    a(href='/preview' target='_blank' style='color: gray; text-decoration: underline;') previewed
-    |  at any time.
+    | classes can be previewed in the 
+    a(href='/index' target='_blank' style='color: gray; text-decoration: underline;') index.
   ul
     li
       p
@@ -142,7 +145,7 @@ br
   h3
     span(style='color: gray;') 3. 
     |  move your hero 
-    span(style='font-size:12px;font-weight:normal;color:var(--BACKTOTOP);' onclick="scrollToThisDiv('h2top')") [back to top]
+    span(style='font-size:12px;font-weight:normal;color:var(--BACKTOTOP);' onclick="scrollToThisDiv('playGameForward')") [back to top]
   p each player has two turns per round.
   p
     | on your turn, click one of your 
@@ -172,7 +175,7 @@ br
   h3
     span(style='color: gray;') 4. 
     |  select an action 
-    span(style='font-size:12px;font-weight:normal;color:var(--BACKTOTOP);' onclick="scrollToThisDiv('h2top')") [back to top]
+    span(style='font-size:12px;font-weight:normal;color:var(--BACKTOTOP);' onclick="scrollToThisDiv('playGameForward')") [back to top]
   p
     | the hero&apos;s autoattack will attack all opponents within their 
     span(style='color:var(--STATNAME);') reach&nbsp;
@@ -192,12 +195,11 @@ br
     span(style='color: var(--SKILLCOLOR);') passive
     |  skill that is automatically applied each turn.
   p
-    | ability, ultimate, and passive descriptions can be 
-    a(href='/preview' target='_blank' style='color: gray; text-decoration: underline;') previewed
-    |  at any time.
+    | ability, ultimate, and passive descriptions can be previewed in the 
+    a(href='/index' target='_blank' style='color: gray; text-decoration: underline;') index.
 #calculatingDamage.helpSlide
   h3 calculating damage 
-    span(style='font-size:12px;font-weight:normal;color:var(--BACKTOTOP);' onclick="scrollToThisDiv('h2top')") [back to top]
+    span(style='font-size:12px;font-weight:normal;color:var(--BACKTOTOP);' onclick="scrollToThisDiv('playGameForward')") [back to top]
   p
     | the base amount of damage done is usually calculated with the hero&apos;s ATK divided by their opponent&apos;s DEF.
   p there are six status effects that modify the base amount of damage:
@@ -234,7 +236,7 @@ br
     | mythomagic is won when all enemy heroes have been defeated, or when your opponent concedes.
 #creatingAnAccount.helpSlide
   h3 creating an account 
-    span(style='font-size:12px;font-weight:normal;color:var(--BACKTOTOP);' onclick="scrollToThisDiv('h2top')") [back to top]
+    span(style='font-size:12px;font-weight:normal;color:var(--BACKTOTOP);' onclick="scrollToThisDiv('playGameForward')") [back to top]
   p
     | if you have an 
     span(style='color: var(--GENERALHIGHLIGHT);') invitation code
@@ -279,7 +281,7 @@ br
     | you can also hover over a name in the lobby to have the score and class shown as text.
 #scoring.helpSlide
   h3 game scoring 
-    span(style='font-size:12px;font-weight:normal;color:var(--BACKTOTOP);' onclick="scrollToThisDiv('h2top')") [back to top]
+    span(style='font-size:12px;font-weight:normal;color:var(--BACKTOTOP);' onclick="scrollToThisDiv('playGameForward')") [back to top]
   p
     | scores are only recorded while you are logged in.
   p
@@ -302,7 +304,7 @@ br
     | surrendering a game after pick phase completes counts as your opponent's win.
 #joiningAGroup.helpSlide
   h3 joining a group 
-    span(style='font-size:12px;font-weight:normal;color:var(--BACKTOTOP);' onclick="scrollToThisDiv('h2top')") [back to top]
+    span(style='font-size:12px;font-weight:normal;color:var(--BACKTOTOP);' onclick="scrollToThisDiv('playGameForward')") [back to top]
   p
     | after logging in, your account login box will display a space where you can type in the name of your desired 
     span(style='color: var(--GENERALHIGHLIGHT);') group.
@@ -315,46 +317,3 @@ br
 br
 br
 br
-hr(style='border:1px solid rgba(255,255,255,0.2); width:400px;')
-br
-p#credsFixed
-  a#betaVersion beta version 1.5.0 - 
-  a(href='https://forms.gle/p9WZHYcC2gUuW6LG6' target='_blank') support form
-  br
-  br
-  | a portfolio project inspired by 
-  a(href='https://en.wikipedia.org/wiki/List_of_Greek_mythological_figures' target='_blank') greek mythology 
-  br
-  | and 
-  a(href='https://riordan.fandom.com/wiki/Mythomagic' target='_blank') mythomagic 
-  | from the 
-  a(href='https://rickriordan.com/series/percy-jackson-and-the-olympians/' target='_blank') percy jackson series 
-  | &#x2646;
-  br
-  br
-  | made by 
-  a(href='https://github.com/miya7090/' target='_blank') miya7090
-  |  - view 
-  a(href='https://github.com/miya7090/mythomagic' target='_blank') source code
-  |  on github
-  br
-  |  icons from 
-  a(href='https://www.flaticon.com/authors/freepik' target='_blank') freepik on flaticon
-  | ,
-  |     bgm from 
-  a(href='https://www.youtube.com/c/TheSeventhMidnight/' target='_blank') the seventh midnight
-  br
-  |  sound effects from 
-  a(href='https://github.com/miya7090/' target='_blank') miya7090
-  | , 
-  a(href='https://www.youtube.com/channel/UCBlyQ5LHho5o7JQE1WocXuQ' target='_blank') cpht fluke
-  | , and 
-  a(href='https://www.youtube.com/channel/UCLfn0jnl1ye_AkuSeu5l3Uw' target='_blank') alan dalcastagne
-  br
-  br
-  | contact: fanmade
-  // no bots please
-  | mythomagic
-  | [at]
-  // no bots please
-  | gmail [dot] com

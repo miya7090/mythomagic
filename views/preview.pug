@@ -22,9 +22,17 @@ head
   link(rel='icon' type='image/png' sizes='16x16' href='../images/tokens/redicon.png')
   meta(property='og:image' content='https://raw.githubusercontent.com/miya7090/mythomagic/main/public/images/og-image.png')
 #bgmLinker(page="preview")
+br
+h1(style="text-align:center") index
+.navigationDiv
+  a(id="playGameForward" class='navigationButton' style="position:absolute;right:90px;top:0px;" href="/help") instructions
+  a(id="playGameForward" class='navigationButton' style="position:absolute;right:0px;top:0px;" href="/lobby") play game
+  a(class='navigationButton' style="position:absolute;left:0px;top:0px;" href="/") back to main menu
+br
 .wrapper
   .player
-    #gameInfoBox.hoverInfo.fixHoverWidth
+    #gameInfoBox.hoverInfo.fixHoverWidth(style="margin:auto; background-color: rgba(255,255,255,0.05); padding: 10px; border-radius: 5px;")
+  br
   p#availHeroTitle(style='margin-left:20px;') all available heroes (loading...)
   #myAvailableCards.cards
   .classCardWrapper

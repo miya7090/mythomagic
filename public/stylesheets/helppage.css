@@ -28,12 +28,6 @@ h2 {
     text-align: center;
 }
 
-#tableOfContents {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
 .tocTitle {
     -webkit-appearance: none;
     cursor: pointer;

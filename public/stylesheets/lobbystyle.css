@@ -29,6 +29,36 @@ h2 {
     font-size: 25px;
 }
 
+.navigationDiv {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.navigationButton {
+    -webkit-appearance: none;
+    cursor: pointer;
+    margin: 9px;
+    padding: 5px 7px;
+    font-family: "regularFont";
+    text-decoration: none;
+    font-size: 14px;
+    color: rgba(255,255,255,0.8);
+    background-color: rgba(152, 33, 33, 0.218);
+    border: 3px rgba(77, 66, 27, 0.8) solid;
+    border-left: 3px rgba(96, 86, 42, 0.8) solid;
+    border-top: 3px rgba(137, 116, 59, 0.8) solid;
+    text-align: center;
+  }
+  
+  .navigationButton:hover {
+    color: white;
+    background-color: rgba(152, 33, 33, 0.318);
+    border: 3px rgb(77, 66, 27) solid;
+    border-left: 3px rgb(96, 86, 42) solid;
+    border-top: 3px rgb(137, 116, 59) solid;
+  }
+
 #loginColWrap {
     display: flex;
 }
