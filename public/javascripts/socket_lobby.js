@@ -17,8 +17,8 @@ document.addEventListener("DOMContentLoaded", () => {
     MOUSE_X = e.clientX;
     MOUSE_Y = e.clientY;
     if (document.contains(LEADERBOARD_CURSOR_DIV[1])) {
-      LEADERBOARD_CURSOR_DIV[1].style.left = (MOUSE_X + 0) + "px";
-      LEADERBOARD_CURSOR_DIV[1].style.top = (MOUSE_Y + 12) + "px";
+      LEADERBOARD_CURSOR_DIV[1].style.left = (MOUSE_X + 10) + "px";
+      LEADERBOARD_CURSOR_DIV[1].style.top = (MOUSE_Y - 165 + 12) + "px";
     }
   });
 
@@ -40,8 +40,9 @@ document.addEventListener("DOMContentLoaded", () => {
         LEADERBOARD_CURSOR_DIV[1].style.border = "2px rgba(255,255,255,0.05) solid";
         LEADERBOARD_CURSOR_DIV[1].style.borderRight = "2px rgba(255,255,255,0.1) solid";
         LEADERBOARD_CURSOR_DIV[1].style.borderBottom = "2px rgba(255,255,255,0.1) solid";
-        LEADERBOARD_CURSOR_DIV[1].style.left = MOUSE_X + "px";
-        LEADERBOARD_CURSOR_DIV[1].style.top = MOUSE_Y + "px";
+        LEADERBOARD_CURSOR_DIV[1].style.left = (MOUSE_X+10) + "px";
+        LEADERBOARD_CURSOR_DIV[1].style.top = (MOUSE_Y-165) + "px";
+        LEADERBOARD_CURSOR_DIV[1].style.height = "165px";
         LEADERBOARD_CURSOR_DIV[1].style.pointerEvents = "none";
         document.body.appendChild(LEADERBOARD_CURSOR_DIV[1]); // only done once
         

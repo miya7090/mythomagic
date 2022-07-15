@@ -7,7 +7,6 @@ head
   link(rel='stylesheet' href='../stylesheets/game.css')
   link(rel='stylesheet' href='../stylesheets/boards.css')
   link(rel='stylesheet' href='../stylesheets/lobbystyle.css')
-  link(rel='stylesheet' href='../stylesheets/fireflies.css')
   script(src='//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js')
   script(src='/socket.io/socket.io.js' charset='utf8')
   script(src='../javascripts/models.js' charset='utf8')
@@ -153,9 +152,3 @@ br
       td
       td
       td.forceRightCol
-
-      //socket.on("requestGuildAndPlayerStats", () => {
-  //io.to(socket.id).emit("guildplayerboardUpdate", undefined);
-   db.collection('login').aggregate([{$group: { _id: "$guild", guildScore: { $sum: "$score" }, totalWins: { $sum: ["$wins.olympia","$wins.corinth","$wins.athens","$wins.olympia"] }}}]).sort({guildScore:-1}).limit(5).toArray().then((res) => {
-     io.to(socket.id).emit("guildplayerboardUpdate", res);*/
-//});
