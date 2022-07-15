@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // don't forget to register plugins
     gsap.registerPlugin(ScrollTrigger, Draggable, Flip, MotionPathPlugin); 
 
-    var total = 20;
+    var total = 40;
     var container = document.getElementById('app');
     var w = window.innerWidth;
     var h = window.innerHeight;
@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
     function MoveAnim(newFirefly) {
         var thisMotion;
         var thisScale;
-        if (R(10) > 3 && MOUSE_X != 0 && MOUSE_X != undefined){
+        if (R(10) > 0 && MOUSE_X != 0 && MOUSE_X != undefined){
             // interact with mouse
             thisMotion = [{x:MOUSE_X,y:MOUSE_Y},{x:R(w),y:R(h)}];
             thisScale = R(0.2)+1.0;
