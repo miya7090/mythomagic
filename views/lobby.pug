@@ -8,8 +8,6 @@ head
   link(rel='stylesheet' href='../stylesheets/boards.css')
   link(rel='stylesheet' href='../stylesheets/lobbystyle.css')
   link(rel='stylesheet' href='../stylesheets/fireflies.css')
-  script(type="module" src="../gsap/all.js")
-  script(type="module" src='../javascripts/fireflyAnim.js' charset='utf8')
   script(src='//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js')
   script(src='/socket.io/socket.io.js' charset='utf8')
   script(src='../javascripts/models.js' charset='utf8')
@@ -23,7 +21,6 @@ head
   meta(property='og:image' content='https://raw.githubusercontent.com/miya7090/mythomagic/main/public/images/og-image.png')
 iframe(src="../sounds/silence.mp3" allow="autoplay" id="audio" style="display: none")
 #bgmLinker(page="lobby")
-#lessFireflies.fireflyContainer
 #loginBox
   label username: 
   input#username(type='text' maxlength='16')
