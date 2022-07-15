@@ -2,6 +2,7 @@ import {gsap, TweenLite, ScrollTrigger, Draggable, Flip, MotionPathPlugin } from
 
 var MOUSE_X;
 var MOUSE_Y;
+var LITE_MODE = false;
 
 document.addEventListener("DOMContentLoaded", () => {
     document.addEventListener("mousemove", function(e) {
@@ -17,8 +18,9 @@ document.addEventListener("DOMContentLoaded", () => {
     // don't forget to register plugins
     gsap.registerPlugin(ScrollTrigger, Draggable, Flip, MotionPathPlugin); 
 
-    var total = 40;
+    var total = 25;
     var container = document.getElementsByClassName("fireflyContainer")[0];
+    if (container.id == "lessFireflies") { total = 5; LITE_MODE = true; }
     var w = window.innerWidth;
     var h = window.innerHeight;
     var fireflies = [];
@@ -62,7 +64,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function GlowAnim(newFirefly, lastOpacity) {
         var thisDelay = 0;
-        if (lastOpacity == 1){ thisDelay = R(7); }
+        if (lastOpacity == 1){
+            if (LITE_MODE) {
+                thisDelay = R(1); // fireflies vanish for less time
+            } else {
+                thisDelay = R(4);
+            }
+        }
         gsap.to(newFirefly, {
             duration: 1.0,
             opacity: lastOpacity,
