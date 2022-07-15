@@ -11,8 +11,3 @@ body{
     border-radius: 20px;
     z-index:2;
 }
-
-html, body, #app {
-    width:100%; 
-    height:100%;
-}

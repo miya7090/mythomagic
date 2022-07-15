@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
     gsap.registerPlugin(ScrollTrigger, Draggable, Flip, MotionPathPlugin); 
 
     var total = 40;
-    var container = document.getElementById('app');
+    var container = document.getElementsByClassName("fireflyContainer")[0];
     var w = window.innerWidth;
     var h = window.innerHeight;
     var fireflies = [];

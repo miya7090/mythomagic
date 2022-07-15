@@ -23,7 +23,6 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // show previews for leaderboard
-  console.log(LEADERBOARD_CURSOR_DIV[1]);
   $("#leaderboardTable tr:has(td)").mouseover(function(e) {
     let cardName = e.target.innerText.split(" ")[0];
 

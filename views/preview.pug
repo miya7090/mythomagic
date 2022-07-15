@@ -11,6 +11,7 @@ head
   link(rel='stylesheet' href='../stylesheets/cards.css')
   script(src='//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js')
   script(src='/socket.io/socket.io.js' charset='utf8')
+  script(src='../javascripts/bgm_player.js' charset='utf8')
   script(src='../javascripts/config.js' charset='utf8')
   script(src='../javascripts/models.js' charset='utf8')
   script(src='../javascripts/graphichelpers.js' charset='utf8')
@@ -19,6 +20,8 @@ head
   script(src='../javascripts/preview.js' charset='utf8')
   link(rel='icon' type='image/png' sizes='32x32' href='../images/tokens/redicon.png')
   link(rel='icon' type='image/png' sizes='16x16' href='../images/tokens/redicon.png')
+  meta(property='og:image' content='https://raw.githubusercontent.com/miya7090/mythomagic/main/public/images/og-image.png')
+#bgmLinker(page="preview")
 .wrapper
   .player
     #gameInfoBox.hoverInfo.fixHoverWidth
