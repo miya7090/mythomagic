@@ -275,8 +275,7 @@ io.on("connection", socket => {
             if (rivalEntry == 0) { console.log("db0","updateUserStats2",opponentCookieName); return; }
 
             let myScorePercent = (0.1 * (100*existingLoginEntry[0].score))/100.0;
-            let theirScorePercent = (0.1 * (100*rivalEntry[0].score))/100.0;
-            if (theirScorePercent < 1.00) { theirScorePercent = 1.00; }
+            let theirScorePercent = ((0.1 * (100*rivalEntry[0].score))/100.0) + 1.00;
             if (theirScorePercent > 5.00) { theirScorePercent = 5.00; }
             // absorb 10% of opponent's score
             if (winType == "win") {

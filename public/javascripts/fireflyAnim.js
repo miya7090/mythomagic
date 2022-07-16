@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // don't forget to register plugins
     gsap.registerPlugin(ScrollTrigger, Draggable, Flip, MotionPathPlugin); 
 
-    var total = 25;
+    var total = 15;
     var container = document.getElementsByClassName("fireflyContainer")[0];
     if (container.id == "lessFireflies") { total = 5; LITE_MODE = true; }
     var w = window.innerWidth;
@@ -68,7 +68,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (LITE_MODE) {
                 thisDelay = R(1); // fireflies vanish for less time
             } else {
-                thisDelay = R(4);
+                thisDelay = R(2);
             }
         }
         gsap.to(newFirefly, {

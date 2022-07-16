@@ -89,7 +89,7 @@ function ult_nyx(attacker, target) {
 
 function ability_nyx(attacker, target) {
     broadcastMsg("ability", true, "Nyx", target.cardName);
-    target.addToCMPT(-20);
+    target.addToCMPT(-30);
 }
 
 function ult_eros(attacker, target) {

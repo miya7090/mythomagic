@@ -136,6 +136,7 @@ function createMusicChangeButton(musicCode, musicFullName){
     tempButton.addEventListener("mouseup", () => {
         BGM_OBJECT.src = GITHUB_PUBLIC_PATH+'sounds/'+musicCode+'.mp3';
         BGM_OBJECT.play(); //call this to play the song right away
+        BGM_OBJECT.loop = true;
         tempButton.style.backgroundColor = "rgba(255,255,255,0.5)";
     });
     return tempButton;
@@ -151,7 +152,7 @@ function refreshBgm(){
 
         if (promise !== undefined) {
             promise.then(_ => {
-                // Autoplay started!
+                BGM_OBJECT.loop = true;
             }).catch(error => {
                 // Autoplay was prevented :)))
                 muteBGM();
