@@ -125,6 +125,13 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
+    if (username.toLowerCase() != username){
+      alert("username must be lowercase");
+      usernameDiv.focus();
+      usernameDiv.select();
+      return;
+    }
+
     if (password.length < 8){
       alert("password must be at least 8 characters long");
       passwordDiv.focus();
@@ -147,6 +154,10 @@ document.addEventListener("DOMContentLoaded", () => {
   lJoinButton.addEventListener("click", ()=>{
     if (nicknameDiv.value.length == 0){
       regionNotesText.textContent = "please enter a nickname first";
+      nicknameDiv.focus();
+      nicknameDiv.select();
+    } else if (nicknameDiv.value.toLowerCase() != nicknameDiv.value){
+      regionNotesText.textContent = "nickname must be lowercase";
       nicknameDiv.focus();
       nicknameDiv.select();
     } else {
@@ -399,7 +410,16 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function changeGuild(){
-    let typedGuild = document.getElementById("guildField").value;
+    let guildBox = document.getElementById("guildField");
+    let typedGuild = guildBox.value;
+    
+    if (typedGuild.toLowerCase() != typedGuild){
+      alert("group name must be lowercase");
+      guildBox.focus();
+      guildBox.select();
+      return;
+    }
+
     socket.emit("guildChangeRequest", getUserLoggedIn(), typedGuild);
   }
 
