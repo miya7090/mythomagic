@@ -69,15 +69,7 @@ h2#h2top how to play
   p
     | once you join a lobby, you can 
     span(style='color:var(--GENERALHIGHLIGHT);') challenge 
-    | other players in that lobby to a game. 
-  p
-    | note that 
-    span(style='color:var(--GENERALHIGHLIGHT);') disconnecting 
-    | after a match starts (e.g. wi-fi disconnecting, closing the window, or refreshing the page) gives your opponent the choice to claim victory or to wait for you to return.
-  p
-    | if both players disconnect, the match is won by the second player to disconnect, or by neither player if that cannot be determined.
-  p
-    | after a mutual disconnection, both players will be returned to the lobby page.
+    | other players in that lobby to a game.
 #pickYourHeroes.helpSlide
   h3
     span(style='color: gray;') 2. 
@@ -283,10 +275,11 @@ h2#h2top how to play
   h3 game scoring 
     span(style='font-size:12px;font-weight:normal;color:var(--BACKTOTOP);' onclick="scrollToThisDiv('playGameForward')") [back to top]
   p
-    | scores are only recorded while you are logged in.
-  p
-    | your player score is initialized to be 
+    | when you create an account, your player score is initialized to be 
     span(style='color: var(--GENERALHIGHLIGHT);') 10.00.
+  p
+    | your player score is updated when you play games while you are logged in.
+  br
   p
     | winning a game against a logged-in player grants you 
     span(style='color: var(--GENERALHIGHLIGHT);') 1.00 
@@ -295,13 +288,30 @@ h2#h2top how to play
     | of your opponent&apos;s score. 
     | at most 
     span(style='color: var(--GENERALHIGHLIGHT);') 5.00 
-    | points will be gained by a player on a win.
+    | points can be gained per win.
   p
     | losing a game removes 
     span(style='color: var(--GENERALHIGHLIGHT);') 10% 
     | of your own score.
+  br
   p
-    | surrendering a game after pick phase completes counts as your opponent's win.
+    | if both players agree on a truce 
+    span(style='color:var(--KEYCODE);') (t)
+    | , both players will receive 
+    span(style='color: var(--GENERALHIGHLIGHT);') 0.50 
+    | points, and the game will end early.
+  p
+    | surrendering 
+    span(style='color:var(--KEYCODE);') (esc) 
+    | a game after pick phase completes counts as your opponent's win and your loss.
+  br
+  p
+    span(style='color:var(--GENERALHIGHLIGHT);') disconnecting 
+    | after a match starts (e.g. wi-fi disconnecting, closing the window, or refreshing the page) gives your opponent the choice to claim victory or to wait for you to return.
+  p
+    | if both players disconnect, the match is won by the second player to disconnect, or by neither player if that cannot be determined.
+  p
+    | after a mutual disconnection, both players will be returned to the lobby page.
 #joiningAGroup.helpSlide
   h3 joining a group 
     span(style='font-size:12px;font-weight:normal;color:var(--BACKTOTOP);' onclick="scrollToThisDiv('playGameForward')") [back to top]

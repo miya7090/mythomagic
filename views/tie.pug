@@ -1,0 +1,28 @@
+doctype html
+head
+  meta(charset='utf8')
+  title tie
+  meta(name='description' content='ancient greek gaming')
+  meta(name='keywords' content='mythomagic')
+  link(rel='shortcut icon' href='../images/tokens/redicon.png')
+  link(rel='stylesheet' href='../stylesheets/lobbystyle.css')
+  link(rel='stylesheet' href='../stylesheets/entrypage.css')
+  script(src='../javascripts/bgm_player.js' charset='utf8')
+  script.
+    document.addEventListener("DOMContentLoaded", () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      document.getElementById("gameCompleteDetails").innerText = "you tied with " + urlParams.get("opponent");
+    });
+  link(rel='icon' type='image/png' sizes='32x32' href='../images/tokens/redicon.png')
+  link(rel='icon' type='image/png' sizes='16x16' href='../images/tokens/redicon.png')
+  meta(property='og:image' content='https://raw.githubusercontent.com/miya7090/mythomagic/main/public/images/og-image.png')
+iframe(src="../sounds/silence.mp3" allow="autoplay" id="audio" style="display: none")
+#bgmLinker(page="tie")
+#banner
+  img.laurel_completeBG(src='https://raw.githubusercontent.com/miya7090/mythomagic/main/public/images/laurels/bronze-laurel.svg' style="opacity:0.3;")
+  img.token_completeBG(src='https://raw.githubusercontent.com/miya7090/mythomagic/main/public/images/tokens/whitetoken.png' style="opacity:0.4;")
+  p.tier_text tie
+  #buttons(bHeight="low")
+    a(class='entryButton' href='/lobby') return to lobby
+    a(class='entryButton' href='/') back to main menu
+  p#gameCompleteDetails loading...
