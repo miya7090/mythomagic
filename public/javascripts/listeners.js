@@ -194,13 +194,6 @@ function mouseClickTile(evt) {
   var thisTile = evt.target;
   var tokenOnTile = evt.target.querySelector('.token');
 
-  if (tokenOnTile != undefined && GAME_MODE_MEMORYTARGET != undefined){
-    if (tokenOnTile.pcardLink.dead == "defeated" && !canWorkWithDead(GAME_MODE_MEMORYTARGET.cardName)) {
-      console.log("this hero has already been defeated");
-      return;
-    }
-  }
-
   var cQ = thisTile.cube_q;
   var cR = thisTile.cube_r;
   var cS = thisTile.cube_s;
