@@ -207,7 +207,7 @@ function mouseClickTile(evt) {
   
   var distanceDifference;
   if (GAME_MODE_MEMORYTARGET != undefined) {
-    distanceDifference = getTileDistance(cQ, cR, cS, GAME_MODE_MEMORYTARGET.getQ(), GAME_MODE_MEMORYTARGET.getR(), GAME_MODE_MEMORYTARGET.getS()); // #TODO visually pick token up with mouse click as well
+    distanceDifference = getTileDistance(cQ, cR, cS, GAME_MODE_MEMORYTARGET.getQ(), GAME_MODE_MEMORYTARGET.getR(), GAME_MODE_MEMORYTARGET.getS());
   }
 
   if (GAME_MODE == "p1-active") { ///// (1) p1-active
@@ -372,7 +372,7 @@ function ultButtonClick(){
 }
 
 function mouseHoverTile(evt) {
-  /* TODO show token stats in the popup window */
+  //
 }
 
 function mouseClickToken(evt) {
@@ -399,8 +399,7 @@ function mouseOverAvailableCard(evt, referenceCard) {
 }
 
 function mouseOverPowerbutton(evt) {
-  // #TODO only if button active
-  return;
+  //
 }
 
 function mouseClickAvailableCard(evt) {

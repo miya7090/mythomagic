@@ -45,7 +45,7 @@ document.addEventListener("DOMContentLoaded", () => {
     window.location.href = "/error.html";
   });
 
-  MY_SOCKET.on('tokenPickPhase', (otherId)=>{ // #TODO make opponent plans visible live (ghost coloring?)
+  MY_SOCKET.on('tokenPickPhase', (otherId)=>{
     OPPONENT_SOCKET_ID = otherId;
 
     if (PICK_PHASE_RANDOM) {

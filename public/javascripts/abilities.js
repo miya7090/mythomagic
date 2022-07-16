@@ -34,7 +34,7 @@ const ULT_MAP = {
 
 function doUniqueSkill(atkType, attacker, target, targetIsOpponent) { // atkType 1=ability, 2=ultimate
     let map = ABILITY_MAP;
-    if (atkType == 2) { map = ULT_MAP; } // #TODO rewrite this and similar with ternary
+    if (atkType == 2) { map = ULT_MAP; }
 
     if (map[attacker.cardName] != undefined){
         if (targetIsOpponent && map[attacker.cardName][1] == 0) {

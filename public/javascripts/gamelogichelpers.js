@@ -161,7 +161,7 @@ function abilityAttack(pcard, q, r, s){
     cS = GAME_MODE_MEMORYTARGET.getS();
   }
   GAME_MODE_MEMORYTARGET.current_mana -= ABILITY_MANA_REQ;
-  attack(1, pcard, cQ, cR, cS, GAME_MODE_MEMORYTARGET.ability_aim_aoe); //#TODO change from flat dmg
+  attack(1, pcard, cQ, cR, cS, GAME_MODE_MEMORYTARGET.ability_aim_aoe);
 }
 
 function ultimateAttack(pcard, q, r, s){
@@ -183,7 +183,7 @@ function ultimateAttack(pcard, q, r, s){
     cS = GAME_MODE_MEMORYTARGET.getS();
   }
   GAME_MODE_MEMORYTARGET.current_mana -= MAX_MANA;
-  attack(2, pcard, cQ, cR, cS, GAME_MODE_MEMORYTARGET.ult_aim_aoe); //#TODO change from flat dmg
+  attack(2, pcard, cQ, cR, cS, GAME_MODE_MEMORYTARGET.ult_aim_aoe);
 }
 
 function canWorkWithDead(cardName){
@@ -218,7 +218,7 @@ function attack(atkType, attacker, centerQ, centerR, centerS, aoe) {
             passive_echo(attacker, tokenOnTile.pcardLink, dmg);
             passive_eros(attacker, tokenOnTile.pcardLink);
             passive_gaea(tokenOnTile.pcardLink);
-            anim_tileHitByAttack(hitTile); // #TODO add sound
+            anim_tileHitByAttack(hitTile);
           }
         } else {
           if (tokenOnTile.pcardLink.dead != "defeated" || canWorkWithDead(attacker.cardName)){
@@ -229,7 +229,6 @@ function attack(atkType, attacker, centerQ, centerR, centerS, aoe) {
               anim_tileHitByAttack(hitTile);
             } else {
               anim_tileHitByHeal(hitTile);
-              console.log("need to implement anim for neutral skill"); // #TODO
             }
           } else {
             console.log("hero already defeated");
@@ -315,7 +314,7 @@ function filterOnlyCoordinatesOnBoard(qrsList){
         moveToken(pcardOfOtherToken, false, -1, 0);
       }
     });
-    rerenderAllGamecardsAndTokens(); // #TODO above code redundant
+    rerenderAllGamecardsAndTokens();
   };
 
   function moveToken(tokenPcard, absolute, diffQ, diffR) {

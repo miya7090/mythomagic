@@ -37,7 +37,7 @@ function exportPC(pcard){
     "cd": pcard.current_defense, "ch": pcard.current_health, "cm": pcard.current_mana,
     "cmpt": pcard.current_mana_per_turn, "cmpa": pcard.current_mana_per_atk,
     "m": pcard.current_movement, "d": pcard.dead, "hb": pcard.health_bonus, "mb": pcard.mana_bonus,
-    "s": pcard.statuses, "b": pcard.blessings, "qq": pcard.getQ(), "rr": pcard.getR(), "ss": pcard.getS() // #TODO compress this?
+    "s": pcard.statuses, "b": pcard.blessings, "qq": pcard.getQ(), "rr": pcard.getR(), "ss": pcard.getS()
   };
 }
 

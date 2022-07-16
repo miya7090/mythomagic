@@ -191,7 +191,7 @@ function anim_tileInAttackRange(hitTileDiv){
 // div creation
 function createTileDiv(rowDiv, q, r) {
   const square = document.createElement("div"); // create tile and add to row
-  square.classList.add("gameSquare"); // #TODO rename as tiles not squares
+  square.classList.add("gameSquare");
 
   const wrap = document.createElement("div"); // create tile and add to row
   wrap.classList.add("tileWrap");
