@@ -25,7 +25,7 @@ const ULT_MAP = {
     "Heracles":[ult_heracles,3], "Hades":[ult_hades,3],
     "Hecate":[ult_hecate,3], "Icarus":[ult_icarus,3],
     "Orpheus":[ult_orpheus,3], "Echo":[ult_echo,1],
-    "Themis":[ult_themis,3], "Artemis":[ult_artemis,1],
+    "Themis":[ult_themis,0], "Artemis":[ult_artemis,1],
     "Atalanta":[ult_atalanta,2], "Gaea":[ult_gaea,3],
     "Jason":[ult_jason,3], "Hephaestus":[ult_hephaestus,1],
     "Eros":[ult_eros,3], "Aphrodite":[ult_aphrodite,0],
@@ -186,10 +186,14 @@ function ability_atalanta(attacker, target) {
 }
 
 function ult_themis(attacker, target) {
-    broadcastMsg("ultimate", true, "Themis", undefined);
+    broadcastMsg("ultimate", true, "Themis", target.cardName);
+    let highestAtk = undefined;
     ENEMY_GAMECARD_OBJS.forEach(pc => {
-        pc.revertToBaseStats();
+        if (pc.dead != "defeated" && (highestAtk == undefined || pc.getCurrentAttack() > highestAtk)) {
+            highestAtk = pc.getCurrentAttack();
+        }
     });
+    target.current_attack = highestAtk;
 }
 
 function ability_themis(attacker, target) {
