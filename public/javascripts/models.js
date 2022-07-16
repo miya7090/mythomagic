@@ -324,6 +324,9 @@ function importAllP2Cs(pcListObj){
       return Object.values(this.statuses).every(v => v == 0);
     }
     giveTurnMana(){
+      this.giveMana(this.getCMPT());
+    }
+    getCMPT(){
       let manaToGive = this.current_mana_per_turn + passive_hecate(this.p1) + passive_dolphin(this.p1);
 
       if (this.p1 && this.cardName == "Aphrodite") { // passive_aphrodite
@@ -333,9 +336,8 @@ function importAllP2Cs(pcListObj){
         manaToGive += 20 * countCardPairsIn(ENEMY_GAMECARD_OBJS, PAIRING_LIST);
       }
 
-      this.giveMana(manaToGive);
+      return manaToGive;
     }
-    
     giveAttackMana(){
       this.giveMana(this.current_mana_per_atk);
     }

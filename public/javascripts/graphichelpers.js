@@ -578,9 +578,9 @@ function get_PC_BroadcastForInfoBox(PCard, isPlayer1) {
     if (PCard.getMaxMana() - MAX_MANA >=0 ) { res += "+"; }
     res += (PCard.getMaxMana() - MAX_MANA) + ")</i></p>";
 
-    res += "<p>MP/turn: " + PCard.current_mana_per_turn + " <i>(";
-    if (PCard.current_mana_per_turn - PCard.base_mana_per_turn >=0 ) { res += "+"; }
-    res += (PCard.current_mana_per_turn - PCard.base_mana_per_turn) + ")</i></p>";
+    res += "<p>MP/turn: " + PCard.getCMPT() + " <i>(";
+    if (PCard.getCMPT() - PCard.base_mana_per_turn >=0 ) { res += "+"; }
+    res += (PCard.getCMPT() - PCard.base_mana_per_turn) + ")</i></p>";
     res += "</div>";
     
     res += '<div class="hoverColumn">';
