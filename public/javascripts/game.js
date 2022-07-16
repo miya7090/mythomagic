@@ -104,10 +104,9 @@ document.addEventListener("DOMContentLoaded", () => {
     window.location.href = "/victory?opponent="+OTHER_NAME;
   });
 
-  MY_SOCKET.on('gameTie', ()=>{
-    MY_SOCKET.emit("updateUserStats", REGION_NAME, "tie", getUserLoggedIn());
-    alert("game over: you have tied with "+OTHER_NAME);
-    window.location.href = "/lobby";
+  MY_SOCKET.on('gameTie', (opponentCookieName)=>{
+    MY_SOCKET.emit("updateUserStats", REGION_NAME, "tie", getUserLoggedIn(), opponentCookieName);
+    window.location.href = "/tie?opponent="+OTHER_NAME;
   });
 
   MY_SOCKET.on('gameWin', (wasSurrender, opponentCookieName)=>{
@@ -157,6 +156,18 @@ document.addEventListener("DOMContentLoaded", () => {
   
   MY_SOCKET.on('giveMessage', (msgType, p1, arg1, arg2)=>{
     processBroadcast(msgType, p1, arg1, arg2);
+  });
+
+  MY_SOCKET.on('truceRequest', ()=>{
+    if (confirm(OTHER_NAME + " has proposed a truce. would you like to accept?")) {
+      MY_SOCKET.emit("gameEnded_withTie", REGION_NAME, SELF_NAME, PLAYER_HERO_INITIAL_NAMES, OTHER_NAME, ENEMY_HERO_INITIAL_NAMES);
+    } else {
+      MY_SOCKET.emit("tellRival_rejectTruce");
+    }
+  });
+
+  MY_SOCKET.on('truceFailed', ()=>{
+    alert(OTHER_NAME + " has rejected your truce");
   });
 
   /////////////////////////////

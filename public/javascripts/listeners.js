@@ -63,6 +63,13 @@ function keyProcessing(event) {
       MY_SOCKET.emit("gameEnded_withEnemyWin", REGION_NAME, SELF_NAME, PLAYER_HERO_INITIAL_NAMES, OTHER_NAME, ENEMY_HERO_INITIAL_NAMES, true);
     }
   }
+
+  // T
+  if (event.keyCode === 84) { // t, suggest truce
+    if (confirm("would you like to propose a truce with " + OTHER_NAME + "?")) {
+      MY_SOCKET.emit("tellRival_askForTruce");
+    }
+  }
   return;
 }
 

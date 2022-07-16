@@ -248,6 +248,16 @@ io.on("connection", socket => {
     io.to(rivalId).emit("giveMessage", msgType, p1, arg1, arg2);
   });
 
+  socket.on("tellRival_askForTruce", () => {
+    let rivalId = rivalFinder[socket.id];
+    io.to(rivalId).emit("truceRequest");
+  });
+
+  socket.on("tellRival_rejectTruce", () => {
+    let rivalId = rivalFinder[socket.id];
+    io.to(rivalId).emit("truceFailed");
+  });
+
   socket.on("updateUserStats", (regionName, winType, cookieName, opponentCookieName, forceOpponentLossIncrease) => {
     // update user stats
     if (cookieMap[socket.id] != ""){ // user logged in
@@ -272,7 +282,7 @@ io.on("connection", socket => {
         // the winner adjusts the user scores
         if (!(opponentCookieName == "" || opponentCookieName == undefined)) { // rival also logged in
           db.collection('login').find({username: opponentCookieName}).toArray().then((rivalEntry) => {
-            if (rivalEntry == 0) { console.log("db0","updateUserStats2",opponentCookieName); return; }
+            if (rivalEntry.length == 0) { console.log("db0","updateUserStats2",opponentCookieName); return; }
 
             let myScorePercent = (0.1 * (100*existingLoginEntry[0].score))/100.0;
             let theirScorePercent = ((0.1 * (100*rivalEntry[0].score))/100.0) + 1.00;
@@ -281,6 +291,9 @@ io.on("connection", socket => {
             if (winType == "win") {
               db.collection('login').updateOne({username: cookieName}, {$inc:{score:theirScorePercent}});
               db.collection('login').updateOne({username: opponentCookieName}, {$inc:{score:-myScorePercent}});
+            } else if (winType == "tie") {
+              db.collection('login').updateOne({username: cookieName}, {$inc:{score:0.25}}); // total = 0.50 since both players run
+              db.collection('login').updateOne({username: opponentCookieName}, {$inc:{score:0.25}});
             }
 
             if (forceOpponentLossIncrease) { // used if opponent disconnects: P1 helps update the losses
@@ -304,8 +317,8 @@ io.on("connection", socket => {
     db.collection('gamestats').insertOne({isTie:true, time:thisDate, region:regionName, winName:p1Name, winTeam:p1cardNames, loseName:p2Name, loseTeam:p2cardNames});
 
     let rivalId = rivalFinder[socket.id];
-    io.to(socket.id).emit("gameTie", cookieMap[rivalId]);
-    io.to(rivalId).emit("gameTie", cookieMap[socket.id]);
+    io.to(socket.id).emit("gameTie", cookieMap[rivalId], cookieMap[socket.id]);
+    io.to(rivalId).emit("gameTie", cookieMap[socket.id], cookieMap[rivalId]);
     demolishRoomOf(socket.id);
   });
 
@@ -530,6 +543,10 @@ router.get('/victory',(req,res) => {
 
 router.get('/defeat',(req,res) => {
   res.render("defeat", {opponent: req.query.opponent});
+});
+
+router.get('/tie',(req,res) => {
+  res.render("tie", {opponent: req.query.opponent});
 });
 
 router.get('/lobby',(req,res) => {

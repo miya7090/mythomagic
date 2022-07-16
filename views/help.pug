@@ -293,17 +293,19 @@ h2#h2top how to play
     | losing a game removes 
     span(style='color: var(--GENERALHIGHLIGHT);') 10% 
     | of your own score.
-  br
-  p
-    | if both players agree on a truce 
-    span(style='color:var(--KEYCODE);') (t)
-    | , both players will receive 
-    span(style='color: var(--GENERALHIGHLIGHT);') 0.50 
-    | points, and the game will end early.
   p
     | surrendering 
     span(style='color:var(--KEYCODE);') (esc) 
     | a game after pick phase completes counts as your opponent's win and your loss.
+  br
+  p
+    | truces (and ties, where both players are simultaneously defeated) affect players' scores, but not players' win/loss counts.
+  p
+    | if both players tie or agree on a truce 
+    span(style='color:var(--KEYCODE);') (t)
+    | , both players will receive 
+    span(style='color: var(--GENERALHIGHLIGHT);') 0.50 
+    | points, and the game will end early.
   br
   p
     span(style='color:var(--GENERALHIGHLIGHT);') disconnecting 
