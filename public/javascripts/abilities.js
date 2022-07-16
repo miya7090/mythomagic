@@ -139,7 +139,7 @@ function ult_jason(attacker, target) {
         pc.current_defense += 1;
     });
     ENEMY_GAMECARD_OBJS.forEach(pc => {
-        pc.current_defense -= 3;
+        pc.current_defense -= 5;
     });
 }
 
@@ -154,7 +154,7 @@ function ability_jason(attacker, target) {
     });
 
     broadcastMsg("ability", true, "Jason", pcWithLowestDef.cardName);
-    pcWithLowestDef.current_defense += 2;
+    pcWithLowestDef.current_defense += 3;
 }
 
 function ult_gaea(attacker, target) {

@@ -102,8 +102,8 @@ const BASE_STAT_DICT = {
       "Revitalization", "Heal 200 HP to all allies",
       "Resurgence","Heal 50 HP to allies after being autoattacked", "Healer"],
     "Jason":[1800,2,10,800,70,0,2, undefined,undefined,undefined,undefined,
-      "Teamwork","Increase the DEF of the ally with the lowest DEF by 2",
-      "Captainship", "Increase DEF of all allies by 1, decrease DEF of all enemies by 3",
+      "Teamwork","Increase the DEF of the ally with the lowest DEF by 3",
+      "Captainship", "Increase DEF of all allies by 1, decrease DEF of all enemies by 5",
       "Argonautica","All allies gain 100 ATK for each Argonaut in the team", "Protector"],
     "Medea":[1200,2,10,500,40,0,2, 3,0,1,0,
       "Sorcery", "Drain all mana from an enemy within 3 tiles and inflict Poisoned",
@@ -117,7 +117,7 @@ const BASE_STAT_DICT = {
       "Warming Hearth","Heal all allies within 2 tiles by 300 HP",
       "Eternal Flame","Increase max HP of allies within 2 tiles by 200 HP and heal them 300 HP",
       "Shelter", "While adjacent to Hestia, allies' DEF is increased by 10, and max HP is increased by 200", "Protector"],
-    "Kronos":[2000,2,10,800,50,0,1, 2,1,undefined,undefined,
+    "Kronos":[1800,2,10,800,50,0,1, 2,1,undefined,undefined,
       "Scythe","Attack targets in a 1-tile radius up to 2 units away, inflicting Stunned",
       "Stasis","Deal 200 true damage to all Stunned enemies, and grants additional turn",
       "Infinite Power","Gains 50 ATK and 1 DEF on each of your turns", "Caster"],
@@ -218,6 +218,7 @@ const BASE_STAT_DICT = {
   PLAYER_OWNED_temp.splice(PLAYER_OWNED_temp.indexOf("Dolphin"), 1);
   const PLAYER_OWNED = PLAYER_OWNED_temp;
   const PLAYER_OWNED_FIGHTERS = PLAYER_OWNED.filter(key => (BASE_STAT_DICT[key][17] == "Melee" || BASE_STAT_DICT[key][17] == "Ranged"));
+  const PLAYER_OWNED_DEFENDERS = PLAYER_OWNED.filter(key => (BASE_STAT_DICT[key][17] == "Protector" || BASE_STAT_DICT[key][17] == "Healer"));
 
   const PLAYER_OWNED_MELEE = PLAYER_OWNED.filter(key => BASE_STAT_DICT[key][17] == "Melee");
   const PLAYER_OWNED_RANGED = PLAYER_OWNED.filter(key => BASE_STAT_DICT[key][17] == "Ranged");

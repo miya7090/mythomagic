@@ -26,7 +26,7 @@ function processLobbyCode(lobbyCode){
 
 function pickPCardsRandomly(){
   let fighterTags = pickRandomEntries(PLAYER_OWNED_FIGHTERS, 1);
-  let healerTags = pickRandomEntries(PLAYER_OWNED_HEALERS, 1);
+  let healerTags = pickRandomEntries(PLAYER_OWNED_DEFENDERS, 1);
 
   let PLAYER_OWNED_PICKABLE = PLAYER_OWNED.filter(key => (key !== fighterTags[0] && key !== healerTags[0]));
   let anyTags = pickRandomEntries(PLAYER_OWNED_PICKABLE, 3);
