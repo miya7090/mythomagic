@@ -89,7 +89,7 @@ function updateTokenClock(){
 
 function tokenClockDone(){
   changeGameModeTo("startup");
-  MY_SOCKET.emit("doneWithTokenPick", exportAllP1Cs(false));
+  MY_SOCKET.emit("doneWithTokenPick", exportAllP1Cs());
 }
 
 function updateTurnClock(){
@@ -127,6 +127,7 @@ function beginTurn(yourEnemysCards, yourEnemysVerOfYourCards){
     TURN_STARTED_AT = Date.now();
     setTimeout(updateTurnClock, 1000);
   }
+  console.log("opponent ver of my cards looks like", yourEnemysVerOfYourCards);
   console.log("opponent cards look like", yourEnemysCards);
 
   if (yourEnemysCards != undefined){

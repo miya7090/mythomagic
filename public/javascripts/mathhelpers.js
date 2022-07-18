@@ -37,5 +37,5 @@ function pickRandomEntries(arr, n) {
 }
 
 function randArray(arr) {
-  return arr.sort(function(){ return 0.5 - Math.random(); });
+  return arr.slice().sort(function(){ return 0.5 - Math.random(); }); // slice() first to get a copy
 }
