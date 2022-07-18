@@ -6,6 +6,8 @@ const clack4 = GITHUB_PUBLIC_PATH+'sounds/clack4.mp3'
 const clack5 = GITHUB_PUBLIC_PATH+'sounds/clack5.mp3'
 
 document.addEventListener("DOMContentLoaded", () => {
+    populateHeroImgCache();
+    
     const gameInfoBox = document.getElementById("gameInfoBox");
 
     document.getElementById("availHeroTitle").innerText = "all available heroes (" + PLAYER_OWNED.length + ")";
