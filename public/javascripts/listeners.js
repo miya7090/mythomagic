@@ -111,6 +111,10 @@ function updateTurnClock(){
     } else if (GAME_MODE == "p1-ultimateAim") {
       relinquishAimingMouseHighlight();
       aimingTargetReachHighlight(false, GAME_MODE_MEMORYTARGET.ult_aim_range);
+    } else if (GAME_MODE == "p1-moveToken") {
+      highlightMemoryTarget(false);
+      highlightSelfAndRadius("rangeHighlight", false, GAME_MODE_MEMORYTARGET.getCurrentMovement(),
+        GAME_MODE_MEMORYTARGET.getQ(), GAME_MODE_MEMORYTARGET.getR(), GAME_MODE_MEMORYTARGET.getS());
     }
     attackComplete();
   } else {

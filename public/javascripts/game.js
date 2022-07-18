@@ -97,12 +97,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
   MY_SOCKET.on('forfeit', (reason)=>{
     alert("you have forfeited the game ("+reason+")");
-    window.location.href = "/defeat?opponent="+OTHER_NAME;
+    window.location.href = "/lobby";
   });
 
   MY_SOCKET.on('winThroughForfeit', (reason)=>{
     alert(OTHER_NAME + " has forfeited the game ("+reason+")"); // used only in card picking
-    window.location.href = "/victory?opponent="+OTHER_NAME;
+    window.location.href = "/lobby";
   });
 
   MY_SOCKET.on('gameTie', (opponentCookieName)=>{

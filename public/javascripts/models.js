@@ -302,7 +302,7 @@ function importAllP2Cs(pcListObj){
       }
     }
     inflictStatus(iStat){
-      if (this.dead != "defeated" && this.statuses[iStat] == 0){
+      if (this.dead != "defeated"){
         if (this.p1){ passive_medea_onAlly(this); } else { passive_medea_onEnemy(this); }
         this.statuses[iStat] += STATUS_DEFAULT_LENGTH;
       }
