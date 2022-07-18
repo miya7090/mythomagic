@@ -205,7 +205,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const d = new Date();
     d.setTime(d.getTime() + (exdays*24*60*60*1000));
     let expires = "expires="+ d.toUTCString();
-    document.cookie = "user" + "=" + username + ";" + expires + ";path=/";
+    document.cookie = "user=" + username + ";" + expires + ";path=/";
     requestLoginBoxLoggedIn();
   });
 
@@ -426,8 +426,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function logoutUser(){
     nicknameDiv.value = "";
     nicknameDiv.disabled = false;
-
-    document.cookie.split(";").forEach(function(c) { document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); });
+    document.cookie = 'user=;expires=Thu, 01 Jan 1970 00:00:01 GMT;path=/';
     const thisLoginBox = document.getElementById("loginBox");
     thisLoginBox.innerHTML = "logged out successfully!";
   }

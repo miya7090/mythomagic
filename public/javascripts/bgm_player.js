@@ -2,7 +2,7 @@
 
 GITHUB_PUBLIC_PATH = "https://raw.githubusercontent.com/miya7090/mythomagic/main/public/";
 
-BGM_MUTE = false;
+BGM_MUTE_COPY = false; // a copy in case cookies don't work
 BGM_OBJECT = undefined;
 BGM_VOLUME = 1.0;
 BGM_NAME = undefined;
@@ -96,7 +96,6 @@ document.addEventListener("DOMContentLoaded", () => {
         MUSIC_ICON_IMG.title = "music change not available"; // #TODO fix
     }
     
-
     MUSIC_ICON_IMG.addEventListener("mouseenter", mouseEnteredIcon);
     MUSIC_ICON_IMG.addEventListener("mouseleave", mouseLeftIcon);
     MUSIC_ICON_IMG.addEventListener("contextmenu", (ev) => {
@@ -135,44 +134,105 @@ function createMusicChangeButton(musicCode, musicFullName){
     });
     tempButton.addEventListener("mouseup", () => {
         BGM_OBJECT.src = GITHUB_PUBLIC_PATH+'sounds/'+musicCode+'.mp3';
-        BGM_OBJECT.play(); //call this to play the song right away
-        BGM_OBJECT.loop = true;
+        BGM_MUTE_COPY = true; muteBGM(true); // reset: force mute + unmute
         tempButton.style.backgroundColor = "rgba(255,255,255,0.5)";
     });
     return tempButton;
 }
 
 function refreshBgm(){
-    if (BGM_MUTE){
-        BGM_OBJECT.pause();
-        BGM_OBJECT.currentTime = 0;
-    } else {
-        BGM_OBJECT.volume = BGM_VOLUME;
-        var promise = BGM_OBJECT.play();
-
-        if (promise !== undefined) {
-            promise.then(_ => {
-                BGM_OBJECT.loop = true;
-            }).catch(error => {
-                // Autoplay was prevented :)))
-                muteBGM();
-            });
+    let cookieSaysMute = getMuteStatus();
+    console.log(cookieSaysMute, BGM_MUTE_COPY, "bgm refresh");
+    if (cookieSaysMute == "" || cookieSaysMute == undefined){
+        if (BGM_MUTE_COPY){
+            console.log("no mute preference set yet, but a mute was declared");
+            BGM_OBJECT.pause();
+            BGM_OBJECT.currentTime = 0;
+        } else {
+            console.log("no mute preference set yet, but attempting to play sound");
+            BGM_OBJECT.volume = BGM_VOLUME;
+            BGM_OBJECT.loop = true;
+            var promise = BGM_OBJECT.play();
+    
+            if (promise !== undefined) {
+                promise.then(_ => {
+                    // all ok
+                }).catch(error => {
+                    console.log("music autoplay was prevented, most likely by chrome");
+                    BGM_MUTE_COPY = true; // but don't remember this
+                });
+            }
         }
-    }
+    } else {
+        if (cookieSaysMute=="true") {
+            console.log("deferring to cookie demanding mute");
+            BGM_MUTE_COPY = true;
+            BGM_OBJECT.pause();
+            BGM_OBJECT.currentTime = 0;
+
+            MUSIC_ICON_OPACITY = 0.3; MUSIC_ICON_IMG.style.opacity = MUSIC_ICON_OPACITY;
+            
+        } else {
+            console.log("deferring to cookie demanding sound");
+            BGM_MUTE_COPY = false;
+            BGM_OBJECT.volume = BGM_VOLUME;
+            BGM_OBJECT.loop = true;
+            var promise = BGM_OBJECT.play();
+
+            MUSIC_ICON_OPACITY = 0.6; MUSIC_ICON_IMG.style.opacity = MUSIC_ICON_OPACITY;
+    
+            if (promise !== undefined) {
+                promise.then(_ => {
+                    // all ok
+                }).catch(error => {
+                    console.log("music autoplay was prevented, most likely by chrome");
+                    BGM_MUTE_COPY = true;
+                    MUSIC_ICON_OPACITY = 0.3; MUSIC_ICON_IMG.style.opacity = MUSIC_ICON_OPACITY;
+                });
+            }
+        }
+    }    
 }
   
-function muteBGM(){
-    console.log("setting bgm mute to", !BGM_MUTE);
-    BGM_MUTE = !BGM_MUTE;
+function muteBGM(rememberThis){
+    console.log("setting bgm mute to", !BGM_MUTE_COPY);
+    BGM_MUTE_COPY = !BGM_MUTE_COPY;
+    if (rememberThis) {
+        rememberMuteStatus(BGM_MUTE_COPY)
+    }
     refreshBgm();
   
-    if (BGM_MUTE) {
+    if (BGM_MUTE_COPY) {
         MUSIC_ICON_OPACITY = 0.3;
         MUSIC_ICON_IMG.style.opacity = MUSIC_ICON_OPACITY;
     } else {
         MUSIC_ICON_OPACITY = 0.6;
         MUSIC_ICON_IMG.style.opacity = MUSIC_ICON_OPACITY;
     }
+}
+
+function rememberMuteStatus(shouldMute) {
+    let exdays = 30; // expire after a month
+    const d = new Date();
+    d.setTime(d.getTime() + (exdays*24*60*60*1000));
+    let expires = "expires="+ d.toUTCString();
+    document.cookie = "mute=" + shouldMute + ";" + expires + ";path=/";
+}
+
+function getMuteStatus() {
+    let name = "mute=";
+    let decodedCookie = decodeURIComponent(document.cookie);
+    let ca = decodedCookie.split(';');
+    for(let i = 0; i <ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) == ' ') {
+        c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+        return c.substring(name.length, c.length);
+        }
+    }
+    return "";
 }
 
 function mouseEnteredIcon() {
