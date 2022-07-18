@@ -5,6 +5,8 @@ const clack3 = GITHUB_PUBLIC_PATH+'sounds/clack3.mp3'
 const clack4 = GITHUB_PUBLIC_PATH+'sounds/clack4.mp3'
 const clack5 = GITHUB_PUBLIC_PATH+'sounds/clack5.mp3'
 
+var HOVER_LOCK = false;
+
 document.addEventListener("DOMContentLoaded", () => {
     populateHeroImgCache();
     
@@ -31,13 +33,18 @@ document.addEventListener("DOMContentLoaded", () => {
 // listener semi-copies that don't actually do anything game-wise
 
 function mouseClickAvailableCard(evt){
-    return;
+    HOVER_LOCK = true;
+    document.getElementById("playGameForward").scrollIntoView();
 }
 
 function mouseOverAvailableCard(evt, referenceCard) {
-    const gameInfoBox = document.getElementById("gameInfoBox");
-    gameInfoBox.innerHTML = get_BC_BroadcastForInfoBox(referenceCard);
-    playSoundRandom([clack3, clack4, clack5], rand(0.4,0.6));
+    if (!HOVER_LOCK) {
+        const gameInfoBox = document.getElementById("gameInfoBox");
+        gameInfoBox.innerHTML = get_BC_BroadcastForInfoBox(referenceCard);
+        playSoundRandom([clack3, clack4, clack5], rand(0.4,0.6));
+    } else {
+        HOVER_LOCK = false;
+    }
 }
 
 function playSoundRandom(choices, volume){
