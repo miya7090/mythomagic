@@ -156,7 +156,6 @@ function atTurnStart(suppressNotif){
     ENEMY_HERO_INITIAL_NAMES = getPCNames(ENEMY_GAMECARD_OBJS);
   }
 
-  poisonThePoisoned();
   passive_hestia(true, suppressNotif);
   passive_hermes(suppressNotif);
   forAll_decreaseStatusCooldowns();
@@ -286,6 +285,7 @@ function mouseClickTile(evt) {
 function attackComplete(){
   TURN_STARTED_AT = undefined;
   giveAllTurnMana(); // attack mana is given in autoattack
+  poisonThePoisoned();
   passive_apollo();
   passive_kronos();
   if (GAME_MODE_MEMORYTARGET != undefined){ highlightMemoryTarget(false); }

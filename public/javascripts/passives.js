@@ -143,7 +143,7 @@ function passive_achilles_onAlly(){ // run when ally card is defeated
     if (mc != undefined) {
         broadcastMsg("passive", true, "Achilles", undefined);
         mc.clearStatuses();
-        mc.current_attack += 600;
+        mc.current_attack += 300;
     }
 }
 

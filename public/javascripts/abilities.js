@@ -370,6 +370,7 @@ function ult_achilles(attacker, target) {
 
 function ability_medea(attacker, target) {
     broadcastMsg("ability", true, "Medea", target.cardName);
+    attacker.giveMana(target.current_mana);
     target.current_mana = 0;
     target.inflictStatus("poisoned");
 }
