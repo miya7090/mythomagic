@@ -1,7 +1,8 @@
 :root {
     --GENERALHIGHLIGHT: rgb(241, 224, 141);
 
-    --SERVERCOLOR: rgb(137, 179, 239);
+    --SERVERCOLOR: rgb(139, 209, 147);
+    --STATNAME: rgb(95, 166, 168);
     --STATUSEFFECTCOLOR: rgb(137, 179, 239);
     --SKILLCOLOR: rgb(214, 170, 240);
     --KEYCODE: rgb(128, 234, 116);

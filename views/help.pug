@@ -24,13 +24,9 @@ h2#h2top how to play
   a(class='navigationButton' style="position:absolute;left:0px;top:0px;" href="/") back to main menu
 .navigationDiv 
   span(class='tocTitle' onclick="scrollToThisDiv('joinALobby')") 1. join a lobby
-  span(class='tocTitle' onclick="scrollToThisDiv('pickYourHeroes')") 2. pick your heroes
-  span(class='tocTitle' onclick="scrollToThisDiv('moveYourHero')") 3. move your hero
+  span(class='tocTitle' onclick="scrollToThisDiv('pickYourHeroes')") 2. choose your team
+  span(class='tocTitle' onclick="scrollToThisDiv('moveYourHero')") 3. move a token
   span(class='tocTitle' onclick="scrollToThisDiv('selectAnAction')") 4. select an action
-  span(class='tocTitle' onclick="scrollToThisDiv('calculatingDamage')") calculating damage
-  span(class='tocTitle' onclick="scrollToThisDiv('creatingAnAccount')") creating an account
-  span(class='tocTitle' onclick="scrollToThisDiv('scoring')") game scoring
-  span(class='tocTitle' onclick="scrollToThisDiv('joiningAGroup')") joining a group
 #joinALobby.helpSlide
   h3
     span(style='color: gray;') 1. 
@@ -38,71 +34,52 @@ h2#h2top how to play
     span(style='font-size:12px;font-weight:normal;color:var(--BACKTOTOP);' onclick="scrollToThisDiv('playGameForward')") [back to top]
   p
     | enter a nickname and choose one of four possible lobbies to play in: 
-    span(style='color:var(--SERVERCOLOR);') olympia
-    | , 
-    span(style='color:var(--SERVERCOLOR);') corinth
-    |  (60-), 
-    span(style='color:var(--SERVERCOLOR);') athens
-    |  (45-30), or 
-    span(style='color:var(--SERVERCOLOR);') sparta
-    |  (15-15).
-  p
-    | lobbies restrict the amount of time you have to 
-    span(style='color:var(--GENERALHIGHLIGHT);') pick heroes
-    |  and to 
-    span(style='color:var(--GENERALHIGHLIGHT);') play your turn
-    | .
+    span(style='color:var(--SERVERCOLOR);') olympia, corinth 
+    span(style='color:var(--GENERALHIGHLIGHT);') (60-), 
+    span(style='color:var(--SERVERCOLOR);') athens 
+    span(style='color:var(--GENERALHIGHLIGHT);') (45-30), 
+    | or 
+    span(style='color:var(--SERVERCOLOR);') sparta 
+    span(style='color:var(--GENERALHIGHLIGHT);') (15-15).
   br
   p
-    | heroes are randomly assigned to teams in 
-    span(style='color:var(--SERVERCOLOR);') olympia
-    | , and turns are untimed. assigned teams will have at least one fighter class and at least one defender class.
+    span(style='color:var(--SERVERCOLOR);') olympia: 
+    | teams are pre-assigned, having at least one fighter and at least one defender; turns are 
+    span(style='color:var(--GENERALHIGHLIGHT);') untimed. 
   p
-    span(style='color:var(--SERVERCOLOR);') corinth
-    |  gives 60 seconds to pick heroes, and turns are untimed.
+    span(style='color:var(--SERVERCOLOR);') corinth: 
+    span(style='color:var(--GENERALHIGHLIGHT);') 60 
+    | seconds to pick teams; turns are 
+    span(style='color:var(--GENERALHIGHLIGHT);') untimed.
   p
-    span(style='color: var(--SERVERCOLOR);') athens
-    |  gives 45 seconds to pick heroes and 30 seconds per turn.
+    span(style='color: var(--SERVERCOLOR);') athens: 
+    span(style='color:var(--GENERALHIGHLIGHT);') 45 
+    | seconds to pick teams; 
+    span(style='color:var(--GENERALHIGHLIGHT);') 30 
+    | seconds per turn.
   p
-    span(style='color:var(--SERVERCOLOR);') sparta
-    |  gives 15 seconds to pick heroes and 15 seconds per turn.
+    span(style='color:var(--SERVERCOLOR);') sparta: 
+    span(style='color:var(--GENERALHIGHLIGHT);') 15 
+    | seconds to pick teams; 
+    span(style='color:var(--GENERALHIGHLIGHT);') 15 
+    | seconds per turn.
   br
   p
-    | once you join a lobby, you can 
-    span(style='color:var(--GENERALHIGHLIGHT);') challenge 
-    | other players in that lobby to a game.
+    | once you are in a lobby, you can challenge other players in that lobby to a game.
 #pickYourHeroes.helpSlide
   h3
     span(style='color: gray;') 2. 
-    |  pick your heroes 
+    | choose your team 
     span(style='font-size:12px;font-weight:normal;color:var(--BACKTOTOP);' onclick="scrollToThisDiv('playGameForward')") [back to top]
   p
-    | pick up to five hero cards by clicking in the 
-    span(style='color:var(--GENERALHIGHLIGHT);') index
-    |  to bring a card into your 
-    span(style='color: var(--GENERALHIGHLIGHT);') deck
-    | .
-  p
-    | you can view hero details by hovering over any card with your mouse, and you can click on any card in your deck to return it to the index.
+    | for games in 
+    span(style='color: var(--SERVERCOLOR);') corinth, athens, 
+    | and 
+    span(style='color: var(--SERVERCOLOR);') sparta, 
+    | you can select up to five hero cards. click again on any card you've selected to return it.
+  br
   p
     | there are seven available hero classes: 
-    span(style='color:var(--MELEE);') melee
-    |  and 
-    span(style='color:var(--RANGED);') ranged
-    |  (fighters), 
-    span(style='color:var(--PROTECTOR);') protectors
-    |  and 
-    span(style='color:var(--HEALER);') healers
-    | (defenders), 
-    span(style='color:var(--SUPPORTER);') supporters
-    |  and 
-    span(style='color:var(--CASTER);') casters
-    | , and 
-    span(style='color:var(--SPECIAL);') special
-    |  heroes.
-  p
-    | classes can be previewed in the 
-    a(href='/index' target='_blank' style='color: gray; text-decoration: underline;') index.
   ul
     li
       p
@@ -111,17 +88,7 @@ h2#h2top how to play
         span(style='color:var(--RANGED);') ranged
         |  fighters tend to have higher 
         span(style='color:var(--STATNAME);') attack
-        |  (ATK) and primarily do damage through autoattacks and abilities.
-    li
-      p
-        span(style='color:var(--PROTECTOR);') protectors
-        |  focus on absorbing damage or increasing the 
-        span(style='color:var(--STATNAME);') defense
-        |  (DEF) of allies, while the main purpose of 
-        span(style='color: var(--HEALER);') healers
-        |  is to restore allies&apos; 
-        span(style='color:var(--STATNAME);') health points
-        |  (HP).
+        |  (ATK) and primarily do damage through autoattacks and abilities.        
     li
       p
         span(style='color:var(--SUPPORTER);') supporters
@@ -130,25 +97,34 @@ h2#h2top how to play
         |  impair enemies and worsen enemy stats.
     li
       p
+        span(style='color:var(--PROTECTOR);') protectors
+        |  often increase the 
+        span(style='color:var(--STATNAME);') defense
+        |  (DEF) and survivability of allies, while the main purpose of 
+        span(style='color: var(--HEALER);') healers
+        |  is to restore allies&apos; 
+        span(style='color:var(--STATNAME);') health points
+        |  (HP).
+    li
+      p
         span(style='color:var(--SPECIAL);') special
         |  heroes use unique abilities to affect the outcome of the game.
   p
-    | if you haven&apos;t picked any heroes when the allotted time is up, you and your opponent will be returned to the lobby.
+    | if time runs out and you still haven&apos;t picked any heroes, you and your opponent will be returned to the lobby.
 #moveYourHero.helpSlide
   h3
     span(style='color: gray;') 3. 
-    |  move your hero 
+    |  move a token 
     span(style='font-size:12px;font-weight:normal;color:var(--BACKTOTOP);' onclick="scrollToThisDiv('playGameForward')") [back to top]
-  p each player has two turns per round.
-  p
-    | on your turn, click one of your 
-    span(style='color: var(--GENERALHIGHLIGHT);') tokens&nbsp;
-    | on the map to move it, and click again to place it.
+  p each player has 
+    span(style='color: var(--GENERALHIGHLIGHT);') two turns per round. 
+    | on your turn, click one of your tokens on the map to move it, and click again to place it.
   p
     i
-      | note that clicking the same tile again will keep the token in the same position for the turn. to unselect a tile, press 
+      | note: clicking the same tile again keeps the token in the same position for the turn. to unselect a tile, press 
       span(style='color:var(--KEYCODE);') c
       |  instead.
+  br
   p
     | the maximum distance that you can move the token depends on the hero&apos;s 
     span(style='color:var(--STATNAME);') movement
@@ -160,7 +136,7 @@ h2#h2top how to play
     |  and 
     span(style='color:var(--KEYCODE);') x
     |  to decrease/increase the 
-    span(style='color: var(--GENERALHIGHLIGHT);')  preview radius
+    span(style='color: var(--GENERALHIGHLIGHT);') preview radius
     | , which appears when you hover your cursor over a game tile.
   p
     | the preview radius can be useful as a tool for measuring tile distances on the grid.
@@ -170,63 +146,75 @@ h2#h2top how to play
     |  select an action 
     span(style='font-size:12px;font-weight:normal;color:var(--BACKTOTOP);' onclick="scrollToThisDiv('playGameForward')") [back to top]
   p
-    | the hero&apos;s autoattack will attack all opponents within their 
+    | all heroes accumulate a certain amount of 
+    span(style='color:var(--STATNAME);') mana points 
+    | (MP) after each of your turns, typically around 50 MP/turn.
+  p
+    | each hero has a unique 
+    span(style='color:var(--SKILLCOLOR);') ability
+    |  consuming 200 MP, and an 
+    span(style='color:var(--SKILLCOLOR);') ultimate
+    |  consuming 1000 MP.
+  br
+  p
+    | a hero can also 
+    span(style='color: var(--SKILLCOLOR);') attack 
+    | (also known as autoattack), which does not consume MP and will attack all opponents within the hero's 
     span(style='color:var(--STATNAME);') reach&nbsp;
     | (RC).
   p
-    | each hero also has a unique 
-    span(style='color:var(--SKILLCOLOR);') ability
-    |  consuming 200 
-    span(style='color:var(--STATNAME);') mana points
-    |  (MP), and an 
-    span(style='color:var(--SKILLCOLOR);') ultimate
-    |  consuming 1000 MP.
-  p
-    | all heroes gain a certain amount of MP after each turn, and generally can accumulate up to 1000 MP.
-  p
-    | in addition to an ability and an ultimate, each hero has a&nbsp;
+    | each hero also has a&nbsp;
     span(style='color: var(--SKILLCOLOR);') passive
     |  skill that is automatically applied each turn.
-  p
-    | ability, ultimate, and passive descriptions can be previewed in the 
-    a(href='/index' target='_blank' style='color: gray; text-decoration: underline;') index.
+  br
+  br
+  br
+  p(style="text-align:center;color: var(--GENERALHIGHLIGHT);")
+    | mythomagic is won when all enemy heroes have been defeated, or when your opponent concedes.
+br
+br
+hr(style="width:50%;border: 2px solid rgba(255,255,255,0.1);")
+h2 advanced instructions
+.navigationDiv 
+  span(class='tocTitle' onclick="scrollToThisDiv('calculatingDamage')") calculating damage
+  span(class='tocTitle' onclick="scrollToThisDiv('creatingAnAccount')") creating an account
+  span(class='tocTitle' onclick="scrollToThisDiv('scoring')") game scoring
+  span(class='tocTitle' onclick="scrollToThisDiv('joiningAGroup')") joining a group
+br
 #calculatingDamage.helpSlide
   h3 calculating damage 
     span(style='font-size:12px;font-weight:normal;color:var(--BACKTOTOP);' onclick="scrollToThisDiv('playGameForward')") [back to top]
   p
-    | the base amount of damage done is usually calculated with the hero&apos;s ATK divided by their opponent&apos;s DEF.
-  p there are six status effects that modify the base amount of damage:
+    | the amount of damage done in an autoattack is typically calculated by 
+    span(style='color: var(--GENERALHIGHLIGHT);') dividing the attacker's ATK by their opponent&apos;s DEF.
+  p there are six status effects that modify this base amount of damage:
   ol
     li
       span(style='color:var(--STATUSEFFECTCOLOR);') charmed:
-      |  the hero&apos;s DEF is reduced by 50%.
+      |  DEF is reduced by 50%
     li
       span(style='color:var(--STATUSEFFECTCOLOR);')  distracted:
-      |  the hero is prevented from gaining MP, and DEF is reduced by 25%.
+      |  prevented from gaining MP, DEF reduced by 25%
     li
       span(style='color:var(--STATUSEFFECTCOLOR);')  poisoned:
-      |  the hero will obtain 800/DEF damage each turn.
+      |  receives 800/DEF damage each turn
     li
       span(style='color:var(--STATUSEFFECTCOLOR);')  stunned:
-      |  the hero&apos;s ATK and MVT are reduced to zero, and RC is reduced to one.
+      |  ATK and MVT are reduced to zero, RC reduced to 1
     li
       span(style='color:var(--STATUSEFFECTCOLOR);')  terrified:
-      |  the hero&apos;s ATK is reduced by 50%.
+      |  ATK is reduced by 50%
     li
       span(style='color:var(--STATUSEFFECTCOLOR);')  obscured:
-      |  the hero&apos;s location is not visible to the opponent.
+      |  location is not visible to the opponent
   p
-    | as an example, a terrified hero with ATK=2000 would deal (2000/10)/2=100 HP of damage to a hero with DEF=10.
-  p
-    | status effects typically persist for 4 turns; repeated applications will stack by duration. status effects can be removed by certain heroes.
+    | status effects typically persist for 4 turns; repeated applications stack by duration.
   p
     span(style='color: var(--GENERALHIGHLIGHT);') true
     |  damage is applied directly and is not affected by hero stats or statuses.
   br
   p
     | heroes are defeated when their HP reaches zero. a hero&apos;s passive becomes inactive once they are defeated.
-  p
-    | mythomagic is won when all enemy heroes have been defeated, or when your opponent concedes.
 #creatingAnAccount.helpSlide
   h3 creating an account 
     span(style='font-size:12px;font-weight:normal;color:var(--BACKTOTOP);' onclick="scrollToThisDiv('playGameForward')") [back to top]
@@ -234,32 +222,27 @@ h2#h2top how to play
     | if you have an 
     span(style='color: var(--GENERALHIGHLIGHT);') invitation code
     | , you can create an account.
+  br
   p
-    | your account 
+    | your 
     span(style='color: var(--GENERALHIGHLIGHT);') username
-    |  reserves a nickname for your usage and assigns you an invitation code that can be used up to five times.
+    |  reserves a nickname for your usage and assigns you a new invitation code that can be used up to five times.
   p
-    | please 
-    b do not create multiple accounts
-    |  to gain more invitation codes: your account (and all resulting accounts) will eventually be removed.
+    i please do not create multiple accounts to reserve nicknames or gain more invitation codes: your account (and all resulting accounts) will be removed.
+  br
   p
     | accounts track your wins and losses across games and calculate your 
     span(style='color: var(--GENERALHIGHLIGHT);') player score, 
     | which is used to determine your 
     span(style='color: var(--GENERALHIGHLIGHT);') class 
     | and 
-    span(style='color: var(--GENERALHIGHLIGHT);') ranking.
+    span(style='color: var(--GENERALHIGHLIGHT);') ranking 
+    | amongst all players.
   br
   p
-    | guest players are shown with 
-    span(style='color: var(--NOTIER);') green 
-    | names in the lobby.
-  p
-    | if a player is logged in, their name in the lobby will be colored according to their current 
-    span(style='color: var(--GENERALHIGHLIGHT);') class.    
-  p
-    span(style='color: var(--GENERALHIGHLIGHT);') classes
-    |  are assigned based on your score: 
+    | your 
+    span(style='color: var(--GENERALHIGHLIGHT);') class 
+    |  is based on your score: 
     span(style='color: var(--IRON);') iron
     | , 
     span(style='color: var(--BRONZE);') bronze
@@ -271,7 +254,11 @@ h2#h2top how to play
     span(style='color: var(--GRANDMASTER);') grandmaster
     |  (&gt;40.00).
   p
-    | you can also hover over a name in the lobby to have the score and class shown as text.
+    | if a player is logged in, their name in the lobby will be colored according to their current class. guest players are shown with 
+    span(style='color: var(--NOTIER);') green 
+    | names in the lobby. 
+  p
+    i tip: you can hover over a name in the lobby to have the score and class shown as text.
 #scoring.helpSlide
   h3 game scoring 
     span(style='font-size:12px;font-weight:normal;color:var(--BACKTOTOP);' onclick="scrollToThisDiv('playGameForward')") [back to top]
