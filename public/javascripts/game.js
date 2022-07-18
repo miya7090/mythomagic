@@ -35,6 +35,7 @@ document.addEventListener("DOMContentLoaded", () => {
   SELF_NAME = urlParams.get('self');
   OTHER_NAME = urlParams.get('other');
   processLobbyCode(urlParams.get('lobby'));
+  populateHeroImgCache();
 
   /* socket stuff */
   MY_SOCKET.on('connect', ()=>{

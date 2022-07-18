@@ -44,7 +44,7 @@ function processBroadcast(msgType, p1, arg1, arg2){
   } else if (msgType == "ultimate" && arg1 == "Dionysus") {
     p1 = !p1;
     bIcon = GITHUB_PUBLIC_PATH + "images/portraits/dolphin.png";
-    bText = arg2 + " is turning into a dolphin!";
+    bText = arg2 + " has turned into a dolphin!";
   } else {
     bIcon = GITHUB_PUBLIC_PATH + "images/portraits/"+arg1.toLowerCase()+".png";
     bText = formatBroadcast(msgType, p1, arg1, arg2);
@@ -223,6 +223,38 @@ function createTileDiv(rowDiv, q, r) {
   // token mover function
   square.onclick = mouseClickTile;
 };
+
+function populateHeroImgCache(){
+  Object.keys(BASE_STAT_DICT).forEach(heroName => {
+    HERO_IMAGE_DIV_CACHE[heroName] = {};
+
+    let imageDiv = new Image();
+    imageDiv.src = GITHUB_PUBLIC_PATH + "images/portraits/"+heroName.toLowerCase()+".png";
+    imageDiv.alt = heroName;
+    imageDiv.classList.add("baseCardImg1");
+    HERO_IMAGE_DIV_CACHE[heroName][""] = imageDiv;
+    let imageDiv2 = new Image();
+    imageDiv2.src = GITHUB_PUBLIC_PATH + "images/portraits/"+heroName.toLowerCase()+".png";
+    imageDiv2.alt = heroName;
+    imageDiv2.classList.add("baseCardImg1");
+    imageDiv2.classList.add("smallFont");
+    HERO_IMAGE_DIV_CACHE[heroName]["smallFont"] = imageDiv2;
+    let imageDiv3 = new Image();
+    imageDiv3.src = GITHUB_PUBLIC_PATH + "images/portraits/"+heroName.toLowerCase()+".png";
+    imageDiv3.alt = heroName;
+    imageDiv3.classList.add("baseCardImg1");
+    imageDiv3.classList.add("smallestFont");
+    HERO_IMAGE_DIV_CACHE[heroName]["smallestFont"] = imageDiv3;
+  });
+}
+ 
+function getCachedImageDiv(cardName, fontString){
+  if (fontString == "" || fontString == undefined){
+    return HERO_IMAGE_DIV_CACHE[cardName][""];
+  } else {
+    return HERO_IMAGE_DIV_CACHE[cardName][fontString];
+  }
+}
 
 function createAvailableCardDiv(pcNameToRender, availCardGroupDiv) {
   const acard = document.createElement("div");
@@ -427,12 +459,7 @@ function putBaseCardHTML(cardName, cardDiv) {
   bcih.classList.add("baseCardImgHolder");
   cardDiv.appendChild(bcih);
 
-  const bci1 = document.createElement("img"); // add image backing
-  bci1.classList.add("baseCardImg1");
-  if (fontString != undefined) { bci1.classList.add(fontString); }
-  bci1.src = GITHUB_PUBLIC_PATH + "images/portraits/"+cardName.toLowerCase()+".png";
-  bci1.alt = "card image";
-  bcih.appendChild(bci1);
+  bcih.appendChild(getCachedImageDiv(cardName, fontString));
 
   const bci2 = document.createElement("img"); // add image front
   bci2.classList.add("baseCardImg2");
