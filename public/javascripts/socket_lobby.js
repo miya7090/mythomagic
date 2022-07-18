@@ -162,7 +162,7 @@ document.addEventListener("DOMContentLoaded", () => {
       nicknameDiv.select();
     } else {
       const regionDiv = document.getElementById("region");
-      socket.emit("lobbyJoin", nicknameDiv.value, regionDiv.value, getUserLoggedIn());
+      socket.emit("lobbyJoin", nicknameDiv.value, regionDiv.value, getCookieValFor("user"), getCookieValFor("authkey"));
       regionNotesText.textContent = "joining "+regionDiv.value+" lobby...";
       nicknameDiv.disabled = true;
       lLeaveButton.hidden = false;
@@ -173,7 +173,7 @@ document.addEventListener("DOMContentLoaded", () => {
     socket.emit("lobbyLeave");
     clearRegionList();
     regionNotesText.textContent = "";
-    if (getUserLoggedIn() == "" || getUserLoggedIn() == undefined){
+    if (getCookieValFor("user") == "" || getCookieValFor("user") == undefined){
       nicknameDiv.disabled = false;
     }
     lLeaveButton.hidden = true;
@@ -200,12 +200,13 @@ document.addEventListener("DOMContentLoaded", () => {
     alert(notes);
   });
 
-  socket.on("loginSuccess", (username) => {
+  socket.on("loginSuccess", (username, authkey) => {
     let exdays = 3; // expire after 3 days
     const d = new Date();
     d.setTime(d.getTime() + (exdays*24*60*60*1000));
     let expires = "expires="+ d.toUTCString();
     document.cookie = "user=" + username + ";" + expires + ";path=/";
+    document.cookie = "authkey=" + authkey + ";" + expires + ";path=/";
     requestLoginBoxLoggedIn();
   });
 
@@ -217,9 +218,9 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   function requestLoginBoxLoggedIn() {
-    let thisUser = getUserLoggedIn();
+    let thisUser = getCookieValFor("user");
     if (thisUser != "") {
-      socket.emit("requestUserDataBox", thisUser);
+      socket.emit("requestUserDataBox", thisUser); // doesn't require authkey (but guild update, change password do)
     }
     // if no cookie, make no change
   }
@@ -406,7 +407,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let typedPW = document.getElementById("newPW").value;
     if (typedEmail.length == 0) { alert("enter your email for verification"); return; }
     if (typedPW.length < 8) { alert("new password must be at least 8 characters long"); return; }
-    socket.emit("passwordChangeRequest", getUserLoggedIn(), typedEmail, typedPW); // #TODO improve typedPW not sent directly
+    socket.emit("passwordChangeRequest", getCookieValFor("user"), getCookieValFor("authkey"), typedEmail, typedPW); // #TODO improve typedPW not sent directly
   }
 
   function changeGuild(){
@@ -420,19 +421,20 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    socket.emit("guildChangeRequest", getUserLoggedIn(), typedGuild);
+    socket.emit("guildChangeRequest", getCookieValFor("user"), getCookieValFor("authkey"), typedGuild);
   }
 
   function logoutUser(){
     nicknameDiv.value = "";
     nicknameDiv.disabled = false;
     document.cookie = 'user=;expires=Thu, 01 Jan 1970 00:00:01 GMT;path=/';
+    document.cookie = 'authkey=;expires=Thu, 01 Jan 1970 00:00:01 GMT;path=/';
     const thisLoginBox = document.getElementById("loginBox");
     thisLoginBox.innerHTML = "logged out successfully!";
   }
 
-  function getUserLoggedIn() {
-    let name = "user" + "=";
+  function getCookieValFor(whichCookie) {
+    let name = whichCookie + "=";
     let decodedCookie = decodeURIComponent(document.cookie);
     let ca = decodedCookie.split(';');
     for(let i = 0; i <ca.length; i++) {

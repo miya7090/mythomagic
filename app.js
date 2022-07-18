@@ -117,14 +117,19 @@ io.on("connection", socket => {
   });
 
   /* ~~~~~ lobby socket operations ~~~~~ */
-  socket.on("lobbyJoin", (nickname, region, cookieName) => {
+  socket.on("lobbyJoin", (nickname, region, cookieName, authkey) => {
     if (!MONGO_CONNECTED) { return; }
     db.collection('login').find({username: nickname}).toArray().then((existingLoginEntry) => {
       // nickname is reserved
       if (existingLoginEntry.length > 0 && cookieName != nickname) { io.to(socket.id).emit("nicknameFailure"); return; }
 
       // if logged in, update cookie book
-      if (cookieName == nickname) { lobbyCookieBook[socket.id] = [existingLoginEntry[0].score, existingLoginEntry[0].guild]; }
+      if (cookieName == nickname) {
+        if (existingLoginEntry[0].password != authkey) { // both are salted
+          io.to(socket.id).emit("accountMessage", "session expired, please log out and refresh"); return;
+        }
+        lobbyCookieBook[socket.id] = [existingLoginEntry[0].score, existingLoginEntry[0].guild];
+      }
 
       // if login is not found, yet cookie name provided, command user to remove cookie
       /*if (existingLoginEntry.length == 0 && (cookieName == "" || cookieName == undefined)) {
@@ -374,9 +379,12 @@ io.on("connection", socket => {
     })
   });
   
-  socket.on("passwordChangeRequest", (username, email, newPassword) => {
+  socket.on("passwordChangeRequest", (username, authkey, email, newPassword) => {
     db.collection('login').find({username: username}).toArray().then((loginEntry) => {
-      if (loginEntry.length == 0) { console.log("db0","passwordChangeRequest",username); return; }
+      if (loginEntry.length != 1) { io.to(socket.id).emit("accountMessage", "account not found"); return; }
+      if (loginEntry[0].password != authkey) { // both are salted
+        io.to(socket.id).emit("accountMessage", "session expired, please log out and refresh"); return;
+      }
       if (loginEntry[0].email != email) { io.to(socket.id).emit("accountMessage", "password not changed: email does not match email on record"); return; }
     
       // all ok
@@ -404,30 +412,39 @@ io.on("connection", socket => {
     });
   });
 
-  socket.on("guildChangeRequest", (username, guildName) => {
-    if (lobbyCookieBook[socket.id] != undefined){
-      lobbyCookieBook[socket.id] = [ lobbyCookieBook[socket.id][0], guildName ];
-    }
+  socket.on("guildChangeRequest", (username, authkey, guildName) => {
+    db.collection('login').find({username: username}).toArray().then((existingLoginEntry) => {
+      if (existingLoginEntry.length != 1) { io.to(socket.id).emit("accountMessage", "account not found"); return; }
 
-    db.collection('login').updateOne({username:username}, {$set:{guild:guildName}});
-    io.to(socket.id).emit("accountMessage", "guild has been changed successfully, please refresh");
+      if (existingLoginEntry[0].password != authkey){ // both are salted
+        io.to(socket.id).emit("accountMessage", "session expired, please log out and refresh"); return;
+      }
+
+      if (lobbyCookieBook[socket.id] != undefined){
+        lobbyCookieBook[socket.id] = [ lobbyCookieBook[socket.id][0], guildName ];
+      }
+  
+      db.collection('login').updateOne({username:username}, {$set:{guild:guildName}});
+      io.to(socket.id).emit("accountMessage", "guild has been changed successfully, please refresh");
+    });
   });
   
   socket.on("login_request", (username, password) => {
     db.collection('login').find({username: username}).toArray().then((existingLoginEntry) => {
       if (existingLoginEntry.length != 1) { io.to(socket.id).emit("accountMessage", "invalid username/password combination"); return; } // no account exists
 
-      let storedPasswordString = existingLoginEntry[0].password;
-      if (storedPasswordString.substring(0,5) == "temp:") { // was manually changed in the database
+      let storedPasswordSalted = existingLoginEntry[0].password;
+      if (storedPasswordSalted.substring(0,5) == "temp:") { // was manually changed in the database
         if ("temp:"+password == storedPasswordString) { // was manually changed in the database
           io.to(socket.id).emit("canResetPassword", username);
         } else {
           io.to(socket.id).emit("accountMessage", "incorrect temporary password"); return;
         }
       } else {
-        bcrypt.compare(password, storedPasswordString).then((validPassword) => {
+        bcrypt.compare(password, storedPasswordSalted).then((validPassword) => {
           if (!validPassword) { io.to(socket.id).emit("accountMessage", "invalid username/password combination"); return; }
-          io.to(socket.id).emit("loginSuccess", username);
+          // otherwise, all good
+          io.to(socket.id).emit("loginSuccess", username, storedPasswordSalted);
         });
       }
     });
