@@ -179,6 +179,7 @@ h2 advanced instructions
   span(class='tocTitle' onclick="scrollToThisDiv('calculatingDamage')") calculating damage
   span(class='tocTitle' onclick="scrollToThisDiv('creatingAnAccount')") creating an account
   span(class='tocTitle' onclick="scrollToThisDiv('scoring')") game scoring
+  span(class='tocTitle' onclick="scrollToThisDiv('botGames')") bot games
   span(class='tocTitle' onclick="scrollToThisDiv('joiningAGroup')") joining a group
 br
 #calculatingDamage.helpSlide
@@ -302,6 +303,25 @@ br
     | if both players disconnect, the match is won by the second player to disconnect, or by neither player if that cannot be determined.
   p
     | after a mutual disconnection, both players will be returned to the lobby page.
+#botGames.helpSlide
+  h3 bot games 
+    span(style='font-size:12px;font-weight:normal;color:var(--BACKTOTOP);' onclick="scrollToThisDiv('playGameForward')") [back to top]
+  p
+    | every lobby has an automated 
+    span(style='color: var(--GENERALHIGHLIGHT);') bot 
+    | available to practice against. 
+  p
+    | note that this feature is currently under development: hero passives in particular will not function correctly in bot games.
+  br
+  p
+    | experimental: if you're logged in and have less than 20.00 points, winning a game against a bot grants you 
+    span(style='color: var(--GENERALHIGHLIGHT);') 1.00 
+    | point, tying against a bot grants you 
+    span(style='color: var(--GENERALHIGHLIGHT);') 0.25 
+    | points, and losing against a bot grants you no points.
+  br
+  p
+    | if you have accumulated over 20.00 points, bot games will not affect your score at all.
 #joiningAGroup.helpSlide
   h3 joining a group 
     span(style='font-size:12px;font-weight:normal;color:var(--BACKTOTOP);' onclick="scrollToThisDiv('playGameForward')") [back to top]

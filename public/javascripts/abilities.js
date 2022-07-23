@@ -360,7 +360,7 @@ function ult_kronos(attacker, target) {
 }
 
 function ability_achilles(attacker, target) {
-    broadcastMsg("ability", true, "Achilles", target.cardName);
+    broadcastMsg("ability", true, "Achilles", undefined);
     attacker.clearStatuses();
     let dmg = calcDamage(attacker, target);
     target.takeDamage(1.2 * dmg);

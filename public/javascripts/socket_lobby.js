@@ -6,6 +6,8 @@ var LEADERBOARD_CURSOR_DIV = [undefined, document.createElement("div")]; // [car
 var MOUSE_X;
 var MOUSE_Y;
 
+const BOT_SOCKET_ID = 5555555;
+
 document.addEventListener("DOMContentLoaded", () => {
   const nicknameDiv = document.getElementById("nickname");
   nicknameDiv.focus();
@@ -170,7 +172,6 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   lLeaveButton.addEventListener("click", ()=>{
-    if (Object.keys(regionUsers).length == 2){ socket.emit("killBot", thisRegion); }
     socket.emit("lobbyLeave");
     clearRegionList();
     regionNotesText.textContent = "";
@@ -415,8 +416,8 @@ document.addEventListener("DOMContentLoaded", () => {
     let guildBox = document.getElementById("guildField");
     let typedGuild = guildBox.value;
     
-    if (typedGuild.toLowerCase() != typedGuild){
-      alert("group name must be lowercase");
+    if (typedGuild.toLowerCase() != typedGuild){ // no uppercase
+      alert("group name must be lowercase and cannot contain whitespace");
       guildBox.focus();
       guildBox.select();
       return;
@@ -538,13 +539,15 @@ function populateRegionList(thisRegion, regionUsers, cookieBook){
   const regionNotesText = document.getElementById("queueNotes");
   if (Object.keys(regionUsers).length <= 2){
     regionNotesText.innerHTML = "it's lonely here... invite a friend to play with a <a href ='https://mythomagic.herokuapp.com/lobby?join_region=" + thisRegion +" ' id='sharelink' style='color:white;'>link </a><a href='#' id='copyPrompt' onclick='copySharelinkText()'>[copy]</span>";
-    if (Object.keys(regionUsers).length == 1){ socket.emit("requestBot", thisRegion); }
   } else {
     regionNotesText.textContent = "";
   }
   const myNickname = document.getElementById("nickname").value;
   const lobbiersInRegion = document.getElementById("lobbiersinregion");
   lobbiersInRegion.innerHTML = ""; // clear div ahead of time
+
+  regionUsers[BOT_SOCKET_ID] = "bot";
+  cookieBook[BOT_SOCKET_ID] = [0.00, "automated"];
   
   Object.keys(regionUsers).forEach(indivSocketid => {
     // create a button for each person in the lobby
@@ -569,9 +572,11 @@ function populateRegionList(thisRegion, regionUsers, cookieBook){
     } else {
       rUser.addEventListener("click", (evt)=>{
         if (PENDING_INVITE_RESPONSE == false) {
-          PENDING_INVITE_RESPONSE = true;
-          regionNotesText.textContent = "invitation sent...";
-          socket.emit("gameInvite", myNickname, indivSocketid);
+          if (indivSocketid != BOT_SOCKET_ID || (indivSocketid == BOT_SOCKET_ID && confirm("bot games are a newly added feature and highly experimental. continue?"))){
+            PENDING_INVITE_RESPONSE = true;
+            regionNotesText.textContent = "invitation sent...";
+            socket.emit("gameInvite", myNickname, indivSocketid);
+          }
         } else {
           console.error("you are still waiting for an invitation response");
         }

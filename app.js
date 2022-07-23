@@ -122,20 +122,6 @@ io.on("connection", socket => {
     demolishRoomOf(socket.id);
   });
 
-  socket.on("requestBot", (region) => {
-    db.collection('login').find({username: "bot"}).toArray().then((botEntry) => {
-      lobbyCookieBook[BOT_SOCKET_ID] = [botEntry[0].score, botEntry[0].guild];
-      regionUsers[rk(region)][BOT_SOCKET_ID] = "bot";
-      // note that bot does not appear in roombook since there may be multiple instances of it
-      io.to(rk(region)).emit("lobbyJoined", "bot", region, regionUsers[rk(region)], lobbyCookieBook);
-    });
-  });
-
-  socket.on("killBot", (region) => {
-    lobbyCookieBook[BOT_SOCKET_ID] = undefined;
-    regionUsers[rk(region)][BOT_SOCKET_ID] = undefined;
-  });
-
   /* ~~~~~ lobby socket operations ~~~~~ */
   socket.on("lobbyJoin", (nickname, region, cookieName, authkey) => {
     if (!MONGO_CONNECTED) { return; }
@@ -175,7 +161,6 @@ io.on("connection", socket => {
 
   socket.on("gameInvite", (inviterNickname, recipientId)=>{
     if (recipientId == BOT_SOCKET_ID) {
-      console.log("starting a bot game for", inviterNickname);
       const genRoomCode = Math.random().toString(36).slice(2);
       makeRoomWith(genRoomCode, inviterNickname, socket.id, "bot", BOT_SOCKET_ID);
     } else {
@@ -188,6 +173,7 @@ io.on("connection", socket => {
   });
 
   function makeRoomWith(room, inviterNickname, inviterId, recipientNickname, recipientId) {
+    console.log("starting a game for", inviterNickname, "and", recipientNickname);
     let lobbyCode = nk(roomBook[socket.id]);
     kickOutSocketFromLastRoom(socket.id);
     kickOutSocketFromLastRoom(inviterId);
@@ -307,6 +293,8 @@ io.on("connection", socket => {
   });
 
   socket.on("updateUserStats", (regionName, winType, cookieName, opponentCookieName, forceOpponentLossIncrease) => {
+    let IS_BOT_GAME = (cookieName == "bot" || opponentCookieName == "bot");
+
     // update user stats
     if (cookieMap[socket.id] != ""){ // user logged in
       db.collection('login').find({username: cookieName}).toArray().then((existingLoginEntry) => {
@@ -332,22 +320,30 @@ io.on("connection", socket => {
           db.collection('login').find({username: opponentCookieName}).toArray().then((rivalEntry) => {
             if (rivalEntry.length == 0) { console.log("db0","updateUserStats2",opponentCookieName); return; }
 
-            let myScorePercent = (0.1 * (100*existingLoginEntry[0].score))/100.0;
-            let theirScorePercent = ((0.1 * (100*rivalEntry[0].score))/100.0) + 1.00;
-            if (theirScorePercent > 5.00) { theirScorePercent = 5.00; }
-            // absorb 10% of opponent's score
-            if (winType == "win") {
-              db.collection('login').updateOne({username: cookieName}, {$inc:{score:theirScorePercent}});
-              db.collection('login').updateOne({username: opponentCookieName}, {$inc:{score:-myScorePercent}});
-            } else if (winType == "tie") {
-              db.collection('login').updateOne({username: cookieName}, {$inc:{score:0.25}}); // total = 0.50 since both players run
-              db.collection('login').updateOne({username: opponentCookieName}, {$inc:{score:0.25}});
-            }
-
-            if (forceOpponentLossIncrease) { // used if opponent disconnects: P1 helps update the losses
-              let enemyTrackObj = rivalEntry[0].losses;
-              enemyTrackObj[regionName] += 1;
-              db.collection('login').updateOne({username: opponentCookieName}, {$set:{losses:enemyTrackObj}});
+            if (IS_BOT_GAME) {
+              if (winType == "win" && existingLoginEntry[0].score < 20.00) {
+                db.collection('login').updateOne({username: cookieName}, {$inc:{score:1.00}});
+              } else if (winType == "tie" && existingLoginEntry[0].score < 20.00) {
+                db.collection('login').updateOne({username: cookieName}, {$inc:{score:0.25}});
+              }
+            } else {
+              let myScorePercent = (0.1 * (100*existingLoginEntry[0].score))/100.0;
+              let theirScorePercent = ((0.1 * (100*rivalEntry[0].score))/100.0) + 1.00;
+              if (theirScorePercent > 5.00) { theirScorePercent = 5.00; }
+              // absorb 10% of opponent's score
+              if (winType == "win") {
+                db.collection('login').updateOne({username: cookieName}, {$inc:{score:theirScorePercent}});
+                db.collection('login').updateOne({username: opponentCookieName}, {$inc:{score:-myScorePercent}});
+              } else if (winType == "tie") {
+                db.collection('login').updateOne({username: cookieName}, {$inc:{score:0.25}}); // total = 0.50 since both players run
+                db.collection('login').updateOne({username: opponentCookieName}, {$inc:{score:0.25}});
+              }
+  
+              if (forceOpponentLossIncrease) { // used if opponent disconnects: P1 helps update the losses
+                let enemyTrackObj = rivalEntry[0].losses;
+                enemyTrackObj[regionName] += 1;
+                db.collection('login').updateOne({username: opponentCookieName}, {$set:{losses:enemyTrackObj}});
+              }
             }
           });
         }
@@ -456,6 +452,9 @@ io.on("connection", socket => {
   });
 
   socket.on("guildChangeRequest", (username, authkey, guildName) => {
+    if (guildName == "automated") { io.to(socket.id).emit("accountMessage", "this group name is reserved for bots"); return; }
+    if (guildName == "admin") { io.to(socket.id).emit("accountMessage", "this group name has been restricted"); return; }
+
     db.collection('login').find({username: username}).toArray().then((existingLoginEntry) => {
       if (existingLoginEntry.length != 1) { io.to(socket.id).emit("accountMessage", "account not found"); return; }
 
@@ -473,6 +472,8 @@ io.on("connection", socket => {
   });
   
   socket.on("login_request", (username, password) => {
+    if (username == "bot") { io.to(socket.id).emit("accountMessage", "you cannot play as a bot"); return; }
+
     db.collection('login').find({username: username}).toArray().then((existingLoginEntry) => {
       if (existingLoginEntry.length != 1) { io.to(socket.id).emit("accountMessage", "invalid username/password combination"); return; } // no account exists
 

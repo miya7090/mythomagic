@@ -47,12 +47,15 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   MY_SOCKET.on('tokenPickPhase', (otherId)=>{
+    console.log("pick phase................");
     OPPONENT_SOCKET_ID = otherId;
 
     if (PICK_PHASE_RANDOM) {
+      console.log("picking randomly................");
       pickPCardsRandomly();
       tokenClockDone();
     } else {
+      console.log("player is picking cards................");
       changeGameModeTo("pick-phase");
       PICK_PHASE_STARTED_AT = Date.now();
       setTimeout(updateTokenClock, 1000); // update token clock every second
@@ -142,7 +145,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   MY_SOCKET.on('playBotTurn', (yourEnemysCards)=>{
     doWaitTurnAndPopulate(yourEnemysCards);
-    setTimeout(function () { playBotTurn(1); }, 5000);
+    setTimeout(function () { playBotTurn(1); }, BOT_LAG);
   });
 
   function doWaitTurnAndPopulate(yourEnemysCards){

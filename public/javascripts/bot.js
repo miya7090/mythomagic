@@ -4,7 +4,12 @@ function playBotTurn(moreTurns){
   forAll_decreaseStatusCooldowns();
   // #TODO implement passives here
  
-  let cardToMove = pickRandomEntries(ENEMY_GAMECARD_OBJS, 1)[0];
+  let NOT_DEFEATED_BOTCARDS = [];
+  ENEMY_GAMECARD_OBJS.forEach(pc => {
+    if (pc.dead != "defeated") { NOT_DEFEATED_BOTCARDS.push(pc); }
+  });
+
+  let cardToMove = pickRandomEntries(NOT_DEFEATED_BOTCARDS, 1)[0];
 
   let coordTagsInRangeAll = getCoordinatesWithinRadius(cardToMove.getQ(), cardToMove.getR(), cardToMove.getS(), cardToMove.getCurrentMovement(), true);
   let coordTagsInRange = randArray(filterOnlyCoordinatesOnBoard(coordTagsInRangeAll));
@@ -39,7 +44,7 @@ function playBotTurn(moreTurns){
   if (gameOver == "ongoing"){
     if (moreTurns > 0){ // another bot turn
       changeGameModeTo("p2-turn2");
-      setTimeout(function () { playBotTurn(moreTurns - 1); }, 5000);
+      setTimeout(function () { playBotTurn(moreTurns - 1); }, BOT_LAG);
     } else { // player's turn
       if (TURNS_ALLOCATED > 0){
         beginTurn(undefined, undefined); // includes a rerender

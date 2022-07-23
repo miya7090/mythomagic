@@ -11,6 +11,8 @@ OTHER_NAME = undefined;
 BROADCASTING = false;
 BROADCAST_QUEUE = [];
 
+BOT_LAG = 3000;
+
 HEX_SIDELENGTH = 13;
 HEX_RADIUS = (HEX_SIDELENGTH-1)/2;
 CUBE_DIR_VECS = [[1,0,-1],[1,-1,0],[0,-1,1],[-1,0,1],[-1,1,0],[0,1,-1]];
