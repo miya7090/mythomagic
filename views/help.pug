@@ -251,13 +251,19 @@ br
     span(style='color: var(--SILVER);') silver
     |  (&gt;20.00), 
     span(style='color: var(--GOLD);') gold
-    |  (&gt;30.00), 
+    |  (&gt;30.00), or 
     span(style='color: var(--GRANDMASTER);') grandmaster
     |  (&gt;40.00).
   p
-    | if a player is logged in, their name in the lobby will be colored according to their current class. guest players are shown with 
+    | if a player is logged in, their name in the lobby will be colored according to their current class. 
+  p
+    | guest players are shown with 
     span(style='color: var(--NOTIER);') green 
     | names in the lobby. 
+  p
+    | automated bots are shown with 
+    span(style='color: var(--BOTCOLOR') pink 
+    | names in the lobby.
   p
     i tip: you can hover over a name in the lobby to have the score and class shown as text.
 #scoring.helpSlide

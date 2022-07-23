@@ -293,6 +293,7 @@ io.on("connection", socket => {
   });
 
   socket.on("updateUserStats", (regionName, winType, cookieName, opponentCookieName, forceOpponentLossIncrease) => {
+    console.log("stat update", winType, cookieName, opponentCookieName, "/ force is", forceOpponentLossIncrease);
     let IS_BOT_GAME = (cookieName == "bot" || opponentCookieName == "bot");
 
     // update user stats
@@ -360,9 +361,14 @@ io.on("connection", socket => {
     let thisDate = new Date();
     db.collection('gamestats').insertOne({isTie:true, time:thisDate, region:regionName, winName:p1Name, winTeam:p1cardNames, loseName:p2Name, loseTeam:p2cardNames});
 
-    let rivalId = rivalFinder[socket.id];
-    io.to(socket.id).emit("gameTie", cookieMap[rivalId], cookieMap[socket.id]);
-    io.to(rivalId).emit("gameTie", cookieMap[socket.id], cookieMap[rivalId]);
+    if (p2Name == "bot") {
+      io.to(socket.id).emit("gameTie", "bot");
+    } else {
+      let rivalId = rivalFinder[socket.id];
+      io.to(socket.id).emit("gameTie", cookieMap[rivalId]);
+      io.to(rivalId).emit("gameTie", cookieMap[socket.id]);
+    }
+
     demolishRoomOf(socket.id);
   });
 
@@ -375,9 +381,14 @@ io.on("connection", socket => {
     let thisDate = new Date();
     db.collection('gamestats').insertOne({isTie:false, time:thisDate, region:regionName, winName:p1Name, winTeam:p1cardNames, loseName:p2Name, loseTeam:p2cardNames});
     
-    let rivalId = rivalFinder[socket.id];
-    io.to(socket.id).emit("gameWin", wasSurrender, cookieMap[rivalId]);
-    io.to(rivalId).emit("gameLoss", wasSurrender, cookieMap[socket.id]);
+    if (p2Name == "bot") {
+      io.to(socket.id).emit("gameWin", wasSurrender, "bot");
+    } else {
+      let rivalId = rivalFinder[socket.id];
+      io.to(socket.id).emit("gameWin", wasSurrender, cookieMap[rivalId]);
+      io.to(rivalId).emit("gameLoss", wasSurrender, cookieMap[socket.id]);
+    }
+
     demolishRoomOf(socket.id);
   });
 
@@ -389,9 +400,15 @@ io.on("connection", socket => {
     // log game results
     let thisDate = new Date();
     db.collection('gamestats').insertOne({isTie:false, time:thisDate, region:regionName, winName:p2Name, winTeam:p2cardNames, loseName:p1Name, loseTeam:p1cardNames});
-    let rivalId = rivalFinder[socket.id];
-    io.to(socket.id).emit("gameLoss", wasSurrender, cookieMap[rivalId]);
-    io.to(rivalId).emit("gameWin", wasSurrender, cookieMap[socket.id]);
+
+    if (p2Name == "bot") {
+      io.to(socket.id).emit("gameLoss", wasSurrender, "bot");
+    } else {
+      let rivalId = rivalFinder[socket.id];
+      io.to(socket.id).emit("gameLoss", wasSurrender, cookieMap[rivalId]);
+      io.to(rivalId).emit("gameWin", wasSurrender, cookieMap[socket.id]);
+    }
+
     demolishRoomOf(socket.id);
   });
 

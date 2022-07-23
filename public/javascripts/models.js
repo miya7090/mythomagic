@@ -66,6 +66,8 @@ function exportAllP2Cs(){
 }
 
 function exportBotPCs(botPCArr){
+  if (botPCArr.length == 0) { return undefined; }
+
   let ans = [];
   botPCArr.forEach(pc => {
     ans.push(exportPC(pc));

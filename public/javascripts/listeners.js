@@ -89,7 +89,11 @@ function updateTokenClock(){
 
 function tokenClockDone(){
   changeGameModeTo("startup");
-  MY_SOCKET.emit("doneWithTokenPick", exportAllP1Cs(), exportBotPCs(getBotCardJsonObjs()));
+  if (OTHER_NAME == "bot"){
+    MY_SOCKET.emit("doneWithTokenPick", exportAllP1Cs(), exportBotPCs(getBotCardJsonObjs()));
+  } else {
+    MY_SOCKET.emit("doneWithTokenPick", exportAllP1Cs());
+  }  
 }
 
 function updateTurnClock(){

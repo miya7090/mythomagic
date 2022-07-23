@@ -561,7 +561,7 @@ function populateRegionList(thisRegion, regionUsers, cookieBook){
     rUser.title = "score: " + rScore + ", class: " + (rUserTier == "noTier" ? "none" : rUserTier);
 
     // add the name text and the guild text
-    rUser.innerHTML = "<span class='"+ rUserTier +"'>" + rNickname + "</span><br>";
+    rUser.innerHTML = "<span class='"+ rUserTier +" name-"+rNickname+"'>" + rNickname + "</span><br>";
     if (rUserGuild != "" && rUserGuild != undefined) {
       rUser.innerHTML += "<span class='lobbierGuild'>" + rUserGuild + "</span>";
     }

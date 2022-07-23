@@ -190,6 +190,10 @@ p {
     color: var(--GRANDMASTER);
 }
 
+.name-bot {
+    color: var(--BOTCOLOR);
+}
+
 .lobbier {
     font-size: 14px;
     line-height: 16px;
