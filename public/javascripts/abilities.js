@@ -136,7 +136,7 @@ function ability_hephaestus(attacker, target) {
 function ult_jason(attacker, target) {
     broadcastMsg("ultimate", true, "Jason", undefined);
     PLAYER_GAMECARD_OBJS.forEach(pc => {
-        pc.current_defense += 1;
+        pc.current_defense += 2;
     });
     ENEMY_GAMECARD_OBJS.forEach(pc => {
         pc.current_defense -= 5;
@@ -395,8 +395,8 @@ function ult_poseidon(attacker, target) {
 function ult_thanatos(attacker, target) {
     broadcastMsg("ultimate", true, "Thanatos", "enemies");
     ENEMY_GAMECARD_OBJS.forEach(pc => {
-        if (pc.current_health < 100) {
-            pc.takeDamage(100);
+        if (pc.current_health < 200) {
+            pc.takeDamage(200);
         }
     });
 }
