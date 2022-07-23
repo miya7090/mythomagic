@@ -107,7 +107,7 @@ const BASE_STAT_DICT = {
       "Argonautica","All allies gain 100 ATK for each Argonaut in the team", "Protector"],
     "Medea":[1200,2,10,500,50,0,2, 3,0,1,0,
       "Sorcery", "Absorb all mana from an enemy within 3 tiles and inflict Poisoned",
-      "Cold Blood", "Deal fatal blow to an adjacent ally, absorb their current ATK and MVT, and regain full HP",
+      "Cold Blood", "Deal fatal blow to adjacent ally, absorb their current ATK and MVT, and regain full HP",
       "Circulation", "No ally can obtain more than one status effect at a time, and repeated effects will not stack", "Special"],
     "Thanatos":[1800,2,10,600,60,0,3, 1,0,undefined,undefined,
       "Soul Collection","Attack adjacent target, and if enemy is defeated, absorb their MP and 50% of their ATK",

@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
         case "lobby":      BGM_NAME = "73 campfire"; BGM_VOLUME = 0.6; break;
         case "tie":      BGM_NAME = "89 town of clocks"; BGM_VOLUME = 0.7; break;
         case "preview":      BGM_NAME = "36 elven kingdom"; BGM_VOLUME = 0.8; break;
-        case "help":      BGM_NAME = "36 elven kingdom"; BGM_VOLUME = 0.5; break;
+        case "help":      BGM_NAME = "36 elven kingdom"; BGM_VOLUME = 0.8; break;
         case "game":       BGM_NAME = "50 mulling"; BGM_VOLUME = 0.4; MUSIC_ICON_PLACEMENT = "topright"; break;
         case "defeat":     BGM_NAME = "94 the contract"; break;
         case "victory":    BGM_NAME = "18 elemental plane of air"; break;

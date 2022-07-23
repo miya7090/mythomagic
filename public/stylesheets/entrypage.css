@@ -77,14 +77,14 @@ html {
 hr {
     border: 1px solid rgba(255,255,255,0.2);
     position: absolute; 
-    top: 460px;
+    top: 450px;
     left: calc(50% - 200px);
     width: 400px;
 }
 
 #credsFixed {
     position: absolute;
-    top: 490px;
+    top: 480px;
     left: calc(50% - 200px);
     width: 400px;
     text-align: center;
