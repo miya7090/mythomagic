@@ -554,6 +554,10 @@ router.get('/help',(req,res) => {
   res.render("help");
 });
 
+router.get('/terms',(req,res) => {
+  res.render("terms");
+});
+
 router.get('/victory',(req,res) => {
   res.render("victory", {opponent: req.query.opponent});
 });
