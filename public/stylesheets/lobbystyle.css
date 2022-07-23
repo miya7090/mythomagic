@@ -26,6 +26,25 @@ h1,h2 {
     margin-bottom: 10px;
 }
 
+.iconNavButtons img {
+    opacity: 0.5;
+    width: 30px;
+    margin: 3px;
+    filter: invert(1.0);
+    cursor: "pointer";
+}
+
+.iconNavButtons {
+    position: fixed;
+    right: 12px;
+    bottom: 53px;
+    width: 40px;
+}
+
+.iconNavButtons img:hover {
+    opacity: 0.8;
+}
+
 h2 {
     font-size: 25px;
 }
