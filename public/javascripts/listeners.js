@@ -89,7 +89,7 @@ function updateTokenClock(){
 
 function tokenClockDone(){
   changeGameModeTo("startup");
-  MY_SOCKET.emit("doneWithTokenPick", exportAllP1Cs());
+  MY_SOCKET.emit("doneWithTokenPick", exportAllP1Cs(), exportBotPCs(getBotCardJsonObjs()));
 }
 
 function updateTurnClock(){
@@ -296,11 +296,16 @@ function attackComplete(){
     TURNS_ALLOCATED -= 1;
     if (TURNS_ALLOCATED > 0){
       beginTurn(undefined, undefined); // includes a rerender
-      MY_SOCKET.emit("tellRival_ongoingProgress", exportAllP1Cs(), exportAllP2Cs());
+      if (OTHER_NAME != "bot"){ MY_SOCKET.emit("tellRival_ongoingProgress", exportAllP1Cs(), exportAllP2Cs()); }      
     } else {
       changeGameModeTo('p2-turn1');
-      rerenderAllGamecardsAndTokens();
-      MY_SOCKET.emit("tellRival_yourTurn", exportAllP1Cs(), exportAllP2Cs());
+      if (OTHER_NAME != "bot"){
+        rerenderAllGamecardsAndTokens();
+        MY_SOCKET.emit("tellRival_yourTurn", exportAllP1Cs(), exportAllP2Cs());
+      } else {
+        rerenderAllGamecardsAndTokens();
+        playBotTurn(1);
+      }
     }
   } else if (gameOver == "tie") {
     MY_SOCKET.emit("gameEnded_withTie", REGION_NAME, SELF_NAME, PLAYER_HERO_INITIAL_NAMES, OTHER_NAME, ENEMY_HERO_INITIAL_NAMES);

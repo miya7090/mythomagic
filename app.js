@@ -4,6 +4,8 @@ const server = require("http").Server(app); // create server
 const io = require("socket.io")(server); // create instance of socketio
 const PORT = process.env.PORT || 3000;
 
+const BOT_SOCKET_ID = 5555555;
+
 // db connection for leaderboard tracking
 const bcrypt = require('bcrypt');
 const mongoose = require('mongoose');
@@ -92,20 +94,24 @@ function demolishRoomOf(socketId){
 io.on("connection", socket => {
   /* ~~~~~ managing sockets of any type ~~~~~ */
   socket.on("disconnect", () => {
-    if (socket.id in roomBook) { // in game
+    if (socket.id in roomBook) { // in game or lobby
       let thisRoomCode = roomBook[socket.id];
       if (isLobbyId(roomBook[socket.id])) {
         kickOutSocketFromLastRoom(socket.id); // in lobby
-      } else {
-        if (roommateFinder[thisRoomCode].length > 0) {
-          io.to(rivalFinder[socket.id]).emit("opponentDisconnectWarning"); // warn the opponent
-        }
-
-        kickOutSocketFromLastRoom(socket.id); // in game room
-        if (roommateFinder[thisRoomCode].length == 0){
-          removeGameRoom(thisRoomCode); // game room empty
-        }       
-        
+      } else { // in game or main page
+        if (roommateFinder[thisRoomCode] != undefined && roommateFinder[thisRoomCode].length > 0) { // opponent is waiting!!
+          if (rivalFinder[socket.id] == BOT_SOCKET_ID){
+            demolishRoomOf(socket.id); // #TODO allow returning to bot games: set a timeout to kill the bot after the user doesn't return
+          } else {
+            io.to(rivalFinder[socket.id]).emit("opponentDisconnectWarning"); // warn the opponent
+            kickOutSocketFromLastRoom(socket.id); // remove the old socket
+          }
+        } else { // no opponent is waiting
+          kickOutSocketFromLastRoom(socket.id); // in game room
+          if (roommateFinder[thisRoomCode].length == 0){
+            removeGameRoom(thisRoomCode); // game room empty
+          }  
+        }        
       }
     } else {
       //console.log("socket left without being assigned to a room", socket.id); // normal behavior for the main (non-lobby non-game) page
@@ -114,6 +120,20 @@ io.on("connection", socket => {
 
   socket.on("commandDisconnectGame", () => {
     demolishRoomOf(socket.id);
+  });
+
+  socket.on("requestBot", (region) => {
+    db.collection('login').find({username: "bot"}).toArray().then((botEntry) => {
+      lobbyCookieBook[BOT_SOCKET_ID] = [botEntry[0].score, botEntry[0].guild];
+      regionUsers[rk(region)][BOT_SOCKET_ID] = "bot";
+      // note that bot does not appear in roombook since there may be multiple instances of it
+      io.to(rk(region)).emit("lobbyJoined", "bot", region, regionUsers[rk(region)], lobbyCookieBook);
+    });
+  });
+
+  socket.on("killBot", (region) => {
+    lobbyCookieBook[BOT_SOCKET_ID] = undefined;
+    regionUsers[rk(region)][BOT_SOCKET_ID] = undefined;
   });
 
   /* ~~~~~ lobby socket operations ~~~~~ */
@@ -154,25 +174,36 @@ io.on("connection", socket => {
   });
 
   socket.on("gameInvite", (inviterNickname, recipientId)=>{
-    io.to(recipientId).emit("gameInvite", inviterNickname, socket.id);
+    if (recipientId == BOT_SOCKET_ID) {
+      console.log("starting a bot game for", inviterNickname);
+      const genRoomCode = Math.random().toString(36).slice(2);
+      makeRoomWith(genRoomCode, inviterNickname, socket.id, "bot", BOT_SOCKET_ID);
+    } else {
+      io.to(recipientId).emit("gameInvite", inviterNickname, socket.id);
+    }
   });
   
   socket.on("roomRequest", (room, inviterNickname, inviterId, recipientNickname)=>{
+    makeRoomWith(room, inviterNickname, inviterId, recipientNickname, socket.id);
+  });
+
+  function makeRoomWith(room, inviterNickname, inviterId, recipientNickname, recipientId) {
     let lobbyCode = nk(roomBook[socket.id]);
     kickOutSocketFromLastRoom(socket.id);
     kickOutSocketFromLastRoom(inviterId);
     // #TODO emit only one update for removing 2 lobbiers
-    //io.to(rk(region)).emit("lobbyLeft2", inviterNickname, recipientNickname, region, regionUsers[rk(region)]);
     io.to(inviterId).emit("redirectToGame", inviterNickname, recipientNickname, room, lobbyCode);
-    io.to(socket.id).emit("redirectToGame", recipientNickname, inviterNickname, room, lobbyCode);
-  });
+    if (recipientId != BOT_SOCKET_ID) {
+      io.to(recipientId).emit("redirectToGame", recipientNickname, inviterNickname, room, lobbyCode);
+    }
+  }
 
   socket.on("denyChallengeRequest", (ownNickname, enemyId)=>{
     io.to(enemyId).emit("gameRequestDenied", ownNickname);
   });
 
   /* ~~~~~ player socket operations ~~~~~ */
-  socket.on("registerPlayer", (roomCode, cookieName) => {
+  socket.on("registerPlayer", (roomCode, cookieName, opponentName) => {
     cookieMap[socket.id] = cookieName;
 
     if (gameHasBegun[roomCode] == true) { // rejoining a disconnected game
@@ -194,6 +225,9 @@ io.on("connection", socket => {
     } else { // joining a new game
       socket.join(roomCode);
       roomBook[socket.id] = roomCode;
+      if (opponentName == "bot"){
+        roommateFinder[roomCode] = [BOT_SOCKET_ID];
+      }
       if (roomCode in roommateFinder){
         roommateFinder[roomCode].push(socket.id);
         rivalFinder[roommateFinder[roomCode][0]] = roommateFinder[roomCode][1];
@@ -207,15 +241,15 @@ io.on("connection", socket => {
     }
   });
 
-  socket.on("doneWithTokenPick", (gameCardJsonObjs)=>{
+  socket.on("doneWithTokenPick", (gameCardJsonObjs, botCardJsonObjs)=>{
     let roomCode = roomBook[socket.id];
     let rivalId = rivalFinder[socket.id];
+    if (botCardJsonObjs != undefined){
+      doneTokenPick[roomCode] = botCardJsonObjs;
+    }
     if (roomCode in doneTokenPick){ // opponent is also done
       // check that both have chosen >= 1 token
-      if (gameCardJsonObjs.length == 0 && doneTokenPick[roomCode] && 0){
-        io.to(roomCode).emit("forfeit", "did not pick any cards");
-        demolishRoomOf(socket.id);
-      } else if (gameCardJsonObjs.length == 0){
+      if (gameCardJsonObjs.length == 0){
         io.to(socket.id).emit("forfeit", "did not pick any cards");
         io.to(rivalId).emit("winThroughForfeit", "opponent did not pick any cards");
         demolishRoomOf(socket.id);
@@ -225,12 +259,21 @@ io.on("connection", socket => {
         demolishRoomOf(socket.id);
       } else { // token picks were completed
         gameHasBegun[roomCode] = true;
-        if (socket.id > rivalId){ // this socket goes first
-          io.to(socket.id).emit("yourTurn", doneTokenPick[roomCode], undefined); // syntax: 'yourTurn', (yourEnemysCards, yourEnemysVerOfYourCards)
-          io.to(rivalId).emit("waitTurnAndPopulate", gameCardJsonObjs);
-        } else {
-          io.to(rivalId).emit("yourTurn", gameCardJsonObjs, undefined);
-          io.to(socket.id).emit("waitTurnAndPopulate", doneTokenPick[roomCode]);
+
+        if (botCardJsonObjs == undefined) { // pvp
+          if (socket.id > rivalId){ // this socket goes first
+            io.to(socket.id).emit("yourTurn", doneTokenPick[roomCode], undefined); // syntax: 'yourTurn', (yourEnemysCards, yourEnemysVerOfYourCards)
+            io.to(rivalId).emit("waitTurnAndPopulate", gameCardJsonObjs);
+          } else {
+            io.to(rivalId).emit("yourTurn", gameCardJsonObjs, undefined);
+            io.to(socket.id).emit("waitTurnAndPopulate", doneTokenPick[roomCode]);
+          }
+        } else { // bot game
+          if (Math.floor(Math.random() * 2) == 0) { // this socket goes first
+            io.to(socket.id).emit("yourTurn", doneTokenPick[roomCode], undefined);
+          } else {
+            io.to(socket.id).emit("playBotTurn", doneTokenPick[roomCode]);
+          }
         }
       }
     } else {
@@ -532,6 +575,7 @@ console.log("listening on", PORT);
 
 // pug router setup
 var path = require('path');
+const { receiveMessageOnPort } = require('worker_threads');
 const router = express.Router();
 
 app.set('view engine', 'pug');

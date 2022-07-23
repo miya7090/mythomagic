@@ -65,6 +65,14 @@ function exportAllP2Cs(){
   return ans;
 }
 
+function exportBotPCs(botPCArr){
+  let ans = [];
+  botPCArr.forEach(pc => {
+    ans.push(exportPC(pc));
+  });
+  return ans;
+}
+
 function importPC(pcJson, p1){
   let ans = new PlayerCard(pcJson["n"], pcJson["qq"], pcJson["rr"], pcJson["ss"], p1);
   ans.current_attack = pcJson["ca"]; ans.current_normal_attack_range = pcJson["cnar"];
@@ -388,8 +396,14 @@ function importAllP2Cs(pcListObj){
             this.clearStatuses();
             this.dead = "defeated";
             playSound("heroDeath", 1.0);
+            if (this.cardName != "Achilles") {
+              if (this.p1){ // ally was defeated
+                passive_achilles_onAlly();
+              } else { // enemy was defeated
+                passive_achilles_onEnemy();
+              }
+            }
             if (this.p1){ // ally was defeated
-              passive_achilles_onAlly();
               passive_perseus_onAlly();
             } else { // enemy was defeated
               passive_achilles_onEnemy();

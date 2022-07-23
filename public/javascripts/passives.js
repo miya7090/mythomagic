@@ -128,7 +128,7 @@ function passive_athena(){ // run by both players at the beginning of the game
 
 function passive_apollo(){ // run by player1 at the end of the turn
     if (hasAllyCard("Apollo")) {
-        broadcastMsg("passive", true, "Apollo", "targets");
+        //broadcastMsg("passive", true, "Apollo", "targets");
         PLAYER_GAMECARD_OBJS.forEach(pc => {
             pc.heal(20);
         });
@@ -197,7 +197,7 @@ function passive_hestia(notif, suppressNotif) { // run by player1 at the beginni
                 pc.removeBlessing("Hestia");
             }
         });
-        if (!suppressNotif && notif && numberBlessed > 0) { broadcastMsg("passive", true, "Hestia"); }
+        //if (!suppressNotif && notif && numberBlessed > 0) { broadcastMsg("passive", true, "Hestia"); }
     }
     if (hasEnemyCard("Hestia")) {
         let yc = getEnemyCard("Hestia");
@@ -210,7 +210,7 @@ function passive_hestia(notif, suppressNotif) { // run by player1 at the beginni
                 pc.removeBlessing("Hestia");
             }
         });
-        if (!suppressNotif && notif && numberBlessed > 0) { broadcastMsg("passive", false, "Hestia"); }
+        //if (!suppressNotif && notif && numberBlessed > 0) { broadcastMsg("passive", false, "Hestia"); }
     }
 }
 
@@ -272,7 +272,7 @@ function blessing_hestia(give, pc) {
 
 function passive_kronos(){ // run by player1 at the end of the turn
     if (hasAllyCard("Kronos")) {
-        broadcastMsg("passive", true, "Kronos", undefined);
+        //broadcastMsg("passive", true, "Kronos", undefined);
         let mc = getAllyCard("Kronos");
         mc.current_attack += 50;
         mc.current_defense += 1;

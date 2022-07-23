@@ -170,6 +170,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   lLeaveButton.addEventListener("click", ()=>{
+    if (Object.keys(regionUsers).length == 2){ socket.emit("killBot", thisRegion); }
     socket.emit("lobbyLeave");
     clearRegionList();
     regionNotesText.textContent = "";
@@ -475,7 +476,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   socket.on("lobbyJoined", (nickname, region, regionUsers, lobbyCookieBook)=>{
-    console.log(nickname, "has joined region", region);
+    console.log(nickname, "has joined region", region, regionUsers);
     populateRegionList(region, regionUsers, lobbyCookieBook);
   });
 
@@ -535,8 +536,9 @@ function tierOf(score){
 
 function populateRegionList(thisRegion, regionUsers, cookieBook){
   const regionNotesText = document.getElementById("queueNotes");
-  if (Object.keys(regionUsers).length == 1){
-    regionNotesText.innerHTML = "nobody is here... invite a friend with a <a href ='https://mythomagic.herokuapp.com/lobby?join_region=" + thisRegion +" ' id='sharelink' style='color:white;'>link </a><a href='#' id='copyPrompt' onclick='copySharelinkText()'>[copy]</span>";
+  if (Object.keys(regionUsers).length <= 2){
+    regionNotesText.innerHTML = "it's lonely here... invite a friend to play with a <a href ='https://mythomagic.herokuapp.com/lobby?join_region=" + thisRegion +" ' id='sharelink' style='color:white;'>link </a><a href='#' id='copyPrompt' onclick='copySharelinkText()'>[copy]</span>";
+    if (Object.keys(regionUsers).length == 1){ socket.emit("requestBot", thisRegion); }
   } else {
     regionNotesText.textContent = "";
   }

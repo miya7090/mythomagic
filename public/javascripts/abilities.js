@@ -32,14 +32,18 @@ const ULT_MAP = {
     "Nyx":[ult_nyx,1], "Dolphin":[ult_dolphin,1],
     "Dionysus":[ult_dionysus,1]};
 
-function doUniqueSkill(atkType, attacker, target, targetIsOpponent) { // atkType 1=ability, 2=ultimate
+function doUniqueSkill(IS_BOT, atkType, attacker, target, targetIsOpponent) { // atkType 1=ability, 2=ultimate
     let map = ABILITY_MAP;
     if (atkType == 2) { map = ULT_MAP; }
 
     if (map[attacker.cardName] != undefined){
-        if (targetIsOpponent && map[attacker.cardName][1] == 0) {
+        if (IS_BOT && !targetIsOpponent && map[attacker.cardName][1] == 0) {
+            console.log("[bot] invalid target: target must be an ally");
+        } else if (IS_BOT && targetIsOpponent && map[attacker.cardName][1] == 1) {
+            console.log("[bot] invalid target: target must be an opponent");
+        } else if (!IS_BOT && targetIsOpponent && map[attacker.cardName][1] == 0) {
             console.error("invalid target: target must be an ally");
-        } else if (!targetIsOpponent && map[attacker.cardName][1] == 1) {
+        } else if (!IS_BOT && !targetIsOpponent && map[attacker.cardName][1] == 1) {
             console.error("invalid target: target must be an opponent");
         } else {
             let skillFunc = map[attacker.cardName][0]; // do action

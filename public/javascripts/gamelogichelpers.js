@@ -24,6 +24,25 @@ function processLobbyCode(lobbyCode){
   }
 }
 
+function getBotCardJsonObjs(){ // similar to pickPCardsRandomly
+  let fighterTags = pickRandomEntries(PLAYER_OWNED_FIGHTERS, 1);
+  let healerTags = pickRandomEntries(PLAYER_OWNED_DEFENDERS, 1);
+
+  let PLAYER_OWNED_PICKABLE = PLAYER_OWNED.filter(key => (key !== fighterTags[0] && key !== healerTags[0]));
+  let anyTags = pickRandomEntries(PLAYER_OWNED_PICKABLE, 3);
+  let pickedTags = randArray(fighterTags.concat(healerTags).concat(anyTags));
+
+  let botList = [];
+  for (let i = 0; i < 5; i++) {
+    let tempCardName = pickedTags[i];
+    let tempCardQ = -(HEX_RADIUS-1)+i;
+    let tempCardR = HEX_RADIUS;
+    let tempPC = new PlayerCard(tempCardName, tempCardQ, tempCardR, -tempCardQ-tempCardR, true);
+    botList.push(tempPC);
+  }
+  return botList;
+}
+
 function pickPCardsRandomly(){
   let fighterTags = pickRandomEntries(PLAYER_OWNED_FIGHTERS, 1);
   let healerTags = pickRandomEntries(PLAYER_OWNED_DEFENDERS, 1);
@@ -33,7 +52,7 @@ function pickPCardsRandomly(){
 
   let pickedTags = randArray(fighterTags.concat(healerTags).concat(anyTags));
 
-  for (let i = 0; i < 5; i++) { selectAvailCard(pickedTags[i], -(HEX_RADIUS-1)+i, HEX_RADIUS,-1-i); }
+  for (let i = 0; i < 5; i++) { selectAvailCard(pickedTags[i], -(HEX_RADIUS-1)+i, HEX_RADIUS); }
   
   rerenderAllGamecardsAndTokens();
 }
@@ -93,11 +112,18 @@ function transitionToMoveTokenMode(tokenOnTile){
     GAME_MODE_MEMORYTARGET.getQ(), GAME_MODE_MEMORYTARGET.getR(), GAME_MODE_MEMORYTARGET.getS());
 }
 
-function giveAllTurnMana() {
-  Object.keys(PLAYER_GAMECARD_OBJS).forEach(key => {
-    const pcardTarget = PLAYER_GAMECARD_OBJS[key];
-    pcardTarget.giveTurnMana();
-  });
+function giveAllTurnMana(isBot) {
+  if (isBot != undefined){
+    Object.keys(ENEMY_GAMECARD_OBJS).forEach(key => {
+      const pcardTarget = ENEMY_GAMECARD_OBJS[key];
+      pcardTarget.giveTurnMana();
+    });
+  } else {
+    Object.keys(PLAYER_GAMECARD_OBJS).forEach(key => {
+      const pcardTarget = PLAYER_GAMECARD_OBJS[key];
+      pcardTarget.giveTurnMana();
+    });
+  }  
 }
 
 function poisonThePoisoned(){
@@ -186,6 +212,49 @@ function ultimateAttack(pcard, q, r, s){
   attack(2, pcard, cQ, cR, cS, GAME_MODE_MEMORYTARGET.ult_aim_aoe);
 }
 
+function bot_autoattack(pcard){
+  attack(3, pcard, pcard.getQ(), pcard.getR(), pcard.getS(), pcard.getCurrentNormAtkRange());
+  pcard.giveAttackMana();
+}
+
+function bot_abilityAttack(pcard, q, r, s){
+  let [cQ,cR,cS] = [q,r,s];
+  if (q == undefined) { // if not an aimed attack
+    cQ = pcard.getQ();
+    cR = pcard.getR();
+    cS = pcard.getS();
+    pcard.current_mana -= ABILITY_MANA_REQ;
+    attack(4, pcard, cQ, cR, cS, pcard.ability_aim_aoe);
+  } else { // if an aimed attack: autoattack instead
+    bot_autoattack(pcard);
+  }  
+}
+
+function bot_ultimateAttack(pcard, q, r, s){
+  let [cQ,cR,cS] = [q,r,s];
+  if (q == undefined) { // if not an aimed attack
+    if (pcard.blessings["Nyx"] == true) { // nyx ultimate disables ultimate
+      broadcastMsg("ultimate", false, "Nyx", pcard.cardName);
+      return;
+    }
+  
+    if (pcard.blessings["Dionysus"] == true) { // passive_dionysus
+      broadcastMsg("passive", false, "Dionysus", pcard.cardName);
+      pcard.takeDamage(100);
+      return;
+    }
+
+    cQ = pcard.getQ();
+    cR = pcard.getR();
+    cS = pcard.getS();
+
+    pcard.current_mana -= MAX_MANA;
+    attack(5, pcard, cQ, cR, cS, pcard.ult_aim_aoe);
+  } else { // if an aimed attack: autoattack instead
+    bot_autoattack(pcard);
+  }
+}
+
 function canWorkWithDead(cardName){
   if (cardName == "Hades"){
     return true;
@@ -194,9 +263,12 @@ function canWorkWithDead(cardName){
 }
 
 function attack(atkType, attacker, centerQ, centerR, centerS, aoe) {
-  if (aoe == undefined && atkType != 0){ // needs no target
-    console.log("doing action without aoe",atkType, attacker, centerQ, centerR, centerS, aoe);
-    let animCode = doUniqueSkill(atkType, attacker, undefined, undefined);
+  let IS_BOT = false;
+  if (atkType >= 3) { IS_BOT = true; }
+
+  if (aoe == undefined && !(atkType == 0 || atkType == 3)){ // an ability/ultimate that needs no target
+    console.log("doing action without aoe",IS_BOT,atkType, attacker, centerQ, centerR, centerS, aoe);
+    let animCode = doUniqueSkill(IS_BOT, atkType, attacker, undefined, undefined);
   } else { // needs target
     console.log("doing action with aoe",atkType, attacker, centerQ, centerR, centerS, aoe);
     let coordTagsInRangeAll = getCoordinatesWithinRadius(centerQ, centerR, centerS, aoe, true);
@@ -208,7 +280,7 @@ function attack(atkType, attacker, centerQ, centerR, centerS, aoe) {
         // found a valid target
         console.log("intersected target", tokenOnTile.pcardLink.cardName);
         let targetIsOpponent = tokenOnTile.classList.contains("player2");
-        if (atkType == 0){
+        if (atkType == 0){ // p1 autoattack
           if (targetIsOpponent == true && tokenOnTile.pcardLink.dead != "defeated") { // cannot autoattack an already-defeated card
             let dmg = calcDamage(attacker, tokenOnTile.pcardLink); // autoattack
             dmg += passive_atalanta(attacker, tokenOnTile.pcardLink);
@@ -220,22 +292,21 @@ function attack(atkType, attacker, centerQ, centerR, centerS, aoe) {
             passive_gaea(tokenOnTile.pcardLink);
             anim_tileHitByAttack(hitTile);
           }
+        } else if (atkType == 3){ // bot autoattack
+          if (targetIsOpponent == false && tokenOnTile.pcardLink.dead != "defeated") { // cannot autoattack an already-defeated card
+            let dmg = calcDamage(attacker, tokenOnTile.pcardLink); // autoattack // #TODO re-add passives
+            broadcastMsg("autoattack", false, attacker.cardName, tokenOnTile.pcardLink.cardName);
+            tokenOnTile.pcardLink.takeDamage(dmg);
+          }
         } else {
           if (tokenOnTile.pcardLink.dead != "defeated" || canWorkWithDead(attacker.cardName)){
-            let animCode = doUniqueSkill(atkType, attacker, tokenOnTile.pcardLink, targetIsOpponent);
-            if (animCode == 0) { // do animation
-              anim_tileHitByHeal(hitTile);
-            } else if (animCode == 1) {
-              anim_tileHitByAttack(hitTile);
-            } else {
-              anim_tileHitByHeal(hitTile);
-            }
+            doUniqueSkill(IS_BOT, atkType, attacker, tokenOnTile.pcardLink, targetIsOpponent);
           } else {
             console.log("hero already defeated");
           }
         }
       } else { // no hit
-        anim_tileInAttackRange(hitTile);
+        if (!IS_BOT) { anim_tileInAttackRange(hitTile); }
       }
     });
   }
@@ -334,4 +405,23 @@ function filterOnlyCoordinatesOnBoard(qrsList){
       console.error(tokenPcard.cardName+" cannot be moved to "+tokenPcard.tag+" since this is out of bounds");
     }
     createTokenDiv(tokenPcard);
+  };
+
+  function moveBotToken(tokenPcard, absolute, diffQ, diffR) {
+    const tokenDiv = document.getElementById("p2token-" + tokenPcard.cardName);
+    tokenDiv.parentNode.setAttribute("hasP1Token", false);
+    tokenDiv.parentNode.setAttribute("hasP2Token", false);
+    tokenDiv.remove();
+    const tooltipDiv = document.getElementById("p2tooltip-" + tokenPcard.cardName);
+    tooltipDiv.remove();
+    if (absolute == true) {
+      tokenPcard.changeLocationTo(diffQ, diffR);
+    } else {
+      tokenPcard.moveLocationBy(diffQ, diffR);
+    }
+    // check if this coordinate is invalid
+    if (HEXTILE_CUBIC_INDEX[tokenPcard.tag] == undefined){
+      console.error(tokenPcard.cardName+" cannot be moved to "+tokenPcard.tag+" since this is out of bounds");
+    }
+    createEnemyTokenDiv(tokenPcard);
   };

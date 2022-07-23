@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   /* socket stuff */
   MY_SOCKET.on('connect', ()=>{
-    MY_SOCKET.emit("registerPlayer", roomCode, getUserLoggedIn());
+    MY_SOCKET.emit("registerPlayer", roomCode, getUserLoggedIn(), OTHER_NAME);
   });
 
   MY_SOCKET.on('cannotJoinGame', ()=>{
@@ -137,11 +137,20 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   MY_SOCKET.on('waitTurnAndPopulate', (yourEnemysCards)=>{
+    doWaitTurnAndPopulate(yourEnemysCards);
+  });
+
+  MY_SOCKET.on('playBotTurn', (yourEnemysCards)=>{
+    doWaitTurnAndPopulate(yourEnemysCards);
+    setTimeout(function () { playBotTurn(1); }, 5000);
+  });
+
+  function doWaitTurnAndPopulate(yourEnemysCards){
     changeGameModeTo("p2-turn1");
     console.log("opponent cards look like", yourEnemysCards);
     importAllP2Cs(yourEnemysCards);
     atTurnStart(true, true);
-  });
+  }
 
   MY_SOCKET.on('enemysProgress', (yourEnemysCards, yourEnemysVerOfYourCards)=>{
     if ((yourEnemysCards == undefined || yourEnemysCards == null) && (yourEnemysVerOfYourCards == undefined || yourEnemysVerOfYourCards == null)) {
