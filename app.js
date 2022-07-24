@@ -4,7 +4,8 @@ const server = require("http").Server(app); // create server
 const io = require("socket.io")(server); // create instance of socketio
 const PORT = process.env.PORT || 3000;
 
-const BOT_SOCKET_ID = 5555555;
+const BOT_SOCKET_ID_1 = 55555551;
+const BOT_SOCKET_ID_2 = 55555552;
 
 // db connection for leaderboard tracking
 const bcrypt = require('bcrypt');
@@ -100,7 +101,7 @@ io.on("connection", socket => {
         kickOutSocketFromLastRoom(socket.id); // in lobby
       } else { // in game or main page
         if (roommateFinder[thisRoomCode] != undefined && roommateFinder[thisRoomCode].length > 0) { // opponent is waiting!!
-          if (rivalFinder[socket.id] == BOT_SOCKET_ID){
+          if (rivalFinder[socket.id] == BOT_SOCKET_ID_1 || rivalFinder[socket.id] == BOT_SOCKET_ID_2){
             demolishRoomOf(socket.id); // #TODO allow returning to bot games: set a timeout to kill the bot after the user doesn't return
           } else {
             io.to(rivalFinder[socket.id]).emit("opponentDisconnectWarning"); // warn the opponent
@@ -160,9 +161,12 @@ io.on("connection", socket => {
   });
 
   socket.on("gameInvite", (inviterNickname, recipientId)=>{
-    if (recipientId == BOT_SOCKET_ID) {
+    if (recipientId == BOT_SOCKET_ID_1) {
       const genRoomCode = Math.random().toString(36).slice(2);
-      makeRoomWith(genRoomCode, inviterNickname, socket.id, "bot", BOT_SOCKET_ID);
+      makeRoomWith(genRoomCode, inviterNickname, socket.id, "chuck", recipientId);
+    } else if (recipientId == BOT_SOCKET_ID_2) {
+      const genRoomCode = Math.random().toString(36).slice(2);
+      makeRoomWith(genRoomCode, inviterNickname, socket.id, "hank", recipientId);
     } else {
       io.to(recipientId).emit("gameInvite", inviterNickname, socket.id);
     }
@@ -179,7 +183,7 @@ io.on("connection", socket => {
     kickOutSocketFromLastRoom(inviterId);
     // #TODO emit only one update for removing 2 lobbiers
     io.to(inviterId).emit("redirectToGame", inviterNickname, recipientNickname, room, lobbyCode);
-    if (recipientId != BOT_SOCKET_ID) {
+    if (!(recipientId == BOT_SOCKET_ID_1 || recipientId == BOT_SOCKET_ID_2)) {
       io.to(recipientId).emit("redirectToGame", recipientNickname, inviterNickname, room, lobbyCode);
     }
   }
@@ -211,8 +215,11 @@ io.on("connection", socket => {
     } else { // joining a new game
       socket.join(roomCode);
       roomBook[socket.id] = roomCode;
-      if (opponentName == "bot"){
-        roommateFinder[roomCode] = [BOT_SOCKET_ID];
+      if (opponentName == "chuck"){
+        roommateFinder[roomCode] = [BOT_SOCKET_ID_1];
+      }
+      if (opponentName == "hank"){
+        roommateFinder[roomCode] = [BOT_SOCKET_ID_2];
       }
       if (roomCode in roommateFinder){
         roommateFinder[roomCode].push(socket.id);
@@ -294,7 +301,7 @@ io.on("connection", socket => {
 
   socket.on("updateUserStats", (regionName, winType, cookieName, opponentCookieName, forceOpponentLossIncrease) => {
     console.log("stat update", winType, cookieName, opponentCookieName, "/ force is", forceOpponentLossIncrease);
-    let IS_BOT_GAME = (cookieName == "bot" || opponentCookieName == "bot");
+    let IS_BOT_GAME = (opponentCookieName == "chuck" || opponentCookieName == "hank");
 
     // update user stats
     if (cookieMap[socket.id] != ""){ // user logged in
@@ -361,8 +368,8 @@ io.on("connection", socket => {
     let thisDate = new Date();
     db.collection('gamestats').insertOne({isTie:true, time:thisDate, region:regionName, winName:p1Name, winTeam:p1cardNames, loseName:p2Name, loseTeam:p2cardNames});
 
-    if (p2Name == "bot") {
-      io.to(socket.id).emit("gameTie", "bot");
+    if (p2Name == "chuck" || p2Name == "hank") {
+      io.to(socket.id).emit("gameTie", p2Name);
     } else {
       let rivalId = rivalFinder[socket.id];
       io.to(socket.id).emit("gameTie", cookieMap[rivalId]);
@@ -381,8 +388,8 @@ io.on("connection", socket => {
     let thisDate = new Date();
     db.collection('gamestats').insertOne({isTie:false, time:thisDate, region:regionName, winName:p1Name, winTeam:p1cardNames, loseName:p2Name, loseTeam:p2cardNames});
     
-    if (p2Name == "bot") {
-      io.to(socket.id).emit("gameWin", wasSurrender, "bot");
+    if (p2Name == "chuck" || p2Name == "hank") {
+      io.to(socket.id).emit("gameWin", wasSurrender, p2Name);
     } else {
       let rivalId = rivalFinder[socket.id];
       io.to(socket.id).emit("gameWin", wasSurrender, cookieMap[rivalId]);
@@ -401,8 +408,8 @@ io.on("connection", socket => {
     let thisDate = new Date();
     db.collection('gamestats').insertOne({isTie:false, time:thisDate, region:regionName, winName:p2Name, winTeam:p2cardNames, loseName:p1Name, loseTeam:p1cardNames});
 
-    if (p2Name == "bot") {
-      io.to(socket.id).emit("gameLoss", wasSurrender, "bot");
+    if (p2Name == "chuck" || p2Name == "hank") {
+      io.to(socket.id).emit("gameLoss", wasSurrender, p2Name);
     } else {
       let rivalId = rivalFinder[socket.id];
       io.to(socket.id).emit("gameLoss", wasSurrender, cookieMap[rivalId]);
@@ -489,7 +496,8 @@ io.on("connection", socket => {
   });
   
   socket.on("login_request", (username, password) => {
-    if (username == "bot") { io.to(socket.id).emit("accountMessage", "you cannot play as a bot"); return; }
+    if (username == "chuck") { io.to(socket.id).emit("accountMessage", "this name is restricted to a bot"); return; }
+    if (username == "hank") { io.to(socket.id).emit("accountMessage", "this name is restricted to a bot"); return; }
 
     db.collection('login').find({username: username}).toArray().then((existingLoginEntry) => {
       if (existingLoginEntry.length != 1) { io.to(socket.id).emit("accountMessage", "invalid username/password combination"); return; } // no account exists

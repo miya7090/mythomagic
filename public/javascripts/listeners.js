@@ -89,8 +89,9 @@ function updateTokenClock(){
 
 function tokenClockDone(){
   changeGameModeTo("startup");
-  if (OTHER_NAME == "bot"){
+  if (Object.keys(BOT_NAMES).includes(OTHER_NAME)){
     MY_SOCKET.emit("doneWithTokenPick", exportAllP1Cs(), exportBotPCs(getBotCardJsonObjs()));
+    BOT_DIFFICULTY = BOT_NAMES[OTHER_NAME];
   } else {
     MY_SOCKET.emit("doneWithTokenPick", exportAllP1Cs());
   }  
@@ -300,9 +301,9 @@ function attackComplete(){
     TURNS_ALLOCATED -= 1;
     if (TURNS_ALLOCATED > 0){
       beginTurn(undefined, undefined); // includes a rerender
-      if (OTHER_NAME != "bot"){ MY_SOCKET.emit("tellRival_ongoingProgress", exportAllP1Cs(), exportAllP2Cs()); }      
+      if (!Object.keys(BOT_NAMES).includes(OTHER_NAME)){ MY_SOCKET.emit("tellRival_ongoingProgress", exportAllP1Cs(), exportAllP2Cs()); }      
     } else {
-      if (OTHER_NAME != "bot"){
+      if (!Object.keys(BOT_NAMES).includes(OTHER_NAME)){
         changeGameModeTo('p2-turn1');
         rerenderAllGamecardsAndTokens();
         MY_SOCKET.emit("tellRival_yourTurn", exportAllP1Cs(), exportAllP2Cs());

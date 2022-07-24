@@ -82,8 +82,8 @@ function gradeStateMetric(horizon, origPlayerArr, origBotArr){
     let coordTagsInRangeAll = getCoordinatesWithinRadius(hypoCardCopyToMove.getQ(), hypoCardCopyToMove.getR(), hypoCardCopyToMove.getS(), hypoCardCopyToMove.getCurrentMovement(), true);
     let coordTagsInRange = randArray(filterOnlyCoordinatesOnBoard(coordTagsInRangeAll));
     coordTagsInRange.forEach(hitTag => {
-      if (limitForSearches > 100){
-        console.log("bot search limit reached. ending search early...");
+      if (limitForSearches > 100 || (BOT_DIFFICULTY == "easy" && limitForSearches > 5)){
+        //console.log("bot search limit reached. ending search early...");
         [PLAYER_GAMECARD_OBJS, ENEMY_GAMECARD_OBJS] = botDeepCopyPCArrsToState(origPlayerArr, origBotArr);
         return bestCourseOfAction;
       }

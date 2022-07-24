@@ -12,6 +12,8 @@ BROADCASTING = false;
 BROADCAST_QUEUE = [];
 
 BOT_LAG = 1000;
+BOT_DIFFICULTY = undefined; // easy, hard
+BOT_NAMES = {"chuck": "easy", "hank": "hard"};
 
 HEX_SIDELENGTH = 13;
 HEX_RADIUS = (HEX_SIDELENGTH-1)/2;

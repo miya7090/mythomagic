@@ -6,7 +6,8 @@ var LEADERBOARD_CURSOR_DIV = [undefined, document.createElement("div")]; // [car
 var MOUSE_X;
 var MOUSE_Y;
 
-const BOT_SOCKET_ID = 5555555;
+const BOT_SOCKET_ID_1 = 55555551;
+const BOT_SOCKET_ID_2 = 55555552;
 
 document.addEventListener("DOMContentLoaded", () => {
   const nicknameDiv = document.getElementById("nickname");
@@ -546,8 +547,11 @@ function populateRegionList(thisRegion, regionUsers, cookieBook){
   const lobbiersInRegion = document.getElementById("lobbiersinregion");
   lobbiersInRegion.innerHTML = ""; // clear div ahead of time
 
-  regionUsers[BOT_SOCKET_ID] = "bot";
-  cookieBook[BOT_SOCKET_ID] = [0.00, "automated"];
+  regionUsers[BOT_SOCKET_ID_1] = "chuck";
+  cookieBook[BOT_SOCKET_ID_1] = [15.00, "automated"];
+
+  regionUsers[BOT_SOCKET_ID_2] = "hank";
+  cookieBook[BOT_SOCKET_ID_2] = [20.00, "automated"];
   
   Object.keys(regionUsers).forEach(indivSocketid => {
     // create a button for each person in the lobby
@@ -572,9 +576,15 @@ function populateRegionList(thisRegion, regionUsers, cookieBook){
     } else {
       rUser.addEventListener("click", (evt)=>{
         if (PENDING_INVITE_RESPONSE == false) {
-          if (indivSocketid != BOT_SOCKET_ID || (indivSocketid == BOT_SOCKET_ID && confirm("this bot is still currently in development. continue?"))){
+          if (indivSocketid != BOT_SOCKET_ID_1 && indivSocketid != BOT_SOCKET_ID_2){
             PENDING_INVITE_RESPONSE = true;
             regionNotesText.textContent = "invitation sent...";
+            socket.emit("gameInvite", myNickname, indivSocketid);
+          } else if (indivSocketid == BOT_SOCKET_ID_1 && confirm("chuck is an experimental bot on easy difficulty. begin game?")){
+            regionNotesText.textContent = "loading bot game...";
+            socket.emit("gameInvite", myNickname, indivSocketid);
+          } else if (indivSocketid == BOT_SOCKET_ID_2 && confirm("hank is an experimental bot on hard difficulty. begin game?")){
+            regionNotesText.textContent = "loading bot game...";
             socket.emit("gameInvite", myNickname, indivSocketid);
           }
         } else {
