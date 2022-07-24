@@ -316,21 +316,27 @@ br
   h3 bot games 
     span(style='font-size:12px;font-weight:normal;color:var(--BACKTOTOP);' onclick="scrollToThisDiv('playGameForward')") [back to top]
   p
-    | every lobby has an automated 
-    span(style='color: var(--GENERALHIGHLIGHT);') bot 
+    | every lobby has automated 
+    span(style='color: var(--GENERALHIGHLIGHT);') bots 
     | available to practice against. 
   p
     | note that this feature is currently under development: hero passives in particular will not function correctly in bot games.
   br
   p
-    | if you're logged in and have less than 15.00 points, winning a game against a bot grants you 
-    span(style='color: var(--GENERALHIGHLIGHT);') 1.00 
-    | point, tying against a bot grants you 
-    span(style='color: var(--GENERALHIGHLIGHT);') 0.25 
-    | points, and losing against a bot grants you no points.
+    span(style='color: var(--GENERALHIGHLIGHT);') chuck 
+    | is an easy difficulty bot and can grant points to players with a score of less than 
+    span(style='color: var(--GENERALHIGHLIGHT);') 15.00.
+  p 
+    span(style='color: var(--GENERALHIGHLIGHT);') hank 
+    | is a medium difficulty bot and can grant points to players with a score of less than 
+    span(style='color: var(--GENERALHIGHLIGHT);') 20.00.
   br
   p
-    | if you have accumulated over 15.00 points, bot games will not affect your score at all.
+    | if you are logged in and have a qualifying score, winning a bot game grants 
+    span(style='color: var(--GENERALHIGHLIGHT);') 1.00 
+    | point, tying grants 
+    span(style='color: var(--GENERALHIGHLIGHT);') 0.25 
+    | points, and losing grants no points.
 #joiningAGroup.helpSlide
   h3 joining a group 
     span(style='font-size:12px;font-weight:normal;color:var(--BACKTOTOP);' onclick="scrollToThisDiv('playGameForward')") [back to top]

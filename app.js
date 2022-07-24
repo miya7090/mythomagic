@@ -328,10 +328,16 @@ io.on("connection", socket => {
           db.collection('login').find({username: opponentCookieName}).toArray().then((rivalEntry) => {
             if (rivalEntry.length == 0) { console.log("db0","updateUserStats2",opponentCookieName); return; }
 
-            if (IS_BOT_GAME) {
+            if (opponentCookieName == "chuck") {
               if (winType == "win" && existingLoginEntry[0].score < 15.00) {
                 db.collection('login').updateOne({username: cookieName}, {$inc:{score:1.00}});
               } else if (winType == "tie" && existingLoginEntry[0].score < 15.00) {
+                db.collection('login').updateOne({username: cookieName}, {$inc:{score:0.25}});
+              }
+            } else if (opponentCookieName == "hank") {
+              if (winType == "win" && existingLoginEntry[0].score < 20.00) {
+                db.collection('login').updateOne({username: cookieName}, {$inc:{score:1.00}});
+              } else if (winType == "tie" && existingLoginEntry[0].score < 20.00) {
                 db.collection('login').updateOne({username: cookieName}, {$inc:{score:0.25}});
               }
             } else {

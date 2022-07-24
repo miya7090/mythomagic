@@ -583,7 +583,7 @@ function populateRegionList(thisRegion, regionUsers, cookieBook){
           } else if (indivSocketid == BOT_SOCKET_ID_1 && confirm("chuck is an experimental bot on easy difficulty. begin game?")){
             regionNotesText.textContent = "loading bot game...";
             socket.emit("gameInvite", myNickname, indivSocketid);
-          } else if (indivSocketid == BOT_SOCKET_ID_2 && confirm("hank is an experimental bot on hard difficulty. begin game?")){
+          } else if (indivSocketid == BOT_SOCKET_ID_2 && confirm("hank is an experimental bot on medium difficulty. begin game?")){
             regionNotesText.textContent = "loading bot game...";
             socket.emit("gameInvite", myNickname, indivSocketid);
           }

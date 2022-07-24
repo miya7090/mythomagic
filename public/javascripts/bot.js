@@ -96,7 +96,7 @@ function gradeStateMetric(horizon, origPlayerArr, origBotArr){
         [PLAYER_GAMECARD_OBJS, ENEMY_GAMECARD_OBJS] = botDeepCopyPCArrsToState(origPlayerArr, origBotArr);
         return bestCourseOfAction;
       }
-      if (limitForSearches > 200 || (limitForSearches > 30 && horizon == 2)){
+      if (limitForSearches > 300 || (limitForSearches > 70 && horizon == 2)){
         //console.log("bot search limit reached. ending search early...");
         [PLAYER_GAMECARD_OBJS, ENEMY_GAMECARD_OBJS] = botDeepCopyPCArrsToState(origPlayerArr, origBotArr);
         return bestCourseOfAction;
@@ -124,7 +124,7 @@ function gradeStateMetric(horizon, origPlayerArr, origBotArr){
             let possAimCoords = getCoordinatesWithinRadius(hypoCardToMove.getQ(), hypoCardToMove.getR(), hypoCardToMove.getS(), hypoCardToMove.ability_aim_range, true);
             let aimCoordsInRange = filterOnlyCoordinatesOnBoard(possAimCoords);
             aimCoordsInRange.forEach(aimHitTag => {
-              if (limitForSearches > 200 || (limitForSearches > 30 && horizon == 2)){
+              if (limitForSearches > 300 || (limitForSearches > 70 && horizon == 2)){
                 //console.log("bot search limit reached. ending search early...");
                 [PLAYER_GAMECARD_OBJS, ENEMY_GAMECARD_OBJS] = botDeepCopyPCArrsToState(origPlayerArr, origBotArr);
                 return bestCourseOfAction;
@@ -153,7 +153,7 @@ function gradeStateMetric(horizon, origPlayerArr, origBotArr){
             let possAimCoords = getCoordinatesWithinRadius(hypoCardToMove.getQ(), hypoCardToMove.getR(), hypoCardToMove.getS(), hypoCardToMove.ult_aim_range, true);
             let aimCoordsInRange = filterOnlyCoordinatesOnBoard(possAimCoords);
             aimCoordsInRange.forEach(aimHitTag => {
-              if (limitForSearches > 200 || (limitForSearches > 30 && horizon == 2)){
+              if (limitForSearches > 300 || (limitForSearches > 70 && horizon == 2)){
                 //console.log("bot search limit reached. ending search early...");
                 [PLAYER_GAMECARD_OBJS, ENEMY_GAMECARD_OBJS] = botDeepCopyPCArrsToState(origPlayerArr, origBotArr);
                 return bestCourseOfAction;
@@ -211,7 +211,7 @@ function gradeTeamMetric(){
     if (BOT_DIFFICULTY != "easy") {
       finalScore -= (pc.getCurrentAttack() / 20.0);
       finalScore -= (pc.getCurrentDefense() * 4.0);
-      if (pc.dead == "defeated") { finalScore += 200; }
+      if (pc.dead == "defeated") { finalScore += 300; }
     }
   });
 
@@ -221,7 +221,7 @@ function gradeTeamMetric(){
     if (BOT_DIFFICULTY != "easy") {
       finalScore += (pc.getCurrentAttack() / 20.0);
       finalScore += (pc.getCurrentDefense() * 4.0);
-      if (pc.dead == "defeated") { finalScore -= 200; }
+      if (pc.dead == "defeated") { finalScore -= 300; }
     }
   });
   return finalScore;
