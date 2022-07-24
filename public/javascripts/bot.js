@@ -12,6 +12,16 @@ function playBotTurn(){
 
     const [playerOrig, botOrig] = botDeepCopyPCArrsToState(PLAYER_GAMECARD_OBJS, ENEMY_GAMECARD_OBJS);
     var bestCourseOfAction = gradeStateMetric(2, playerOrig, botOrig);
+
+    if (bestCourseOfAction[1] == undefined) {
+      console.error("bot logic: bot cannot make any move");
+      giveAllTurnMana(true);
+      poisonThePoisoned();
+      onBotTurnEnd();
+      console.log("bot done-------------------");
+      return;
+    }
+
     var recipeString = bestCourseOfAction[1].split(".").slice(0, -1);
 
     if (recipeString.length != 2) {
@@ -45,7 +55,7 @@ function followRecipe(recipe){
   let bestAction = recipe.split("_")[2].split(":")[0];
   let [bestActionQ, bestActionR, bestActionS] = [undefined, undefined, undefined];
   if (recipe.split("_")[2].split(":").length > 1){
-    [bestActionQ, bestActionR, bestActionS] = recipe.split("_")[2].split(":").map(obj => parseInt(obj));
+    [bestActionQ, bestActionR, bestActionS] = recipe.split("_")[2].split(":").slice(1).map(obj => parseInt(obj));
   }
 
   let targetCard = getGamecardByTokenId("p2-"+bestCard);
@@ -82,7 +92,11 @@ function gradeStateMetric(horizon, origPlayerArr, origBotArr){
     let coordTagsInRangeAll = getCoordinatesWithinRadius(hypoCardCopyToMove.getQ(), hypoCardCopyToMove.getR(), hypoCardCopyToMove.getS(), hypoCardCopyToMove.getCurrentMovement(), true);
     let coordTagsInRange = randArray(filterOnlyCoordinatesOnBoard(coordTagsInRangeAll));
     coordTagsInRange.forEach(hitTag => {
-      if (limitForSearches > 100 || (BOT_DIFFICULTY == "easy" && limitForSearches > 5)){
+      if (BOT_DIFFICULTY == "easy" && limitForSearches > 10){
+        [PLAYER_GAMECARD_OBJS, ENEMY_GAMECARD_OBJS] = botDeepCopyPCArrsToState(origPlayerArr, origBotArr);
+        return bestCourseOfAction;
+      }
+      if (limitForSearches > 200 || (limitForSearches > 30 && horizon == 2)){
         //console.log("bot search limit reached. ending search early...");
         [PLAYER_GAMECARD_OBJS, ENEMY_GAMECARD_OBJS] = botDeepCopyPCArrsToState(origPlayerArr, origBotArr);
         return bestCourseOfAction;
@@ -110,6 +124,12 @@ function gradeStateMetric(horizon, origPlayerArr, origBotArr){
             let possAimCoords = getCoordinatesWithinRadius(hypoCardToMove.getQ(), hypoCardToMove.getR(), hypoCardToMove.getS(), hypoCardToMove.ability_aim_range, true);
             let aimCoordsInRange = filterOnlyCoordinatesOnBoard(possAimCoords);
             aimCoordsInRange.forEach(aimHitTag => {
+              if (limitForSearches > 200 || (limitForSearches > 30 && horizon == 2)){
+                //console.log("bot search limit reached. ending search early...");
+                [PLAYER_GAMECARD_OBJS, ENEMY_GAMECARD_OBJS] = botDeepCopyPCArrsToState(origPlayerArr, origBotArr);
+                return bestCourseOfAction;
+              }
+
               let aimHitTile = HEXTILE_CUBIC_INDEX[aimHitTag];
               var aim_cQ = aimHitTile.cube_q;
               var aim_cR = aimHitTile.cube_r;
@@ -133,6 +153,12 @@ function gradeStateMetric(horizon, origPlayerArr, origBotArr){
             let possAimCoords = getCoordinatesWithinRadius(hypoCardToMove.getQ(), hypoCardToMove.getR(), hypoCardToMove.getS(), hypoCardToMove.ult_aim_range, true);
             let aimCoordsInRange = filterOnlyCoordinatesOnBoard(possAimCoords);
             aimCoordsInRange.forEach(aimHitTag => {
+              if (limitForSearches > 200 || (limitForSearches > 30 && horizon == 2)){
+                //console.log("bot search limit reached. ending search early...");
+                [PLAYER_GAMECARD_OBJS, ENEMY_GAMECARD_OBJS] = botDeepCopyPCArrsToState(origPlayerArr, origBotArr);
+                return bestCourseOfAction;
+              }
+              
               let aimHitTile = HEXTILE_CUBIC_INDEX[aimHitTag];
               var aim_cQ = aimHitTile.cube_q;
               var aim_cR = aimHitTile.cube_r;
@@ -181,9 +207,22 @@ function gradeTeamMetric(){
   var finalScore = 0; // a higher finalScore is more advantageous for the bot
   PLAYER_GAMECARD_OBJS.forEach(pc => { // #TODO improve metric
     finalScore -= pc.current_health;
+
+    if (BOT_DIFFICULTY != "easy") {
+      finalScore -= (pc.getCurrentAttack() / 20.0);
+      finalScore -= (pc.getCurrentDefense() * 4.0);
+      if (pc.dead == "defeated") { finalScore += 200; }
+    }
   });
+
   ENEMY_GAMECARD_OBJS.forEach(pc => {
     finalScore += pc.current_health;
+
+    if (BOT_DIFFICULTY != "easy") {
+      finalScore += (pc.getCurrentAttack() / 20.0);
+      finalScore += (pc.getCurrentDefense() * 4.0);
+      if (pc.dead == "defeated") { finalScore -= 200; }
+    }
   });
   return finalScore;
 }

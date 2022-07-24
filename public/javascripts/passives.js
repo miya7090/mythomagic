@@ -141,7 +141,7 @@ function passive_apollo(){ // run by player1 at the end of the turn
 function passive_achilles_onAlly(){ // run when ally card is defeated
     let mc = getAllyCard("Achilles");
     if (mc != undefined) {
-        broadcastMsg("passive", true, "Achilles", undefined);
+        //broadcastMsg("passive", true, "Achilles", undefined);
         mc.clearStatuses();
         mc.current_attack += 300;
     }
@@ -150,7 +150,7 @@ function passive_achilles_onAlly(){ // run when ally card is defeated
 function passive_achilles_onEnemy(){ // run when enemy card is defeated
     let mc = getEnemyCard("Achilles");
     if (mc != undefined) {
-        broadcastMsg("passive", false, "Achilles", undefined);
+        //broadcastMsg("passive", false, "Achilles", undefined);
         mc.clearStatuses();
         mc.current_attack += 300;
     }

@@ -14,7 +14,7 @@ function getPlayerTurnText() {
     case "p1-ultimate":     return "Using ultimate...";
     case "p1-ultimateAim":  return "Aiming ultimate...";
 
-    case "bot-turn1":       return "Bot is on turn 1/2... (Thinking...)";
+    case "bot-thinking":       return OTHER_NAME+" is on turn 1/2...";
 
     case "p2-turn1":       return OTHER_NAME+" is on turn 1/2...";
     case "p2-turn2":       return OTHER_NAME+" is on turn 2/2...";
@@ -72,7 +72,7 @@ function startBroadcast(p1, bIcon, bText){
   let fadeInLength = 100;
   let messageLength = 1700;
   let fadeOutLength = 800;
-  if (BROADCAST_QUEUE.length > 0){ fadeInLength = 10; }
+  if (BROADCAST_QUEUE.length > 0){ fadeInLength = 1; fadeInLength = 1; }
 
   $("#notifBox").fadeIn(fadeInLength, function(){
     if (BROADCAST_QUEUE.length > 0){ messageLength = 1600; }
