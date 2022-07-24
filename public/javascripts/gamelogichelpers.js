@@ -77,7 +77,7 @@ function getTurn() {
     return "pick";
   } else {
     let code = GAME_MODE.substring(0,2);
-    if (code != "p1" && code != "p2") {
+    if (code != "p1" && code != "p2" && code != "bo") { // bot
       console.error("can't determine which player's turn it is", GAME_MODE, code);
     }
     return code;
@@ -106,7 +106,7 @@ function toSelectAttackMode(){
 
 function transitionToMoveTokenMode(tokenOnTile){
   changeGameModeTo("p1-moveToken");
-  GAME_MODE_MEMORYTARGET = tokenOnTile.pcardLink;
+  GAME_MODE_MEMORYTARGET = getGamecardByTokenId(tokenOnTile.id);
   highlightMemoryTarget(true);
   highlightSelfAndRadius("rangeHighlight", true, GAME_MODE_MEMORYTARGET.getCurrentMovement(),
     GAME_MODE_MEMORYTARGET.getQ(), GAME_MODE_MEMORYTARGET.getR(), GAME_MODE_MEMORYTARGET.getS());
@@ -222,37 +222,21 @@ function bot_abilityAttack(pcard, q, r, s){
   if (q == undefined) { // if not an aimed attack
     cQ = pcard.getQ();
     cR = pcard.getR();
-    cS = pcard.getS();
-    pcard.current_mana -= ABILITY_MANA_REQ;
-    attack(4, pcard, cQ, cR, cS, pcard.ability_aim_aoe);
-  } else { // if an aimed attack: autoattack instead
-    bot_autoattack(pcard);
-  }  
+    cS = pcard.getS();    
+  }
+  pcard.current_mana -= ABILITY_MANA_REQ;
+  attack(4, pcard, cQ, cR, cS, pcard.ability_aim_aoe);
 }
 
 function bot_ultimateAttack(pcard, q, r, s){
   let [cQ,cR,cS] = [q,r,s];
   if (q == undefined) { // if not an aimed attack
-    if (pcard.blessings["Nyx"] == true) { // nyx ultimate disables ultimate
-      broadcastMsg("ultimate", false, "Nyx", pcard.cardName);
-      return;
-    }
-  
-    if (pcard.blessings["Dionysus"] == true) { // passive_dionysus
-      broadcastMsg("passive", false, "Dionysus", pcard.cardName);
-      pcard.takeDamage(100);
-      return;
-    }
-
     cQ = pcard.getQ();
     cR = pcard.getR();
     cS = pcard.getS();
-
-    pcard.current_mana -= MAX_MANA;
-    attack(5, pcard, cQ, cR, cS, pcard.ult_aim_aoe);
-  } else { // if an aimed attack: autoattack instead
-    bot_autoattack(pcard);
   }
+  pcard.current_mana -= MAX_MANA;
+  attack(5, pcard, cQ, cR, cS, pcard.ult_aim_aoe);
 }
 
 function canWorkWithDead(cardName){
@@ -267,10 +251,10 @@ function attack(atkType, attacker, centerQ, centerR, centerS, aoe) {
   if (atkType >= 3) { IS_BOT = true; }
 
   if (aoe == undefined && !(atkType == 0 || atkType == 3)){ // an ability/ultimate that needs no target
-    console.log("doing action without aoe",IS_BOT,atkType, attacker, centerQ, centerR, centerS, aoe);
+    if (getTurn() != "bo"){ console.log("doing no-aoe action,",IS_BOT,atkType, attacker, centerQ, centerR, centerS, aoe); }
     let animCode = doUniqueSkill(IS_BOT, atkType, attacker, undefined, undefined);
   } else { // needs target
-    console.log("doing action with aoe",atkType, attacker, centerQ, centerR, centerS, aoe);
+    if (getTurn() != "bo"){ console.log("doing aoe action,",atkType, attacker, centerQ, centerR, centerS, aoe); }
     let coordTagsInRangeAll = getCoordinatesWithinRadius(centerQ, centerR, centerS, aoe, true);
     const coordTagsInRange = filterOnlyCoordinatesOnBoard(coordTagsInRangeAll);
     coordTagsInRange.forEach(hitTag => {
@@ -278,31 +262,34 @@ function attack(atkType, attacker, centerQ, centerR, centerS, aoe) {
       let tokenOnTile = hitTile.querySelector('.token');
       if (tokenOnTile != undefined) {
         // found a valid target
-        console.log("intersected target", tokenOnTile.pcardLink.cardName);
+        if (getTurn() != "bo"){ console.log("intersected target", tokenOnTile.id); }
         let targetIsOpponent = tokenOnTile.classList.contains("player2");
         if (atkType == 0){ // p1 autoattack
-          if (targetIsOpponent == true && tokenOnTile.pcardLink.dead != "defeated") { // cannot autoattack an already-defeated card
-            let dmg = calcDamage(attacker, tokenOnTile.pcardLink); // autoattack
-            dmg += passive_atalanta(attacker, tokenOnTile.pcardLink);
-            dmg += passive_hephaestus(attacker, tokenOnTile.pcardLink);
-            broadcastMsg("autoattack", true, attacker.cardName, tokenOnTile.pcardLink.cardName);
-            tokenOnTile.pcardLink.takeDamage(dmg);
-            passive_echo(attacker, tokenOnTile.pcardLink, dmg);
-            passive_eros(attacker, tokenOnTile.pcardLink);
-            passive_gaea(tokenOnTile.pcardLink);
+          let TEMPGETGAMECARD = getGamecardByTokenId(tokenOnTile.id);
+          if (targetIsOpponent == true && TEMPGETGAMECARD.dead != "defeated") { // cannot autoattack an already-defeated card
+            let dmg = calcDamage(attacker, TEMPGETGAMECARD); // autoattack
+            dmg += passive_atalanta(attacker, TEMPGETGAMECARD);
+            dmg += passive_hephaestus(attacker, TEMPGETGAMECARD);
+            broadcastMsg("autoattack", true, attacker.cardName, TEMPGETGAMECARD.cardName);
+            TEMPGETGAMECARD.takeDamage(dmg);
+            passive_echo(attacker, TEMPGETGAMECARD, dmg);
+            passive_eros(attacker, TEMPGETGAMECARD);
+            passive_gaea(TEMPGETGAMECARD);
             anim_tileHitByAttack(hitTile);
           }
         } else if (atkType == 3){ // bot autoattack
-          if (targetIsOpponent == false && tokenOnTile.pcardLink.dead != "defeated") { // cannot autoattack an already-defeated card
-            let dmg = calcDamage(attacker, tokenOnTile.pcardLink); // autoattack // #TODO re-add passives
-            broadcastMsg("autoattack", false, attacker.cardName, tokenOnTile.pcardLink.cardName);
-            tokenOnTile.pcardLink.takeDamage(dmg);
+          let TEMPGETGAMECARD = getGamecardByTokenId(tokenOnTile.id);
+          if (targetIsOpponent == false && TEMPGETGAMECARD.dead != "defeated") { // cannot autoattack an already-defeated card
+            let dmg = calcDamage(attacker, TEMPGETGAMECARD); // autoattack // #TODO re-add passives
+            broadcastMsg("autoattack", false, attacker.cardName, TEMPGETGAMECARD.cardName);
+            TEMPGETGAMECARD.takeDamage(dmg);
           }
         } else {
-          if (tokenOnTile.pcardLink.dead != "defeated" || canWorkWithDead(attacker.cardName)){
-            doUniqueSkill(IS_BOT, atkType, attacker, tokenOnTile.pcardLink, targetIsOpponent);
+          let TEMPGETGAMECARD = getGamecardByTokenId(tokenOnTile.id);
+          if (TEMPGETGAMECARD.dead != "defeated" || canWorkWithDead(attacker.cardName)){
+            doUniqueSkill(IS_BOT, atkType, attacker, TEMPGETGAMECARD, targetIsOpponent);
           } else {
-            console.log("hero already defeated");
+            if (getTurn() != "bo"){ console.log("hero already defeated"); }
           }
         }
       } else { // no hit
@@ -314,7 +301,9 @@ function attack(atkType, attacker, centerQ, centerR, centerS, aoe) {
 
 function calcDamage(attacker, target){
   let dmg = attacker.getCurrentAttack() / target.getCurrentDefense(); // rounded by the recipient
-  console.log(dmg, "damage :", attacker.getCurrentAttack(), "/", target.getCurrentDefense(), ": to", target.cardName);
+  if (getTurn() != "bo"){
+    console.log(dmg, "damage :", attacker.getCurrentAttack(), "/", target.getCurrentDefense(), ": to", target.cardName);
+  }  
   return dmg;
 }
 

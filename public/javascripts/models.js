@@ -37,7 +37,7 @@ function exportPC(pcard){
     "cd": pcard.current_defense, "ch": pcard.current_health, "cm": pcard.current_mana,
     "cmpt": pcard.current_mana_per_turn, "cmpa": pcard.current_mana_per_atk,
     "m": pcard.current_movement, "d": pcard.dead, "hb": pcard.health_bonus, "mb": pcard.mana_bonus,
-    "s": pcard.statuses, "b": pcard.blessings, "qq": pcard.getQ(), "rr": pcard.getR(), "ss": pcard.getS()
+    "s": JSON.parse(JSON.stringify(pcard.statuses)), "b": JSON.parse(JSON.stringify(pcard.blessings)), "qq": pcard.getQ(), "rr": pcard.getR(), "ss": pcard.getS()
   };
 }
 
@@ -71,6 +71,17 @@ function exportBotPCs(botPCArr){
   let ans = [];
   botPCArr.forEach(pc => {
     ans.push(exportPC(pc));
+  });
+  return ans;
+}
+
+function botDeepCopyPCArrsToState(pcArr, botArr){
+  let ans = [[], []];
+  pcArr.forEach(pc => {
+    ans[0].push(importPC(exportPC(pc),true));
+  });
+  botArr.forEach(pc => {
+    ans[1].push(importPC(exportPC(pc),false));
   });
   return ans;
 }
@@ -362,7 +373,7 @@ function importAllP2Cs(pcListObj){
     heal(flatNum){
       if (this.dead != "defeated") {
         this.current_health += Math.round(flatNum);
-        console.log(this.cardName, "healed", flatNum, "damage");
+        if (getTurn() != "bo"){ console.log(this.cardName, "healed", flatNum, "damage"); }
         if (this.current_health > this.getMaxHealth()) {
           this.current_health = this.getMaxHealth();
         }
@@ -384,7 +395,7 @@ function importAllP2Cs(pcListObj){
           if (this.p1){ passive_thanatos_onAlly(this); } else { passive_thanatos_onEnemy(this); }
         }
         this.current_health -= flatNum;
-        console.log(this.cardName, "took", flatNum, "damage");
+        if (getTurn() != "bo"){ console.log(this.cardName, "took", flatNum, "damage"); }
         if (this.current_health <= 0) { // card is defeated
 
           if (passive_orpheus(this.p1, this.cardName)){
@@ -397,7 +408,7 @@ function importAllP2Cs(pcListObj){
             this.current_mana = 0;
             this.clearStatuses();
             this.dead = "defeated";
-            playSound("heroDeath", 1.0);
+            if (getTurn() != "bo"){ playSound("heroDeath", 1.0); }
             if (this.cardName != "Achilles") {
               if (this.p1){ // ally was defeated
                 passive_achilles_onAlly();

@@ -184,8 +184,8 @@ function mouseOverTile(evt) {
       tokenOnTile = evt.target.querySelector('.token');
     }
     if (tokenOnTile != undefined) {
-      if (!(!tokenOnTile.classList.contains("player1") && tokenOnTile.pcardLink.statuses["obscured"] != 0)) { // if not an obscured enemy
-        gameInfoBox.innerHTML = get_PC_BroadcastForInfoBox(tokenOnTile.pcardLink, tokenOnTile.classList.contains("player1"));
+      if (!(!tokenOnTile.classList.contains("player1") && getGamecardByTokenId(tokenOnTile.id).statuses["obscured"] != 0)) { // if not an obscured enemy
+        gameInfoBox.innerHTML = get_PC_BroadcastForInfoBox(getGamecardByTokenId(tokenOnTile.id), tokenOnTile.classList.contains("player1"));
       }
     }
 }
@@ -223,7 +223,7 @@ function mouseClickTile(evt) {
       processBroadcast("alert", true, "there is no token to move on this tile"); return;
     } else if (tokenOnTile.classList.contains("player1") == false) {
       processBroadcast("alert", true, "this is "+OTHER_NAME+"'s token"); return;
-    } else if (tokenOnTile.pcardLink.dead == "defeated") {
+    } else if (getGamecardByTokenId(tokenOnTile.id).dead == "defeated") {
       processBroadcast("alert", true, "this hero has already been defeated"); return;
     } else { // success
       playSound("tokenPickedUp", rand(0.5,0.7));
@@ -231,7 +231,7 @@ function mouseClickTile(evt) {
     }
 
   } else if (GAME_MODE == "p1-moveToken") {  ///// (2) p1-moveToken
-    if (tokenOnTile != null && tokenOnTile.pcardLink != GAME_MODE_MEMORYTARGET) {
+    if (tokenOnTile != null && getGamecardByTokenId(tokenOnTile.id) != GAME_MODE_MEMORYTARGET) {
       processBroadcast("alert", true, "there is already a hero at this location");
       resetToActiveMode(); return;
     }
@@ -302,13 +302,13 @@ function attackComplete(){
       beginTurn(undefined, undefined); // includes a rerender
       if (OTHER_NAME != "bot"){ MY_SOCKET.emit("tellRival_ongoingProgress", exportAllP1Cs(), exportAllP2Cs()); }      
     } else {
-      changeGameModeTo('p2-turn1');
       if (OTHER_NAME != "bot"){
+        changeGameModeTo('p2-turn1');
         rerenderAllGamecardsAndTokens();
         MY_SOCKET.emit("tellRival_yourTurn", exportAllP1Cs(), exportAllP2Cs());
       } else {
         rerenderAllGamecardsAndTokens();
-        playBotTurn(1);
+        playBotTurn();
       }
     }
   } else if (gameOver == "tie") {
@@ -405,7 +405,7 @@ function mouseOverAvailableCard(evt, referenceCard) {
   const gameInfoBox = document.getElementById("gameInfoBox");
   var gCard = onFieldCards.querySelector('#p1card-'+referenceCard.cardName);
   if (gCard != undefined){
-    gameInfoBox.innerHTML = get_PC_BroadcastForInfoBox(gCard.pcardLink, true);
+    gameInfoBox.innerHTML = get_PC_BroadcastForInfoBox(getGamecardByTokenId(gCard.id), true);
   } else {
     gameInfoBox.innerHTML = get_BC_BroadcastForInfoBox(referenceCard);
   }
@@ -426,7 +426,7 @@ function mouseClickAvailableCard(evt) {
 
     var dupeCard = onFieldCards.querySelector('#p1card-'+thisCardName);
     if (dupeCard != null) { // search if card with that ID already selected to be played
-      let existingPcard = dupeCard.pcardLink;
+      let existingPcard = getGamecardByTokenId(dupeCard.id);
       evt.target.setAttribute("acChosen",false);
       PLAYER_GAMECARD_OBJS.splice(PLAYER_GAMECARD_OBJS.indexOf(existingPcard), 1); // remove from game cards
       removeTokenAndShiftOthers(existingPcard);

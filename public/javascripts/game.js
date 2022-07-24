@@ -145,7 +145,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   MY_SOCKET.on('playBotTurn', (yourEnemysCards)=>{
     doWaitTurnAndPopulate(yourEnemysCards);
-    setTimeout(function () { playBotTurn(1); }, BOT_LAG);
+    playBotTurn();
   });
 
   function doWaitTurnAndPopulate(yourEnemysCards){

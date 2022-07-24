@@ -572,7 +572,7 @@ function populateRegionList(thisRegion, regionUsers, cookieBook){
     } else {
       rUser.addEventListener("click", (evt)=>{
         if (PENDING_INVITE_RESPONSE == false) {
-          if (indivSocketid != BOT_SOCKET_ID || (indivSocketid == BOT_SOCKET_ID && confirm("bot games are a newly added feature and highly experimental. continue?"))){
+          if (indivSocketid != BOT_SOCKET_ID || (indivSocketid == BOT_SOCKET_ID && confirm("this bot is still currently in development. continue?"))){
             PENDING_INVITE_RESPONSE = true;
             regionNotesText.textContent = "invitation sent...";
             socket.emit("gameInvite", myNickname, indivSocketid);

@@ -14,6 +14,8 @@ function getPlayerTurnText() {
     case "p1-ultimate":     return "Using ultimate...";
     case "p1-ultimateAim":  return "Aiming ultimate...";
 
+    case "bot-turn1":       return "Bot is on turn 1/2... (Thinking...)";
+
     case "p2-turn1":       return OTHER_NAME+" is on turn 1/2...";
     case "p2-turn2":       return OTHER_NAME+" is on turn 2/2...";
   }
@@ -26,35 +28,38 @@ function updateTurnText() {
 }
 
 function broadcastMsg(msgType, p1, arg1, arg2){
-  MY_SOCKET.emit("tellRival_message", msgType, !p1, arg1, arg2);
+  if (getTurn() != "bo" && OTHER_NAME != "bot"){
+    MY_SOCKET.emit("tellRival_message", msgType, !p1, arg1, arg2);
 
-  processBroadcast(msgType, p1, arg1, arg2);
+    processBroadcast(msgType, p1, arg1, arg2);
+  }
 }
 
 function processBroadcast(msgType, p1, arg1, arg2){
   console.log(msgType, p1, arg1, arg2);
-  
-  var bIcon;
-  var bText;
+  if (getTurn() != "bo"){    
+    var bIcon;
+    var bText;
 
-  if (msgType == "alert") {
-    bIcon = GITHUB_PUBLIC_PATH + "images/alert.png";
-    bText = arg1;
-    console.log("okay", bIcon, bText, p1);
-  } else if (msgType == "ultimate" && arg1 == "Dionysus") {
-    p1 = !p1;
-    bIcon = GITHUB_PUBLIC_PATH + "images/portraits/dolphin.png";
-    bText = arg2 + " has turned into a dolphin!";
-  } else {
-    bIcon = GITHUB_PUBLIC_PATH + "images/portraits/"+arg1.toLowerCase()+".png";
-    bText = formatBroadcast(msgType, p1, arg1, arg2);
-  }
-  
-  if (!BROADCASTING){
-    BROADCASTING = true;
-    startBroadcast(p1, bIcon, bText);
-  } else {
-    BROADCAST_QUEUE.push([p1, bIcon, bText]);
+    if (msgType == "alert") {
+      bIcon = GITHUB_PUBLIC_PATH + "images/alert.png";
+      bText = arg1;
+      console.log("okay", bIcon, bText, p1);
+    } else if (msgType == "ultimate" && arg1 == "Dionysus") {
+      p1 = !p1;
+      bIcon = GITHUB_PUBLIC_PATH + "images/portraits/dolphin.png";
+      bText = arg2 + " has turned into a dolphin!";
+    } else {
+      bIcon = GITHUB_PUBLIC_PATH + "images/portraits/"+arg1.toLowerCase()+".png";
+      bText = formatBroadcast(msgType, p1, arg1, arg2);
+    }
+    
+    if (!BROADCASTING){
+      BROADCASTING = true;
+      startBroadcast(p1, bIcon, bText);
+    } else {
+      BROADCAST_QUEUE.push([p1, bIcon, bText]);
+    }      
   }
 }
 
@@ -207,6 +212,7 @@ function createTileDiv(rowDiv, q, r) {
   square.cube_q = cubeQ;
   square.cube_r = cubeR;
   square.cube_s = cubeS;
+  square.title = cubeQ + "," + cubeR + "," + cubeS;
 
   // select tiles outside edge as off field
   if (getTileDistance(cubeQ,cubeR,cubeS,0,0,0) > HEX_RADIUS) {
@@ -283,7 +289,6 @@ function createGameCardDiv(pcToRender) {
   ccard.innerHTML = getGameCardHTML(pcToRender);
   ccard.classList.add("player1");
   ccard.classList.add("card");
-  ccard.pcardLink = pcToRender;
   ccard.id = "p1card-"+pcToRender.cardName;
   if (pcToRender.dead == "defeated"){
     ccard.classList.add("deadCard");
@@ -312,7 +317,6 @@ function createEnemyGameCardDiv(pcToRender) { //#TODO reduce redundant code ^
   ccard.innerHTML = getGameCardHTML(pcToRender);
   ccard.classList.add("player2");
   ccard.classList.add("card");
-  ccard.pcardLink = pcToRender;
   ccard.id = "p2card-"+pcToRender.cardName;
   if (pcToRender.dead == "defeated"){
     ccard.classList.add("deadCard");
@@ -341,7 +345,6 @@ function createTokenDiv(pcToRender) {
   token.classList.add("player1");
   token.classList.add("token");
   token.id = "p1token-" + pcToRender.cardName;
-  token.pcardLink = pcToRender;
   token.q = pcToRender.getQ(); // used ONLY for location initialization
   token.setAttribute("isDefeated", pcToRender.dead == "defeated");
   if (GAME_MODE_MEMORYTARGET != undefined){
@@ -372,7 +375,6 @@ function createEnemyTokenDiv(pcToRender) {
   token.classList.add("player2");
   token.classList.add("token");
   token.id = "p2token-" + pcToRender.cardName;
-  token.pcardLink = pcToRender;
   token.q = pcToRender.getQ(); // used for location initialization
   token.setAttribute("isDefeated", pcToRender.dead == "defeated");
   token.setAttribute("thisObscured", pcToRender.statuses["obscured"] > 0);

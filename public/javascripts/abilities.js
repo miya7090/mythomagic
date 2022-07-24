@@ -38,9 +38,9 @@ function doUniqueSkill(IS_BOT, atkType, attacker, target, targetIsOpponent) { //
 
     if (map[attacker.cardName] != undefined){
         if (IS_BOT && !targetIsOpponent && map[attacker.cardName][1] == 0) {
-            console.log("[bot] invalid target: target must be an ally");
+            if (getTurn() != "bo"){ console.log("[bot] invalid target: target must be an ally"); }
         } else if (IS_BOT && targetIsOpponent && map[attacker.cardName][1] == 1) {
-            console.log("[bot] invalid target: target must be an opponent");
+            if (getTurn() != "bo"){ console.log("[bot] invalid target: target must be an opponent"); }
         } else if (!IS_BOT && targetIsOpponent && map[attacker.cardName][1] == 0) {
             console.error("invalid target: target must be an ally");
         } else if (!IS_BOT && !targetIsOpponent && map[attacker.cardName][1] == 1) {

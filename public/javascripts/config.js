@@ -11,7 +11,7 @@ OTHER_NAME = undefined;
 BROADCASTING = false;
 BROADCAST_QUEUE = [];
 
-BOT_LAG = 3000;
+BOT_LAG = 1000;
 
 HEX_SIDELENGTH = 13;
 HEX_RADIUS = (HEX_SIDELENGTH-1)/2;
@@ -127,7 +127,7 @@ const BASE_STAT_DICT = {
       "Undaunted","Using only base stats and ignoring status effects, attack all enemies within 2 tiles",
       "Swordsmanship","Adjacent ally receives ATK and DEF increase by 20%, MVT increase by 1",
       "Cap of Invisibility","After an enemy is defeated, become Obscured and increase MVT by 1", "Melee"],
-    "Hera":[1400,2,15,800,40,0,2, 2,0,4,0,
+    "Hera":[1400,2,15,800,30,0,2, 2,0,4,0,
       "Blessing","Grant 3 DEF, 200 HP, 100 MP to ally within 2 tiles",
       "Wrath","Max HP of enemy within 4 tiles reduced to 100",
       "Queen of Olympus","All allies gain 1 DEF for each Olympian in the team", "Protector"],
@@ -233,6 +233,19 @@ const BASE_STAT_DICT = {
   PLAYER_GAMECARD_OBJS = [];
   ENEMY_GAMECARD_OBJS = [];
 
+  function getGamecardByTokenId(tokenId){
+    let playerWhose = tokenId.substring(0,2);
+    let playerCard = tokenId.split("-")[1];
+    if (playerWhose == "p1"){
+      return PLAYER_GAMECARD_OBJS.find(obj => obj.cardName == playerCard);
+    } else if (playerWhose == "p2"){
+      return ENEMY_GAMECARD_OBJS.find(obj => obj.cardName == playerCard);
+    } else {
+      console.error("token id not formatted correctly?", playerWhose, playerCard);
+      return undefined;
+    }
+  }
+  
   PLAYER_HERO_INITIAL_NAMES = [];
   ENEMY_HERO_INITIAL_NAMES = [];
 
