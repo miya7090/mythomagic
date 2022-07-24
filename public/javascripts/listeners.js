@@ -152,6 +152,16 @@ function beginTurn(yourEnemysCards, yourEnemysVerOfYourCards){
     BEGINGAME_PASSIVE_CHECK_DONE = true;
   }
 
+  if (PLAYER_GAMECARD_OBJS.length > 5){
+    console.error("(!) card duplication error A (!)");
+    PLAYER_GAMECARD_OBJS = PLAYER_GAMECARD_OBJS.slice(0, 5);
+  }
+
+  if (ENEMY_GAMECARD_OBJS.length > 5){
+    console.error("(!) card duplication error B (!)");
+    ENEMY_GAMECARD_OBJS = ENEMY_GAMECARD_OBJS.slice(0, 5);
+  }
+
   atTurnStart(false); // if true, flip enemy
 }
 
