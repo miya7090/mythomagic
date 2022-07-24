@@ -16,12 +16,15 @@ head
   meta(property='og:image' content='https://raw.githubusercontent.com/miya7090/mythomagic/main/public/images/og-image.png')
 iframe(src="../sounds/silence.mp3" allow="autoplay" id="audio" style="display: none")
 #bgmLinker(page="help")
-br
 h2#h2top how to play
-.navigationDiv
-  a(id="playGameForward" class='navigationButton' style="position:absolute;right:90px;top:0px;" href="/index") index
-  a(id="playGameForward" class='navigationButton' style="position:absolute;right:0px;top:0px;" href="/lobby") play game
-  a(class='navigationButton' style="position:absolute;left:0px;top:0px;" href="/") back to main menu
+span(id="playGameForward" style="position:absolute;height:1px;width:1px;top:0px;left:0px;")
+.iconNavButtonsVariant
+  a(href="/index")
+    img(src='https://raw.githubusercontent.com/miya7090/mythomagic/main/public/images/index.png' title="card index")
+  a(href="/lobby")
+    img(src='https://raw.githubusercontent.com/miya7090/mythomagic/main/public/images/play.png' title="play game")    
+  a(href="/")
+    img(src='https://raw.githubusercontent.com/miya7090/mythomagic/main/public/images/return.png' title="back to main menu")
 .navigationDiv 
   span(class='tocTitle' onclick="scrollToThisDiv('joinALobby')") 1. join a lobby
   span(class='tocTitle' onclick="scrollToThisDiv('pickYourHeroes')") 2. choose your team

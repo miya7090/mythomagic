@@ -37,6 +37,11 @@
 
 /* BASECARD AREA: EXTRA RULES */
 
+.previewSubtitle {
+    text-align: center;
+    font-size: 15px;
+}
+
 #myAvailableCards {
     display: flex;
     flex-wrap: nowrap;

@@ -65,6 +65,26 @@
 
 /* GENERAL RULES */
 
+.iconNavButtonsVariant img {
+    opacity: 0.5;
+    width: 30px;
+    margin: 3px;
+    filter: invert(1.0);
+    cursor: "pointer";
+}
+
+.iconNavButtonsVariant {
+    font-family: "regularFont";
+    position: fixed;
+    right: 12px;
+    top: 60px;
+    width: 40px;
+}
+
+.iconNavButtonsVariant img:hover {
+    opacity: 0.8;
+}
+
 body {
   margin: 20px;
   

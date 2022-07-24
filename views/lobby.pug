@@ -23,9 +23,12 @@ head
 iframe(src="../sounds/silence.mp3" allow="autoplay" id="audio" style="display: none")
 #bgmLinker(page="lobby")
 .iconNavButtons
-  img(src='https://raw.githubusercontent.com/miya7090/mythomagic/main/public/images/help.png' href="/help" title="instructions")
-  img(src='https://raw.githubusercontent.com/miya7090/mythomagic/main/public/images/index.png' href="/index" title="card index")
-  img(src='https://raw.githubusercontent.com/miya7090/mythomagic/main/public/images/return.png' href="/" title="back to main menu")
+  a(href="/")
+    img(src='https://raw.githubusercontent.com/miya7090/mythomagic/main/public/images/return.png' title="back to main menu")
+  a(href="/help")
+    img(src='https://raw.githubusercontent.com/miya7090/mythomagic/main/public/images/help.png' title="instructions")
+  a(href="/index")
+    img(src='https://raw.githubusercontent.com/miya7090/mythomagic/main/public/images/index.png' title="card index")
 #loginBox
   label username: 
   input#username(type='text' maxlength='16')

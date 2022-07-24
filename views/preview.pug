@@ -23,19 +23,23 @@ head
   meta(property="og:title" content="mythomagic - card index")
   meta(property='og:image' content='https://raw.githubusercontent.com/miya7090/mythomagic/main/public/images/og-image.png')
 #bgmLinker(page="preview")
-br
 h1(style="text-align:center") index
-.navigationDiv
-  a(id="playGameForward" class='navigationButton' style="position:absolute;right:90px;top:0px;" href="/help") instructions
-  a(id="playGameForward2" class='navigationButton' style="position:absolute;right:0px;top:0px;" href="/lobby") play game
-  a(class='navigationButton' style="position:absolute;left:0px;top:0px;" href="/") back to main menu
+span(id="playGameForward" style="position:absolute;height:1px;width:1px;top:0px;left:0px;")
+.iconNavButtonsVariant
+  a(href="/help")
+    img(src='https://raw.githubusercontent.com/miya7090/mythomagic/main/public/images/help.png' title="instructions")
+  a(href="/lobby")
+    img(src='https://raw.githubusercontent.com/miya7090/mythomagic/main/public/images/play.png' title="play game")
+  a(href="/")
+    img(src='https://raw.githubusercontent.com/miya7090/mythomagic/main/public/images/return.png' title="back to main menu")
 br
 .wrapper
   .player
     #gameInfoBox.hoverInfo.fixHoverWidth(style="margin:auto; background-color: rgba(255,255,255,0.05); padding: 10px; border-radius: 5px;")
   br
-  p#availHeroTitle(style='margin-left:20px;') all available heroes (loading...)
+  p#availHeroTitle.previewSubtitle all available heroes (loading...)
   #myAvailableCards.cards
+  p.previewSubtitle heroes by class
   .classCardWrapper
     .classCard
       div
