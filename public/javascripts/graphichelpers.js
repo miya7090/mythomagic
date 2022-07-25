@@ -212,7 +212,7 @@ function createTileDiv(rowDiv, q, r) {
   square.cube_q = cubeQ;
   square.cube_r = cubeR;
   square.cube_s = cubeS;
-  square.title = cubeQ + "," + cubeR + "," + cubeS;
+  //square.title = cubeQ + "," + cubeR + "," + cubeS;
 
   // select tiles outside edge as off field
   if (getTileDistance(cubeQ,cubeR,cubeS,0,0,0) > HEX_RADIUS) {

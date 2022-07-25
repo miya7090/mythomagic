@@ -266,6 +266,7 @@ function ult_icarus(attacker, target) {
 function ability_icarus(attacker, target) {
     broadcastMsg("ability", true, "Icarus", undefined);
     attacker.current_movement += 1;
+    attacker.addToCMPT(20);
     attacker.changeMaxHealthBy(-50);
 }
 

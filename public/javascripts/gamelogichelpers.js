@@ -180,6 +180,11 @@ function autoattack(pcard){
 }
 
 function abilityAttack(pcard, q, r, s){
+  if (pcard.blessings["Nyx"] == true) { // nyx ultimate disables ability
+    broadcastMsg("ultimate", false, "Nyx", pcard.cardName);
+    return;
+  }
+
   let [cQ,cR,cS] = [q,r,s];
   if (q == undefined) { // if not an aimed attack
     cQ = GAME_MODE_MEMORYTARGET.getQ();
